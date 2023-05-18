@@ -407,3 +407,29 @@ Socket::~Socket() {
         ::close(this->skt);
     }
 }
+
+int Socket::recvall(void *data, unsigned int sz) {
+    unsigned int received = 0;
+
+    while (received < sz) {
+        int s = recv(this->skt, (char*)data + received, sz - received, 0);
+        if (s <= 0) {
+            throw SocketError("Fallo en recv");
+        }
+        received += s;
+    }
+    return sz;
+}
+
+int Socket::sendall(const void *data, unsigned int sz) {
+    unsigned int sent = 0;
+
+    while (sent < sz) {
+        int s = send(this->skt, (char*)data + sent, sz - sent, MSG_NOSIGNAL);
+        if (s < 0) {
+            throw SocketError("Fallo en send");
+        }
+        sent += s;
+    }
+    return sz;
+}

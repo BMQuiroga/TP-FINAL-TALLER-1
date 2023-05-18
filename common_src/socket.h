@@ -134,6 +134,15 @@ int recvall(
  *
  * En caso de error, se lanza una excepción.
  * */
+
+//envia sz bytes de datos localizados en *data
+//version de sendall sin el puntero a bool
+int sendall(const void *data, unsigned int sz);
+
+//version de recvall sin el puntero a bool
+//guarda en *data sz bytes de informacion
+int recvall(void *data, unsigned int sz);
+
 Socket accept();
 
 /*
