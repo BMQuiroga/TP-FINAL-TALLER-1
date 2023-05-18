@@ -4,7 +4,7 @@
 //#include <arpa/inet.h>
 
 void CProtocol::send_one_byte(uint8_t n, Socket &s) {
-    s.sendall(&n,1);
+    s.sendall(&n,ONE_BYTE);
 }
 
 void CProtocol::command_move_left(Socket &s) {

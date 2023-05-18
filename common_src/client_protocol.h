@@ -4,6 +4,15 @@
 #include "socket.h"
 #include <string>
 
+#define MOVE_LEFT 0
+#define MOVE_RIGHT 1
+#define MOVE_UP 2
+#define MOVE_DOWN 3
+#define STOP_MOVING_LEFT 4
+#define STOP_MOVING_RIGHT 5
+#define STOP_MOVING_UP 6
+#define STOP_MOVING_DOWN 7
+
 class CProtocol {
     private:
     //manda mensajes de 1 byte

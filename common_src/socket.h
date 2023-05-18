@@ -6,6 +6,11 @@
  * Por simplificación este TDA se enfocará solamente
  * en sockets IPv4 para TCP.
  * */
+
+#define ONE_BYTE 1
+#define TWO_BYTES 2
+#define FOUR_BYTES 4
+
 class Socket {
     private:
     int skt;
