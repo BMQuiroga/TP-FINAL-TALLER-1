@@ -1,0 +1,21 @@
+Game:
+  port: 8082
+  MapPaths:
+    - Map: { name: Map1, path: ''}
+    - Map: { name: Map2, path: ''}
+  Weapons:
+    - Weapon: { name: IDF, bulletdamage: 10, firerate: 20, reloadafter: 50 }
+    - Weapon: { name: P90, bulletdamage: 10, firerate: 10, reloadafter: 30 }
+    - Weapon: { name: Scout, bulletdamage: 10, firerate: 1, reloadafter: 20 }
+    - Weapon: { name: Grenade, waittime: 10 }
+    - Weapon: { name: Bombardeo aereo, waittime: 60 }
+  Enemies:
+    - Enemy: { name: Infectado, speed: 10 }
+    - Enemy: { name: Jumper, speed: 10 }
+    - Enemy: { name: Witch, speed: 10 }
+    - Enemy: { name: Spear, speed: 10 }
+    - Enemy: { name: Venom, speed: 10 }
+  Soldiers:
+    - Soldier: { gun: IDF, grenades: true, bombaereo: false }
+    - Soldier: { gun: P90, grenades: true, bombaereo: true }
+    - Soldier: { gun: Scout, grenades: true, bombaereo: false }
