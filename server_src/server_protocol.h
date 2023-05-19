@@ -1,51 +1,51 @@
-#ifndef SERVERPROTOCOL_H
-#define SERVERPROTOCOL_H
 #include <stdint.h>
 #include <iostream>
-#include "../common_src/socket.h"
-#include "../server_src/matchstate.h"
-#include "../common_src/protocol.h"
-#include <string>
-#include <vector>
-#include <sstream>
 #include <tuple>
+#include "../socket.h"
+#include <string>
+#include <sstream>
+#include <vector>
 
-class ServerProtocol: public Protocol {
+
+class ServerProtocol {
     private:
-    void send_success(
-        bool succeeded, 
-        Socket &peer, 
-        bool *was_closed);
-        
+    Socket skt;
+    Socket peer;
+
     public:
-    ServerProtocol() = default;
+    explicit ServerProtocol(
+            const std::string& servname);
+
+    /*
+     * No queremos permitir que alguien haga copias
+     * */
+    ServerProtocol(const ServerProtocol&) = delete;
+    ServerProtocol& operator=(const ServerProtocol&) = delete;
+
+    ServerProtocol(ServerProtocol&&) = default;
+    ServerProtocol& operator=(ServerProtocol&&) = default;
 
     /**
-     * Envía el estado de la partida a través del socket
+     * Envía el estado del juego a través del socket
     */
-    void send(Socket &peer, MatchState *data);
+    void send(std::vector<int> resource);
     /**
      * Recibe los datos a través del socket y devuelve el comando
      * y los parámetros recibidos
     */
-    std::tuple<std::string, std::string> receive(
-        Socket &peer, 
-        char *buf, 
+    std::tuple<std::string, std::vector<int>> receive(
+        char *buf,
         bool was_closed);
     /**
      * Recibe la cantidad de parametros necesarios según el 
      * tipo de comando y devuelve un vector con los parámetros recibidos
-    */    
-    std::string receive_paramaters(
-        Socket &peer,
-        int num_parameters, 
+    */
+    std::vector<int> receive_paramaters(
+        const std::string &command_name, 
         bool *was_closed);
     /**
-     * Deserializa los bytes recibidos del socket y convierte 
-     * los datos a una tupla con el comando recibido y el número
-     *  de parámetros que requiere
+     * Deserializa los bytes recibidos del socket y devuelve
+     * un string con el nombre del comando
     */
-    std::tuple<std::string, int> deserialize_command_type(
-        char *data);
+    std::string deserialize_command_type(char *data);
 };
-#endif

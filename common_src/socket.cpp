@@ -9,7 +9,7 @@
 #include <netdb.h>
 #include <unistd.h>
 
-#include "socket.h"
+#include "../socket.h"
 #include "resolver.h"
 #include "liberror.h"
 

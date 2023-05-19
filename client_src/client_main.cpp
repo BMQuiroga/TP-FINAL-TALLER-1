@@ -1,35 +1,42 @@
-//#include "client.h"
-#include "client_protocol.h"
-#include "../common_src/socket.h"
-#include "client_reader.h"
+#include "client.h"
+
 #include <iostream>
 #include <exception>
 #include <fstream>
 #include <vector>
 #include <cstring>
 #include <algorithm>
+#define FILE_ARG argv[3]
+
 
 int main(int argc, char *argv[]) { try {
     int ret = 1;
     const char *hostname = NULL;
     const char *servname = NULL;
 
-    if (argc == 3) {
+    if (argc == 4) {
         hostname = argv[1];
         servname = argv[2];
+        std::ifstream text_file(FILE_ARG);
+        if (!text_file) {
+            std::cerr << "Bad program call. "
+                  << FILE_ARG
+                  << " is not a valid file.\n";
+            return ret;
+        }
     } else {
         std::cerr << "Bad program call. Expected "
                   << argv[0]
-                  << " <ip/hostname server> <puerto/servicename>.\n";
+                  << " <ip/hostname server> <puerto/servicename> "
+                  << "<archivo-acciones>.\n";
         return ret;
     }
-    
-    Socket skt(hostname, servname);
+
+    const char *commands_file_name = argv[3];
+
+    Client client(hostname, servname, commands_file_name);
+    client.start_communication();
     ret = 0;
-    ClientReader client(std::ref(skt));
-    client.start();
-    skt.shutdown(0);
-    skt.close();
     return ret;
 } catch (const std::exception& err) {
     std::cerr

@@ -1,57 +1,73 @@
-#ifndef CLIENTPROTOCOL_H
-#define CLIENTPROTOCOL_H
+#include <arpa/inet.h>
+
 #include <stdint.h>
 #include <iostream>
-#include "../common_src/socket.h"
-#include "../server_src/matchstate.h"
-#include "../common_src/protocol.h"
+#include "../socket.h"
 #include <string>
 #include <vector>
 #include <sstream>
-#include <tuple>
 
-class ClientProtocol:public Protocol {
+enum GameState {
+    NOP = 0x00,
+    SHOOT = 0x01,
+    MOVE = 0x02,
+    RELOAD = 0x03,
+    INVALID = -1
+};
+
+/*
+ * Versión simplificada del protocolo HTTP desde el punto de vista
+ * de un cliente HTTP (no del server).
+ * */
+class ClientProtocol {
+    private:
+    const std::string hostname;
+    Socket skt;
+
     public:
-    ClientProtocol() = default;
+    explicit ClientProtocol(
+            const std::string& hostname,
+            const std::string& servname);
+
     /**
      * Recibe el comando y los parametros necesarios 
-     * para que se ejecute como argumentos y se los
-     * envía al servidor.
+     * para que se ejecute.
     */
-    void send_command(
-        const std::string& data, 
-        const std::string& parameter, 
-        Socket &skt);
-    /**
-     * Recibe el comando y los parametros necesarios 
-     * para que se ejecute como argumentos y,
-     * según el comando recibido, serializa los datos
-     * de la forma pedida
-    */
-    void send_info_from_command(
-        const int8_t & command,
-        const std::string& parameter, 
-        Socket &skt,
-        bool *was_closed);
+    void async_get(const std::string& resource, 
+    std::vector<int> parameters);
+
     /**
      * Devuelve un vector con los datos recibidos 
-     * para imprimir el estado de la partida
+     * para imprimir el estado del juego
     */
-    std::string wait_response(const std::string &data, Socket &skt);
+    std::vector<int> wait_response();
+
+    std::vector<int> get(const std::string& resource, 
+    const std::vector<int>& parameters);
+    /*
+     * No queremos permitir que alguien haga copias
+     * */
+    ClientProtocol(const ClientProtocol&) = delete;
+    ClientProtocol& operator=(const ClientProtocol&) = delete;
+
+    ClientProtocol(ClientProtocol&&) = default;
+    ClientProtocol& operator=(ClientProtocol&&) = default;
 
     /**
-     * Recibe el comando que fue ejecutado, y según este, 
-     * recibe la cantidad de bytes esperados a través del
-     * socket y devuelve la respuesta del servidor
+     * Convierte el comando recibido y sus parametros a un 
+     * string de bytes para enviar a través del socket 
     */
-    std::string receive_response_from_command(
-        char *buf, 
-        const int8_t &command, 
-        Socket &skt);
+    std::string serialize(const std::string& resource, 
+    std::vector<int> parameters);
 
     /**
-     * Devuelve el tipo de comando de mensaje según el string recibido
+     * Convierte los datos recibidos del socket a un vector
+     * con el estado del juego y devuelve el estado
     */
-    CommandType get_command_type(const std::string& resource);
+    std::vector<int> deserialize(char *data);
+
+    /**
+     * Devuelve el tipo de comando de juego según el string recibido
+    */
+    GameState get_command_type(const std::string& resource);
 };
-#endif
