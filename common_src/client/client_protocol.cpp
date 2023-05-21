@@ -38,3 +38,11 @@ void CProtocol::command_stop_moving_down(Socket &s) {
 void CProtocol::command_stop_moving_up(Socket &s) {
     send_one_byte(STOP_MOVING_UP,s);
 }
+
+ProtocolResponse CProtocol::get(Socket &skt, bool was_closed) {
+    // get the response from the server
+}
+
+void CProtocol::send(Socket &skt, ProtocolRequest request, bool was_closed) {
+    // send client request
+}
