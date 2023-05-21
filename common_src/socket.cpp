@@ -414,7 +414,11 @@ int Socket::recvall(void *data, unsigned int sz) {
     while (received < sz) {
         int s = recv(this->skt, (char*)data + received, sz - received, 0);
         if (s <= 0) {
-            throw SocketError("Fallo en recv");
+            throw LibError(
+                        EPIPE,
+                        "socket received only %d of %d bytes",
+                        received,
+                        sz);
         }
         received += s;
     }
@@ -427,7 +431,11 @@ int Socket::sendall(const void *data, unsigned int sz) {
     while (sent < sz) {
         int s = send(this->skt, (char*)data + sent, sz - sent, MSG_NOSIGNAL);
         if (s < 0) {
-            throw SocketError("Fallo en send");
+            throw LibError(
+                        EPIPE,
+                        "socket sent only %d of %d bytes",
+                        sent,
+                        sz);
         }
         sent += s;
     }
