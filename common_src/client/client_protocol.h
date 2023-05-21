@@ -1,7 +1,7 @@
 #ifndef CLIENT_PROTOCOL_H_
 #define CLIENT_PROTOCOL_H_
 
-#include "socket.h"
+#include "../socket.h"
 #include <string>
 
 #define MOVE_LEFT 0
@@ -12,6 +12,8 @@
 #define STOP_MOVING_RIGHT 5
 #define STOP_MOVING_UP 6
 #define STOP_MOVING_DOWN 7
+#define SHOOT 8
+#define STOP_SHOOTING 9
 
 class CProtocol {
     private:
@@ -42,6 +44,12 @@ class CProtocol {
 
     //procesa el evento de dejar de presionar la flecha ↑
     void command_stop_moving_up(Socket &s);
+
+    void command_shoot(Socket &s);
+
+    void command_stop_shooting(Socket &s);
+
+    void send_command(const std::string& command, Socket &s);
 };
 
 #endif
