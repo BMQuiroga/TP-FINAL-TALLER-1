@@ -9,13 +9,11 @@
 #include <vector>
 
 // Solicitud del cliente
-struct ProtocolRequest {
-    
-};
+struct ProtocolRequest {};
 
 // Respuesta que se devuelve al cliente despues de cada solicitud
 struct ProtocolResponse {
-    int model_count;
+    // int model_count;
     MatchState state;
 };
 
@@ -59,9 +57,7 @@ class Protocol {
     std::string receive_text_message(
         Socket &peer,
         bool *was_closed) {
-        
         uint16_t size;
-        std::string empty;
 
         // get the string size
         peer.recvall(&size, sizeof(size), was_closed);
