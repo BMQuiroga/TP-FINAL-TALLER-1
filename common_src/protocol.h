@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include "socket.h"
+#include "queue.h"
 #include "matchstate.h"
 #include <string>
 #include <vector>
@@ -15,9 +16,10 @@ struct ProtocolRequest {};
 struct ProtocolResponse {
     // int model_count;
     MatchState state;
+    ProtocolResponse() = default;
 };
 
-template <typename Recv_Type>
+template <typename Send_Type, typename Recv_Type>
 class Protocol {
     private:
     const std::string hostname;
@@ -31,7 +33,15 @@ class Protocol {
     */
     virtual Recv_Type get(
         Socket &skt,
-        bool *was_closed) = 0;
+        bool was_closed) = 0;
+
+    /**
+     * Envía datos del tipo Send_Type a traves del socket skt
+    */
+    virtual void send(
+        Socket &skt,
+        Send_Type message,
+        bool was_closed) = 0;
 
     /**
      * Envía un número de n bytes a través
