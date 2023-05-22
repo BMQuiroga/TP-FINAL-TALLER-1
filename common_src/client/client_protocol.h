@@ -50,6 +50,9 @@ class CProtocol {
     void command_stop_shooting(Socket &s);
 
     void send_command(const std::string& command, Socket &s);
+
+    //recibe la image a renderizar del server
+    uint8_t* receive_render(Socket &s);
 };
 
 #endif
