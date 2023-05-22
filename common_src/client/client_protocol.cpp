@@ -113,7 +113,7 @@ void render_all(uint8_t * render, SDL2pp::Renderer & renderer) {
                 iterator+=4;
                 flip = *iterator++;
                 action = *iterator++;//unused
-                SDL2pp::Texture sprite = draw_sprite("./resources/Soldier_1/Idle.png",renderer,action);
+                SDL2pp::Texture sprite = draw_sprite("../resources/Soldier_1/Idle.png",renderer,action);
                 renderer.CopyEx(
                     sprite,
                     SDL2pp::Rect(0, 0, 130, 130),
@@ -130,7 +130,7 @@ void render_all(uint8_t * render, SDL2pp::Renderer & renderer) {
                 iterator+=4;
                 flip = *iterator++;
                 action = *iterator++;//unused
-                SDL2pp::Texture sprite = draw_sprite("./resources/Soldier_2/Idle.png",renderer,action);
+                SDL2pp::Texture sprite = draw_sprite("../resources/Soldier_2/Idle.png",renderer,action);
                 renderer.CopyEx(
                     sprite,
                     SDL2pp::Rect(0,0,130,130),
