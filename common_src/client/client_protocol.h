@@ -13,6 +13,8 @@
 #define STOP_MOVING_RIGHT 5
 #define STOP_MOVING_UP 6
 #define STOP_MOVING_DOWN 7
+#define SHOOT 8
+#define STOP_SHOOTING 9
 
 class CProtocol : public Protocol<ProtocolRequest, ProtocolResponse> {
     private:
@@ -43,6 +45,15 @@ class CProtocol : public Protocol<ProtocolRequest, ProtocolResponse> {
 
     //procesa el evento de dejar de presionar la flecha ↑
     void command_stop_moving_up(Socket &s);
+
+    void command_shoot(Socket &s);
+
+    void command_stop_shooting(Socket &s);
+
+    void send_command(const std::string& command, Socket &s);
+
+    //recibe la image a renderizar del server
+    uint8_t* receive_render(Socket &s);
 
     ProtocolResponse get(Socket &skt, bool was_closed) override;
     void send(Socket &skt, ProtocolRequest request, bool was_closed) override;

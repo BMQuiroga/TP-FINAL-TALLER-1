@@ -31,5 +31,8 @@
 *.out
 *.app
 
-venv
-build
+# Folders
+build/
+libs/
+CMakeFiles/
+venv/
