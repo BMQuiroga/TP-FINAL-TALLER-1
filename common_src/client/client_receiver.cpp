@@ -20,11 +20,11 @@ void ClientReceiver::run() {
     std::string command;
     is_alive = keep_talking = true;
     while (keep_talking) {
-        std::list<std::string> models = protocol.receive(skt);
+        ProtocolResponse resp = protocol.get(skt, keep_talking);
         if (!keep_talking) {
             break;
         }
-        q.push(models);
+        // q.push(resp);
     }
 }
 

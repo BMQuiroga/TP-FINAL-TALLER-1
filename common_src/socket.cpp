@@ -187,10 +187,7 @@ Socket& Socket::operator=(Socket&& other) {
      * y debemos desinicializarlo primero antes de pisarle
      * el recurso con el que le robaremos al otro socket (`other`)
      * */
-    if (not this->closed) {
-        ::shutdown(this->skt, 2);
-        ::close(this->skt);
-    }
+    this->~Socket();
 
     /* Ahora hacemos los mismos pasos que en el move constructor */
     this->skt = other.skt;
@@ -396,15 +393,21 @@ void Socket::shutdown(int how) {
     }
 }
 
-int Socket::close() {
-    this->closed = true;
-    return ::close(this->skt);
+void Socket::close() {
+    if (not this->closed) {
+        int status = ::close(this->skt);
+        if (status == 0) {
+            this->closed = true;
+        } else {
+            throw LibError(errno, "socket close failed");
+        }
+    }
 }
 
 Socket::~Socket() {
     if (not this->closed) {
-        ::shutdown(this->skt, 2);
-        ::close(this->skt);
+        shutdown(SHUT_RDWR);
+        close();
     }
 }
 

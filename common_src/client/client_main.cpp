@@ -33,7 +33,8 @@ int main(int argc, char *argv[]) { try {
     ClientReceiver client_receiver(std::ref(skt), std::ref(updates_q));
     client_sender.start();
     client_receiver.start();
-    //start_render(events_q, updates_q); Desde acá haría el primer render y el waitEvents
+    // Desde acá haría el primer render y el waitEvents
+    //start_render(events_q, updates_q);
     skt.shutdown(0);
     skt.close();
     ret = 0;

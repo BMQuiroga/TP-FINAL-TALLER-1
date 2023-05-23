@@ -2,6 +2,7 @@
 #define CLIENT_PROTOCOL_H_
 
 #include "../socket.h"
+#include "../protocol.h"
 #include <string>
 
 #define MOVE_LEFT 0
@@ -15,7 +16,7 @@
 #define SHOOT 8
 #define STOP_SHOOTING 9
 
-class CProtocol {
+class CProtocol : public Protocol<ProtocolRequest, ProtocolResponse> {
     private:
     //manda mensajes de 1 byte
     void send_one_byte(uint8_t n, Socket &s);
@@ -53,6 +54,9 @@ class CProtocol {
 
     //recibe la image a renderizar del server
     uint8_t* receive_render(Socket &s);
+
+    ProtocolResponse get(Socket &skt, bool was_closed) override;
+    void send(Socket &skt, ProtocolRequest request, bool was_closed) override;
 };
 
 #endif

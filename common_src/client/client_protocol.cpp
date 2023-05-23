@@ -1,6 +1,8 @@
 #include <iostream>
 #include "client_protocol.h"
 #include <string>
+#include <SDL2pp/SDL2pp.hh>
+#include <SDL2pp/Renderer.hh>
 //#include <arpa/inet.h>
 
 void CProtocol::send_one_byte(uint8_t n, Socket &s) {
@@ -45,6 +47,10 @@ void CProtocol::command_shoot(Socket &s) {
 
 void CProtocol::command_stop_shooting(Socket &s) {
     send_one_byte(STOP_SHOOTING,s);
+}
+
+ProtocolResponse CProtocol::get(Socket &skt, bool was_closed) {
+    // TODO: recibir respuesta del servidor y pushearla a una queue
 }
 
 void CProtocol::send_command(const std::string& command, Socket &s) {
@@ -106,7 +112,7 @@ void render_all(uint8_t * render, SDL2pp::Renderer & renderer) {
     draw_rounds((*iterator++),renderer);
     while(iterator) {
         switch (*iterator++) {
-            case 1:
+            case 1: {
                 iterator16 = reinterpret_cast<uint16_t*>(iterator);
                 x = *iterator16++;
                 y = *iterator16;
@@ -114,16 +120,18 @@ void render_all(uint8_t * render, SDL2pp::Renderer & renderer) {
                 flip = *iterator++;
                 action = *iterator++;//unused
                 SDL2pp::Texture sprite = draw_sprite("../resources/Soldier_1/Idle.png",renderer,action);
-                renderer.CopyEx(
+                renderer.Copy(
                     sprite,
                     SDL2pp::Rect(0, 0, 130, 130),
                     SDL2pp::Rect(x, y, x + 130 - 1, y + 130 - 1),
                     0,
+                    SDL2pp::Point(),
                     flip > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
                 );
                 iterator+=4;
                 break;
-            case 2:
+            }
+            case 2: {
                 iterator16 = reinterpret_cast<uint16_t*>(iterator);
                 x = *iterator16++;
                 y = *iterator16;
@@ -131,15 +139,17 @@ void render_all(uint8_t * render, SDL2pp::Renderer & renderer) {
                 flip = *iterator++;
                 action = *iterator++;//unused
                 SDL2pp::Texture sprite = draw_sprite("../resources/Soldier_2/Idle.png",renderer,action);
-                renderer.CopyEx(
+                renderer.Copy(
                     sprite,
                     SDL2pp::Rect(0,0,130,130),
                     SDL2pp::Rect(x,y,x+130,y+130),
                     0,
+                    SDL2pp::Point(),
                     flip > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
                 );
                 iterator+=4;
                 break;
+            }
             default:
                 break;
         }

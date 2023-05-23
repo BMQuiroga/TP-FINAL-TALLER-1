@@ -37,7 +37,8 @@ class Queue {
 
     public:
 	Queue() : max_size(UINT_MAX-1), closed(false) {}
-	explicit Queue(const unsigned int max_size) : max_size(max_size), closed(false) {}
+	explicit Queue(const unsigned int max_size) : 
+    max_size(max_size), closed(false) {}
 
 
         bool try_push(T const& val) {
@@ -146,7 +147,8 @@ class Queue<void*> {
         std::condition_variable is_not_empty;
 
     public:
-	explicit Queue(const unsigned int max_size) : max_size(max_size), closed(false) {}
+	explicit Queue(const unsigned int max_size) : 
+    max_size(max_size), closed(false) {}
 
 
         bool try_push(void* const & val) {
