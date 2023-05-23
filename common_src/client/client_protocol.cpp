@@ -74,8 +74,11 @@ void CProtocol::send_command(const std::string& command, Socket &s) {
 uint8_t* CProtocol::receive_render(Socket &s) {
     uint8_t lenght;
     s.recvall(&lenght,1);
-    uint8_t * render = new uint8_t[lenght];//podria ser unique ptr
-    s.recvall(render,lenght);
+    uint8_t * render = new uint8_t[lenght+1];//podria ser unique ptr
+    render[0] = lenght;
+    uint8_t * render_plus_one = render;
+    render_plus_one++;
+    s.recvall(render_plus_one,lenght);
     return render;
 }
 
@@ -102,9 +105,10 @@ void render_all(uint8_t * render, SDL2pp::Renderer & renderer) {
     uint8_t flip, action;
     renderer.Clear();
     uint8_t * iterator = render;
+    uint8_t number_of_models = (*iterator++);
     draw_health((*iterator++),renderer);
     draw_rounds((*iterator++),renderer);
-    while(iterator) {
+    for (int i=0; i<number_of_models; i++){
         switch (*iterator++) {
             case 1:
                 iterator16 = reinterpret_cast<uint16_t*>(iterator);
