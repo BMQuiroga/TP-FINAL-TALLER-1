@@ -8,14 +8,30 @@
 #include "matchstate.h"
 #include <string>
 #include <vector>
+#include <algorithm>
+
+#define MOVE_LEFT 0
+#define MOVE_RIGHT 1
+#define MOVE_UP 2
+#define MOVE_DOWN 3
+#define STOP_MOVING_LEFT 4
+#define STOP_MOVING_RIGHT 5
+#define STOP_MOVING_UP 6
+#define STOP_MOVING_DOWN 7
 
 // Solicitud del cliente
-struct ProtocolRequest {};
+struct ProtocolRequest {
+    int move; // move command (LEFT, RIGHT, UP, DOWN)
+    int shoot; // shoot command
+};
 
 // Respuesta que se devuelve al cliente despues de cada solicitud
 struct ProtocolResponse {
-    // int model_count;
-    MatchState state;
+    std::string name;
+    uint16_t hit_points;
+    uint16_t rounds;
+    std::vector<uint16_t> position;
+    int8_t state;
     ProtocolResponse() = default;
 };
 
@@ -49,7 +65,7 @@ class Protocol {
     */
    template <typename T>
     void send_number(
-        const T &n,
+        T n,
         Socket &skt,
         bool *was_closed) {
         if (sizeof(n) <= sizeof(uint16_t))
@@ -58,6 +74,21 @@ class Protocol {
             n = htonl(n);
 
         skt.sendall(&n, sizeof(n), was_closed);
+    }
+
+    /**
+     * Envia un mensaje de texto a traves del 
+     * socket
+    */
+    std::string send_text_message(
+        std::string &message,
+        Socket &skt,
+        bool *was_closed) {
+        std::vector<char> buf;
+        size_t size = message.size();
+        std::copy_if(message.begin(), message.end(), std::back_inserter(buf), [](char c) { return c != '\0'; });
+        skt.sendall(&size, sizeof(size), was_closed);
+        skt.sendall(buf.data(), buf.size(), was_closed);
     }
 
     /**
