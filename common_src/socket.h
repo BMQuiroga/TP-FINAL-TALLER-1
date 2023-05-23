@@ -160,7 +160,7 @@ void shutdown(int how);
  * Cierra el socket. El cierre no implica un `shutdown`
  * que debe ser llamado explícitamente.
  * */
-int close();
+void close();
 
 /*
  * Destruye el socket. Si aun esta conectado,
