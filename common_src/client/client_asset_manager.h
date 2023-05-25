@@ -14,19 +14,15 @@ class AssetManager {
     private:
 
     static AssetManager* sInstance;
-    std::map<std::string,Asset> map;
+    std::map<int,Asset*> map;
 
     public:
 
-    static AssetManager* Instance();
+    static AssetManager* Instance(SDL2pp::Renderer & renderer);
 
     static void Release();
 
-    Asset* GetAsset(std::string filename);
-
-
-
-
+    Asset* GetAsset(int code);
 };
 
 #endif

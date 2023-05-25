@@ -3,9 +3,11 @@
 #include <string>
 //#include <arpa/inet.h>
 
-AssetManager* AssetManager::Instance() {
+AssetManager* AssetManager::sInstance = NULL;
+
+AssetManager* AssetManager::Instance(SDL2pp::Renderer & renderer) {
 	if(sInstance == NULL)
-		sInstance = new AssetManager();
+		sInstance = new AssetManager(renderer);
 
 	return sInstance;
 }
@@ -15,10 +17,15 @@ void AssetManager::Release() {
 	sInstance = NULL;
 }
 
-AssetManager::AssetManager() {
-
+AssetManager::AssetManager(SDL2pp::Renderer & renderer) {
+    map.emplace(1, std::make_unique<Asset>("../resources/Soldier_1/Idle.png", 0, 128, 128, 7, renderer, 0));
+    map.emplace(2, std::make_unique<Asset>("../resources/Soldier_2/Idle.png", 0, 128, 128, 7, renderer, 0));
 }
 
-SDL_Texture* AssetManager::GetTexture(std::string path) {
-	return map[path];
+Asset* AssetManager::GetAsset(int code) {
+    auto it = map.find(code);
+    if (it != map.end()) {
+        return it->second.get();
+    }
+    return nullptr;
 }
