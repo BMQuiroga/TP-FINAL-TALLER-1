@@ -14,7 +14,7 @@ class AssetManager {
     private:
 
     static AssetManager* sInstance;
-    std::map<int,Asset*> map;
+    std::map<int,std::shared_ptr<Asset>> map;
 
     public:
 

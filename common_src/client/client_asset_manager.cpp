@@ -18,10 +18,10 @@ void AssetManager::Release() {
 }
 
 AssetManager::AssetManager(SDL2pp::Renderer & renderer) {
-    //map.emplace(1, std::make_unique<Asset>("../resources/Soldier_1/Idle.png", 0, 128, 128, 7, renderer, 0));
-    //map.emplace(2, std::make_unique<Asset>("../resources/Soldier_2/Idle.png", 0, 128, 128, 7, renderer, 0));
+    map.emplace(1, std::make_shared<Asset>("../resources/Soldier_1/Idle.png", 0, 128, 128, 7, renderer, 0));
+    map.emplace(2, std::make_shared<Asset>("../resources/Soldier_2/Idle.png", 0, 128, 128, 7, renderer, 0));
 }
 
 Asset* AssetManager::GetAsset(int code) {
-    //return map.at(code);
+    return map.at(code).get();
 }
