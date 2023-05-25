@@ -75,3 +75,11 @@ void ClientRenderer::render_all(uint8_t * render, SDL2pp::Renderer & renderer) {
     }
     renderer.Present();
 }
+
+void ClientRenderer::GameLoop() {
+
+}
+
+ClientRenderer::~ClientRenderer() {
+    AssetManager::Release();
+}

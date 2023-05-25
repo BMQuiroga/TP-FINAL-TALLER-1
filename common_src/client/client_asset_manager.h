@@ -23,6 +23,8 @@ class AssetManager {
     static void Release();
 
     Asset* GetAsset(int code);
+
+    AssetManager(SDL2pp::Renderer & renderer);
 };
 
 #endif

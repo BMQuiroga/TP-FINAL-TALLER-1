@@ -23,9 +23,5 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) {
 }
 
 Asset* AssetManager::GetAsset(int code) {
-    auto it = map.find(code);
-    if (it != map.end()) {
-        return it->second.get();
-    }
-    return nullptr;
+    return map[code];
 }
