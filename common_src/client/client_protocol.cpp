@@ -53,6 +53,10 @@ ProtocolResponse CProtocol::get(Socket &skt, bool was_closed) {
     // TODO: recibir respuesta del servidor y pushearla a una queue
 }
 
+void CProtocol::send(Socket &skt, ProtocolRequest request, bool was_closed) {
+    // TODO
+}
+
 void CProtocol::send_command(const std::string& command, Socket &s) {
     if (command == "move left") {
         command_move_left(s);

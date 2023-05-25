@@ -25,7 +25,7 @@ class ClientRenderer {
     public:
 
     void GameLoop();
-    ClientRenderer::~ClientRenderer();
+    ~ClientRenderer();
 };
 
 #endif
