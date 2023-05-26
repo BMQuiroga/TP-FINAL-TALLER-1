@@ -3,12 +3,14 @@
 #include "../queue.h"
 #include "client_receiver.h"
 #include "client_sender.h"
+#include "client_renderer.h"
 #include <iostream>
 #include <exception>
 #include <fstream>
 #include <vector>
 #include <cstring>
 #include <algorithm>
+#include <functional>
 
 
 int main(int argc, char *argv[]) { try {
@@ -33,8 +35,8 @@ int main(int argc, char *argv[]) { try {
     ClientReceiver client_receiver(std::ref(skt), std::ref(updates_q));
     client_sender.start();
     client_receiver.start();
-    // Desde acá haría el primer render y el waitEvents
-    //start_render(events_q, updates_q);
+    ClientRenderer client_renderer(std::ref(events_q),std::ref(updates_q));
+    client_renderer.GameLoop(); //<--- magia
     skt.shutdown(0);
     skt.close();
     ret = 0;
