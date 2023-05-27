@@ -39,6 +39,10 @@ void ClientRenderer::render(Image & im) {
     uint16_t x = im.x;
     uint16_t y = im.y;
     Asset * asset = assets->GetAsset(im.id + im.action*1000);
+
+    while (im.frame > asset->get_frames())
+        im.frame -=  asset->get_frames();
+    
     renderer.Copy(
         (*asset->get_texture())
         SDL2pp::Rect(asset->get_length() * im.frame, 0, (asset->get_length() * im.frame) + asset->get_length(), asset->get_height()),
