@@ -51,12 +51,12 @@ void ClientRenderer::render(Image & im) {
         renderHealth(asset->get_length(),x,y,im.health);
 }
 
-void renderHealth(uint16_t lenght, uint16_t x, uint16_t y, uint8_t hp) {
+void renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp) {
     uint16_t hp_bar_height = 3;
     uint16_t hp_bar_height_difference = 10;
     Asset * full = assets->GetAsset(-1);
     Asset * empty = assets->GetAsset(-2);
-    float hp_percentage = (x + length -1)*100/hp;
+    float hp_percentage = (x + length -1)*hp/100;
 
     renderer.Copy(
         (*empty->get_texture())

@@ -9,7 +9,7 @@ class ServerProtocol : public Protocol<ProtocolResponse, ProtocolRequest> {
     public:
     //recibe un puntero a char que contiene ya codificado
     //el mensaje de la imagen y lo envia
-    void send_render(char * data, int lenght, Socket & s);
+    void send_render(char * data, int length, Socket & s);
 
     //recibe un byte
     uint8_t recieve_command(Socket & s);

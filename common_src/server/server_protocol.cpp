@@ -7,8 +7,8 @@ uint8_t ServerProtocol::recieve_command(Socket & s) {
     return n;
 }
 
-void ServerProtocol::send_render(char * data, int lenght, Socket & s) { 
-    s.sendall(data,lenght);
+void ServerProtocol::send_render(char * data, int length, Socket & s) { 
+    s.sendall(data,length);
 }
 
 ProtocolRequest ServerProtocol::get(Socket &skt, bool was_closed) {

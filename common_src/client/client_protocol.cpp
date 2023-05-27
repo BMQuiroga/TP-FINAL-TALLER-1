@@ -50,12 +50,12 @@ void CProtocol::command_stop_shooting(Socket &s) {
 }
 
 uint8_t * CProtocol::get(Socket &skt, bool was_closed) {
-    uint8_t lenght;
-    s.recvall(&lenght,1,&was_closed);
-    uint8_t * render = new uint8_t[lenght+1];//podria ser unique ptr
+    uint8_t length;
+    s.recvall(&length,1,&was_closed);
+    uint8_t * render = new uint8_t[length+1];//podria ser unique ptr
     uint8_t * render_plus_one = render++;
-    s.recvall(render_plus_one,lenght,&was_closed);
-    render[0] = lenght;
+    s.recvall(render_plus_one,length,&was_closed);
+    render[0] = length;
     return render;
 }
 
@@ -88,11 +88,11 @@ void CProtocol::send_command(const std::string& command, Socket &s) {
 }
 
 uint8_t* CProtocol::receive_render(Socket &s) {
-    uint8_t lenght;
-    s.recvall(&lenght,1);
-    uint8_t * render = new uint8_t[lenght+1];//podria ser unique ptr
+    uint8_t length;
+    s.recvall(&length,1);
+    uint8_t * render = new uint8_t[length+1];//podria ser unique ptr
     uint8_t * render_plus_one = render++;
-    s.recvall(render_plus_one,lenght);
-    render[0] = lenght;
+    s.recvall(render_plus_one,length);
+    render[0] = length;
     return render;
 }

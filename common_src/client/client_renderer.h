@@ -24,7 +24,7 @@ class ClientRenderer {
     void render_all();
     void render(Image & im);
     void renderBackground();
-    void renderHealth(uint16_t lenght, uint16_t x, uint16_t y, uint8_t hp);
+    void renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp);
     static bool handleEvents();
 
     public:
