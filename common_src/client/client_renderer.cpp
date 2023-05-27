@@ -3,7 +3,40 @@
 #include <string>
 //#include <arpa/inet.h>
 
-ClientRenderer::ClientRenderer(Queue<std::string> &events, Queue<std::list<std::string>> &updates) : 
+void ClientRenderer::GameLoop() {
+    uint32_t frames = 0;
+    std::list<Image>* new_update = nullptr;
+    bool running = true;
+    while (running) {
+        running = handle_events();
+        renderer.Clear();    
+        if (updates.try_pop(new_update)) {
+            actual_frame = Image::Replace(actual_frame,new_update);
+        }
+        renderBackground();
+        render_all();
+        renderer.Present();
+        //falta sdl sleep;
+    }
+}
+
+void ClientRenderer::render_all() {
+    draw_health(actual_frame->front().id);
+    draw_rounds(actual_frame->front().action);
+    for (const auto& it : actual_frame) {
+        if(it->id > 0) {
+            render((*it));
+        }
+    }
+
+}
+
+void ClientRenderer::render(Image im) {
+    
+}
+
+
+ClientRenderer::ClientRenderer(Queue<std::string> &events, Queue<std::list<Image>*> &updates) : 
     events(events),
     updates(updates),
     sdl(SDL_INIT_VIDEO),
@@ -12,11 +45,11 @@ ClientRenderer::ClientRenderer(Queue<std::string> &events, Queue<std::list<std::
     this->assets = AssetManager::Instance(this->renderer);
 }
 
-void ClientRenderer::draw_health(uint8_t n, SDL2pp::Renderer & renderer) {
-
+void ClientRenderer::draw_health(uint8_t n) {
+    //se va, cada unidad va a tener su vida
 }
 
-void ClientRenderer::draw_rounds(uint8_t n, SDL2pp::Renderer & renderer) {
+void ClientRenderer::draw_rounds(uint8_t n) {
     
 }
 
@@ -28,9 +61,7 @@ SDL2pp::Texture ClientRenderer::draw_sprite(char * path, SDL2pp::Renderer & rend
     return sprite;
 }
 
-void ClientRenderer::renderAt(Asset* asset, uint8_t x, uint8_t y, uint8_t flip) {
 
-}
 
 void ClientRenderer::renderBackground() {
     Asset * asset = assets->GetAsset(0);
@@ -44,24 +75,9 @@ void ClientRenderer::renderBackground() {
     );
 }
 
-void ClientRenderer::GameLoop() {
-    uint32_t frames = 0
-    while (1) {
-        renderer.Clear();
-        renderBackground();
-        if (updates.try_pop()) {
 
-        }
-
-
-
-
-        renderer.Present();
-    }
-}
-
-
-void ClientRenderer::render_all(uint8_t * render, SDL2pp::Renderer & renderer) {
+/*
+void ClientRenderer::render_all() {
     uint16_t * iterator16 = nullptr;
     uint16_t x, y;
     uint8_t flip, action;
@@ -114,8 +130,61 @@ void ClientRenderer::render_all(uint8_t * render, SDL2pp::Renderer & renderer) {
         }
     }
     renderer.Present();
-}
+}*/
 
 ClientRenderer::~ClientRenderer() {
     AssetManager::Release();
+}
+
+static bool ClientRenderer::handleEvents() {
+    SDL_Event event;
+    // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
+    while(SDL_PollEvent(&event)){
+        switch(event.type) {
+            case SDL_KEYDOWN: {
+                // ¿Qué pasa si mantengo presionada la tecla?    
+                SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&) event;
+                switch (keyEvent.keysym.sym) {
+                    case SDLK_LEFT:
+                        //player.moveLeft();
+                        break;
+                    case SDLK_RIGHT:
+                        //player.moveRigth();
+                        break;
+                    case SDLK_DOWN:
+                        //player.moveRigth();
+                        break;
+                    case SDLK_UP:
+                        //player.moveRigth();
+                        break;
+                    }
+                } // Fin KEY_DOWN
+                break;
+            case SDL_KEYUP: {
+                SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&) event;
+                switch (keyEvent.keysym.sym) {
+                    case SDLK_LEFT:
+                        //player.stopMoving();
+                        break;
+                    case SDLK_RIGHT:
+                        //player.stopMoving();
+                        break;
+                    case SDLK_DOWN:
+                        //player.moveRigth();
+                        break;
+                    case SDLK_UP:
+                        //player.moveRigth();
+                        break;
+                    } 
+                }// Fin KEY_UP
+                break;
+            case SDL_MOUSEMOTION:
+                //std::cout << "Oh! Mouse" << std::endl;
+                break;
+            case SDL_QUIT:
+                //std::cout << "Quit :(" << std::endl;
+                return false;
+        } // fin switch(event)
+    } // fin while(SDL_PollEvents)
+    return true;
 }

@@ -7,9 +7,10 @@
 #include <algorithm>
 #include "../queue.h"
 
+
 ClientReceiver::ClientReceiver(
     Socket& socket,
-    Queue<std::list<std::string>>& q) :
+    Queue<std::list<Image>*>& q) :
     protocol(), 
     skt(socket),
     q(q)
@@ -21,7 +22,7 @@ void ClientReceiver::run() {
     is_alive = keep_talking = true;
     while (keep_talking) {
         uint8_t * resp = protocol.get(skt, keep_talking);
-        //q.push(resp);
+        q.push(Image::Create(resp));
         if (!keep_talking) {
             break;
         }

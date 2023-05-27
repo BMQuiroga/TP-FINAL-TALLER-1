@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) { try {
     }
     
     Queue<std::string> events_q;
-    Queue<std::list<std::string>> updates_q;
+    Queue<std::list<Image>*> updates_q;
     Socket skt(hostname, servname);
     ClientSender client_sender(std::ref(skt), std::ref(events_q));
     ClientReceiver client_receiver(std::ref(skt), std::ref(updates_q));

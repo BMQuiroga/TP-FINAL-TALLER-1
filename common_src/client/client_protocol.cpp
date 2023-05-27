@@ -49,8 +49,14 @@ void CProtocol::command_stop_shooting(Socket &s) {
     send_one_byte(STOP_SHOOTING,s);
 }
 
-ProtocolResponse CProtocol::get(Socket &skt, bool was_closed) {
-    // TODO: recibir respuesta del servidor y pushearla a una queue
+uint8_t * CProtocol::get(Socket &skt, bool was_closed) {
+    uint8_t lenght;
+    s.recvall(&lenght,1,&was_closed);
+    uint8_t * render = new uint8_t[lenght+1];//podria ser unique ptr
+    uint8_t * render_plus_one = render++;
+    s.recvall(render_plus_one,lenght,&was_closed);
+    render[0] = lenght;
+    return render;
 }
 
 void CProtocol::send(Socket &skt, ProtocolRequest request, bool was_closed) {
