@@ -1,13 +1,14 @@
 #include <iostream>
 #include "client_renderer.h"
 #include <string>
+#include <cmath>
 //#include <arpa/inet.h>
 
 void ClientRenderer::GameLoop() {
-    uint32_t frames = 0;
     std::list<Image>* new_update = nullptr;
     bool running = true;
     while (running) {
+        unsigned int frame_ticks = SDL_GetTicks();	
         running = handle_events();
         renderer.Clear();    
         if (updates.try_pop(new_update)) {
@@ -16,16 +17,20 @@ void ClientRenderer::GameLoop() {
         renderBackground();
         render_all();
         renderer.Present();
-        //falta sdl sleep;
+        unsigned int end_ticks = SDL_GetTicks();
+        unsigned int ticks_delta = frame_ticks - end_ticks;
+        SDL_Delay((1000/30) - ticks_delta);
     }
 }
 
 void ClientRenderer::render_all() {
-    draw_health(actual_frame->front().id);
-    draw_rounds(actual_frame->front().action);
-    for (auto const& it : actual_frame) {
-        if(it->id > 0) {
-            render((*it));
+    if (actual_frame != nullptr) {
+        draw_health(actual_frame->front().id);
+        draw_rounds(actual_frame->front().action);
+        for (auto const& it : *actual_frame) {
+            if (it->id > 0) {
+                render((*it));
+            }
         }
     }
 }
@@ -35,14 +40,35 @@ void ClientRenderer::render(Image & im) {
     uint16_t y = im.y;
     Asset * asset = assets->GetAsset(im.id + im.action*1000);
     renderer.Copy(
-                    asset,
-                    SDL2pp::Rect(asset->get_length() * im.frame, 0, (asset->get_length() * im.frame) + asset->get_length(), asset->get_height()),
-                    SDL2pp::Rect(x, y, x + asset->get_length() - 1, y + asset->get_height() - 1),
-                    0,
-                    SDL2pp::NullOpt,
-                    im.flip > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
+        (*asset->get_texture())
+        SDL2pp::Rect(asset->get_length() * im.frame, 0, (asset->get_length() * im.frame) + asset->get_length(), asset->get_height()),
+        SDL2pp::Rect(x, y, x + asset->get_length() - 1, y + asset->get_height() - 1),
+        0,
+        SDL2pp::NullOpt,
+        im.flip > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
     );
-    //dibujarle la barra de vida arriba
+    if (im.health != 0)
+        renderHealth(asset->get_length(),x,y,im.health);
+}
+
+void renderHealth(uint16_t lenght, uint16_t x, uint16_t y, uint8_t hp) {
+    uint16_t hp_bar_height = 3;
+    uint16_t hp_bar_height_difference = 10;
+    Asset * full = assets->GetAsset(-1);
+    Asset * empty = assets->GetAsset(-2);
+    float hp_percentage = (x + length -1)*100/hp;
+
+    renderer.Copy(
+        (*empty->get_texture())
+        SDL2pp::Rect(0,0,length,hp_bar_height),
+        SDL2pp::Rect(x, y + hp_bar_height_difference, x + length - 1, y + hp_bar_height - 1),
+
+    );
+    renderer.Copy(
+        (*full->get_texture())
+        SDL2pp::Rect(0,0,length,hp_bar_height),
+        SDL2pp::Rect(x, y + hp_bar_height_difference, std::round(hp_percentage), y + hp_bar_height - 1),
+    );
 }
 
 
@@ -63,16 +89,6 @@ void ClientRenderer::draw_rounds(uint8_t n) {
     
 }
 
-SDL2pp::Texture ClientRenderer::draw_sprite(char * path, SDL2pp::Renderer & renderer, uint8_t action) {
-    SDL2pp::Texture sprite(
-        renderer,
-        SDL2pp::Surface(path).SetColorKey(true,0x000000)
-    );
-    return sprite;
-}
-
-
-
 void ClientRenderer::renderBackground() {
     Asset * asset = assets->GetAsset(0);
     renderer.Copy(
@@ -84,63 +100,6 @@ void ClientRenderer::renderBackground() {
         SDL_FLIP_NONE
     );
 }
-
-
-/*
-void ClientRenderer::render_all() {
-    uint16_t * iterator16 = nullptr;
-    uint16_t x, y;
-    uint8_t flip, action;
-    renderer.Clear();
-    uint8_t * iterator = render;
-    draw_health((*iterator++),renderer);
-    draw_rounds((*iterator++),renderer);
-    while(iterator) {
-        switch (*iterator++) {
-            case 1: {
-                iterator16 = reinterpret_cast<uint16_t*>(iterator);
-                x = *iterator16++;
-                y = *iterator16;
-                iterator+=4;
-                flip = *iterator++;
-                action = *iterator++;//unused
-                SDL2pp::Texture sprite = draw_sprite("../resources/Soldier_1/Idle.png",renderer,action);
-                renderer.Copy(
-                    sprite,
-                    SDL2pp::Rect(0, 0, 130, 130),
-                    SDL2pp::Rect(x, y, x + 130 - 1, y + 130 - 1),
-                    0,
-                    SDL2pp::Point(),
-                    flip > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
-                );
-                iterator+=4;
-                break;
-            }
-            case 2: {
-                iterator16 = reinterpret_cast<uint16_t*>(iterator);
-                x = *iterator16++;
-                y = *iterator16;
-                iterator+=4;
-                flip = *iterator++;
-                action = *iterator++;//unused
-                SDL2pp::Texture sprite = draw_sprite("../resources/Soldier_2/Idle.png",renderer,action);
-                renderer.Copy(
-                    sprite,
-                    SDL2pp::Rect(0,0,130,130),
-                    SDL2pp::Rect(x,y,x+130,y+130),
-                    0,
-                    SDL2pp::Point(),
-                    flip > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
-                );
-                iterator+=4;
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    renderer.Present();
-}*/
 
 ClientRenderer::~ClientRenderer() {
     AssetManager::Release();

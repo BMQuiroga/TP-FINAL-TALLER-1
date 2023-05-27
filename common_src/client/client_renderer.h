@@ -21,10 +21,10 @@ class ClientRenderer {
 
     void draw_health(uint8_t n);
     void draw_rounds(uint8_t n);
-    SDL2pp::Texture draw_sprite(char * path, SDL2pp::Renderer & renderer, uint8_t action);
     void render_all();
     void render(Image & im);
     void renderBackground();
+    void renderHealth(uint16_t lenght, uint16_t x, uint16_t y, uint8_t hp);
     static bool handleEvents();
 
     public:
