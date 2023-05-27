@@ -103,6 +103,8 @@ void ClientRenderer::renderBackground() {
 
 ClientRenderer::~ClientRenderer() {
     AssetManager::Release();
+    if (actual_frame)
+        delete actual_frame;
 }
 
 static bool ClientRenderer::handleEvents() {

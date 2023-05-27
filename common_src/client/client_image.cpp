@@ -38,3 +38,22 @@ Image::Image(uint8_t id, uint8_t action, uint8_t flip, uint8_t hp, uint16_t x, u
     this->y = y;
     this->frame = 0;
 }
+
+std::list<Image>* Image::Replace(std::list<Image>* original, std::list<Image>* neww) {
+    if (original != nullptr) {
+        std::list<Image>::iterator it1 = original->begin();
+        std::list<Image>::iterator it2 = neww->begin();
+
+        while (it1 != original->end() && it2 != neww->end()) {
+            if ((*it1).id == (*it2).id) {
+                if ((*it1).action == (*it2).action) {
+                    (*it2).frame++;
+                }
+            }
+            ++it1;
+            ++it2;
+        }
+        delete original;
+        return neww;
+    }
+}
