@@ -23,16 +23,26 @@ void ClientRenderer::GameLoop() {
 void ClientRenderer::render_all() {
     draw_health(actual_frame->front().id);
     draw_rounds(actual_frame->front().action);
-    for (const auto& it : actual_frame) {
+    for (auto const& it : actual_frame) {
         if(it->id > 0) {
             render((*it));
         }
     }
-
 }
 
-void ClientRenderer::render(Image im) {
-    
+void ClientRenderer::render(Image & im) {
+    uint16_t x = im.x;
+    uint16_t y = im.y;
+    Asset * asset = assets->GetAsset(im.id + im.action*1000);
+    renderer.Copy(
+                    asset,
+                    SDL2pp::Rect(asset->get_length() * im.frame, 0, (asset->get_length() * im.frame) + asset->get_length(), asset->get_height()),
+                    SDL2pp::Rect(x, y, x + asset->get_length() - 1, y + asset->get_height() - 1),
+                    0,
+                    SDL2pp::NullOpt,
+                    im.flip > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
+    );
+    //dibujarle la barra de vida arriba
 }
 
 
