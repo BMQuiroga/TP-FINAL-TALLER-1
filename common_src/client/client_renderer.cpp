@@ -9,7 +9,7 @@ void ClientRenderer::GameLoop() {
     bool running = true;
     while (running) {
         unsigned int frame_ticks = SDL_GetTicks();	
-        running = handle_events();
+        running = this->handleEvents();
         renderer.Clear();    
         if (updates.try_pop(new_update)) {
             actual_frame = Image::Replace(actual_frame,new_update);
@@ -28,8 +28,8 @@ void ClientRenderer::render_all() {
         draw_health(actual_frame->front().id);
         draw_rounds(actual_frame->front().action);
         for (auto const& it : *actual_frame) {
-            if (it->id > 0) {
-                render((*it));
+            if (it.id > 0) {
+                render(const_cast<Image&>(it));
             }
         }
     }
@@ -44,7 +44,7 @@ void ClientRenderer::render(Image & im) {
         im.frame -=  asset->get_frames();
     
     renderer.Copy(
-        (*asset->get_texture())
+        (*asset->get_texture()),
         SDL2pp::Rect(asset->get_length() * im.frame, 0, (asset->get_length() * im.frame) + asset->get_length(), asset->get_height()),
         SDL2pp::Rect(x, y, x + asset->get_length() - 1, y + asset->get_height() - 1),
         0,
@@ -55,7 +55,7 @@ void ClientRenderer::render(Image & im) {
         renderHealth(asset->get_length(),x,y,im.health);
 }
 
-void renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp) {
+void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp) {
     uint16_t hp_bar_height = 3;
     uint16_t hp_bar_height_difference = 10;
     Asset * full = assets->GetAsset(-1);
@@ -63,15 +63,15 @@ void renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp) {
     float hp_percentage = (x + length -1)*hp/100;
 
     renderer.Copy(
-        (*empty->get_texture())
+        (*empty->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + hp_bar_height_difference, x + length - 1, y + hp_bar_height - 1),
+        SDL2pp::Rect(x, y + hp_bar_height_difference, x + length - 1, y + hp_bar_height - 1)
 
     );
     renderer.Copy(
-        (*full->get_texture())
+        (*full->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + hp_bar_height_difference, std::round(hp_percentage), y + hp_bar_height - 1),
+        SDL2pp::Rect(x, y + hp_bar_height_difference, std::round(hp_percentage), y + hp_bar_height - 1)
     );
 }
 
@@ -111,7 +111,7 @@ ClientRenderer::~ClientRenderer() {
         delete actual_frame;
 }
 
-static bool ClientRenderer::handleEvents() {
+bool ClientRenderer::handleEvents() {
     SDL_Event event;
     // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
     while(SDL_PollEvent(&event)){

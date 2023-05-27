@@ -10,8 +10,8 @@
 
 class ClientRenderer {
     private:
-    Queue<std::string> events;
-    Queue<std::list<Image>*> updates;
+    Queue<std::string> &events;
+    Queue<std::list<Image>*> &updates;
     std::list<Image>* actual_frame;
     AssetManager * assets;
 

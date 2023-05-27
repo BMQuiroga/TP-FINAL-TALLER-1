@@ -49,7 +49,7 @@ void CProtocol::command_stop_shooting(Socket &s) {
     send_one_byte(STOP_SHOOTING,s);
 }
 
-uint8_t * CProtocol::get(Socket &skt, bool was_closed) {
+uint8_t * CProtocol::get(Socket &s, bool was_closed) {
     uint8_t length;
     s.recvall(&length,1,&was_closed);
     uint8_t * render = new uint8_t[length+1];//podria ser unique ptr
