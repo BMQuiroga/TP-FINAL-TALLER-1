@@ -16,7 +16,7 @@
 #define SHOOT 8
 #define STOP_SHOOTING 9
 
-class CProtocol : public Protocol<ProtocolRequest, ProtocolResponse> {
+class CProtocol : public Protocol<ProtocolRequest, uint8_t*> {
     private:
     //manda mensajes de 1 byte
     void send_one_byte(uint8_t n, Socket &s);
@@ -55,7 +55,8 @@ class CProtocol : public Protocol<ProtocolRequest, ProtocolResponse> {
     //recibe la image a renderizar del server
     uint8_t* receive_render(Socket &s);
 
-    ProtocolResponse get(Socket &skt, bool was_closed) override;
+    uint8_t* get(Socket &skt, bool was_closed) override;
+    
     void send(Socket &skt, ProtocolRequest request, bool was_closed) override;
 };
 

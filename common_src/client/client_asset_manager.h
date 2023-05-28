@@ -4,8 +4,6 @@
 #include "../socket.h"
 #include "../protocol.h"
 #include <string>
-#include <SDL2pp/SDL2pp.hh>
-#include <SDL2pp/Renderer.hh>
 #include "client_asset.h"
 #include <map>
 

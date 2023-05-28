@@ -47,9 +47,9 @@ void SProtocol::send_code(uint32_t bytes, Socket &s) {
 void SProtocol::sendmsg(std::string msg, Socket &s) {
     uint8_t msgcode = COMMAND_BROADCAST;
     s.sendall(&msgcode,ONE_BYTE);
-    uint16_t msglenght = msg.size();
-    uint16_t msglenghtsend = ntohs(msglenght);
-    s.sendall(&msglenghtsend,TWO_BYTES);
+    uint16_t msglength = msg.size();
+    uint16_t msglengthsend = ntohs(msglength);
+    s.sendall(&msglengthsend,TWO_BYTES);
     const char *cstr = msg.c_str();
-    s.sendall(cstr,msglenght);
+    s.sendall(cstr,msglength);
 }

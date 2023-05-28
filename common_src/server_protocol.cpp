@@ -7,6 +7,6 @@ uint8_t SProtocol::receive_command(Socket & s) {
     return n;
 }
 
-void SProtocol::send_render(char * data, int lenght, Socket & s) { 
-    s.sendall(data,lenght);
+void SProtocol::send_render(char * data, int length, Socket & s) { 
+    s.sendall(data,length);
 }
