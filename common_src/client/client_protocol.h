@@ -51,14 +51,14 @@ class CProtocol : public Protocol<ProtocolRequest, uint8_t*> {
 
     void command_stop_shooting(Socket &s);
     
-    void send_command(Intention& command, Socket &s);
+    void send_command(Intention& command, Socket &s, bool *was_closed);
 
     //recibe la image a renderizar del server
     uint8_t* receive_render(Socket &s);
 
-    uint8_t* get(Socket &skt, bool was_closed) override;
+    ProtocolResponse get(Socket &skt, bool *was_closed) override;
     
-    void send(Socket &skt, ProtocolRequest request, bool was_closed) override;
+    // void send(Socket &skt, ProtocolRequest request, bool was_closed) override;
 };
 
 #endif
