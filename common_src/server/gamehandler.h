@@ -13,6 +13,7 @@
 #include <mutex>
 #include "../queue.h"
 #include "../matchstate.h"
+#include "../protocol.h"
 
 class ProtectedMatchCounter {
     int counter {0};
@@ -61,9 +62,9 @@ class ProtectedMatchesList {
     /**
      * Agrega una partida nueva a la lista
     */
-    void add(const Game &x) {
+    void add(Game &x) {
         m.lock();
-        list.push_back(x);
+        list.push_back(std::move(x));
         m.unlock();
     }
 
@@ -79,25 +80,30 @@ class ProtectedMatchesList {
         return *it;
     }
 
-    void send_message_to_game(
-        const MatchState &message,
-        int code) {
-        m.lock();
-        auto it = std::find(list.begin(), list.end(), code);
-        (*it).send_message(message);
-        m.unlock();
+    size_t get_game_count() {
+        std::lock_guard<std::mutex> lock(m);
+        return list.size();
     }
+
+    // void send_message_to_game(
+    //     const MatchState &message,
+    //     int code) {
+    //     m.lock();
+    //     auto it = std::find(list.begin(), list.end(), code);
+    //     (*it).notify_all(message);
+    //     m.unlock();
+    // }
 
     /**
      * Cambia los jugadores de una partida según el 
      * código de la partida
     */
-    void change_game_players(int code, Queue<MatchState>& q) {
-        m.lock();
-        auto it = std::find(list.begin(), list.end(), code);
-        (*it).add_player(q);
-        m.unlock();
-    }
+    // void change_game_players(int code, Queue<MatchState>& q) {
+    //     m.lock();
+    //     auto it = std::find(list.begin(), list.end(), code);
+    //     (*it).add_player(q);
+    //     m.unlock();
+    // }
 };
 
 class GameHandler {
@@ -112,32 +118,34 @@ class GameHandler {
          * la partida con el código de la partida y el 
          * comando recibido
         */
-        MatchState create_new_game(const std::string& name,
-        Queue<MatchState>& q);
-        /**
-         * Recibe un mensaje y el código de la partida y
-         * reenvie el mensaje a la partida con el código 
-         * recibido 
-        */
-        void broadcast_message(
-            const std::string &message, 
-            const int &game_code);
+        Game& create_new_game(const std::string& name,
+        Queue<ProtocolResponse>& q);
+        Game& get_game(int code);
+        size_t get_game_count();
+        // /**
+        //  * Recibe un mensaje y el código de la partida y
+        //  * reenvie el mensaje a la partida con el código 
+        //  * recibido 
+        // */
+        // void broadcast_message(
+        //     const std::string &message, 
+        //     const int &game_code);
         /**
          * Recibo la cola de un jugador y el código de una partida. 
          * Si la partida existe, agrega el jugador a la partida. 
          * En caso contrario, envía un mensaje que la partida
          * no existe.
         */
-        MatchState join_game(int code,
-        Queue<MatchState>& q);
-        /**
-         * Recibo una de los comandos (join, create) para iniciar 
-         * una partida (handshake),
-         * Devuelve si el del comando comando, si fue ejecutado 
-         * con exito o no y el código de la partida
-        */
-        MatchState start_game_chat(const std::string& command, 
-        const std::string& parameters,
-        Queue<MatchState>& q);
+        // MatchState join_game(ProtocolRequest &message, int code,
+        // std::string &player_uuid, Queue<MatchState>& q);
+        // /**
+        //  * Recibo una de los comandos (join, create) para iniciar 
+        //  * una partida (handshake),
+        //  * Devuelve si el del comando comando, si fue ejecutado 
+        //  * con exito o no y el código de la partida
+        // */
+        // MatchState start_game_chat(const std::string& command, 
+        // const std::string& parameters,
+        // Queue<MatchState>& q);
 };
 #endif
