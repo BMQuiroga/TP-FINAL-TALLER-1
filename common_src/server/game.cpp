@@ -12,16 +12,39 @@
 
 Game::Game(int id, const std::string& name) :
     id(id),
-    name(name) {
+    name(name),
+    events(10000),
+    loop(events) {
 }
 
-void Game::add_player(Queue<MatchState>& q) {
+void Game::push_event(
+    ProtocolRequest &req,
+    std::string &player_uuid,
+    Queue<ProtocolResponse> &player_messages
+) {
+    GameEvent ev(req, player_uuid, std::ref(player_messages));
+    events.push(std::ref(ev));
+}
+
+Game::Game(Game &&other) : 
+    events(std::move(other.events)), 
+    loop(events), 
+    players(other.players), 
+    name(other.name) {
+    id = other.id;
+}
+
+void Game::start() {
+    loop.start();
+}
+
+void Game::add_player(Queue<ProtocolResponse>& q) {
     players.push_back(q);
 }
 
-void Game::send_message(const MatchState& state) {
+void Game::notify_all(const ProtocolResponse& state) {
     std::for_each(players.begin(), players.end(),
-        [state](Queue<MatchState> & queue)
+        [state](Queue<ProtocolResponse> & queue)
         {
             queue.push(state);
     });
