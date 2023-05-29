@@ -82,6 +82,7 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<std::list<Image>
     updates(updates),
     sdl(SDL_INIT_VIDEO),
     window("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_RESIZABLE),
+    actual_frame(nullptr),
     renderer(window, -1, SDL_RENDERER_ACCELERATED) {
     this->assets = AssetManager::Instance(this->renderer);
 }
