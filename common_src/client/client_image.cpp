@@ -1,4 +1,6 @@
+#include "../player_state.h"
 #include "client_image.h"
+#include <iostream>
 
 std::list<Image>* Image::Create(uint8_t* array) {
     std::list<Image>* list = new std::list<Image>;
@@ -15,6 +17,7 @@ std::list<Image>* Image::Create(uint8_t* array) {
             uint8_t flip = (*it++);
             uint8_t action = (*it++);
             uint8_t health = (*it++);
+            std::cout << "entity " << id << " at [" << x << " ," << y << "]" << std::endl;
             list->push_back(Image(id, action, flip, health, x, y));
         }
         if ((*it) > 150) {
@@ -40,6 +43,16 @@ Image::Image(uint8_t id, uint8_t action, uint8_t flip, uint8_t hp, uint16_t x, u
     this->frame = 0;
 }
 
+Image::Image(const PlayerStateReference &state) {
+    this->id = state.id;
+    this->action = state.state;
+    this->flip = state.direction;
+    this->health = state.hit_points;
+    this->x = state.x;
+    this->y = state.y;
+    this->frame = 0;
+}
+
 std::list<Image>* Image::Replace(std::list<Image>* original, std::list<Image>* neww) {
     if (original != nullptr) {
         std::list<Image>::iterator it1 = original->begin();
@@ -57,4 +70,5 @@ std::list<Image>* Image::Replace(std::list<Image>* original, std::list<Image>* n
         delete original;
         return neww;
     }
+    return neww;
 }

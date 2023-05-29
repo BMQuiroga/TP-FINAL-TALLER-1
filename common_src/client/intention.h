@@ -22,7 +22,8 @@
 #define RELOAD 10
 #define PREPARE_GRENADE 11
 #define THROW_GRENADE 12
-#define IDLE -1
+#define IDLE 13
+#define END -1
 
 class Intention {
 private:

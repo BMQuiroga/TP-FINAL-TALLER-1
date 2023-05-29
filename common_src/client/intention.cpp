@@ -51,5 +51,8 @@ Intention *Intention::make_intention(SDL_Event &event)
             return new IntentionThrowGrenade(THROW_GRENADE);
         }
     }
+    if (event.type == SDL_QUIT) {
+        return new IntentionIdle(END);
+    }
     return new IntentionIdle(IDLE);
 }

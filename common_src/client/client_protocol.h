@@ -17,40 +17,12 @@
 #define SHOOT 8
 #define STOP_SHOOTING 9
 
-class CProtocol : public Protocol<ProtocolRequest, uint8_t*> {
+class CProtocol : public Protocol<ProtocolRequest, ProtocolResponse> {
     private:
     //manda mensajes de 1 byte
     void send_one_byte(uint8_t n, Socket &s);
 
     public:
-    //procesa el evento de presionar la flecha ←
-    void command_move_left(Socket &s);
-
-    //procesa el evento de presionar la flecha →
-    void command_move_right(Socket &s);
-
-    //procesa el evento de presionar la flecha ↓
-    void command_move_down(Socket &s);
-
-    //procesa el evento de presionar la flecha ↑
-    void command_move_up(Socket &s);
-
-    //procesa el evento de dejar de presionar la flecha ←
-    void command_stop_moving_left(Socket &s);
-
-    //procesa el evento de dejar de presionar la flecha →
-    void command_stop_moving_right(Socket &s);
-
-    //procesa el evento de dejar de presionar la flecha ↓
-    void command_stop_moving_down(Socket &s);
-
-    //procesa el evento de dejar de presionar la flecha ↑
-    void command_stop_moving_up(Socket &s);
-
-    void command_shoot(Socket &s);
-
-    void command_stop_shooting(Socket &s);
-    
     void send_command(Intention& command, Socket &s, bool *was_closed);
 
     //recibe la image a renderizar del server
@@ -58,7 +30,7 @@ class CProtocol : public Protocol<ProtocolRequest, uint8_t*> {
 
     ProtocolResponse get(Socket &skt, bool *was_closed) override;
     
-    // void send(Socket &skt, ProtocolRequest request, bool was_closed) override;
+    void send(Socket &skt, ProtocolRequest request, bool was_closed) override;
 };
 
 #endif

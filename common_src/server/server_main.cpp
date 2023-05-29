@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     Accepter accepter(std::ref(sk));
     try {
         accepter.start();
-        while (std::cin.get() != 'q');
+        while (std::cin.get() != 'q') continue;
         sk.shutdown(0);
         sk.close();
         accepter.join();

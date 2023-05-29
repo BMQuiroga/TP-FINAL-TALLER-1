@@ -7,6 +7,7 @@
 #include <functional>
 #include <list>
 #include <algorithm>
+#include <utility>
 #include <tuple>
 #include "game.h"
 

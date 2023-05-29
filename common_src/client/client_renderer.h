@@ -13,7 +13,7 @@
 class ClientRenderer {
     private:
     Queue<Intention*> &events;
-    Queue<std::list<Image>*> &updates;
+    Queue<ProtocolResponse> &updates;
     std::list<Image>* actual_frame;
     AssetManager * assets;
 
@@ -30,7 +30,7 @@ class ClientRenderer {
     bool handleEvents();
 
     public:
-    explicit ClientRenderer(Queue<Intention*> &events, Queue<std::list<Image>*> &updates);
+    explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates);
     void GameLoop();
     ~ClientRenderer();
 };

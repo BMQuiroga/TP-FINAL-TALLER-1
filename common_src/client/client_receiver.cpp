@@ -10,7 +10,7 @@
 
 ClientReceiver::ClientReceiver(
     Socket& socket,
-    Queue<std::list<Image>*>& q) :
+    Queue<ProtocolResponse>& q) :
     protocol(), 
     skt(socket),
     q(q)
@@ -18,14 +18,15 @@ ClientReceiver::ClientReceiver(
 }
 
 void ClientReceiver::run() {
-    uint8_t * resp;
+    ProtocolResponse resp;
     is_alive = keep_talking = true;
+    bool was_closed = false;
     while (keep_talking) {
-        resp = protocol.get(skt, keep_talking);
-        q.push(Image::Create(resp));
-        if (!keep_talking) {
-            break;
+        resp = protocol.get(skt, &was_closed);
+        if (was_closed) {
+            kill();
         }
+        q.push(resp);
     }
 }
 

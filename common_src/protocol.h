@@ -63,7 +63,7 @@ class Protocol {
     */
     virtual Recv_Type get(
         Socket &skt,
-        bool was_closed) = 0;
+        bool *was_closed) = 0;
 
     /**
      * Envía datos del tipo Send_Type a traves del socket skt
@@ -82,11 +82,12 @@ class Protocol {
         T n,
         Socket &skt,
         bool *was_closed) {
+        /*
         if (sizeof(n) <= sizeof(uint16_t))
             n = htons(n);
         else
             n = htonl(n);
-
+        */
         return skt.sendall(&n, sizeof(n), was_closed);
     }
 

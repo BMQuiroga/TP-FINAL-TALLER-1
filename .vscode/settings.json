@@ -49,6 +49,15 @@
         "condition_variable": "cpp",
         "list": "cpp",
         "map": "cpp",
-        "mutex": "cpp"
+        "mutex": "cpp",
+        "bit": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp",
+        "numbers": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp",
+        "cinttypes": "cpp"
     }
 }

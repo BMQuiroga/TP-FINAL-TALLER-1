@@ -45,8 +45,9 @@ public:
 
     void run() override {
         is_alive = keep_talking = true;
+        bool was_closed = false;
         while (keep_talking) {
-            auto message = protocol.get(skt, keep_talking);
+            auto message = protocol.get(skt, &was_closed);
             if (!keep_talking) {
                 kill();
                 break;

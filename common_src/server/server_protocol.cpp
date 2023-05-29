@@ -1,7 +1,7 @@
 #include <iostream>
 #include "server_protocol.h"
 
-uint8_t ServerProtocol::recieve_command(Socket & s) {
+uint8_t ServerProtocol::receive_command(Socket & s) {
     uint8_t n = -1;
     s.recvall(&n,ONE_BYTE);
     return n;
@@ -11,10 +11,10 @@ void ServerProtocol::send_render(char * data, int length, Socket & s) {
     s.sendall(data,length);
 }
 
-ProtocolRequest ServerProtocol::get(Socket &skt, bool was_closed) {
+ProtocolRequest ServerProtocol::get(Socket &skt, bool *was_closed) {
     // get the client's request and return a ProtocolRequest representation of it
     ProtocolRequest request;
-    int cmd = recieve_command(skt);
+    int cmd = receive_command(skt);
     if (cmd >= 0) {
         request.cmd = cmd;
     }
@@ -24,7 +24,9 @@ ProtocolRequest ServerProtocol::get(Socket &skt, bool was_closed) {
 
 void ServerProtocol::send(Socket &skt, ProtocolResponse resp, bool was_closed) {
     int bytes_sent = 0;
-    bytes_sent += send_number(resp.players.size()*8, skt, &was_closed);//8 BYTES POR JUGADOR
+    uint16_t size = resp.players.size()*8;
+    //bytes_sent += send_number(&size, skt, &was_closed);//8 BYTES POR JUGADOR
+    bytes_sent = skt.sendall(&size ,2 ,&was_closed);
     for (auto player : resp.players) {
         std::cout << "Player: " << std::endl << 
             "- name: " << player.name << std::endl <<
@@ -41,5 +43,4 @@ void ServerProtocol::send(Socket &skt, ProtocolResponse resp, bool was_closed) {
     }
     bytes_sent += send_number(resp.game_state, skt, &was_closed);
     std::cout << "sent " << std::to_string(bytes_sent) << " bytes to client" << std::endl;
-
 }

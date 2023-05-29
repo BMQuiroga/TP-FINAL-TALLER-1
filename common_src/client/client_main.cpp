@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) { try {
     }
     
     Queue<Intention*> events_q(1000);
-    Queue<std::list<Image>*> updates_q(1000);
+    Queue<ProtocolResponse> updates_q(1000);
     Socket skt(hostname, servname);
     ClientSender client_sender(std::ref(skt), std::ref(events_q));
     ClientReceiver client_receiver(std::ref(skt), std::ref(updates_q));
@@ -39,6 +39,9 @@ int main(int argc, char *argv[]) { try {
     client_renderer.GameLoop(); //<--- magia
     skt.shutdown(0);
     skt.close();
+    client_sender.join();
+    client_receiver.kill();
+    client_receiver.join();
     ret = 0;
     return ret;
 } catch (const std::exception& err) {
