@@ -27,7 +27,7 @@ template<typename T, class C = std::deque<T> >
 class Queue {
     private:
         std::queue<T, C> q;
-	const unsigned int max_size;
+	    const unsigned int max_size;
 
         bool closed;
 
@@ -36,9 +36,15 @@ class Queue {
         std::condition_variable is_not_empty;
 
     public:
-	Queue() : max_size(UINT_MAX-1), closed(false) {}
-	explicit Queue(const unsigned int max_size) : 
-    max_size(max_size), closed(false) {}
+        Queue() : max_size(UINT_MAX-1), closed(false) {}
+        explicit Queue(const unsigned int max_size) : 
+        max_size(max_size), closed(false) {}
+        Queue(Queue &&other) : 
+        q(std::move(other.q)), 
+        max_size(other.max_size), 
+        closed(other.closed) {
+            other.close();
+        }
 
 
         bool try_push(T const& val) {
