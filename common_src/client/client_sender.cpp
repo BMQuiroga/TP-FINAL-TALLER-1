@@ -19,13 +19,16 @@ ClientSender::ClientSender(
 void ClientSender::run() {
     Intention *command;
     is_alive = keep_talking = true;
+    bool was_closed = false;
     while (keep_talking) {
         command = q.pop();
-        if (command->get_intention() == -1) {
+        if (command->get_intention() == IDLE) {
+            continue;
+        } else if (command->get_intention() == END) {
             kill();
             break;
         }
-        protocol.send_command(*command, skt);
+        protocol.send_command(*command, skt, &was_closed);
     }
 }
 

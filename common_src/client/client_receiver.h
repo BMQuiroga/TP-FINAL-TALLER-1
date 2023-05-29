@@ -13,14 +13,14 @@ class ClientReceiver:public Thread {
 private:
     CProtocol protocol;
     Socket& skt;
-    Queue<std::list<Image>*>& q;
+    Queue<ProtocolResponse>& q;
     std::atomic<bool> keep_talking{true};
     std::atomic<bool> is_alive{true};
 
 public:
     explicit ClientReceiver(
         Socket& socket,
-        Queue<std::list<Image>*>& q);
+        Queue<ProtocolResponse>& q);
     void run() override;
     bool is_dead();
     void kill();

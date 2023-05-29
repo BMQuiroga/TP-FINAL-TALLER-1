@@ -56,7 +56,7 @@ class CProtocol : public Protocol<ProtocolRequest, uint8_t*> {
     //recibe la image a renderizar del server
     uint8_t* receive_render(Socket &s);
 
-    ProtocolResponse get(Socket &skt, bool *was_closed) override;
+    ProtocolResponse get(Socket &skt, bool *was_closed);
     
     // void send(Socket &skt, ProtocolRequest request, bool was_closed) override;
 };

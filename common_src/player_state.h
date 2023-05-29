@@ -39,7 +39,7 @@ class PlayerState {
     void shoot(int flag);
 
   public:
-    PlayerState(const std::string &name, int8_t max_x = DEFAULT_MAX_X, int8_t max_y = DEFAULT_MAX_Y);
+    explicit PlayerState(const std::string &name, int8_t max_x = DEFAULT_MAX_X, int8_t max_y = DEFAULT_MAX_Y);
     ~PlayerState();
 
     // Procesa la solicitud del cliente y actualiza el estado actual del jugador

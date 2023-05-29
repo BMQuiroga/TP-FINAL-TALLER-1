@@ -3,18 +3,27 @@
 #include <string>
 #include "intention.h"
 #include <cmath>
+#include <vector>
 //#include <arpa/inet.h>
 
 void ClientRenderer::GameLoop() {
-    std::list<Image>* new_update = nullptr;
+    // std::list<Image>* new_update = nullptr;
+    std::list<Image>* frames_list = nullptr;
+    std::list<Image>* actual_frame = nullptr;
+    ProtocolResponse new_update;
     bool running = true;
     while (running) {
         unsigned int frame_ticks = SDL_GetTicks();	
         running = this->handleEvents();
-        renderer.Clear();    
+        renderer.Clear();
         if (updates.try_pop(new_update)) {
-            actual_frame = Image::Replace(actual_frame,new_update);
+            std::vector<PlayerStateReference>::iterator it;
+            for (it = new_update.players.begin(); it != new_update.players.end(); ++it) {
+                auto new_Model = Image((*it));
+                frames_list->push_back(new_Model);
+            }
         }
+        actual_frame = Image::Replace(actual_frame,frames_list);
         renderBackground();
         render_all();
         renderer.Present();
@@ -50,8 +59,7 @@ void ClientRenderer::render(Image & im) {
         SDL2pp::Rect(x, y, x + asset->get_length() - 1, y + asset->get_height() - 1),
         0,
         SDL2pp::NullOpt,
-        im.flip > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE
-    );
+        im.flip > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
     if (im.health != 0)
         renderHealth(asset->get_length(),x,y,im.health);
 }
@@ -66,18 +74,15 @@ void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8
     renderer.Copy(
         (*empty->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + hp_bar_height_difference, x + length - 1, y + hp_bar_height - 1)
-
-    );
+        SDL2pp::Rect(x, y + hp_bar_height_difference, x + length - 1, y + hp_bar_height - 1));
     renderer.Copy(
         (*full->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + hp_bar_height_difference, std::round(hp_percentage), y + hp_bar_height - 1)
-    );
+        SDL2pp::Rect(x, y + hp_bar_height_difference, std::round(hp_percentage), y + hp_bar_height - 1));
 }
 
 
-ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<std::list<Image>*> &updates) : 
+ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates) : 
     events(events),
     updates(updates),
     sdl(SDL_INIT_VIDEO),
@@ -88,11 +93,11 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<std::list<Image>
 }
 
 void ClientRenderer::draw_health(uint8_t n) {
-    //se va, cada unidad va a tener su vida
+    return;
 }
 
 void ClientRenderer::draw_rounds(uint8_t n) {
-    
+    return;
 }
 
 void ClientRenderer::renderBackground() {
@@ -103,8 +108,7 @@ void ClientRenderer::renderBackground() {
         SDL2pp::Rect(0, 0, 1920, 1080),
         0.0,                // don't rotate
         SDL2pp::NullOpt,    // rotation center - not needed
-        SDL_FLIP_NONE
-    );
+        SDL_FLIP_NONE);
 }
 
 ClientRenderer::~ClientRenderer() {
@@ -114,10 +118,10 @@ ClientRenderer::~ClientRenderer() {
 bool ClientRenderer::handleEvents() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
+        events.push(command);
+        if (command->get_intention() == END) {
             return false;
         }
-        events.push(Intention::make_intention(event));
     }
     return true;
 }

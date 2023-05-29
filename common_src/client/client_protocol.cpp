@@ -71,7 +71,7 @@ ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
         s.recvall(&ref.hit_points, sizeof(ref.hit_points), was_closed);
         resp.players.push_back(ref);
     }
-    s.recvall(&ref.game_state, sizeof(ref.game_state), was_closed)
+    s.recvall(&resp.game_state, sizeof(resp.game_state), was_closed);
 }
 
 // void CProtocol::send(Socket &skt, ProtocolRequest request, bool was_closed) {

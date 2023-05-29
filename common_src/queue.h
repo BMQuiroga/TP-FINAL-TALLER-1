@@ -5,6 +5,7 @@
 #include <condition_variable>
 #include <queue>
 #include <deque>
+#include <utility>
 #include <climits>
 
 struct ClosedQueue : public std::runtime_error {

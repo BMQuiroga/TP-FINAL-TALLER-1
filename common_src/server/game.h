@@ -32,11 +32,10 @@ struct GameEvent {
     ProtocolRequest req;
     std::string player_uuid;
     Queue<ProtocolResponse> &player_messages;
-    GameEvent(ProtocolRequest &req, std::string &uuid, Queue<ProtocolResponse> &q) : req(req), player_uuid(uuid), player_messages(q) {};
+    GameEvent(ProtocolRequest &req, std::string &uuid, Queue<ProtocolResponse> &q) : req(req), player_uuid(uuid), player_messages(q) {}
 };
 
 class GameLoop : public Thread {
-
   private:
     Queue<GameEvent> &events;
     uint32_t map[100][100];
@@ -46,8 +45,7 @@ class GameLoop : public Thread {
 
   public:
     GameLoop(
-        Queue<GameEvent> &events
-    ) : events(events), map{0} {
+        Queue<GameEvent> &events) : events(events), map{0} {
         state = CREATED;
     }
 
@@ -102,8 +100,7 @@ class GameLoop : public Thread {
                 std::for_each(message_queues.begin(), message_queues.end(),
                     [resp](Queue<ProtocolResponse> & queue) {
                         queue.push(resp);
-                    }
-                );
+                });
             }
         }
     }
@@ -124,8 +121,7 @@ class Game {
         void push_event(
             ProtocolRequest &req,
             std::string &player_uuid,
-            Queue<ProtocolResponse> &player_messages
-        );
+            Queue<ProtocolResponse> &player_messages);
         void start();
 
         /**
