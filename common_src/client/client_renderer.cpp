@@ -114,6 +114,9 @@ ClientRenderer::~ClientRenderer() {
 bool ClientRenderer::handleEvents() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            return false;
+        }
         events.push(Intention::make_intention(event));
     }
     return true;
