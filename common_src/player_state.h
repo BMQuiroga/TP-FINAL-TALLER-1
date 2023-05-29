@@ -14,9 +14,10 @@ enum player_direction { LEFT, RIGHT };
 
 // struct representing player attributes that will be visible to the clien
 struct PlayerStateReference {
+    uint8_t id;
     std::string name;
-    uint16_t hit_points;
-    uint16_t rounds;
+    uint8_t hit_points;
+    uint8_t rounds;
     uint8_t direction;
     uint16_t x;
     uint16_t y;
@@ -26,9 +27,10 @@ struct PlayerStateReference {
 // Clase encargada de manejar la lógica del jugador (almacenar y actualizar su estado)
 class PlayerState {
   private:
+    uint8_t id;
     std::string name;
-    uint16_t hit_points;
-    uint16_t rounds;
+    uint8_t hit_points;
+    uint8_t rounds;
     std::vector<int8_t> direction;
     std::vector<uint16_t> position;
     int8_t state;

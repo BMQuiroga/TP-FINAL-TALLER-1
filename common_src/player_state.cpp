@@ -17,6 +17,7 @@ std::string PlayerState::get_name() {
 
 PlayerStateReference PlayerState::make_ref() {
     PlayerStateReference ref;
+    ref.id = id;
     ref.hit_points = hit_points;
     ref.name = name;
     ref.rounds = rounds;
