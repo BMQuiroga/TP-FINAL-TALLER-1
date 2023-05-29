@@ -1,6 +1,7 @@
 #include <iostream>
 #include "client_renderer.h"
 #include <string>
+#include "intention.h"
 #include <cmath>
 //#include <arpa/inet.h>
 
@@ -76,7 +77,7 @@ void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8
 }
 
 
-ClientRenderer::ClientRenderer(Queue<std::string> &events, Queue<std::list<Image>*> &updates) : 
+ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<std::list<Image>*> &updates) : 
     events(events),
     updates(updates),
     sdl(SDL_INIT_VIDEO),
@@ -107,59 +108,12 @@ void ClientRenderer::renderBackground() {
 
 ClientRenderer::~ClientRenderer() {
     AssetManager::Release();
-    if (actual_frame)
-        delete actual_frame;
 }
 
 bool ClientRenderer::handleEvents() {
     SDL_Event event;
-    // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
-    while(SDL_PollEvent(&event)){
-        switch(event.type) {
-            case SDL_KEYDOWN: {
-                // ¿Qué pasa si mantengo presionada la tecla?    
-                SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&) event;
-                switch (keyEvent.keysym.sym) {
-                    case SDLK_LEFT:
-                        //player.moveLeft();
-                        break;
-                    case SDLK_RIGHT:
-                        //player.moveRigth();
-                        break;
-                    case SDLK_DOWN:
-                        //player.moveRigth();
-                        break;
-                    case SDLK_UP:
-                        //player.moveRigth();
-                        break;
-                    }
-                } // Fin KEY_DOWN
-                break;
-            case SDL_KEYUP: {
-                SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&) event;
-                switch (keyEvent.keysym.sym) {
-                    case SDLK_LEFT:
-                        //player.stopMoving();
-                        break;
-                    case SDLK_RIGHT:
-                        //player.stopMoving();
-                        break;
-                    case SDLK_DOWN:
-                        //player.moveRigth();
-                        break;
-                    case SDLK_UP:
-                        //player.moveRigth();
-                        break;
-                    } 
-                }// Fin KEY_UP
-                break;
-            case SDL_MOUSEMOTION:
-                //std::cout << "Oh! Mouse" << std::endl;
-                break;
-            case SDL_QUIT:
-                //std::cout << "Quit :(" << std::endl;
-                return false;
-        } // fin switch(event)
-    } // fin while(SDL_PollEvents)
+    while (SDL_PollEvent(&event)) {
+        events.push(Intention::make_intention(event));
+    }
     return true;
 }

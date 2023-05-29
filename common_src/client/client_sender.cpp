@@ -9,7 +9,7 @@
 
 ClientSender::ClientSender(
     Socket& socket, 
-    Queue<std::string>& q) :
+    Queue<Intention*>& q) :
     protocol(), 
     skt(socket),
     q(q)
@@ -17,15 +17,15 @@ ClientSender::ClientSender(
 }
 
 void ClientSender::run() {
-    std::string command;
+    Intention *command;
     is_alive = keep_talking = true;
     while (keep_talking) {
         command = q.pop();
-        if (command == "-1") {
+        if (command->get_intention() == -1) {
             kill();
             break;
         }
-        protocol.send_command(command, skt);
+        protocol.send_command(*command, skt);
     }
 }
 

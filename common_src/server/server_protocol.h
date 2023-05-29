@@ -12,7 +12,7 @@ class ServerProtocol : public Protocol<ProtocolResponse, ProtocolRequest> {
     void send_render(char * data, int length, Socket & s);
 
     //recibe un byte
-    uint8_t recieve_command(Socket & s);
+    uint8_t receive_command(Socket & s);
 
     ProtocolRequest get(Socket &skt, bool was_closed) override;
     void send(Socket &skt,ProtocolResponse resp, bool was_closed) override;

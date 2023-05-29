@@ -11,14 +11,14 @@ class ClientSender:public Thread {
 private:
     CProtocol protocol;
     Socket& skt;
-    Queue<std::string>& q;
+    Queue<Intention*>& q;
     std::atomic<bool> keep_talking{true};
     std::atomic<bool> is_alive{true};
 
 public:
     explicit ClientSender(
         Socket& socket,
-        Queue<std::string>& q);
+        Queue<Intention*>& q);
     void run() override;
     bool is_dead();
     void kill();

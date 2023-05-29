@@ -18,10 +18,10 @@ ClientReceiver::ClientReceiver(
 }
 
 void ClientReceiver::run() {
-    std::string command;
+    uint8_t * resp;
     is_alive = keep_talking = true;
     while (keep_talking) {
-        uint8_t * resp = protocol.get(skt, keep_talking);
+        resp = protocol.get(skt, keep_talking);
         q.push(Image::Create(resp));
         if (!keep_talking) {
             break;

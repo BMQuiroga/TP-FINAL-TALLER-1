@@ -1,8 +1,7 @@
 #include <iostream>
 #include "client_protocol.h"
 #include <string>
-#include <SDL2pp/SDL2pp.hh>
-#include <SDL2pp/Renderer.hh>
+#include "intention.h"
 //#include <arpa/inet.h>
 
 void CProtocol::send_one_byte(uint8_t n, Socket &s) {
@@ -63,28 +62,9 @@ void CProtocol::send(Socket &skt, ProtocolRequest request, bool was_closed) {
     // TODO
 }
 
-void CProtocol::send_command(const std::string& command, Socket &s) {
-    if (command == "move left") {
-        command_move_left(s);
-    } else if (command == "move right") {
-        command_move_right(s);
-    } else if (command == "move up") {
-        command_move_up(s);
-    } else if (command == "move down") {
-        command_move_down(s);
-    } else if (command == "stop left") {
-        command_stop_moving_left(s);
-    } else if (command == "stop right") {
-        command_stop_moving_right(s);
-    } else if (command == "stop up") {
-        command_stop_moving_up(s);
-    } else if (command == "stop down") {
-        command_stop_moving_down(s);
-    } else if (command == "shoot") {
-        command_shoot(s);
-    } else if (command == "stop shooting") {
-        command_stop_shooting(s);
-    }
+void CProtocol::send_command(Intention& command, Socket &s) {
+    uint8_t command_id = (uint8_t) command.get_intention();
+    send_one_byte(command_id, s);
 }
 
 uint8_t* CProtocol::receive_render(Socket &s) {
