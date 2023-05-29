@@ -24,7 +24,9 @@ ProtocolRequest ServerProtocol::get(Socket &skt, bool *was_closed) {
 
 void ServerProtocol::send(Socket &skt, ProtocolResponse resp, bool was_closed) {
     int bytes_sent = 0;
-    bytes_sent += send_number(resp.players.size()*8, skt, &was_closed);//8 BYTES POR JUGADOR
+    uint16_t size = resp.players.size()*8;
+    //bytes_sent += send_number(&size, skt, &was_closed);//8 BYTES POR JUGADOR
+    bytes_sent = skt.sendall(&size ,2 ,&was_closed);
     for (auto player : resp.players) {
         std::cout << "Player: " << std::endl << 
             "- name: " << player.name << std::endl <<

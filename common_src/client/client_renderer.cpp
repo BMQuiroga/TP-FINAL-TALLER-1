@@ -9,7 +9,6 @@
 void ClientRenderer::GameLoop() {
     // std::list<Image>* new_update = nullptr;
     std::list<Image>* frames_list = nullptr;
-    std::list<Image>* actual_frame = nullptr;
     ProtocolResponse new_update;
     bool running = true;
     while (running) {
@@ -17,13 +16,19 @@ void ClientRenderer::GameLoop() {
         running = this->handleEvents();
         renderer.Clear();
         if (updates.try_pop(new_update)) {
+            std::cout << "found new update" << std::endl;
+            frames_list = new std::list<Image>;
             std::vector<PlayerStateReference>::iterator it;
             for (it = new_update.players.begin(); it != new_update.players.end(); ++it) {
                 auto new_Model = Image((*it));
                 frames_list->push_back(new_Model);
             }
+            std::cout << "created image" << std::endl;
+            this->actual_frame = Image::Replace(this->actual_frame,frames_list);
+            std::cout << "replaced image" << std::endl;
+            std::cout << actual_frame->size() << std::endl;
+
         }
-        actual_frame = Image::Replace(actual_frame,frames_list);
         renderBackground();
         render_all();
         renderer.Present();
@@ -34,10 +39,11 @@ void ClientRenderer::GameLoop() {
 }
 
 void ClientRenderer::render_all() {
-    if (actual_frame != nullptr) {
-        draw_health(actual_frame->front().id);
-        draw_rounds(actual_frame->front().action);
+    if (this->actual_frame != nullptr) {
+        //draw_health(actual_frame->front().id);
+        //draw_rounds(actual_frame->front().action);
         for (auto const& it : *actual_frame) {
+            std::cout << "id:" << it.id << std::endl;
             if (it.id > 0) {
                 render(const_cast<Image&>(it));
             }
@@ -46,6 +52,7 @@ void ClientRenderer::render_all() {
 }
 
 void ClientRenderer::render(Image & im) {
+    std::cout << "entra al render" << std::endl;
     uint16_t x = im.x;
     uint16_t y = im.y;
     Asset * asset = assets->GetAsset(im.id + im.action*1000);
@@ -78,7 +85,7 @@ void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8
     renderer.Copy(
         (*full->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + hp_bar_height_difference, std::round(hp_percentage), y + hp_bar_height - 1));
+        SDL2pp::Rect(x, y + hp_bar_height_difference, std::round(hp_percentage), y - 1));
 }
 
 

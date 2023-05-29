@@ -17,9 +17,9 @@ ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
     // render[0] = length;
     // return render;
     ProtocolResponse resp;
-    size_t bytes;
+    uint16_t bytes;
     s.recvall(&bytes, sizeof(bytes), was_closed);
-    int iter = bytes / sizeof(ProtocolResponse);
+    int iter = bytes / 8;
     for (int i = 0; i < iter; i++) {
         PlayerStateReference ref;
         s.recvall(&ref.id, sizeof(ref.id), was_closed);
@@ -32,6 +32,8 @@ ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
         resp.players.push_back(ref);
     }
     s.recvall(&resp.game_state, sizeof(resp.game_state), was_closed);
+    std::cout << "ended CProtocol get" << std::endl;
+    return resp;
 }
 
 void CProtocol::send(Socket &skt, ProtocolRequest request, bool was_closed) {

@@ -82,11 +82,12 @@ class Protocol {
         T n,
         Socket &skt,
         bool *was_closed) {
+        /*
         if (sizeof(n) <= sizeof(uint16_t))
             n = htons(n);
         else
             n = htonl(n);
-
+        */
         return skt.sendall(&n, sizeof(n), was_closed);
     }
 

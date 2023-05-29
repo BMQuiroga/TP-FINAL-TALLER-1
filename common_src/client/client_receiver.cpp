@@ -23,7 +23,7 @@ void ClientReceiver::run() {
     bool was_closed = false;
     while (keep_talking) {
         resp = protocol.get(skt, &was_closed);
-        if (!was_closed) {
+        if (was_closed) {
             kill();
         }
         q.push(resp);
