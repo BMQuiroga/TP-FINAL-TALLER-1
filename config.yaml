@@ -16,6 +16,49 @@ Game:
     - Enemy: { name: Spear, speed: 10 }
     - Enemy: { name: Venom, speed: 10 }
   Soldiers:
-    - Soldier: { gun: IDF, grenades: true, bombaereo: false }
-    - Soldier: { gun: P90, grenades: true, bombaereo: true }
-    - Soldier: { gun: Scout, grenades: true, bombaereo: false }
+    - Soldier: { 
+      gun: IDF, 
+      grenades: true, 
+      bombardeo: false, 
+      walk sprites: 7,
+      run sprites: 8,
+      idle sprites: 7,
+      hurt sprites: 3,
+      recharge sprites: 13,
+      shot1 sprites: 4,
+      shot2 sprites: 4,
+      grenade sprites: 9,
+      dead sprites: 4,
+      attack sprites: 3
+      }
+    - Soldier: { 
+      gun: P90, 
+      grenades: true, 
+      bombardeo: true, 
+      walk sprites: 8,
+      run sprites: 8,
+      idle sprites: 9,
+      hurt sprites: 3,
+      recharge sprites: 7,
+      shot1 sprites: 4,
+      shot2 sprites: 4,
+      grenade sprites: 16,
+      dead sprites: 4,
+      attack sprites: 4
+      }
+    - Soldier: { 
+      gun: Scout, 
+      grenades: true, 
+      bombardeo: false, 
+      walk sprites: 8,
+      run sprites: 6,
+      idle sprites: 7,
+      hurt sprites: 4,
+      recharge sprites: 8,
+      shot1 sprites: 4,
+      shot2 sprites: 4,
+      grenade sprites: 8,
+      dead sprites: 5,
+      attack sprites: 5,
+      smoke sprites: 22
+      }

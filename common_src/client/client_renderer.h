@@ -4,13 +4,15 @@
 #include "../socket.h"
 #include "../protocol.h"
 #include <string>
+#include <memory>
 #include <list>
+#include "intention.h"
 #include "client_asset_manager.h"
 #include "client_image.h"
 
 class ClientRenderer {
     private:
-    Queue<std::string> &events;
+    Queue<Intention*> &events;
     Queue<std::list<Image>*> &updates;
     std::list<Image>* actual_frame;
     AssetManager * assets;
@@ -25,12 +27,11 @@ class ClientRenderer {
     void render(Image & im);
     void renderBackground();
     void renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp);
-    static bool handleEvents();
+    bool handleEvents();
 
     public:
-
+    explicit ClientRenderer(Queue<Intention*> &events, Queue<std::list<Image>*> &updates);
     void GameLoop();
-    ClientRenderer(Queue<std::string> &events, Queue<std::list<Image>*> &updates);
     ~ClientRenderer();
 };
 

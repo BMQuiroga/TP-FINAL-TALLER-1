@@ -80,7 +80,7 @@ class Protocol {
      * Envia un mensaje de texto a traves del 
      * socket
     */
-    std::string send_text_message(
+    /*std::string send_text_message(
         std::string &message,
         Socket &skt,
         bool *was_closed) {
@@ -89,7 +89,7 @@ class Protocol {
         std::copy_if(message.begin(), message.end(), std::back_inserter(buf), [](char c) { return c != '\0'; });
         skt.sendall(&size, sizeof(size), was_closed);
         skt.sendall(buf.data(), buf.size(), was_closed);
-    }
+    }*/
 
     /**
      * Recibe el texto del mensaje recibido para 

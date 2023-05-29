@@ -3,6 +3,7 @@
 
 #include "../socket.h"
 #include "../protocol.h"
+#include "intention.h"
 #include <string>
 
 #define MOVE_LEFT 0
@@ -49,8 +50,8 @@ class CProtocol : public Protocol<ProtocolRequest, uint8_t*> {
     void command_shoot(Socket &s);
 
     void command_stop_shooting(Socket &s);
-
-    void send_command(const std::string& command, Socket &s);
+    
+    void send_command(Intention& command, Socket &s);
 
     //recibe la image a renderizar del server
     uint8_t* receive_render(Socket &s);

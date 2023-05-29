@@ -4,25 +4,24 @@
 #include "../socket.h"
 #include "../protocol.h"
 #include <string>
+#include <memory>
 #include "client_asset.h"
 #include <map>
 
 
 class AssetManager {
     private:
-
     static AssetManager* sInstance;
     std::map<int,std::shared_ptr<Asset>> map;
 
     public:
-
     static AssetManager* Instance(SDL2pp::Renderer & renderer);
 
     static void Release();
 
     Asset* GetAsset(int code);
 
-    AssetManager(SDL2pp::Renderer & renderer);
+    explicit AssetManager(SDL2pp::Renderer & renderer);
 };
 
 #endif

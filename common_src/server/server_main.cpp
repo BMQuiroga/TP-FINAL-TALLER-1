@@ -23,7 +23,9 @@ int main(int argc, char *argv[]) { try {
     Socket sk(servname); // socket aceptador
     Accepter accepter(std::ref(sk));
     accepter.start();
-    while (std::cin.get() != 'q');
+    while (std::cin.get() != 'q') {
+        continue;
+    }
     sk.shutdown(0);
     sk.close();
     accepter.join();

@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) { try {
         return ret;
     }
     
-    Queue<std::string> events_q;
+    Queue<Intention*> events_q(1000);
     Queue<std::list<Image>*> updates_q(1000);
     Socket skt(hostname, servname);
     ClientSender client_sender(std::ref(skt), std::ref(events_q));
