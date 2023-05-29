@@ -27,6 +27,7 @@ std::list<Image>* Image::Create(uint8_t* array) {
             list->push_back(Image(id, 0, flip, 0, x, y));
         }
     }
+    delete[] array;
 }
 
 Image::Image(uint8_t id, uint8_t action, uint8_t flip, uint8_t hp, uint16_t x, uint16_t y) {
