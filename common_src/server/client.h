@@ -30,7 +30,9 @@ private:
     Queue<ProtocolResponse> responses;
     Receiver<ProtocolResponse, ProtocolRequest> receiver;
     Sender<ProtocolResponse, ProtocolRequest> sender;
-    PlayerState state;
+    GameHandler &game_handler;
+    std::string uuid; // uuid of the client
+    int joined_game; // unique id of the game this client joined
 
 public:
     explicit Client(Socket&& socket,
@@ -44,7 +46,7 @@ public:
     bool is_dead();
     void kill();
 
-    void handle_request(const ProtocolRequest &message);
+    void handle_request(ProtocolRequest &message);
 
     Client(const Client&) = delete;
     Client& operator=(const Client&) = delete;

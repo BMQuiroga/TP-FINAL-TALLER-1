@@ -1,7 +1,6 @@
 #ifndef __PLAYER_STATE_H__
 #define __PLAYER_STATE_H__
 
-#include "protocol.h"
 #include <vector>
 #include <string>
 
@@ -11,6 +10,18 @@
 #define DEFAULT_MAX_Y 100
 
 enum player_state { IDLE, SHOOTING, MOVING, SHOOTING_AND_MOVING, RELOADING };
+enum player_direction { LEFT, RIGHT };
+
+// struct representing player attributes that will be visible to the clien
+struct PlayerStateReference {
+    std::string name;
+    uint16_t hit_points;
+    uint16_t rounds;
+    uint8_t direction;
+    uint16_t x;
+    uint16_t y;
+    int8_t state;
+};
 
 // Clase encargada de manejar la lógica del jugador (almacenar y actualizar su estado)
 class PlayerState {
@@ -26,10 +37,13 @@ class PlayerState {
     void shoot(int flag);
 
   public:
-    explicit PlayerState(int8_t max_x = DEFAULT_MAX_X, int8_t max_y = DEFAULT_MAX_Y);
+    PlayerState(const std::string &name, int8_t max_x = DEFAULT_MAX_X, int8_t max_y = DEFAULT_MAX_Y);
     ~PlayerState();
 
     // Procesa la solicitud del cliente y actualiza el estado actual del jugador
-    void next_state(const ProtocolRequest &request);
+    void next_state(int cmd);
+
+    std::string get_name();
+    PlayerStateReference make_ref();
 };
 #endif

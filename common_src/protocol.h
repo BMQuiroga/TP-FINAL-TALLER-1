@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include "player_state.h"
 
 #define MOVE_LEFT 0
 #define MOVE_RIGHT 1
@@ -18,20 +19,33 @@
 #define STOP_MOVING_RIGHT 5
 #define STOP_MOVING_UP 6
 #define STOP_MOVING_DOWN 7
+#define SHOOT 8
+#define STOP_SHOOTING 9
+#define JOIN 10
+#define CREATE 11
 
 // Solicitud del cliente
 struct ProtocolRequest {
-    int move; // move command (LEFT, RIGHT, UP, DOWN)
-    int shoot; // shoot command
+    int cmd; // command (SHOOT, MOVE, etc)
+    std::vector<int8_t> content; // request content
 };
+
+// struct CreateRequest {
+//     int cmd;    // command
+//     std::string name; // name of the match to create
+//     CreateRequest(std::string &name) : cmd(CREATE), name(name) {}
+// };
+
+// struct JoinRequest {
+//     int cmd;
+//     int game_code;
+//     JoinRequest(int game_code) : cmd(JOIN), game_code(game_code) {}
+// };
 
 // Respuesta que se devuelve al cliente despues de cada solicitud
 struct ProtocolResponse {
-    std::string name;
-    uint16_t hit_points;
-    uint16_t rounds;
-    std::vector<uint16_t> position;
-    int8_t state;
+    int game_state;
+    std::vector<PlayerStateReference> players;
     ProtocolResponse() = default;
 };
 
@@ -64,7 +78,7 @@ class Protocol {
      * del socket
     */
    template <typename T>
-    void send_number(
+    int send_number(
         T n,
         Socket &skt,
         bool *was_closed) {
@@ -73,7 +87,7 @@ class Protocol {
         else
             n = htonl(n);
 
-        skt.sendall(&n, sizeof(n), was_closed);
+        return skt.sendall(&n, sizeof(n), was_closed);
     }
 
     /**
