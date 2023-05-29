@@ -4,6 +4,7 @@
 
 PlayerState::PlayerState(const std::string &name, int8_t max_x, int8_t max_y) : 
 name(name), direction(2, 0), position(2, 0) {
+    this->id = 1;
     this->rounds = GUN_MAGAZINE_SIZE;
     this->state = IDLE;
     this->max_x = max_x;
