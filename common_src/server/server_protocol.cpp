@@ -16,15 +16,28 @@ ProtocolRequest ServerProtocol::get(Socket &skt, bool was_closed) {
     ProtocolRequest request;
     int cmd = recieve_command(skt);
     if (cmd >= 0) {
-        request.move = cmd;
+        request.cmd = cmd;
     }
 
     return request;
 }
 
 void ServerProtocol::send(Socket &skt, ProtocolResponse resp, bool was_closed) {
-    send_number(resp.state, skt, &was_closed);
-    send_number(resp.hit_points, skt, &was_closed);
-    send_number(resp.position[0], skt, &was_closed);
-    send_number(resp.position[1], skt, &was_closed);
+    int bytes_sent = 0;
+    bytes_sent += send_number(resp.players.size(), skt, &was_closed);
+    for (auto player : resp.players) {
+        std::cout << "Player: " << std::endl << 
+            "- name: " << player.name << std::endl <<
+            "- state: " << std::to_string(player.state) << std::endl <<
+            "- hit points: " << std::to_string(player.hit_points) << std::endl <<
+            "- x: " << std::to_string(player.x) << std::endl <<
+            "- y: " << std::to_string(player.y) << std::endl;
+        bytes_sent += send_number(player.state, skt, &was_closed);
+        bytes_sent += send_number(player.hit_points, skt, &was_closed);
+        bytes_sent += send_number(player.x, skt, &was_closed);
+        bytes_sent += send_number(player.y, skt, &was_closed);
+    }
+    bytes_sent += send_number(resp.game_state, skt, &was_closed);
+    std::cout << "sent " << std::to_string(bytes_sent) << " bytes to client" << std::endl;
+
 }
