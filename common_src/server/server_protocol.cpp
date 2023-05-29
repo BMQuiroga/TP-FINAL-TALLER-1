@@ -11,7 +11,7 @@ void ServerProtocol::send_render(char * data, int length, Socket & s) {
     s.sendall(data,length);
 }
 
-ProtocolRequest ServerProtocol::get(Socket &skt, bool was_closed) {
+ProtocolRequest ServerProtocol::get(Socket &skt, bool *was_closed) {
     // get the client's request and return a ProtocolRequest representation of it
     ProtocolRequest request;
     int cmd = receive_command(skt);

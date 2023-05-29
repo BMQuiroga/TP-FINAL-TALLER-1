@@ -74,7 +74,7 @@ class GameLoop : public Thread {
         return resp;
     }
 
-    PlayerState& get_player(std::string &uuid) {
+    PlayerState& get_player(const std::string &uuid) {
         return players.call<PlayerState&>([this, uuid](std::vector<PlayerState> &players) -> PlayerState& {
             for (PlayerState &player : players) {
                 if (player.get_name() == uuid) {

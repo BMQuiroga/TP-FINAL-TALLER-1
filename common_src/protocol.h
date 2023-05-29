@@ -63,7 +63,7 @@ class Protocol {
     */
     virtual Recv_Type get(
         Socket &skt,
-        bool was_closed) = 0;
+        bool *was_closed) = 0;
 
     /**
      * Envía datos del tipo Send_Type a traves del socket skt
