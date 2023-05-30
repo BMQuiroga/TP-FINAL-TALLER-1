@@ -2,7 +2,7 @@
 #include "./client/client_protocol.h"
 #include <arpa/inet.h>
 
-PlayerState::PlayerState(const std::string &name, int8_t max_x, int8_t max_y) : 
+PlayerState::PlayerState(const std::string &name, int16_t max_x, int16_t max_y) : 
 name(name), direction(2, 0), position(2, 0) {
     this->id = 1;
     this->rounds = GUN_MAGAZINE_SIZE;
