@@ -81,11 +81,11 @@ void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8
     renderer.Copy(
         (*empty->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + hp_bar_height_difference, x + length - 1, y + hp_bar_height - 1));
+        SDL2pp::Rect(x, y, x + length - 1, y + hp_bar_height - 1));
     renderer.Copy(
         (*full->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + hp_bar_height_difference, std::round(hp_percentage), y - 1));
+        SDL2pp::Rect(x, y, std::round(hp_percentage), y + hp_bar_height - 1));
 }
 
 
