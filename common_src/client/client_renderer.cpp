@@ -6,6 +6,16 @@
 #include <vector>
 //#include <arpa/inet.h>
 
+ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates) : 
+    events(events),
+    updates(updates),
+    sdl(SDL_INIT_VIDEO),
+    window("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_RESIZABLE),
+    actual_frame(nullptr),
+    renderer(window, -1, SDL_RENDERER_ACCELERATED) {
+    this->assets = AssetManager::Instance(this->renderer);
+}
+
 void ClientRenderer::GameLoop() {
     // std::list<Image>* new_update = nullptr;
     std::list<Image>* frames_list = nullptr;
@@ -86,17 +96,6 @@ void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8
         (*full->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
         SDL2pp::Rect(x, y + hp_bar_height_difference, std::round(hp_percentage), y - 1));
-}
-
-
-ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates) : 
-    events(events),
-    updates(updates),
-    sdl(SDL_INIT_VIDEO),
-    window("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_RESIZABLE),
-    actual_frame(nullptr),
-    renderer(window, -1, SDL_RENDERER_ACCELERATED) {
-    this->assets = AssetManager::Instance(this->renderer);
 }
 
 void ClientRenderer::draw_health(uint8_t n) {
