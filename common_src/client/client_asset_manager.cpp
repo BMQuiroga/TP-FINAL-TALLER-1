@@ -21,6 +21,7 @@ void AssetManager::Release() {
 
 AssetManager::AssetManager(SDL2pp::Renderer & renderer) {
 	map.emplace(-2, std::make_shared<Asset>("../resources/HPBar/EmptyBar.png", 0, 300, 300, 1, renderer, 0));
+	//map.emplace(-2, Asset::Create("../resources/HPBar/EmptyBar.png", 0, 300, 300, 1, renderer, 0));
 	map.emplace(-1, std::make_shared<Asset>("../resources/HPBar/FullBar.png", 0, 300, 300, 1, renderer, 0));
 
 	map.emplace(0, std::make_shared<Asset>("../resources/backgrounds/War1/Bright/War.png", 0, 1920, 1080, 1, renderer, 0));

@@ -3,20 +3,21 @@
 #include <string>
 //#include <arpa/inet.h>
 
-Asset::Asset(std::string path, uint8_t offset, uint8_t height, uint8_t length, uint8_t frames, SDL2pp::Renderer& r, uint32_t colorkey)
+Asset::Asset(std::string path, uint8_t offset, uint16_t height, uint16_t length, uint8_t frames, SDL2pp::Renderer& r, uint32_t colorkey)
     : offset(offset), height(height), length(length), frames(frames) {
     this->texture = new SDL2pp::Texture(r, SDL2pp::Surface(path).SetColorKey(true, colorkey));
+    //std::cout << "this and other stuff:" << length << " " << height << std::endl;
 }
 
 uint8_t Asset::get_offset() {
     return this->offset;
 }
 
-uint8_t Asset::get_height() {
+uint16_t Asset::get_height() {
     return this->height;
 }
 
-uint8_t Asset::get_length() {
+uint16_t Asset::get_length() {
     return this->length;
 }
 
@@ -32,3 +33,7 @@ Asset::~Asset() {
     delete this->texture;
 }
 
+Asset* Asset::Create(std::string path, uint8_t offset, uint16_t height, uint16_t length, uint8_t frames, SDL2pp::Renderer& r, uint32_t colorkey) {
+    Asset *a = new Asset(path,offset,height,length,frames,r,colorkey);
+    return a;
+}
