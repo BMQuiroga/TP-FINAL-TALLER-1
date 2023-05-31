@@ -68,7 +68,8 @@ void ClientRenderer::render(Image & im) {
     //Asset * asset = assets->GetAsset(im.id + im.action*1000);
     Asset * asset = assets->GetAsset(1);
 
-    while (im.frame > asset->get_frames())
+    im.frame++;
+    while (im.frame >= asset->get_frames())
         im.frame -=  asset->get_frames();
     
     //std::cout << "image x and y:" << x << " " << y << " " << im.frame << std::endl;
