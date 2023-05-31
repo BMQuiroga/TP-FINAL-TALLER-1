@@ -5,6 +5,7 @@
 #include <cmath>
 #include <vector>
 //#include <arpa/inet.h>
+#define Y_OFFSET 1600
 
 ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates) : 
     events(events),
@@ -95,11 +96,11 @@ void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8
     renderer.Copy(
         (*empty->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + (hp_bar_height*2) , length - 1, hp_bar_height - 1));
+        SDL2pp::Rect(x, y + (hp_bar_height*2) + Y_OFFSET, length - 1, hp_bar_height - 1));
     renderer.Copy(
         (*full->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + (hp_bar_height*2), std::round(hp_percentage), hp_bar_height - 1));
+        SDL2pp::Rect(x, y + (hp_bar_height*2) + Y_OFFSET, std::round(hp_percentage), hp_bar_height - 1));
 }
 
 void ClientRenderer::draw_health(uint8_t n) {
