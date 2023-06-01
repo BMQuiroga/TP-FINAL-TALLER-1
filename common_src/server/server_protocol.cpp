@@ -26,8 +26,7 @@ void ServerProtocol::send(Socket &skt, ProtocolResponse resp, bool was_closed) {
     int bytes_sent = 0;
     uint8_t id = 1;
     uint16_t size = resp.players.size()*8;
-    //bytes_sent += send_number(&size, skt, &was_closed);//8 BYTES POR JUGADOR
-    bytes_sent = skt.sendall(&size ,2 ,&was_closed);
+    bytes_sent += send_number(size, skt, &was_closed);//8 BYTES POR JUGADOR
     for (auto player : resp.players) {
         std::cout << "Player: " << std::endl << 
             "- id: " << player.id << std::endl <<//roto el id
@@ -37,19 +36,13 @@ void ServerProtocol::send(Socket &skt, ProtocolResponse resp, bool was_closed) {
             "- x: " << std::to_string(player.x) << std::endl <<
             "- y: " << std::to_string(player.y) << std::endl <<
             "- direction: " << std::to_string(player.direction) << std::endl;
-        //bytes_sent += send_number(player.id, skt, &was_closed);//como no hay soldado 4, no permite 4 jugadores
-        //bytes_sent += send_number(player.x, skt, &was_closed);
-        //bytes_sent += send_number(player.y, skt, &was_closed);
-        //bytes_sent += send_number(player.direction, skt, &was_closed);     
-        //bytes_sent += send_number(player.state, skt, &was_closed);
-        //bytes_sent += send_number(player.hit_points, skt, &was_closed);
-        bytes_sent += skt.sendall(&id, 1, &was_closed);
-        bytes_sent += skt.sendall(&player.x, 2, &was_closed);
-        bytes_sent += skt.sendall(&player.y, 2, &was_closed);
-        bytes_sent += skt.sendall(&player.direction, 1, &was_closed);
-        bytes_sent += skt.sendall(&player.state, 1, &was_closed);
-        bytes_sent += skt.sendall(&player.hit_points, 1, &was_closed);
+        bytes_sent += send_number(player.id, skt, &was_closed);//como no hay soldado 4, no permite 4 jugadores
+        bytes_sent += send_number(player.x, skt, &was_closed);
+        bytes_sent += send_number(player.y, skt, &was_closed);
+        bytes_sent += send_number(player.direction, skt, &was_closed);     
+        bytes_sent += send_number(player.state, skt, &was_closed);
+        bytes_sent += send_number(player.hit_points, skt, &was_closed);
     }
-    bytes_sent += skt.sendall(&resp.game_state, 4, &was_closed);
+    bytes_sent += send_number(resp.game_state, skt, &was_closed);
     std::cout << "sent " << std::to_string(bytes_sent) << " bytes to client" << std::endl;
 }
