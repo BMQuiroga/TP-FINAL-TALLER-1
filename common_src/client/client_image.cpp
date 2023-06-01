@@ -45,7 +45,6 @@ Image::Image(uint8_t id, uint8_t action, uint8_t flip, uint8_t hp, uint16_t x, u
 }
 
 Image::Image(const PlayerStateReference &state) {
-    std::cout << state.id << "-" << state.state << "-" << state.x << std::endl;
     this->id = state.id;
     this->action = state.state;
     this->flip = state.direction;

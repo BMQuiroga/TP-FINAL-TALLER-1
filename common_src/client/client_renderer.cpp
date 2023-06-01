@@ -5,7 +5,7 @@
 #include <cmath>
 #include <vector>
 //#include <arpa/inet.h>
-#define Y_OFFSET 1600
+#define Y_OFFSET 700
 
 ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates) : 
     events(events),
@@ -66,8 +66,9 @@ void ClientRenderer::render(Image & im) {
     //std::cout << "entra al render" << std::endl;
     uint16_t x = im.x;
     uint16_t y = im.y;
-    //Asset * asset = assets->GetAsset(im.id + im.action*1000);
-    Asset * asset = assets->GetAsset(1);
+    Asset * asset = assets->GetAsset(im.id + im.action*1000);
+    //std::cout << "cosas:" << std::to_string(im.id + im.action*1000) << " " << std::to_string(im.frame) << std::endl;
+    //Asset * asset = assets->GetAsset(1);
 
     im.frame++;
     while (im.frame >= asset->get_frames())
@@ -79,7 +80,7 @@ void ClientRenderer::render(Image & im) {
     renderer.Copy(
         (*asset->get_texture()),
         SDL2pp::Rect(asset->get_length() * im.frame, 0, asset->get_length(), asset->get_height()),
-        SDL2pp::Rect(x, y, asset->get_length() - 1, asset->get_height() - 1),
+        SDL2pp::Rect(x, y + Y_OFFSET, asset->get_length() - 1, asset->get_height() - 1),
         0,
         SDL2pp::NullOpt,
         im.flip > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);

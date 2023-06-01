@@ -37,13 +37,13 @@ ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
         receive_number(&player.direction, s, was_closed);
         receive_number(&player.state, s, was_closed);
         receive_number(&player.hit_points, s, was_closed);
-        resp.players.push_back(player);
         std::cout << "Player: " << std::endl << 
             "- name: " << player.name << std::endl <<
             "- state: " << std::to_string(player.state) << std::endl <<
             "- hit points: " << std::to_string(player.hit_points) << std::endl <<
             "- x: " << std::to_string(player.x) << std::endl <<
             "- y: " << std::to_string(player.y) << std::endl;
+        resp.players.push_back(player);
     }
     receive_number(&resp.game_state, s, was_closed);
     std::cout << "Game state: " << std::to_string(resp.game_state) << std::endl;
