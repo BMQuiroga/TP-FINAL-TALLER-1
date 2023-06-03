@@ -10,7 +10,7 @@
 
 class Asset {
     private:
-    SDL2pp::Texture * texture;
+    SDL2pp::Texture texture;
     uint8_t offset;
     uint16_t height;
     uint16_t length;
@@ -18,7 +18,7 @@ class Asset {
 
     public:
 
-    static Asset* Create(std::string path, uint8_t offset, uint16_t height, uint16_t length, uint8_t frames, SDL2pp::Renderer& r, uint32_t colorkey);
+    //static Asset* Create(std::string path, uint8_t offset, uint16_t height, uint16_t length, uint8_t frames, SDL2pp::Renderer& r, uint32_t colorkey);
 
     Asset(std::string path, uint8_t offset, uint16_t height, uint16_t length, uint8_t frames, SDL2pp::Renderer& r, uint32_t colorkey);
 
