@@ -9,7 +9,24 @@
 #define DEFAULT_MAX_X 1820
 #define DEFAULT_MAX_Y 900
 
-enum player_state { IDLE, SHOOTING, MOVING, SHOOTING_AND_MOVING, RELOADING };
+// 0 idle, 1 attack, 2 dead, 3 grenade, 4 hurt 5 recharge, 6 shot, 7 walk, 8 fall, 9 run, 10 protect, 11 run+atack, 12 bite, 13 scream, 14 eating
+enum player_state { 
+  IDLE, 
+  ATTACKING, 
+  DEAD, 
+  THROWING_GRENADE, 
+  HURT, 
+  RELOADING, 
+  SHOT, 
+  MOVING, 
+  FALLING, 
+  RUNNING, 
+  BLOCKING, 
+  ATTACKING_AND_MOVING, 
+  BITING, 
+  SCREAMING, 
+  EATING 
+  };
 enum player_direction { LEFT, RIGHT };
 
 // struct representing player attributes that will be visible to the clien
@@ -32,7 +49,9 @@ class PlayerState {
     uint8_t hit_points;
     uint8_t rounds;
     std::vector<int8_t> direction;
+    player_direction facing_direction;
     std::vector<uint16_t> position;
+    uint16_t speed;
     int8_t state;
     int16_t max_x, max_y;
     void move();
