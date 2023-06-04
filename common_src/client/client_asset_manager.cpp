@@ -73,6 +73,6 @@ Asset* AssetManager::GetAsset(int code) {
     return map.at(code).get();
 }
 
-void AssetManager::play(int code) {
-	sound_map.at(code).Play(0)
+void AssetManager::play(int code, SDL2pp::Mixer & mixer) {
+	mixer.PlayChannel(-1, sound_map.at(code), 0);
 }

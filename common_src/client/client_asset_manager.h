@@ -13,7 +13,7 @@ class AssetManager {
     private:
     static AssetManager* sInstance;
     std::map<int,std::shared_ptr<Asset>> map;
-    std::map<int,SDL2pp::Mixer::Music> sound_map;
+    std::map<int,SDL2pp::Mixer::Chunk> sound_map;
 
     public:
     static AssetManager* Instance(SDL2pp::Renderer & renderer);
@@ -22,7 +22,7 @@ class AssetManager {
 
     Asset* GetAsset(int code);
 
-    void play(int code);
+    void play(int code, SDL2pp::Mixer & mixer);
 
     explicit AssetManager(SDL2pp::Renderer & renderer);
 };

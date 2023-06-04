@@ -13,10 +13,10 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse
     sdl(SDL_INIT_VIDEO),
     window("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_RESIZABLE),
     actual_frame(nullptr),
-    renderer(window, -1, SDL_RENDERER_ACCELERATED),
-    mixer(MIX_INIT_MP3) {
+    renderer(window, -1, SDL_RENDERER_ACCELERATED) {
     this->assets = AssetManager::Instance(this->renderer);
-    mixer.OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    //mixer.OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    mixer.Init(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
 }
 
 void ClientRenderer::GameLoop() {
@@ -60,15 +60,17 @@ void ClientRenderer::render_all() {
             if (it.id > 0 && it.id < 151) {
                 render(const_cast<Image&>(it));
             } else {
-                if (it.frame == 0)
-                    play(it.id);
+                if (it.frame == 0) {
+                    play(const_cast<Image&>(it));
+                }
             }
         }
     }
 }
 
-void ClientRenderer::Play(uint8_t id) {
-    assets->play(id);
+void ClientRenderer::Play(Image & im) {
+    assets->play(im.id,mixer);
+    im.frame++;
 }
 
 void ClientRenderer::render(Image & im) {

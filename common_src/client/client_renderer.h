@@ -20,6 +20,7 @@ class ClientRenderer {
     SDL2pp::SDL sdl;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
+    SDL2pp::Mixer mixer;
 
     void draw_health(uint8_t n);
     void draw_rounds(uint8_t n);
