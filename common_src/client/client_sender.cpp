@@ -22,9 +22,7 @@ void ClientSender::run() {
     bool was_closed = false;
     while (keep_talking) {
         command = q.pop();
-        if (command->get_intention() == IDLE) {
-            continue;
-        } else if (command->get_intention() == END) {
+        if (command->get_intention() == END) {
             kill();
             break;
         }

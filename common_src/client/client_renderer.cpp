@@ -131,9 +131,11 @@ bool ClientRenderer::handleEvents() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         Intention *command(Intention::make_intention(event));
-        events.push(command);
-        if (command->get_intention() == END) {
-            return false;
+        if (command != nullptr) {
+            events.push(command);
+            if (command->get_intention() == END) {
+                return false;
+            }
         }
     }
     return true;
