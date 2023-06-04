@@ -8,6 +8,7 @@
 #include <string>
 #include <algorithm>
 #include <SDL2pp/SDL2pp.hh>
+#include "../player_state.h"
 
 #define MOVE_LEFT 0
 #define MOVE_RIGHT 1
@@ -22,7 +23,6 @@
 #define RELOAD 10
 #define PREPARE_GRENADE 11
 #define THROW_GRENADE 12
-#define IDLE 13
 #define END -1
 
 class Intention {
