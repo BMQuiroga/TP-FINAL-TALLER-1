@@ -66,7 +66,7 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) {
 	map.emplace(SOLDIER2 + WALK_, std::make_shared<Asset>("../resources/Soldier_2/Walk.png", 0, 128, 128, 8, renderer, 0));
 	map.emplace(SOLDIER2 + RUN_, std::make_shared<Asset>("../resources/Soldier_2/Run.png", 0, 128, 128, 8, renderer, 0));
 
-	sound_map.emplace(151,SDL2pp::Mixer::Music("../resources/Sound/singleshot.mp3"));
+	sound_map.emplace(151,SDL2pp::Music("../resources/Sound/singleshot.mp3"));
 }
 
 Asset* AssetManager::GetAsset(int code) {
@@ -74,5 +74,5 @@ Asset* AssetManager::GetAsset(int code) {
 }
 
 void AssetManager::play(int code, SDL2pp::Mixer & mixer) {
-	mixer.PlayChannel(-1, sound_map.at(code), 0);
+	mixer.PlayMusic(sound_map.at(code), 1);
 }

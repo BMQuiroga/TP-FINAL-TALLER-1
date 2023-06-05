@@ -3,16 +3,17 @@
 
 #include "button.h"
 
+
 class MainMenu {
     public:
     MainMenu();
-    ~MainMenu()
+    ~MainMenu();
     int Start();
     
     private:
     Button boton_play;
     Button boton_quit;
-    bool handleEvents();
+    int handleEvents();
 };
 
 #endif

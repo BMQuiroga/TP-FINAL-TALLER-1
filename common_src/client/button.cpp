@@ -2,19 +2,19 @@
 #include <iostream>
 
 void Button::Render(SDL2pp::Renderer& renderer) {
-    renderer.DrawRect(rect, SDL2pp::Color(255, 255, 255));
-    SDL2pp::Font font("../resources/Fonts/ARIAL.ttf", 28);
+    renderer.SetDrawColor(SDL2pp::Color(230, 230, 0, 255));
+    renderer.FillRect(this->rect);
+    SDL2pp::Font font("../resources/Fonts/ARIAL.TTF", 99);
     SDL2pp::Surface surface(font.RenderText_Solid(text, SDL_Color{255, 255, 255, 255}));
     SDL2pp::Texture texture(renderer, surface);
     renderer.Copy(texture, SDL2pp::NullOpt, rect);
 }
 
-Button::Button(const std::string& text, const SDL2pp::Rect& rect) : text_(text), rect_(rect) {}
+Button::Button(const std::string& text, const SDL2pp::Rect& rect) : text(text), rect(rect) {}
 
-bool Button::HandleEvent(const SDL2pp::Event& event) {
-    if (event.GetType() == SDL2pp::EventType::MOUSEBUTTONDOWN) {
-        const auto& mouseEvent = static_cast<const SDL2pp::MouseButtonEvent&>(event);
-        if (rect_.Contains(mouseEvent.GetX(), mouseEvent.GetY())) {
+bool Button::HandleEvent(const SDL_Event& event) {
+    if (event.type == SDL_EventType::SDL_MOUSEBUTTONDOWN) {
+        if (rect.Contains(event.button.x, event.button.y)) {
             return true;
         }
     }

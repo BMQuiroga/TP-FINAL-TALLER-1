@@ -30,9 +30,10 @@ int main(int argc, char *argv[]) { try {
     }
 
     MainMenu main;
-    if (MainMenu.Start() == 0)
+    if (main.Start() == -1) {
         return ret;
-    
+    }
+        
     Queue<Intention*> events_q(1000);
     Queue<ProtocolResponse> updates_q(1000);
     Socket skt(hostname, servname);

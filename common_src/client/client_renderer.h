@@ -29,6 +29,7 @@ class ClientRenderer {
     void renderBackground();
     void renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp);
     bool handleEvents();
+    void play(Image & im);
 
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates);
