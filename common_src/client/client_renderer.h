@@ -20,6 +20,7 @@ class ClientRenderer {
     SDL2pp::SDL sdl;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
+    SDL2pp::Mixer mixer;
 
     void draw_health(uint8_t n);
     void draw_rounds(uint8_t n);
@@ -28,6 +29,7 @@ class ClientRenderer {
     void renderBackground();
     void renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp);
     bool handleEvents();
+    void play(Image & im);
 
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates);

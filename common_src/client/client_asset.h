@@ -6,6 +6,7 @@
 #include <string>
 #include <SDL2pp/SDL2pp.hh>
 #include <SDL2pp/Renderer.hh>
+#include <SDL2pp/Mixer.hh>
 
 
 class Asset {

@@ -2,6 +2,7 @@
 #include "../socket.h"
 #include "../queue.h"
 #include "client_receiver.h"
+#include "mainmenu.h"
 #include "client_sender.h"
 #include "client_renderer.h"
 #include <iostream>
@@ -30,6 +31,11 @@ int main(int argc, char *argv[]) { try {
         return ret;
     }
 
+    MainMenu main;
+    if (main.Start() == -1) {
+        return ret;
+    }
+    
     // Clase que contiene el loop principal
     QApplication app(argc, argv);
     // Instancio el greeter
