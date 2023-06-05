@@ -11,6 +11,8 @@
 #include <cstring>
 #include <algorithm>
 #include <functional>
+#include <QApplication>
+#include "Lobby.h"
 
 
 int main(int argc, char *argv[]) { try {
@@ -26,6 +28,16 @@ int main(int argc, char *argv[]) { try {
                   << argv[0]
                   << " <ip/hostname server> <puerto/servicename>.\n";
         return ret;
+    }
+
+    // Clase que contiene el loop principal
+    QApplication app(argc, argv);
+    // Instancio el greeter
+    Lobby lobby;
+    lobby.show();
+
+    if (app.exec()) {
+        throw std::runtime_error("La aplicación QT finalizó de forma incorrecta");
     }
     
     Queue<Intention*> events_q(1000);

@@ -14,9 +14,21 @@ find_package(Threads REQUIRED)
 # SDL2pp
 find_package(SDL2pp REQUIRED)
 
+# Find the QtWidgets library
+find_package(Qt5Widgets COMPONENTS Widgets REQUIRED)
+
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
 # Agrego la carpeta con los headers autogenerados a los includes
 message("Agregando '${PROJECT_BINARY_DIR}' como directorio de includes")
 include_directories(${PROJECT_BINARY_DIR})
+
+qt5_wrap_ui(UIS_HEADERS
+        ui/Lobby.ui
+        ui/gameoption.ui
+        ui/joingame.ui
+        ui/numberplayers.ui
+)
 
 file(GLOB SOURCES
     ./common_src/*.h
@@ -29,6 +41,7 @@ file(GLOB SOURCES
 
 add_executable (client
   ${SOURCES}
+  ${UIS_HEADERS}
 )
 
 file(GLOB SOURCES
@@ -43,5 +56,5 @@ add_executable (server
   ${SOURCES}
 )
 
-target_link_libraries(client Threads::Threads SDL2pp::SDL2pp)
+target_link_libraries(client Threads::Threads SDL2pp::SDL2pp Qt5::Widgets)
 target_link_libraries(server Threads::Threads SDL2pp::SDL2pp)
