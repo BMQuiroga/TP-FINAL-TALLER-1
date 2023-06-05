@@ -5,6 +5,7 @@
 #include <cmath>
 #include <vector>
 //#include <arpa/inet.h>
+#define Y_OFFSET 700
 
 ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates) : 
     events(events),
@@ -26,17 +27,17 @@ void ClientRenderer::GameLoop() {
         running = this->handleEvents();
         renderer.Clear();
         if (updates.try_pop(new_update)) {
-            std::cout << "found new update" << std::endl;
+            //std::cout << "found new update" << std::endl;
             frames_list = new std::list<Image>;
             std::vector<PlayerStateReference>::iterator it;
             for (it = new_update.players.begin(); it != new_update.players.end(); ++it) {
                 auto new_Model = Image((*it));
                 frames_list->push_back(new_Model);
             }
-            std::cout << "created image" << std::endl;
+            //std::cout << "created image" << std::endl;
             this->actual_frame = Image::Replace(this->actual_frame,frames_list);
-            std::cout << "replaced image" << std::endl;
-            std::cout << actual_frame->size() << std::endl;
+            //std::cout << "replaced image" << std::endl;
+            //std::cout << actual_frame->size() << std::endl;
 
         }
         renderBackground();
@@ -53,7 +54,7 @@ void ClientRenderer::render_all() {
         //draw_health(actual_frame->front().id);
         //draw_rounds(actual_frame->front().action);
         for (auto const& it : *actual_frame) {
-            std::cout << "id:" << it.id << std::endl;
+            //std::cout << "id:" << it.id << std::endl;
             if (it.id > 0) {
                 render(const_cast<Image&>(it));
             }
@@ -62,40 +63,45 @@ void ClientRenderer::render_all() {
 }
 
 void ClientRenderer::render(Image & im) {
-    std::cout << "entra al render" << std::endl;
+    //std::cout << "entra al render" << std::endl;
     uint16_t x = im.x;
     uint16_t y = im.y;
     Asset * asset = assets->GetAsset(im.id + im.action*1000);
+    //std::cout << "cosas:" << std::to_string(im.id + im.action*1000) << " " << std::to_string(im.frame) << std::endl;
+    //Asset * asset = assets->GetAsset(1);
 
-    while (im.frame > asset->get_frames())
+    im.frame++;
+    while (im.frame >= asset->get_frames())
         im.frame -=  asset->get_frames();
     
+    //std::cout << "image x and y:" << x << " " << y << " " << im.frame << std::endl;
+    //std::cout << "lenght and height" << asset->get_length() << " " << asset->get_height() << std::endl;
+
     renderer.Copy(
         (*asset->get_texture()),
-        SDL2pp::Rect(asset->get_length() * im.frame, 0, (asset->get_length() * im.frame) + asset->get_length(), asset->get_height()),
-        SDL2pp::Rect(x, y, x + asset->get_length() - 1, y + asset->get_height() - 1),
+        SDL2pp::Rect(asset->get_length() * im.frame, 0, asset->get_length(), asset->get_height()),
+        SDL2pp::Rect(x, y + Y_OFFSET, asset->get_length() - 1, asset->get_height() - 1),
         0,
         SDL2pp::NullOpt,
-        im.flip > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+        im.flip > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
     if (im.health != 0)
         renderHealth(asset->get_length(),x,y,im.health);
 }
 
 void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp) {
     uint16_t hp_bar_height = 3;
-    uint16_t hp_bar_height_difference = 10;
     Asset * full = assets->GetAsset(-1);
     Asset * empty = assets->GetAsset(-2);
-    float hp_percentage = (x + length -1)*hp/100;
+    float hp_percentage = (length -1)*hp/100;
 
     renderer.Copy(
         (*empty->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + hp_bar_height_difference, x + length - 1, y + hp_bar_height - 1));
+        SDL2pp::Rect(x, y + (hp_bar_height*2) + Y_OFFSET, length - 1, hp_bar_height - 1));
     renderer.Copy(
         (*full->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + hp_bar_height_difference, std::round(hp_percentage), y - 1));
+        SDL2pp::Rect(x, y + (hp_bar_height*2) + Y_OFFSET, std::round(hp_percentage), hp_bar_height - 1));
 }
 
 void ClientRenderer::draw_health(uint8_t n) {
@@ -125,9 +131,11 @@ bool ClientRenderer::handleEvents() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         Intention *command(Intention::make_intention(event));
-        events.push(command);
-        if (command->get_intention() == END) {
-            return false;
+        if (command != nullptr) {
+            events.push(command);
+            if (command->get_intention() == END) {
+                return false;
+            }
         }
     }
     return true;

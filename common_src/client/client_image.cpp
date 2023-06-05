@@ -17,7 +17,7 @@ std::list<Image>* Image::Create(uint8_t* array) {
             uint8_t flip = (*it++);
             uint8_t action = (*it++);
             uint8_t health = (*it++);
-            std::cout << "entity " << id << " at [" << x << " ," << y << "]" << std::endl;
+            //std::cout << "entity " << id << " at [" << x << " ," << y << "]" << std::endl;
             list->push_back(Image(id, action, flip, health, x, y));
         }
         if ((*it) > 150) {
@@ -31,6 +31,7 @@ std::list<Image>* Image::Create(uint8_t* array) {
         }
     }
     delete[] array;
+    return list;
 }
 
 Image::Image(uint8_t id, uint8_t action, uint8_t flip, uint8_t hp, uint16_t x, uint16_t y) {

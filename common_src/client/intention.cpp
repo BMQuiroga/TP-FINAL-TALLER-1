@@ -54,5 +54,5 @@ Intention *Intention::make_intention(SDL_Event &event)
     if (event.type == SDL_QUIT) {
         return new IntentionIdle(END);
     }
-    return new IntentionIdle(IDLE);
+    return nullptr;
 }

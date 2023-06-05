@@ -82,13 +82,30 @@ class Protocol {
         T n,
         Socket &skt,
         bool *was_closed) {
-        /*
-        if (sizeof(n) <= sizeof(uint16_t))
+        if (sizeof(n) == sizeof(uint16_t))
             n = htons(n);
-        else
+        else if (sizeof(n) == sizeof(uint32_t))
             n = htonl(n);
-        */
+
         return skt.sendall(&n, sizeof(n), was_closed);
+    }
+
+    /**
+     * Recibe un número de n bytes a través
+     * del socket
+    */
+   template <typename T>
+    int receive_number(
+        T *n,
+        Socket &skt,
+        bool *was_closed) {
+        int bytes = skt.recvall(n, sizeof(*n), was_closed); 
+        if (sizeof(*n) == sizeof(uint16_t))
+            *n = ntohs(*n);
+        else if (sizeof(*n) == sizeof(uint32_t))
+            *n = ntohl(*n);
+
+        return bytes;
     }
 
     /**
