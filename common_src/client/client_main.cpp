@@ -2,6 +2,7 @@
 #include "../socket.h"
 #include "../queue.h"
 #include "client_receiver.h"
+#include "mainmenu.h"
 #include "client_sender.h"
 #include "client_renderer.h"
 #include <iostream>
@@ -27,6 +28,10 @@ int main(int argc, char *argv[]) { try {
                   << " <ip/hostname server> <puerto/servicename>.\n";
         return ret;
     }
+
+    MainMenu main;
+    if (MainMenu.Start() == 0)
+        return ret;
     
     Queue<Intention*> events_q(1000);
     Queue<ProtocolResponse> updates_q(1000);
