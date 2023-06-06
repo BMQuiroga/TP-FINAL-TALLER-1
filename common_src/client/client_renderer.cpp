@@ -6,7 +6,7 @@
 #include <vector>
 #include "../serialization.h"
 //#include <arpa/inet.h>
-#define Y_OFFSET 700
+#define Y_OFFSET 805
 
 ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates) : 
     events(events),
