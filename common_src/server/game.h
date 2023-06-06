@@ -56,9 +56,8 @@ class GameLoop : public Thread {
     Serializer serializer;
 
   public:
-    GameLoop(
-        Queue<GameEvent> &events) : events(events), map{0} {
-        state = CREATED;
+    explicit GameLoop(
+        Queue<GameEvent> &events) : events(events), map{0}, state{CREATED} {
     }
 
     int join(GameEvent &event) {

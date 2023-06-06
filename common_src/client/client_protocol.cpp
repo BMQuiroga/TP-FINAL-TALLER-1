@@ -39,7 +39,7 @@ ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
 
 
 
-void CProtocol::send(Socket &skt, const ProtocolRequest request, bool was_closed) {
+void CProtocol::send(Socket &skt, const ProtocolRequest &request, bool was_closed) {
      // TODO
 }
 

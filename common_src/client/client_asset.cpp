@@ -3,7 +3,7 @@
 #include <string>
 //#include <arpa/inet.h>
 
-Asset::Asset(std::string path, uint8_t offset, uint16_t height, uint16_t length, uint8_t frames, SDL2pp::Renderer& r, uint32_t colorkey)
+Asset::Asset(const std::string &path, uint8_t offset, uint16_t height, uint16_t length, uint8_t frames, SDL2pp::Renderer& r, uint32_t colorkey)
     : offset(offset), height(height), length(length), frames(frames), texture(r, SDL2pp::Surface(path).SetColorKey(true, colorkey)){
 }
 
