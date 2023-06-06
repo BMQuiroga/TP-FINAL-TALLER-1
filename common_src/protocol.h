@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "player_state.h"
+#include "protocol_types.h"
 
 #define MOVE_LEFT 0
 #define MOVE_RIGHT 1
@@ -23,31 +23,7 @@
 #define STOP_SHOOTING 9
 #define JOIN 10
 #define CREATE 11
-
-// Solicitud del cliente
-struct ProtocolRequest {
-    int cmd; // command (SHOOT, MOVE, etc)
-    std::vector<int8_t> content; // request content
-};
-
-// struct CreateRequest {
-//     int cmd;    // command
-//     std::string name; // name of the match to create
-//     CreateRequest(std::string &name) : cmd(CREATE), name(name) {}
-// };
-
-// struct JoinRequest {
-//     int cmd;
-//     int game_code;
-//     JoinRequest(int game_code) : cmd(JOIN), game_code(game_code) {}
-// };
-
-// Respuesta que se devuelve al cliente despues de cada solicitud
-struct ProtocolResponse {
-    int game_state;
-    std::vector<PlayerStateReference> players;
-    ProtocolResponse() = default;
-};
+#define LIST 12
 
 template <typename Send_Type, typename Recv_Type>
 class Protocol {
