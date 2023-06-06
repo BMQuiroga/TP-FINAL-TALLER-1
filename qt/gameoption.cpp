@@ -11,17 +11,11 @@ GameOption::GameOption(QWidget *parent) : QWidget(parent) {
 }
 
 void GameOption::createGame() {
-    this->close();
-    NumberPlayers* numberPlayers = new NumberPlayers();
-    numberPlayers->show();
-    delete this;
+    emit gameOptionPicked("create");
 }
 
 void GameOption::joinGame() {
-    this->close();
-    JoinGame* joinGame = new JoinGame();
-    joinGame->show();
-    delete this;
+    emit gameOptionPicked("join");
 }
 
 void GameOption::connectEvents() {

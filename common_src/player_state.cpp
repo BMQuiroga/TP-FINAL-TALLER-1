@@ -100,8 +100,7 @@ void PlayerState::next_state(int cmd) {
     } else if (cmd == MOVE_LEFT) {
         direction[0] = -1;
         facing_direction = LEFT;
-    }
-    else if (cmd == STOP_MOVING_DOWN) {
+    } else if (cmd == STOP_MOVING_DOWN) {
         direction[1] = 0;
     } else if (cmd == STOP_MOVING_UP) {
         direction[1] = 0;

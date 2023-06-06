@@ -1,7 +1,10 @@
 #include <iostream>
 #include "client_protocol.h"
 #include <string>
+#include <iostream>
+#include <sstream>
 #include "intention.h"
+#include "../qt/lobby_command.h"
 //#include <arpa/inet.h>
 
 void CProtocol::send_one_byte(uint8_t n, Socket &s) {
@@ -63,6 +66,27 @@ void CProtocol::send_command(Intention& command, Socket &s, bool *was_closed) {
     //send_number(command_id, s, was_closed);
 }
 
+void CProtocol::send_lobby_command(const LobbyCommand &command, Socket &s, bool *was_closed)
+{
+    uint8_t command_id = (uint8_t) get_command_type(command.name);
+    send_one_byte(command_id, s);
+    if (command.name == JOINGAME) {
+        uint32_t game_code = (uint32_t) std::stoi(command.parameter);
+        send_number(game_code, s, was_closed);
+    } else {
+        std::ostringstream ss;
+        uint16_t len = (uint16_t) command.parameter.length();
+        send_number(len, s, was_closed);
+        ss << command.parameter;
+        auto buf = ss.str();
+        s.sendall(buf.data(), buf.size(), was_closed);
+    } 
+    if (command.name == CREATEGAME) {
+        uint8_t game_size = (uint8_t) command.parameter2;
+        send_one_byte(game_size, s);
+    }
+}
+
 uint8_t* CProtocol::receive_render(Socket &s) {
     uint8_t length;
     s.recvall(&length,1);
@@ -71,4 +95,11 @@ uint8_t* CProtocol::receive_render(Socket &s) {
     s.recvall(render_plus_one,length);
     render[0] = length;
     return render;
+}
+
+int CProtocol::get_command_type(const std::string &resource) {
+    if (resource == CREATEGAME) return CREATE;
+    if (resource == JOINGAME) return JOIN;
+    if (resource == INPUTNAME) return PLAYERNAME;
+    return INVALID;
 }

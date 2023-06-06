@@ -4,6 +4,7 @@
 #include "client_receiver.h"
 #include "mainmenu.h"
 #include "client_sender.h"
+#include "client_lobby.h"
 #include "client_renderer.h"
 #include <iostream>
 #include <exception>
@@ -13,7 +14,8 @@
 #include <algorithm>
 #include <functional>
 #include <QApplication>
-#include "Lobby.h"
+#include "../../qt/mainwindow.h"
+#include "../../qt/lobby_command.h"
 
 
 int main(int argc, char *argv[]) { try {
@@ -31,11 +33,13 @@ int main(int argc, char *argv[]) { try {
         return ret;
     }
 
+    Socket skt(hostname, servname);
+    Queue<LobbyCommand> lobby_commands_q(1000);
     // Clase que contiene el loop principal
     QApplication app(argc, argv);
-    // Instancio el greeter
-    Lobby lobby;
-    lobby.show();
+    ClientLobby client_lobby(std::ref(skt), std::ref(lobby_commands_q));
+    client_lobby.start();
+    MainWindow w(std::ref(lobby_commands_q));
 
     if (app.exec()) {
         throw std::runtime_error("La aplicación QT finalizó de forma incorrecta");
@@ -48,7 +52,6 @@ int main(int argc, char *argv[]) { try {
     
     Queue<Intention*> events_q(1000);
     Queue<ProtocolResponse> updates_q(1000);
-    Socket skt(hostname, servname);
     ClientSender client_sender(std::ref(skt), std::ref(events_q));
     ClientReceiver client_receiver(std::ref(skt), std::ref(updates_q));
     client_sender.start();
@@ -57,6 +60,7 @@ int main(int argc, char *argv[]) { try {
     client_renderer.GameLoop(); //<--- magia
     skt.shutdown(0);
     skt.close();
+    client_lobby.join();
     client_sender.join();
     client_receiver.kill();
     client_receiver.join();

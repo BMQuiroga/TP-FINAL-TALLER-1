@@ -40,7 +40,6 @@ void ClientRenderer::GameLoop() {
             this->actual_frame = Image::Replace(this->actual_frame,frames_list);
             //std::cout << "replaced image" << std::endl;
             //std::cout << actual_frame->size() << std::endl;
-
         }
         renderBackground();
         render_all();

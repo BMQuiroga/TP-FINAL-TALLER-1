@@ -23,6 +23,8 @@
 #define STOP_SHOOTING 9
 #define JOIN 10
 #define CREATE 11
+#define PLAYERNAME 12
+#define INVALID -1
 
 // Solicitud del cliente
 struct ProtocolRequest {
@@ -30,11 +32,12 @@ struct ProtocolRequest {
     std::vector<int8_t> content; // request content
 };
 
-// struct CreateRequest {
-//     int cmd;    // command
-//     std::string name; // name of the match to create
-//     CreateRequest(std::string &name) : cmd(CREATE), name(name) {}
-// };
+struct CreateRequest {
+    int cmd;    // command
+    std::string name; // name of the match to create
+    int size; // number of players that can join the match
+    explicit CreateRequest(std::string &name) : cmd(CREATE), name(name) {}
+};
 
 // struct JoinRequest {
 //     int cmd;

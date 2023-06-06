@@ -44,9 +44,8 @@ class GameLoop : public Thread {
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
 
   public:
-    GameLoop(
-        Queue<GameEvent> &events) : events(events), map{0} {
-        state = CREATED;
+    explicit GameLoop(
+        Queue<GameEvent> &events) : events(events), map{0}, state{CREATED} {
     }
 
     int join(GameEvent &event) {

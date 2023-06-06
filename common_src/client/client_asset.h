@@ -18,7 +18,6 @@ class Asset {
     uint8_t frames;
 
     public:
-
     //static Asset* Create(std::string path, uint8_t offset, uint16_t height, uint16_t length, uint8_t frames, SDL2pp::Renderer& r, uint32_t colorkey);
 
     Asset(std::string path, uint8_t offset, uint16_t height, uint16_t length, uint8_t frames, SDL2pp::Renderer& r, uint32_t colorkey);

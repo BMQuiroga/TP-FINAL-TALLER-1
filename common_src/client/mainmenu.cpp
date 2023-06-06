@@ -14,8 +14,7 @@ int MainMenu::Start() {
         renderer.Copy(
         background,
         SDL2pp::NullOpt,
-        SDL2pp::NullOpt
-        );
+        SDL2pp::NullOpt);
         this->boton_play.Render(renderer);
         this->boton_quit.Render(renderer);
         renderer.Present();
@@ -27,10 +26,10 @@ int MainMenu::Start() {
 int MainMenu::handleEvents() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-        if(boton_quit.HandleEvent(event)) {
+        if (boton_quit.HandleEvent(event)) {
             return -1;
         }   
-        if(boton_play.HandleEvent(event)) {
+        if (boton_play.HandleEvent(event)) {
             return 1;
         }
     }

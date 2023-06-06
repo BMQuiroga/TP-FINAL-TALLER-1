@@ -19,6 +19,12 @@ ProtocolRequest ServerProtocol::get(Socket &skt, bool *was_closed) {
         request.cmd = cmd;
     }
 
+    if (cmd == CREATE) {
+        // creo un CreateRequest en vez de un ProtocolRequest?
+    } else if (cmd == JOIN) {
+        // creo un JoinRequest?
+    }
+
     return request;
 }
 
