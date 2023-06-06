@@ -26,27 +26,12 @@ void CProtocol::send_one_byte(uint8_t n, Socket &s) {
 
 ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
     ProtocolResponse resp;
-    uint16_t bytes;
-    receive_number(&bytes, s, was_closed);
-    int iter = bytes / 8;
-    for (int i = 0; i < iter; i++) {
-        PlayerStateReference player;
-        receive_number(&player.id, s, was_closed);
-        receive_number(&player.x, s, was_closed);
-        receive_number(&player.y, s, was_closed);
-        receive_number(&player.direction, s, was_closed);
-        receive_number(&player.state, s, was_closed);
-        receive_number(&player.hit_points, s, was_closed);
-        std::cout << "Player: " << std::endl << 
-            "- name: " << player.name << std::endl <<
-            "- state: " << std::to_string(player.state) << std::endl <<
-            "- hit points: " << std::to_string(player.hit_points) << std::endl <<
-            "- x: " << std::to_string(player.x) << std::endl <<
-            "- y: " << std::to_string(player.y) << std::endl;
-        resp.players.push_back(player);
-    }
-    receive_number(&resp.game_state, s, was_closed);
-    std::cout << "Game state: " << std::to_string(resp.game_state) << std::endl;
+    receive_number(&resp.content_type, s, was_closed);
+    receive_number(&resp.size, s, was_closed);
+    std::cout << "Content Type: " << std::to_string(resp.content_type) << std::endl;
+    std::cout << "Response size: " << std::to_string(resp.size) << std::endl;
+    resp.content = std::vector<int8_t>(resp.size);
+    s.recvall(resp.content.data(), resp.size, was_closed);
     std::cout << "ended CProtocol get" << std::endl;
     return resp;
 }

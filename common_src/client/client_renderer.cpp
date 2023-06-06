@@ -4,6 +4,7 @@
 #include "intention.h"
 #include <cmath>
 #include <vector>
+#include "../serialization.h"
 //#include <arpa/inet.h>
 #define Y_OFFSET 700
 
@@ -23,6 +24,7 @@ void ClientRenderer::GameLoop() {
     // std::list<Image>* new_update = nullptr;
     std::list<Image>* frames_list = nullptr;
     ProtocolResponse new_update;
+    Serializer serializer;
     bool running = true;
     while (running) {
         unsigned int frame_ticks = SDL_GetTicks();	
@@ -32,9 +34,22 @@ void ClientRenderer::GameLoop() {
             //std::cout << "found new update" << std::endl;
             frames_list = new std::list<Image>;
             std::vector<PlayerStateReference>::iterator it;
-            for (it = new_update.players.begin(); it != new_update.players.end(); ++it) {
-                auto new_Model = Image((*it));
-                frames_list->push_back(new_Model);
+            if (new_update.content_type == GAME_STATE) {
+                GameStateResponse update = serializer.deserialize(new_update.content);
+                for (PlayerStateReference &player : update.players) {
+                    std::cout << "Player: " << std::endl << 
+                        "- name: " << player.name << std::endl <<
+                        "- state: " << std::to_string(player.state) << std::endl <<
+                        "- hit points: " << std::to_string(player.hit_points) << std::endl <<
+                        "- x: " << std::to_string(player.x) << std::endl <<
+                        "- y: " << std::to_string(player.y) << std::endl;
+                }
+                for (it = update.players.begin(); it != update.players.end(); ++it) {
+                    auto new_Model = Image((*it));
+                    frames_list->push_back(new_Model);
+                }
+            } else if (new_update.content_type == LOBBY_STATE) {
+                // LobbyStateResponse update = serializer.deserialize(new_update.content);
             }
             //std::cout << "created image" << std::endl;
             this->actual_frame = Image::Replace(this->actual_frame,frames_list);
