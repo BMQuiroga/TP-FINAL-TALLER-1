@@ -36,7 +36,8 @@ Serializer::copy_number(const int8_t *src, T* dest) {
 int Serializer::copy_string(const int8_t *src, std::string &s) {
     uint16_t offset = 0, ssize;
     offset += copy_number(src, &ssize);
-    std::memcpy(&s[0], src + offset, ssize);
+    const char *ptr = (const char *)(src + offset);
+    s = std::string(ptr, ssize);
     return offset+ssize;
 }
 
