@@ -31,6 +31,7 @@ private:
     Receiver<ProtocolResponse, ProtocolRequest> receiver;
     Sender<ProtocolResponse, ProtocolRequest> sender;
     GameHandler &game_handler;
+    std::string name;
     std::string uuid; // uuid of the client
     int joined_game; // unique id of the game this client joined
 

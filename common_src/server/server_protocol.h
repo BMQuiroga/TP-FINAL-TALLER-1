@@ -15,7 +15,7 @@ class ServerProtocol : public Protocol<ProtocolResponse, ProtocolRequest> {
     uint8_t receive_command(Socket & s);
 
     ProtocolRequest get(Socket &skt, bool *was_closed) override;
-    void send(Socket &skt,ProtocolResponse resp, bool was_closed) override;
+    void send(Socket &skt, const ProtocolResponse &resp, bool was_closed) override;
 };
 
 #endif

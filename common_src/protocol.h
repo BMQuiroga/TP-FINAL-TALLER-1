@@ -48,7 +48,7 @@ class Protocol {
     */
     virtual void send(
         Socket &skt,
-        Send_Type message,
+        const Send_Type &message,
         bool was_closed) = 0;
 
     /**

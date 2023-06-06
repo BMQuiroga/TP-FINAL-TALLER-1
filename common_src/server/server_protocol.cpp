@@ -1,5 +1,8 @@
 #include <iostream>
+#include <string>
+#include <sstream>
 #include "server_protocol.h"
+#include "../serialization.h"
 
 uint8_t ServerProtocol::receive_command(Socket & s) {
     uint8_t n = -1;
@@ -14,21 +17,32 @@ void ServerProtocol::send_render(char * data, int length, Socket & s) {
 ProtocolRequest ServerProtocol::get(Socket &skt, bool *was_closed) {
     // get the client's request and return a ProtocolRequest representation of it
     ProtocolRequest request;
+    Serializer serializer;
     int cmd = receive_command(skt);
+    std::ostringstream parameter;
+    char params[4] = {0};
     if (cmd >= 0) {
         request.cmd = cmd;
     }
 
-    if (cmd == CREATE) {
-        // creo un CreateRequest en vez de un ProtocolRequest?
+    if (cmd == PLAYERNAME) {
+        parameter << receive_text_message(skt, was_closed);
     } else if (cmd == JOIN) {
-        // creo un JoinRequest?
+        uint32_t code = recv_number<uint32_t>(
+            skt, params, sizeof(params), was_closed);
+        parameter << code;
+    } else if (cmd == CREATE) {
+        uint8_t max_players = receive_command(skt);
+        parameter << max_players;
+        parameter << receive_text_message(skt, was_closed);
+    } else {
+        return request;
     }
-
+    serializer.push_string(request.content, parameter.str());
     return request;
 }
 
-void ServerProtocol::send(Socket &skt, ProtocolResponse resp, bool was_closed) {
+void ServerProtocol::send(Socket &skt, const ProtocolResponse &resp, bool was_closed) {
     int bytes_sent = 0;
     bytes_sent += send_number(resp.content_type, skt, &was_closed);
     bytes_sent += send_number(resp.size, skt, &was_closed);

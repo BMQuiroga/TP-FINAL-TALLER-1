@@ -2,7 +2,7 @@
 #include "../socket.h"
 #include "../queue.h"
 #include "client_receiver.h"
-// #include "mainmenu.h"
+#include "mainmenu.h"
 #include "client_sender.h"
 #include "client_lobby.h"
 #include "client_renderer.h"

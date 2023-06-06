@@ -20,7 +20,7 @@ MainWindow::MainWindow(Queue<LobbyCommand>& q, QWidget *parent) :
 
 void MainWindow::showJoinGame()
 {
-    // Close the current widget if it exists uwu
+    // Close the current widget if it exists
     if (currentWidget) {
         currentWidget->close();
     }
@@ -32,7 +32,7 @@ void MainWindow::showJoinGame()
 
 void MainWindow::showCreateGame()
 {
-    // Close the current widget if it exists uwu
+    // Close the current widget if it exists
     if (currentWidget) {
         currentWidget->close();
     }
@@ -56,7 +56,7 @@ void MainWindow::showLobbyWidget() {
 }
 
 void MainWindow::showGameOptionsWidget() {
-    // Close the current widget if it exists uwu
+    // Close the current widget if it exists
     if (currentWidget) {
         currentWidget->close();
     }

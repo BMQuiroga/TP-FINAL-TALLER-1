@@ -110,3 +110,29 @@ LobbyStateResponse Serializer::deserialize_lobby_state(const std::vector<int8_t>
     }
     return resp;
 }
+
+CreateRequest Serializer::deserialize_create_state(const std::vector<int8_t> &content)
+{
+    CreateRequest resp;
+    const int8_t *data = content.data();
+    int offset = 0, size = content.size();
+    std::string test("");
+    offset += copy_number(data+offset, &resp.max_number);
+    offset += copy_string(data+offset, resp.name);
+    return resp;
+}
+
+InputNameRequest Serializer::deserialize_input_name(const std::vector<int8_t> &content)
+{
+    InputNameRequest resp;
+    const int8_t *data = content.data();
+    int offset = 0, size = content.size();
+    std::string test("");
+    offset += copy_string(data+offset, resp.name);
+    return resp;
+}
+
+JoinRequest Serializer::deserialize_join_state(const std::vector<int8_t> &content)
+{
+    // return JoinRequest();
+}
