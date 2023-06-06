@@ -2,6 +2,7 @@
 #include "client_protocol.h"
 #include <string>
 #include "intention.h"
+#include <vector>
 //#include <arpa/inet.h>
 
 void CProtocol::send_one_byte(uint8_t n, Socket &s) {
@@ -38,7 +39,7 @@ ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
 
 
 
-void CProtocol::send(Socket &skt, ProtocolRequest request, bool was_closed) {
+void CProtocol::send(Socket &skt, const ProtocolRequest request, bool was_closed) {
      // TODO
 }
 

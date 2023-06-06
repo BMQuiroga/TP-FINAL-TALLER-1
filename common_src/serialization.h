@@ -3,6 +3,7 @@
 
 #include "protocol_types.h"
 #include <vector>
+#include <string>
 
 class Serializer {    
   private:

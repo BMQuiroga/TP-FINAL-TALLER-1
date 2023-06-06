@@ -100,13 +100,13 @@ LobbyStateResponse Serializer::deserialize_lobby_state(const std::vector<int8_t>
     LobbyStateResponse resp;
     const int8_t *data = content.data();
     int offset = 0, size = content.size();
+    std::string test("");
     while (size > offset) {
-        GameReference ref;
+        GameReference ref(0, test, 0);
         offset += copy_number(data+offset, &ref.id);
         offset += copy_string(data+offset, ref.name);
         offset += copy_number(data+offset, &ref.players);
         resp.games.push_back(ref);
     }
-
     return resp;
 }

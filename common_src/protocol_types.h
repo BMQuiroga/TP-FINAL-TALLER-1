@@ -48,7 +48,7 @@ struct GameStateResponse {
 };
 
 struct LobbyStateResponse {
-    std::vector<GameReference> players;
+    std::vector<GameReference> games;
     LobbyStateResponse() = default;
 };
 

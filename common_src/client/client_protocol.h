@@ -30,7 +30,7 @@ class CProtocol : public Protocol<ProtocolRequest, ProtocolResponse> {
 
     ProtocolResponse get(Socket &skt, bool *was_closed) override;
     
-    void send(Socket &skt, ProtocolRequest request, bool was_closed) override;
+    void send(Socket &skt, const ProtocolRequest request, bool was_closed) override;
 };
 
 #endif

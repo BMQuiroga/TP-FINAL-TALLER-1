@@ -1,5 +1,7 @@
 #include "client_receiver.h"
+#include "../liberror.h"
 #include <iostream>
+#include <exception>
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -22,11 +24,20 @@ void ClientReceiver::run() {
     is_alive = keep_talking = true;
     bool was_closed = false;
     while (keep_talking) {
-        resp = protocol.get(skt, &was_closed);
-        if (was_closed) {
-            kill();
+        try {
+            resp = protocol.get(skt, &was_closed);
+            if (was_closed) {
+                kill();
+            }
+            q.push(resp);
+        } catch (const LibError& err) {
+            if (std::string(err.what()).compare(
+                "socket recv failedBad file descriptor") == 0) {
+                kill();
+                break;
+            }
+            throw;
         }
-        q.push(resp);
     }
 }
 
