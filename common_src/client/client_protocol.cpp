@@ -5,6 +5,7 @@
 #include <sstream>
 #include "intention.h"
 #include <vector>
+#include "../serialization.h"
 //#include <arpa/inet.h>
 
 void CProtocol::send_one_byte(uint8_t n, Socket &s) {
@@ -53,23 +54,48 @@ void CProtocol::send_command(Intention& command, Socket &s, bool *was_closed) {
 
 void CProtocol::send_lobby_command(const LobbyCommand &command, Socket &s, bool *was_closed)
 {
-    uint8_t command_id = (uint8_t) get_command_type(command.name);
-    send_one_byte(command_id, s);
+    Serializer serializer;
+    ProtocolRequest req;
+    GameReference ref;
+    req.cmd = (uint8_t) get_command_type(command.name);
     if (command.name == JOINGAME) {
-        uint32_t game_code = (uint32_t) std::stoi(command.parameter);
-        send_number(game_code, s, was_closed);
-    } else {
+        ref.id = (uint32_t) std::stoi(command.parameter);
+    } else if (command.name == INPUTNAME) {
         std::ostringstream ss;
         uint16_t len = (uint16_t) command.parameter.length();
         send_number(len, s, was_closed);
         ss << command.parameter;
         auto buf = ss.str();
         s.sendall(buf.data(), buf.size(), was_closed);
-    } 
-    if (command.name == CREATEGAME) {
-        uint8_t game_size = (uint8_t) command.parameter2;
-        send_one_byte(game_size, s);
+    } else if (command.name == CREATEGAME) {
+        ref.id = -1;
+        ref.name = command.parameter;
+        ref.players = (uint8_t) command.parameter2;
     }
+
+    req.content = serializer.serialize(ref);
+    int bytes_sent = 0;
+    bytes_sent += send_number(req.cmd, s, was_closed);
+    bytes_sent += send_number(req.content.size(), s, was_closed);
+    bytes_sent += s.sendall(req.content.data(), req.content.size(), was_closed);
+
+    // uint8_t command_id = (uint8_t) get_command_type(command.name);
+    // send_one_byte(command_id, s);
+    // if (command.name == JOINGAME) {
+    //     uint32_t game_code = (uint32_t) std::stoi(command.parameter);
+    //     send_number(game_code, s, was_closed);
+    // } else {
+    //     std::ostringstream ss;
+    //     uint16_t len = (uint16_t) command.parameter.length();
+    //     send_number(len, s, was_closed);
+    //     ss << command.parameter;
+    //     auto buf = ss.str();
+    //     s.sendall(buf.data(), buf.size(), was_closed);
+    // } 
+    // if (command.name == CREATEGAME) {
+    //     uint8_t game_size = (uint8_t) command.parameter2;
+    //     send_one_byte(game_size, s);
+    // }
 }
 
 uint8_t* CProtocol::receive_render(Socket &s) {
