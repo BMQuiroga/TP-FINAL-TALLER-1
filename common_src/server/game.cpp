@@ -18,6 +18,11 @@ Game::Game(int id, const std::string& name) :
     loop(events) {
 }
 
+GameReference Game::make_ref() {
+    GameReference ref(id, name, players.size());
+    return ref;
+}
+
 void Game::push_event(
     ProtocolRequest &req,
     std::string &player_uuid,

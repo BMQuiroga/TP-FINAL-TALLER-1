@@ -33,6 +33,13 @@ Serializer::copy_number(const int8_t *src, T* dest) {
     return sizeof(*dest);
 }
 
+int Serializer::copy_string(const int8_t *src, std::string &s) {
+    uint16_t offset = 0, ssize;
+    offset += copy_number(src, &ssize);
+    std::memcpy(&s[0], src + offset, ssize);
+    return offset+ssize;
+}
+
 std::vector<int8_t> Serializer::serialize(const GameStateResponse &resp) {
     std::vector<int8_t> buf;
     push_number(buf, resp.game_state);
@@ -55,7 +62,7 @@ std::vector<int8_t> Serializer::serialize(const GameStateResponse &resp) {
     return buf;
 }
 
-GameStateResponse Serializer::deserialize(const std::vector<int8_t> &content) {
+GameStateResponse Serializer::deserialize_game_state(const std::vector<int8_t> &content) {
     GameStateResponse resp;
     const int8_t *data = content.data();
     data += copy_number(data, &resp.game_state);
@@ -69,6 +76,36 @@ GameStateResponse Serializer::deserialize(const std::vector<int8_t> &content) {
         offset += copy_number(data+offset, &ref.state);
         offset += copy_number(data+offset, &ref.hit_points);
         resp.players.push_back(ref);
+    }
+
+    return resp;
+}
+
+std::vector<int8_t> Serializer::serialize(const LobbyStateResponse &resp) {
+    std::vector<int8_t> buf;
+    for (auto game : resp.games) {
+        std::cout << "Game: " << std::endl << 
+            "- id: " << game.id << std::endl <<//roto el id
+            "- name: " << game.name << std::endl <<
+            "- players: " << std::to_string(game.players) << std::endl;
+        push_number(buf, game.id);
+        push_string(buf, game.name);
+        push_number(buf, game.players);
+    }
+    return buf;
+}
+
+
+LobbyStateResponse Serializer::deserialize_lobby_state(const std::vector<int8_t> &content) {
+    LobbyStateResponse resp;
+    const int8_t *data = content.data();
+    int offset = 0, size = content.size();
+    while (size > offset) {
+        GameReference ref;
+        offset += copy_number(data+offset, &ref.id);
+        offset += copy_string(data+offset, ref.name);
+        offset += copy_number(data+offset, &ref.players);
+        resp.games.push_back(ref);
     }
 
     return resp;

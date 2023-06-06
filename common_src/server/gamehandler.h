@@ -86,6 +86,15 @@ class ProtectedMatchesList {
         return list.size();
     }
 
+    std::vector<GameReference> get_refs() {
+        std::vector<GameReference> refs;
+        for (Game &game : list) {
+            refs.push_back(game.make_ref());
+        }
+
+        return refs;
+    }
+
     // void send_message_to_game(
     //     const MatchState &message,
     //     int code) {
@@ -123,6 +132,7 @@ class GameHandler {
         Queue<ProtocolResponse>& q);
         Game& get_game(int code);
         size_t get_game_count();
+        ProtectedMatchesList& get_games();
         // /**
         //  * Recibe un mensaje y el código de la partida y
         //  * reenvie el mensaje a la partida con el código 

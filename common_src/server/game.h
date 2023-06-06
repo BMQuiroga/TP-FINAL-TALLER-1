@@ -141,6 +141,8 @@ class Game {
         explicit Game(int id, const std::string& name);
         Game(Game&&);
 
+        GameReference make_ref();
+
         void push_event(
             ProtocolRequest &req,
             std::string &player_uuid,

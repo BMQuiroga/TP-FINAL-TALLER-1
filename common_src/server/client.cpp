@@ -29,6 +29,19 @@ void Client::handle_request(ProtocolRequest &message) {
         // game and return its initial state. If it's a join game request
         // then try to joint the game and return its current state on success
         // or 0 on failure.
+        if (message.cmd == LIST) {
+            LobbyStateResponse resp;
+            resp.games = game_handler.get_games().get_refs();
+            Serializer serializer;
+            ProtocolResponse response;
+            response.content_type = LOBBY_STATE;
+            response.content = serializer.serialize(resp);
+            responses.push(response);
+        }
+        if (message.cmd == JOIN) {
+            // joined_game = message.
+            Game &game = game_handler.get_game(joined_game);
+        }
     }
 }
 

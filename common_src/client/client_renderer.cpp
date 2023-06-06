@@ -35,7 +35,7 @@ void ClientRenderer::GameLoop() {
             frames_list = new std::list<Image>;
             std::vector<PlayerStateReference>::iterator it;
             if (new_update.content_type == GAME_STATE) {
-                GameStateResponse update = serializer.deserialize(new_update.content);
+                GameStateResponse update = serializer.deserialize_game_state(new_update.content);
                 for (PlayerStateReference &player : update.players) {
                     std::cout << "Player: " << std::endl << 
                         "- name: " << player.name << std::endl <<
