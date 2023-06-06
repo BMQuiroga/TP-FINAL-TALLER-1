@@ -33,7 +33,8 @@ void Client::handle_request(ProtocolRequest &message) {
         // then try to joint the game and return its current state on success
         // or 0 on failure.
         if (message.cmd == CREATE) {
-            CreateRequest create_req = serializer.deserialize_create_state(message.content); 
+            GameReference create_req = serializer.deserialize_game_reference(message.content);
+            // CreateRequest create_req = serializer.deserialize_create_state(message.content); 
             Game &game = game_handler.create_new_game(create_req.name, responses);
             game.push_event(message, uuid, responses);
         }

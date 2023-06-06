@@ -76,7 +76,7 @@ void CProtocol::send_lobby_command(const LobbyCommand &command, Socket &s, bool 
     req.content = serializer.serialize(ref);
     int bytes_sent = 0;
     bytes_sent += send_number(req.cmd, s, was_closed);
-    bytes_sent += send_number(req.content.size(), s, was_closed);
+    bytes_sent += send_number((uint16_t)req.content.size(), s, was_closed);
     bytes_sent += s.sendall(req.content.data(), req.content.size(), was_closed);
 
     // uint8_t command_id = (uint8_t) get_command_type(command.name);
