@@ -39,7 +39,7 @@ ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
 
 
 
-void CProtocol::send(Socket &skt, const ProtocolRequest &request, bool was_closed) {
+void CProtocol::send(Socket &skt, /*const*/ ProtocolRequest /*&*/request, bool was_closed) {
      // TODO
 }
 
@@ -53,6 +53,7 @@ uint8_t* CProtocol::receive_render(Socket &s) {
     uint8_t length;
     s.recvall(&length,1);
     uint8_t * render = new uint8_t[length+1];//podria ser unique ptr
+    render[0] = length;
     uint8_t * render_plus_one = render++;
     s.recvall(render_plus_one,length);
     render[0] = length;
