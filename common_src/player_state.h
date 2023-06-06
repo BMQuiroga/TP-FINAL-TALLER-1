@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include "protocol_types.h"
 
 #define GUN_MAGAZINE_SIZE 10
 #define STARTING_HIT_POINTS 100
@@ -29,18 +30,6 @@ enum player_state {
   };
 enum player_direction { LEFT, RIGHT };
 
-// struct representing player attributes that will be visible to the clien
-struct PlayerStateReference {
-    uint8_t id;
-    std::string name;
-    uint8_t hit_points;
-    uint8_t rounds;
-    uint8_t direction;
-    uint16_t x;
-    uint16_t y;
-    int8_t state;
-};
-
 // Clase encargada de manejar la lógica del jugador (almacenar y actualizar su estado)
 class PlayerState {
   private:
@@ -49,7 +38,7 @@ class PlayerState {
     uint8_t hit_points;
     uint8_t rounds;
     std::vector<int8_t> direction;
-    player_direction facing_direction;
+    uint8_t facing_direction;
     std::vector<uint16_t> position;
     uint16_t speed;
     int8_t state;

@@ -29,6 +29,19 @@ void Client::handle_request(ProtocolRequest &message) {
         // game and return its initial state. If it's a join game request
         // then try to joint the game and return its current state on success
         // or 0 on failure.
+        if (message.cmd == LIST) {
+            LobbyStateResponse resp;
+            resp.games = game_handler.get_games().get_refs();
+            Serializer serializer;
+            ProtocolResponse response;
+            response.content_type = LOBBY_STATE;
+            response.content = serializer.serialize(resp);
+            responses.push(response);
+        }
+        if (message.cmd == JOIN) {
+            // joined_game = message.
+            Game &game = game_handler.get_game(joined_game);
+        }
     }
 }
 
@@ -36,7 +49,7 @@ void Client::start()
 {
     receiver.start();
     sender.start();
-    /*ProtocolRequest req;
+    ProtocolRequest req;
     req.cmd = JOIN;
     if (game_handler.get_game_count() == 0) {
         Game &game = game_handler.create_new_game("test", responses);
@@ -49,7 +62,6 @@ void Client::start()
         game.push_event(std::ref(req), uuid, responses);
     }
     std::cout << "Pushing event: " << "(req=JOIN, name=" << uuid << ")" << std::endl;
-    */
 }
 
 void Client::join()

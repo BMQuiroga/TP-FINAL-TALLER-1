@@ -18,6 +18,10 @@ size_t GameHandler::get_game_count() {
     return matches.get_game_count();
 }
 
+ProtectedMatchesList& GameHandler::get_games() {
+    return matches;
+}
+
 Game& GameHandler::create_new_game(const std::string& name,
 Queue<ProtocolResponse>& q) {
     int game_code(number_matches.get_counter());
