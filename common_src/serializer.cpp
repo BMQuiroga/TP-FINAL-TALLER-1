@@ -95,7 +95,9 @@ GameReference Serializer::deserialize_game_reference(const std::vector<int8_t> &
     const int8_t *data = content.data();
     GameReference ref;
     offset += copy_number(data+offset, &ref.id);
-    offset += copy_string(data+offset, ref.name);
+    if (!ref.name.empty()) {
+        offset += copy_string(data+offset, ref.name);
+    }
     offset += copy_number(data+offset, &ref.players);
     return ref;
 }
