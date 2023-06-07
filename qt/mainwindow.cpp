@@ -1,13 +1,13 @@
-#include "mainwindow.h"
-#include "lobby.h"
-#include "gameoption.h"
-#include "numberplayers.h"
-#include "joingame.h"
+#include "MainWindow.h"
+#include "Lobby.h"
+#include "GameOption.h"
+#include "NumberPlayers.h"
+#include "JoinGame.h"
 #include <iostream>
 #include <ostream>
 #include <string>
 #include <QDebug>
-#include "./ui_mainwindow.h"
+#include "./ui_MainWindow.h"
 #include "lobby_command.h"
 
 MainWindow::MainWindow(Queue<LobbyCommand>& q, QWidget *parent) :

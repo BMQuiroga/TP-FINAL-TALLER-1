@@ -1,4 +1,4 @@
-#include "numberPlayers.h"
+#include "NumberPlayers.h"
 #include "GameOption.h"
 #include "ui_NumberPlayers.h"
 #include <iostream>

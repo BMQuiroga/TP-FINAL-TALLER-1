@@ -19,6 +19,7 @@ struct GameReference {
     int id;
     std::string name;
     uint8_t players;
+    GameReference() {}
     GameReference(int id, std::string &name, uint8_t players) :
     id(id), name(name), players(players) {}
 };

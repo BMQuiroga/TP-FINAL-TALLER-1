@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <functional>
 #include <QApplication>
-#include "../../qt/mainwindow.h"
+#include "../../qt/MainWindow.h"
 #include "../../qt/lobby_command.h"
 
 

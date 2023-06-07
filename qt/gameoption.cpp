@@ -1,8 +1,8 @@
 #include "GameOption.h"
 
 #include "ui_GameOption.h"
-#include "joinGame.h"
-#include "numberPlayers.h"
+#include "JoinGame.h"
+#include "NumberPlayers.h"
 
 GameOption::GameOption(QWidget *parent) : QWidget(parent) {
     Ui::GameOption GameOption;
