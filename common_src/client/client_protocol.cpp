@@ -73,31 +73,12 @@ void CProtocol::send_lobby_command(const LobbyCommand &command, Socket &s, bool 
 
     int bytes_sent = 0;
     bytes_sent += send_number(req.cmd, s, was_closed);
-    // 6 bytes (german) + 2 bytes (strlen) + 2bytes (veclen) + 4 bytes (cmd) = 14
     if (!req.content.empty()) {
         bytes_sent += send_number((uint16_t)req.content.size(), s, was_closed);
         bytes_sent += s.sendall(req.content.data(), req.content.size(), was_closed);
     }
     std::cout << "Content size: " << std::to_string(req.content.size()) << std::endl;
     std::cout << "Sent " << std::to_string(bytes_sent) <<" to server" << std::endl;
-
-    // uint8_t command_id = (uint8_t) get_command_type(command.name);
-    // send_one_byte(command_id, s);
-    // if (command.name == JOINGAME) {
-    //     uint32_t game_code = (uint32_t) std::stoi(command.parameter);
-    //     send_number(game_code, s, was_closed);
-    // } else {
-    //     std::ostringstream ss;
-    //     uint16_t len = (uint16_t) command.parameter.length();
-    //     send_number(len, s, was_closed);
-    //     ss << command.parameter;
-    //     auto buf = ss.str();
-    //     s.sendall(buf.data(), buf.size(), was_closed);
-    // } 
-    // if (command.name == CREATEGAME) {
-    //     uint8_t game_size = (uint8_t) command.parameter2;
-    //     send_one_byte(game_size, s);
-    // }
 }
 
 uint8_t* CProtocol::receive_render(Socket &s) {
