@@ -28,6 +28,25 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 message("Agregando '${PROJECT_BINARY_DIR}' como directorio de includes")
 include_directories(${PROJECT_BINARY_DIR})
 
+# Esta macro toma cada uno los parámetros y ejecuta *uic* sobre ellos
+# La aplicacion uic genera headers con la definición de los widgets
+# a partir de un archivo .ui
+# Los nombres de los headers generados se guardan en la variable pasada
+# como primer parámetro.
+# No, no los genera con la carpeta como prefijo.
+qt5_wrap_ui(UIS_HEADERS
+  qt/Lobby.ui
+  qt/gameoption.ui
+  qt/joingame.ui
+  qt/numberplayers.ui
+  qt/mainwindow.ui
+)
+
+# Habilito el automoc para poder hacer autoconnect de señales
+set(CMAKE_AUTOMOC on)
+# Habilito autorcc para manejar automaticamente los QResources
+set(CMAKE_AUTORCC ON)
+
 file(GLOB SOURCES
     ./common_src/*.h
     ./common_src/*.cpp
@@ -35,30 +54,28 @@ file(GLOB SOURCES
     ./common_src/network/*.cpp
     ./common_src/client/*.h
     ./common_src/client/*.cpp
+    ./qt/*.h
+    ./qt/*.cpp
 )
 
-set(QT_SOURCES
-    qt/Lobby.ui
-    qt/gameoption.ui
-    qt/joingame.ui
-    qt/numberplayers.ui
-    qt/mainwindow.ui
-    qt/lobby.cpp
-    qt/lobby.h
-    qt/gameoption.cpp
-    qt/gameoption.h
-    qt/numberplayers.cpp
-    qt/numberplayers.h
-    qt/joingame.cpp
-    qt/joingame.h
-    qt/mainwindow.cpp
-    qt/mainwindow.h
-)
+# set(QT_SOURCES
+#     qt/lobby.cpp
+#     qt/Lobby.h
+#     qt/gameoption.cpp
+#     qt/GameOption.h
+#     qt/numberplayers.cpp
+#     qt/NumberPlayers.h
+#     qt/joingame.cpp
+#     qt/JoinGame.h
+#     qt/mainwindow.cpp
+#     qt/MainWindow.h
+# )
 
 
 add_executable (client
   ${SOURCES}
-  ${QT_SOURCES}
+  ${UIS_HEADERS}
+  # ${QT_SOURCES}
 )
 
 file(GLOB SOURCES
