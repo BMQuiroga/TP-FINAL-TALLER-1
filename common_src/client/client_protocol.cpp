@@ -61,23 +61,25 @@ void CProtocol::send_lobby_command(const LobbyCommand &command, Socket &s, bool 
     if (command.name == JOINGAME) {
         ref.id = (uint32_t) std::stoi(command.parameter);
     } else if (command.name == INPUTNAME) {
-        std::ostringstream ss;
-        uint16_t len = (uint16_t) command.parameter.length();
-        send_number(len, s, was_closed);
-        ss << command.parameter;
-        auto buf = ss.str();
-        s.sendall(buf.data(), buf.size(), was_closed);
+        serializer.push_string(req.content, command.parameter);
     } else if (command.name == CREATEGAME) {
         ref.id = -1;
         ref.name = command.parameter;
         ref.players = (uint8_t) command.parameter2;
     }
 
-    req.content = serializer.serialize(ref);
+    if (req.cmd == JOIN || req.cmd == CREATE)
+        req.content = serializer.serialize(ref);
+
     int bytes_sent = 0;
     bytes_sent += send_number(req.cmd, s, was_closed);
-    bytes_sent += send_number((uint16_t)req.content.size(), s, was_closed);
-    bytes_sent += s.sendall(req.content.data(), req.content.size(), was_closed);
+    // 6 bytes (german) + 2 bytes (strlen) + 2bytes (veclen) + 4 bytes (cmd) = 14
+    if (!req.content.empty()) {
+        bytes_sent += send_number((uint16_t)req.content.size(), s, was_closed);
+        bytes_sent += s.sendall(req.content.data(), req.content.size(), was_closed);
+    }
+    std::cout << "Content size: " << std::to_string(req.content.size()) << std::endl;
+    std::cout << "Sent " << std::to_string(bytes_sent) <<" to server" << std::endl;
 
     // uint8_t command_id = (uint8_t) get_command_type(command.name);
     // send_one_byte(command_id, s);

@@ -12,7 +12,7 @@ Client::Client(
     skt(std::move(socket)),
     responses(QUEUE_MAXSIZE),
     game_handler(game_handler),
-    joined_game(0),
+    joined_game(-1),
     name(""),
     uuid(get_uuid()),
     receiver(std::ref(skt), std::ref(responses), protocol),
@@ -34,9 +34,11 @@ void Client::handle_request(ProtocolRequest &message) {
         // or 0 on failure.
         if (message.cmd == CREATE) {
             GameReference create_req = serializer.deserialize_game_reference(message.content);
-            // CreateRequest create_req = serializer.deserialize_create_state(message.content); 
             Game &game = game_handler.create_new_game(create_req.name, responses);
-            game.push_event(message, uuid, responses);
+            game.start();
+            ProtocolRequest join_req;
+            join_req.cmd = JOIN;
+            game.push_event(std::ref(join_req), uuid, responses);
         }
         if (message.cmd == LIST) {
             LobbyStateResponse resp;
@@ -49,7 +51,7 @@ void Client::handle_request(ProtocolRequest &message) {
         if (message.cmd == JOIN) {
             JoinRequest join_req = serializer.deserialize_join_state(message.content); 
             Game &game = game_handler.get_game(join_req.game_code);
-            game.push_event(message, uuid, responses);
+            game.push_event(std::ref(message), uuid, responses);
         }
         if (message.cmd == PLAYERNAME) {
             InputNameRequest name_req = serializer.deserialize_input_name(message.content);
