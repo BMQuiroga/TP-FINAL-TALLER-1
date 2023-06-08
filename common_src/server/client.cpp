@@ -36,9 +36,8 @@ void Client::handle_request(ProtocolRequest &message) {
             GameReference create_req = serializer.deserialize_game_reference(message.content);
             Game &game = game_handler.create_new_game(create_req.name, responses);
             game.start();
-            ProtocolRequest join_req;
-            join_req.cmd = JOIN;
-            game.push_event(std::ref(join_req), uuid, responses);
+            game_handler.join_game(game.get_id(), uuid, responses);
+            joined_game = game.get_id();
         }
         if (message.cmd == LIST) {
             LobbyStateResponse resp;
@@ -50,8 +49,14 @@ void Client::handle_request(ProtocolRequest &message) {
         }
         if (message.cmd == JOIN) {
             JoinRequest join_req = serializer.deserialize_join_state(message.content); 
-            Game &game = game_handler.get_game(join_req.game_code);
-            game.push_event(std::ref(message), uuid, responses);
+            int join_code = game_handler.join_game(join_req.game_code, uuid, responses);
+            if (join_code == JOIN_FAILURE) {
+                ProtocolResponse resp;
+                resp.content_type = JOIN;
+                serializer.push_number(resp.content, JOIN_FAILURE);
+                resp.size = resp.content.size();
+                responses.push(std::ref(resp));
+            }
         }
         if (message.cmd == PLAYERNAME) {
             InputNameRequest name_req = serializer.deserialize_input_name(message.content);

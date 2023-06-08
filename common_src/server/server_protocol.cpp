@@ -19,9 +19,11 @@ ProtocolRequest ServerProtocol::get(Socket &skt, bool *was_closed) {
     ProtocolRequest request;
     uint16_t size;
     receive_number(&request.cmd, skt, was_closed);
-    receive_number(&size, skt, was_closed);
-    request.content = std::vector<int8_t>(size);
-    skt.recvall(request.content.data(), size, was_closed);
+    if (request.cmd == CREATE || request.cmd == JOIN || request.cmd == PLAYERNAME) {
+        receive_number(&size, skt, was_closed);
+        request.content = std::vector<int8_t>(size);
+        skt.recvall(request.content.data(), size, was_closed);
+    }
     return request;
 }
 
