@@ -39,16 +39,19 @@ Queue<ProtocolResponse>& q) {
 //     matches.send_message_to_game(state_message, game_code);
 // }
 
-// MatchState GameHandler::join_game(ProtocolRequest &message, int code,
-//         std::string &player_uuid, Queue<MatchState>& q) {
-//     bool game_exists = matches.has(code);
-//     if (game_exists) {
-//         matches.change_game_players(code, q);
-//     }
-//     MatchState state("join", code, game_exists);
-
-//     return state;
-// }
+int GameHandler::join_game(int code,
+std::string &player_uuid, Queue<ProtocolResponse>& q) {
+    bool game_exists = matches.has(code);
+    if (game_exists) {
+        Game &game = get_game(code);
+        ProtocolRequest req;
+        req.cmd = JOIN;
+        game.push_event(std::ref(req), player_uuid, q);
+        return JOIN_SUCCESS;
+    } else {
+        return JOIN_FAILURE;
+    }
+}
 
 // MatchState GameHandler::start_game_chat(
 //     const std::string &command, const std::string &parameters,

@@ -36,7 +36,8 @@ Serializer::copy_number(const int8_t *src, T* dest) {
 int Serializer::copy_string(const int8_t *src, std::string &s) {
     uint16_t offset = 0, ssize;
     offset += copy_number(src, &ssize);
-    std::memcpy(&s[0], src + offset, ssize);
+    const char *ptr = (const char *)(src + offset);
+    s = std::string(ptr, ssize);
     return offset+ssize;
 }
 
@@ -81,6 +82,24 @@ GameStateResponse Serializer::deserialize_game_state(const std::vector<int8_t> &
     return resp;
 }
 
+std::vector<int8_t> Serializer::serialize(const GameReference &ref) {
+    std::vector<int8_t> buf;
+    push_number(buf, ref.id);
+    push_string(buf, ref.name);
+    push_number(buf, ref.players);
+    return buf;
+}
+
+GameReference Serializer::deserialize_game_reference(const std::vector<int8_t> &content) {
+    int offset = 0;
+    const int8_t *data = content.data();
+    GameReference ref;
+    offset += copy_number(data+offset, &ref.id);
+    offset += copy_string(data+offset, ref.name);
+    offset += copy_number(data+offset, &ref.players);
+    return ref;
+}
+
 std::vector<int8_t> Serializer::serialize(const LobbyStateResponse &resp) {
     std::vector<int8_t> buf;
     for (auto game : resp.games) {
@@ -109,4 +128,30 @@ LobbyStateResponse Serializer::deserialize_lobby_state(const std::vector<int8_t>
         resp.games.push_back(ref);
     }
     return resp;
+}
+
+CreateRequest Serializer::deserialize_create_state(const std::vector<int8_t> &content)
+{
+    CreateRequest resp;
+    const int8_t *data = content.data();
+    int offset = 0, size = content.size();
+    std::string test("");
+    offset += copy_number(data+offset, &resp.max_number);
+    offset += copy_string(data+offset, resp.name);
+    return resp;
+}
+
+InputNameRequest Serializer::deserialize_input_name(const std::vector<int8_t> &content)
+{
+    InputNameRequest resp;
+    const int8_t *data = content.data();
+    int offset = 0, size = content.size();
+    std::string test("");
+    offset += copy_string(data+offset, resp.name);
+    return resp;
+}
+
+JoinRequest Serializer::deserialize_join_state(const std::vector<int8_t> &content)
+{
+    // return JoinRequest();
 }

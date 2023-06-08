@@ -16,6 +16,9 @@
 #include "../matchstate.h"
 #include "../protocol.h"
 
+#define JOIN_SUCCESS 0
+#define JOIN_FAILURE 1
+
 class ProtectedMatchCounter {
     int counter {0};
     std::mutex m;
@@ -147,8 +150,8 @@ class GameHandler {
          * En caso contrario, envía un mensaje que la partida
          * no existe.
         */
-        // MatchState join_game(ProtocolRequest &message, int code,
-        // std::string &player_uuid, Queue<MatchState>& q);
+        int join_game(int code, std::string &player_uuid, 
+        Queue<ProtocolResponse>& q);
         // /**
         //  * Recibo una de los comandos (join, create) para iniciar 
         //  * una partida (handshake),

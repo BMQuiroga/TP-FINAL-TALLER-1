@@ -19,6 +19,7 @@ struct GameReference {
     int id;
     std::string name;
     uint8_t players;
+    GameReference() {}
     GameReference(int id, std::string &name, uint8_t players) :
     id(id), name(name), players(players) {}
 };
@@ -45,6 +46,23 @@ struct GameStateResponse {
     int game_state;
     std::vector<PlayerStateReference> players;
     GameStateResponse() = default;
+};
+
+struct CreateRequest {
+    // int cmd;    // command
+    std::string name; // name of the match to create
+    int max_number; // number of players that can join the match
+    // explicit CreateRequest(std::string &name) : cmd(CREATE), name(name) {}
+};
+
+struct InputNameRequest {
+    std::string name; // name of the player
+};
+
+struct JoinRequest {
+    // int cmd;
+    int game_code;
+    // explicit JoinRequest(int game_code) : cmd(JOIN), game_code(game_code) {}
 };
 
 struct LobbyStateResponse {

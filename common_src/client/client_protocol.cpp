@@ -1,8 +1,11 @@
 #include <iostream>
 #include "client_protocol.h"
 #include <string>
+#include <iostream>
+#include <sstream>
 #include "intention.h"
 #include <vector>
+#include "../serialization.h"
 //#include <arpa/inet.h>
 
 void CProtocol::send_one_byte(uint8_t n, Socket &s) {
@@ -49,6 +52,35 @@ void CProtocol::send_command(Intention& command, Socket &s, bool *was_closed) {
     //send_number(command_id, s, was_closed);
 }
 
+void CProtocol::send_lobby_command(const LobbyCommand &command, Socket &s, bool *was_closed)
+{
+    Serializer serializer;
+    ProtocolRequest req;
+    GameReference ref;
+    req.cmd = (uint8_t) get_command_type(command.name);
+    if (command.name == JOINGAME) {
+        ref.id = (uint32_t) std::stoi(command.parameter);
+    } else if (command.name == INPUTNAME) {
+        serializer.push_string(req.content, command.parameter);
+    } else if (command.name == CREATEGAME) {
+        ref.id = -1;
+        ref.name = command.parameter;
+        ref.players = (uint8_t) command.parameter2;
+    }
+
+    if (req.cmd == JOIN || req.cmd == CREATE)
+        req.content = serializer.serialize(ref);
+
+    int bytes_sent = 0;
+    bytes_sent += send_number(req.cmd, s, was_closed);
+    if (!req.content.empty()) {
+        bytes_sent += send_number((uint16_t)req.content.size(), s, was_closed);
+        bytes_sent += s.sendall(req.content.data(), req.content.size(), was_closed);
+    }
+    std::cout << "Content size: " << std::to_string(req.content.size()) << std::endl;
+    std::cout << "Sent " << std::to_string(bytes_sent) <<" to server" << std::endl;
+}
+
 uint8_t* CProtocol::receive_render(Socket &s) {
     uint8_t length;
     s.recvall(&length,1);
@@ -58,4 +90,11 @@ uint8_t* CProtocol::receive_render(Socket &s) {
     s.recvall(render_plus_one,length);
     render[0] = length;
     return render;
+}
+
+int CProtocol::get_command_type(const std::string &resource) {
+    if (resource == CREATEGAME) return CREATE;
+    if (resource == JOINGAME) return JOIN;
+    if (resource == INPUTNAME) return PLAYERNAME;
+    return INVALID;
 }

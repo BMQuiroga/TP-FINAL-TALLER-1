@@ -24,6 +24,8 @@
 #define JOIN 10
 #define CREATE 11
 #define LIST 12
+#define PLAYERNAME 13
+#define INVALID -1
 
 template <typename Send_Type, typename Recv_Type>
 class Protocol {
@@ -46,7 +48,7 @@ class Protocol {
     */
     virtual void send(
         Socket &skt,
-        Send_Type message,
+        const Send_Type &message,
         bool was_closed) = 0;
 
     /**
