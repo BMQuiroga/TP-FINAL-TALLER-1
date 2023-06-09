@@ -13,7 +13,7 @@ GameEntity(name, max_x, max_y) {
     this->max_x = max_x;
     this->max_y = max_y;
     this->hit_points = STARTING_HIT_POINTS;
-    this->arma = new Arma(this);
+    this->arma = new Arma1(this);
 }
 
 std::string PlayerState::get_name() {
@@ -107,12 +107,16 @@ void PlayerState::next_state(uint8_t cmd) {
     } else if (cmd == STOP_MOVING_LEFT) {
         direction[0] = 0;
     } else if (cmd == RELOAD) {
-        if (this->arma.try_reload())
+        if (this->arma->try_reload())
             this->state = RELOADING;
     } else if (cmd == SHOOT) {
         attack();
     }
     this->move();
+}
+
+void PlayerState::pass_time() {
+    this->arma->advance_time();
 }
 
 // void PlayerState::as_response(protocol_response_t *response) {

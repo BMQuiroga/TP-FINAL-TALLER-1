@@ -17,7 +17,6 @@
 #define STOP_MOVING_DOWN 7
 #define SHOOT 8
 #define STOP_SHOOTING 9
-#define RELOAD 10
 
 class CProtocol : public Protocol<ProtocolRequest, ProtocolResponse> {
     private:

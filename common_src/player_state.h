@@ -3,9 +3,9 @@
 
 #include <vector>
 #include <string>
+#include "game_entity.h"
 #include "protocol_types.h"
 #include "armas.h"
-#include "game_entity.h"
 
 #define GUN_MAGAZINE_SIZE 10
 #define STARTING_HIT_POINTS 100
@@ -13,18 +13,14 @@
 //#define DEFAULT_MAX_Y 900
 #define DEFAULT_MAX_Y 95
 
+class Arma;
+
 // Clase encargada de manejar la lógica del jugador
 //  (almacenar y actualizar su estado)
 class PlayerState : public GameEntity {
   private:
     uint8_t hit_points;
     Arma * arma;
-    std::vector<int8_t> direction;
-    uint8_t facing_direction;
-    std::vector<uint16_t> position;
-    uint16_t speed;
-    int8_t state;
-    int16_t max_x, max_y;
     void move();
     void attack() override;
 
@@ -37,6 +33,8 @@ class PlayerState : public GameEntity {
 
     // Procesa la solicitud del cliente y actualiza el estado actual del jugador
     void next_state(uint8_t cmd);
+
+    void pass_time();
 
     std::string get_name();
     PlayerStateReference make_ref();

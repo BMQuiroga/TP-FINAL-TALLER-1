@@ -67,3 +67,4 @@ bool Game::operator==(const Game &Game) const {
 bool Game::operator==(const int &code) const {
     return id == code;
 }
+

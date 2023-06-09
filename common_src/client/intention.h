@@ -20,9 +20,9 @@
 #define STOP_MOVING_DOWN 7
 #define SHOOT 8
 #define STOP_SHOOTING 9
-#define RELOAD 10
-#define PREPARE_GRENADE 11
-#define THROW_GRENADE 12
+#define RELOAD 14
+#define PREPARE_GRENADE 15
+#define THROW_GRENADE 16
 #define END -1
 
 class Intention {

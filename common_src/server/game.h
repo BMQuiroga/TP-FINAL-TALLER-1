@@ -89,6 +89,12 @@ class GameLoop : public Thread {
         }
     }
 
+    void pass_time() {
+        for (PlayerState &player : players) {
+            player.pass_time();
+        }
+    }
+
     void run() override {
         int delayMilliseconds = static_cast<int>(1000.0 / 30);
         while (state != ENDED) {
@@ -114,6 +120,8 @@ class GameLoop : public Thread {
                     response.size = response.content.size();
                     queue.push(response);
             });
+            pass_time();
+
             auto endTime = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 

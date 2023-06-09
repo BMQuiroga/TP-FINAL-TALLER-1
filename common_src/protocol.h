@@ -25,6 +25,9 @@
 #define CREATE 11
 #define LIST 12
 #define PLAYERNAME 13
+#define RELOAD 14
+#define PREPARE_GRENADE 15
+#define THROW_GRENADE 16
 #define INVALID -1
 
 template <typename Send_Type, typename Recv_Type>
