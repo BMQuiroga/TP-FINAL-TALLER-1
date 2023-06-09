@@ -9,47 +9,47 @@
 template<typename T>
 class IObserver {
  public:
-  virtual ~IObserver(){};
+  virtual ~IObserver(){}
   virtual void value_changed(T old_value, T new_value) = 0;
 };
 
-template<typename T>
-class ObservableProperty {
+template<typename T, typename Owner>
+class PropertyObserver {
  protected:
-    T value;
-    std::vector<IObserver<T>*> observers;
+  std::function<void(Owner*, T, T)> callback;
  public:
-  ObservableProperty(T initial) : value(initial) {}
-  ~ObservableProperty(){};
-  void attach(IObserver<T> *observer) {
-    observers.push_back(observer);
+  PropertyObserver(std::function<void(Owner*, T, T)> callback) : 
+  callback(callback) {}
+  ~PropertyObserver() {};
+  void value_changed(Owner *owner, T old_value, T new_value) {
+    callback(owner, old_value, new_value);
   }
-  void detach(IObserver<T> *observer) {
-    observers.remove(observer);
-  }
-  void notify(T old_value, T new_value) {
-    for (IObserver<T>* observer : observers) {
-        observer->value_changed(old_value, new_value);
-    }
-  }
-  void set(T new_value) {
-    T old = value;
-    value = new_value;
-    notify(old, value);
-  }
-  T& get() { return value; }
 };
 
-template<typename T>
-class PropertyObserver : public IObserver<T> {
+template<typename T, typename Owner>
+class ObservableProperty {
  protected:
-  std::function<void(T, T)> callback;
+    T value;        // the value of this property
+    std::vector<PropertyObserver<T, Owner>*> observers;
  public:
-  PropertyObserver(std::function<void(T, T)> callback) : 
-  callback(callback) {}
-  ~PropertyObserver() override {};
-  void value_changed(T old_value, T new_value) override {
-    callback(old_value, new_value);
+  ObservableProperty(T initial) : value(initial) {}
+  ~ObservableProperty(){}
+  void attach(PropertyObserver<T, Owner> *observer) {
+    observers.push_back(observer);
   }
+  void detach(PropertyObserver<T, Owner> *observer) {
+    observers.remove(observer);
+  }
+  void notify(Owner *owner, T old_value, T new_value) {
+    for (PropertyObserver<T, Owner>* observer : observers) {
+        observer->value_changed(owner, old_value, new_value);
+    }
+  }
+  void set(T new_value, Owner *owner) {
+    T old = value;
+    value = new_value;
+    notify(owner, old, value);
+  }
+  T& get() { return value; }
 };
 #endif
