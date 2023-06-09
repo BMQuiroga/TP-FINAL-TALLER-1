@@ -5,11 +5,11 @@
 PlayerState::PlayerState(const std::string &name, int16_t max_x, int16_t max_y) : 
 name(name), direction(2, 0), position(2, 0), facing_direction(RIGHT), speed(5) {
     this->id = 1;
-    this->rounds = GUN_MAGAZINE_SIZE;
     this->state = IDLE;
     this->max_x = max_x;
     this->max_y = max_y;
     this->hit_points = STARTING_HIT_POINTS;
+    this->arma = new Arma(this);
 }
 
 std::string PlayerState::get_name() {
@@ -21,7 +21,7 @@ PlayerStateReference PlayerState::make_ref() {
     ref.id = id;
     ref.hit_points = hit_points;
     ref.name = name;
-    ref.rounds = rounds;
+    ref.rounds = arma->get_rounds();
     ref.state = state;
     ref.x = position[0];
     ref.y = position[1];
@@ -68,10 +68,12 @@ void PlayerState::move() {
             this->state = ATTACKING;
         } else if (this->state == MOVING) {
             this->state = IDLE;
+        } else if (this->state == RELOADING) {
+            this->state = RELOADING;
         }
     }
 }
-
+/*
 void PlayerState::shoot(int flag) {
     if (flag && this->rounds > 0) {
         this->rounds--;
@@ -87,7 +89,7 @@ void PlayerState::shoot(int flag) {
             this->state = MOVING;
         }
     }
-}
+}*/
 
 void PlayerState::next_state(int cmd) {
     if (cmd == MOVE_DOWN) {
@@ -108,6 +110,12 @@ void PlayerState::next_state(int cmd) {
         direction[0] = 0;
     } else if (cmd == STOP_MOVING_LEFT) {
         direction[0] = 0;
+    } else if (cmd == RELOAD) {
+        if (this->arma.try_reload())
+            this->state = RELOADING;
+    } else if (cmd == SHOOT) {
+        if (this->arma.try_shoot())
+            this->state = ATTACKING;
     }
     this->move();
     // switch (req->cmd) {
@@ -152,4 +160,6 @@ void PlayerState::next_state(int cmd) {
 //     response->rounds = htons(this->rounds);
 // }
 
-PlayerState::~PlayerState() {}
+PlayerState::~PlayerState() {
+    delete this->arma;
+}

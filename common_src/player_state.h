@@ -4,11 +4,13 @@
 #include <vector>
 #include <string>
 #include "protocol_types.h"
+#include "armas.h"
 
 #define GUN_MAGAZINE_SIZE 10
 #define STARTING_HIT_POINTS 100
-#define DEFAULT_MAX_X 1820
-#define DEFAULT_MAX_Y 900
+#define DEFAULT_MAX_X 1920
+//#define DEFAULT_MAX_Y 900
+#define DEFAULT_MAX_Y 95
 
 // 0 idle, 1 attack, 2 dead, 3 grenade, 4 hurt 5 recharge, 6 shot, 7 walk, 8 fall, 9 run, 10 protect, 11 run+atack, 12 bite, 13 scream, 14 eating
 enum player_state { 
@@ -36,7 +38,7 @@ class PlayerState {
     uint8_t id;
     std::string name;
     uint8_t hit_points;
-    uint8_t rounds;
+    Arma * arma;
     std::vector<int8_t> direction;
     uint8_t facing_direction;
     std::vector<uint16_t> position;
@@ -44,7 +46,7 @@ class PlayerState {
     int8_t state;
     int16_t max_x, max_y;
     void move();
-    void shoot(int flag);
+    //void shoot(int flag);
 
   public:
     explicit PlayerState(const std::string &name, int16_t max_x = DEFAULT_MAX_X, int16_t max_y = DEFAULT_MAX_Y);
@@ -55,5 +57,7 @@ class PlayerState {
 
     std::string get_name();
     PlayerStateReference make_ref();
+
+    //friend class Arma;
 };
 #endif
