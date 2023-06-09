@@ -2,8 +2,12 @@
 #include "./client/client_protocol.h"
 #include <arpa/inet.h>
 
-PlayerState::PlayerState(const std::string &name, int16_t max_x, int16_t max_y) : 
-name(name), direction(2, 0), position(2, 0), facing_direction(RIGHT), speed(5) {
+PlayerState::PlayerState(
+    const std::string &name, 
+    int16_t max_x, 
+    int16_t max_y
+) : 
+GameEntity(name, max_x, max_y) {
     this->id = 1;
     this->state = IDLE;
     this->max_x = max_x;
@@ -23,36 +27,28 @@ PlayerStateReference PlayerState::make_ref() {
     ref.name = name;
     ref.rounds = arma->get_rounds();
     ref.state = state;
-    ref.x = position[0];
-    ref.y = position[1];
+    ref.x = x;
+    ref.y = y;
     ref.direction = facing_direction;
     return ref;
 }
 
+void PlayerState::attack() {
+    if(this->arma->try_shoot())
+        this->state = ATTACKING;
+}
+
 void PlayerState::move() {
-    std::vector<uint16_t> prev_position(this->position);
-    int16_t new_x = (int16_t)this->position[0] + (speed * this->direction[0]);
-    if (new_x < 0) {
-        new_x = 0;
-    } else if (new_x >= this->max_x) {
-        new_x = this->max_x - 1;
-    }
-    int16_t new_y = (int16_t)this->position[1] + (speed * this->direction[1]);
-    if (new_y < 0) {
-        new_y = 0;
-    } else if (new_y >= this->max_y) {
-        new_y = this->max_y - 1;
-    }
-    this->position[0] = new_x;
-    this->position[1] = new_y;
+    std::vector<uint16_t> prev_position({x, y});
+    GameEntity::move();
 
     bool moved = false;
     if (this->direction[0] != 0) {
-        if (prev_position[0] != this->position[0]) {
+        if (prev_position[0] != x) {
             moved = true;
         }
     } else if (this->direction[1] != 0) {
-        if (prev_position[1] != this->position[1]) {
+        if (prev_position[1] != y) {
             moved = true;
         }
     }
@@ -91,7 +87,7 @@ void PlayerState::shoot(int flag) {
     }
 }*/
 
-void PlayerState::next_state(int cmd) {
+void PlayerState::next_state(uint8_t cmd) {
     if (cmd == MOVE_DOWN) {
         direction[1] = 1;
     } else if (cmd == MOVE_UP) {
@@ -114,43 +110,9 @@ void PlayerState::next_state(int cmd) {
         if (this->arma.try_reload())
             this->state = RELOADING;
     } else if (cmd == SHOOT) {
-        if (this->arma.try_shoot())
-            this->state = ATTACKING;
+        attack();
     }
     this->move();
-    // switch (req->cmd) {
-    //     case NOP:
-    //         if (this->state == ATTACKING) {
-    //             this->shoot(1);
-    //         } else if (this->state == MOVING) {
-    //             this->move();
-    //         } else if (this->state == ATTACKING_AND_MOVING) {
-    //             this->move();
-    //             this->shoot(1);
-    //         }
-    //         break;
-
-    //     case SHOOT:
-    //         this->shoot(req->args[0]);
-    //         if (this->state == MOVING || this->state == ATTACKING_AND_MOVING) {
-    //             this->move();
-    //         }
-    //         break;
-
-    //     case MOVE:
-    //         this->direction[0] = req->args[0];
-    //         this->direction[1] = req->args[1];
-    //         this->move();
-    //         if (this->state == ATTACKING || this->state == ATTACKING_AND_MOVING) {
-    //             this->shoot(1);
-    //         }
-    //         break;
-
-    //     case RELOAD:
-    //         this->state = IDLE;
-    //         this->rounds = GUN_MAGAZINE_SIZE;
-    //         break;
-    //     }
 }
 
 // void PlayerState::as_response(protocol_response_t *response) {
