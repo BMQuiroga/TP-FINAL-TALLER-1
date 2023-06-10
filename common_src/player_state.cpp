@@ -16,6 +16,20 @@ GameEntity(name, max_x, max_y) {
     this->arma = new Arma1(this);
 }
 
+PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {
+    if (this == &other)
+        return;
+
+    id = other.id;
+    state = other.state;
+    max_x = other.max_x;
+    max_y = other.max_y;
+    hit_points = other.hit_points;
+    arma = other.arma;
+
+    other.arma = nullptr;
+}
+
 std::string PlayerState::get_name() {
     return name;
 }
@@ -127,5 +141,7 @@ void PlayerState::pass_time() {
 // }
 
 PlayerState::~PlayerState() {
-    delete this->arma;
+    if (arma) {
+        delete arma;
+    }
 }

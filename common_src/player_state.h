@@ -20,7 +20,7 @@ class Arma;
 class PlayerState : public GameEntity {
   private:
     uint8_t hit_points;
-    Arma * arma;
+    Arma* arma;
     void move();
     void attack() override;
 
@@ -29,6 +29,7 @@ class PlayerState : public GameEntity {
       const std::string &name,
       int16_t max_x = DEFAULT_MAX_X,
       int16_t max_y = DEFAULT_MAX_Y);
+    PlayerState(PlayerState&&);
     ~PlayerState();
 
     // Procesa la solicitud del cliente y actualiza el estado actual del jugador

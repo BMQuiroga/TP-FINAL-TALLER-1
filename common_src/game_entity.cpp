@@ -12,6 +12,22 @@ name(name), direction(2, 0), x(2), y(0), facing_direction(RIGHT), speed(5) {
     this->max_y = max_y;
 }
 
+GameEntity::GameEntity(GameEntity &&other) {
+    if (this == &other)
+        return;
+
+    name = std::move(other.name);
+    direction = std::move(other.direction);
+    x = other.x;
+    y = other.y;
+    facing_direction = other.facing_direction;
+    speed = other.speed;
+    id = other.id;
+    state = other.state;
+    max_x = other.max_x;
+    max_y = other.max_y;
+}
+
 GameEntity::~GameEntity() {}
 
 std::string GameEntity::get_name() {

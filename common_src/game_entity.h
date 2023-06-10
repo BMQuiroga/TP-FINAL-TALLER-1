@@ -44,6 +44,7 @@ class GameEntity {
 
   public:
     GameEntity(const std::string &name, int16_t max_x, int16_t max_y);
+    GameEntity(GameEntity&&);
     ~GameEntity();
     std::string get_name();
 };
