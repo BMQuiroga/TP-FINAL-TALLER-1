@@ -59,6 +59,7 @@ std::vector<int8_t> Serializer::serialize(const GameStateResponse &resp) {
         push_number(buf, player.direction);
         push_number(buf, player.state);
         push_number(buf, player.hit_points);
+        push_number(buf, player.rounds);
     }
     return buf;
 }
@@ -76,6 +77,7 @@ GameStateResponse Serializer::deserialize_game_state(const std::vector<int8_t> &
         offset += copy_number(data+offset, &ref.direction);
         offset += copy_number(data+offset, &ref.state);
         offset += copy_number(data+offset, &ref.hit_points);
+        offset += copy_number(data+offset, &ref.rounds);
         resp.players.push_back(ref);
     }
 
