@@ -54,16 +54,14 @@ class GameLoop : public Thread {
     std::atomic<GameState> state;
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
-
   public:
     explicit GameLoop(
-        Queue<GameEvent> &events) : events(events), map{0}, state{CREATED} {
-    }
+        Queue<GameEvent> &events) : events(events), map{0}, state{CREATED} {}
 
     int join(GameEvent &event) {
         if (state == CREATED && players.size() < MAX_PLAYERS) {
             PlayerState new_player(event.player_uuid);
-            players.push_back(new_player);
+            players.push_back(std::move(new_player));
             message_queues.push_back(*event.player_messages);
             return players.size();
         } else {
