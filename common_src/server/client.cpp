@@ -15,7 +15,7 @@ Client::Client(
     joined_game(-1),
     name(""),
     uuid(get_uuid()),
-    receiver(std::ref(skt), std::ref(responses), protocol),
+    receiver(std::ref(skt), /*std::ref(responses),*/ protocol),
     sender(std::ref(skt), std::ref(responses), protocol)
 {
     receiver.register_callback([this](ProtocolRequest &message) {
