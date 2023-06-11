@@ -25,7 +25,7 @@ Client::Client(
 
 void Client::handle_request(ProtocolRequest &message) {
     if (joined_game >= 0) {
-        game_handler.get_game(joined_game).push_event(message, uuid, std::ref(responses));
+        game_handler.get_game(joined_game).push_event(message, name, std::ref(responses));
     } else {
         Serializer serializer;
         // TODO: If this is a create game request, then create the 
@@ -36,7 +36,7 @@ void Client::handle_request(ProtocolRequest &message) {
             GameReference create_req = serializer.deserialize_game_reference(message.content);
             Game &game = game_handler.create_new_game(create_req.name, responses);
             game.start();
-            game_handler.join_game(game.get_id(), uuid, responses);
+            game_handler.join_game(game.get_id(), name, responses);
             joined_game = game.get_id();
         }
         if (message.cmd == LIST) {
@@ -49,7 +49,7 @@ void Client::handle_request(ProtocolRequest &message) {
         }
         if (message.cmd == JOIN) {
             JoinRequest join_req = serializer.deserialize_join_state(message.content); 
-            int join_code = game_handler.join_game(join_req.game_code, uuid, responses);
+            int join_code = game_handler.join_game(join_req.game_code, name, responses);
             if (join_code == JOIN_FAILURE) {
                 ProtocolResponse resp;
                 resp.content_type = JOIN;

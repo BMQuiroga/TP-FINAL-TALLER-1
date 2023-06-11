@@ -31,15 +31,15 @@ enum GameState {
 
 struct GameEvent {
     ProtocolRequest req;
-    std::string player_uuid;
+    std::string player_name;
     Queue<ProtocolResponse> *player_messages;
     GameEvent() {}
-    GameEvent(ProtocolRequest &req, std::string &uuid, Queue<ProtocolResponse> &q) : req(req), player_uuid(uuid), player_messages(&q) {}
+    GameEvent(ProtocolRequest &req, std::string &uuid, Queue<ProtocolResponse> &q) : req(req), player_name(uuid), player_messages(&q) {}
     GameEvent& operator=(const GameEvent& other) {
         if (this == &other)
             return *this;
         req = other.req;
-        player_uuid = other.player_uuid;
+        player_name = other.player_name;
         player_messages = other.player_messages;
 
         return *this;
@@ -57,10 +57,12 @@ class GameLoop : public Thread {
   public:
     explicit GameLoop(
         Queue<GameEvent> &events) : events(events), map{0}, state{CREATED} {}
+        // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
 
     int join(GameEvent &event) {
         if (state == CREATED && players.size() < MAX_PLAYERS) {
-            PlayerState new_player(event.player_uuid);
+            PlayerState new_player(event.player_name);
+            // new_player.x.attach(&on_entity_moved);  
             players.push_back(std::move(new_player));
             message_queues.push_back(*event.player_messages);
             return players.size();
@@ -93,31 +95,53 @@ class GameLoop : public Thread {
         }
     }
 
+    void _on_entity_moved(GameEntity *entity, uint16_t old, uint16_t new_) {
+        std::cout << "Entity with uuid" << entity->get_name() << "moved!" << std::endl;
+    }
+
+    void push_response() {
+        GameStateResponse resp = make_response();
+        std::for_each(message_queues.begin(), message_queues.end(),
+            [this, resp](Queue<ProtocolResponse> & queue) {
+                ProtocolResponse response;
+                response.content_type = GAME_STATE;
+                response.content = serializer.serialize(resp);
+                response.size = response.content.size();
+                queue.push(response);
+        });
+    }
+
     void run() override {
-        int delayMilliseconds = static_cast<int>(1000.0 / 30);
+        int delayMilliseconds = static_cast<int>(1000.0 / 15);
         while (state != ENDED) {
             auto startTime = std::chrono::high_resolution_clock::now();
-            GameEvent event = events.pop();
-            std::cout << "Popped event with cmd=" << std::to_string(event.req.cmd) << std::endl;
-            if (event.req.cmd == JOIN) {
-                int code = join(event);
-                if (code != FAILURE && players.size() == MAX_PLAYERS) {
-                    state = STARTED;
+            GameEvent event;
+            if (events.try_pop(event)) {
+                // std::cout << "Popped event with cmd=" << std::to_string(event.req.cmd) << std::endl;
+                if (event.req.cmd == JOIN) {
+                    int code = join(event);
+                    if (code != FAILURE && players.size() == MAX_PLAYERS) {
+                        state = STARTED;
+                    }
+                } else {
+                    PlayerState &player = get_player(event.player_name);
+                    player.next_state(event.req.cmd);
                 }
+                push_response();
             } else {
-                PlayerState &player = get_player(event.player_uuid);
-                player.next_state(event.req.cmd);
+                bool changed = false;
+                for (PlayerState &player : players) {
+                    if (player.get_state() != IDLE) {
+                        player.next_state(-1);
+                        changed = true;
+                    }
+                }
+                // If any of the players has continued an action, broadcast it 
+                // to the other players (example: movement)
+                if (changed)
+                    push_response();
             }
-            GameStateResponse resp = make_response();
-            std::for_each(message_queues.begin(), message_queues.end(),
-                [this, resp, event](Queue<ProtocolResponse> & queue) {
-                    ProtocolResponse response;
-                    response.request = event.req;
-                    response.content_type = GAME_STATE;
-                    response.content = serializer.serialize(resp);
-                    response.size = response.content.size();
-                    queue.push(response);
-            });
+            
             pass_time();
 
             auto endTime = std::chrono::high_resolution_clock::now();
@@ -150,7 +174,7 @@ class Game {
 
         void push_event(
             ProtocolRequest &req,
-            std::string &player_uuid,
+            std::string &player_name,
             Queue<ProtocolResponse> &player_messages);
         void start();
 

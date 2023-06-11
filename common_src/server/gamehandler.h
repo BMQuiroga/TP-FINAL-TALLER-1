@@ -150,7 +150,7 @@ class GameHandler {
          * En caso contrario, envía un mensaje que la partida
          * no existe.
         */
-        int join_game(int code, std::string &player_uuid, 
+        int join_game(int code, std::string &player_name, 
         Queue<ProtocolResponse>& q);
         // /**
         //  * Recibo una de los comandos (join, create) para iniciar 
