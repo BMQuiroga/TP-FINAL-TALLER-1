@@ -57,17 +57,32 @@ PlayerStateReference PlayerState::make_ref() {
 void PlayerState::attack() {
     if(this->arma->try_shoot())
         this->state = ATTACKING;
+    //else
+        //this->state = IDLE;
 }
 
 void PlayerState::move() {
+    //estas lineas son para que la animacion de reloading se mantenga hasta que se termine de recargar
+    //lo mismo para la de disparar
+
+    int8_t delay = this->arma->get_delay();
+
     bool moved = GameEntity::move();
     if (moved) {
         if (this->state == IDLE) {
             this->state = MOVING;
+        } else if ((this->state == RELOADING) && (delay == 0)) {
+            this->state = MOVING;//termino la recarga
+        } else if ((this->state == ATTACKING) && (delay == 0)) {
+            this->state = MOVING;//termino el disparo
         }
     } else {
         if (this->state == MOVING) {
             this->state = IDLE;
+        } else if ((this->state == RELOADING) && (delay == 0)) {
+            this->state = IDLE;//termino la recarga
+        } else if ((this->state == ATTACKING) && (delay == 0)) {
+            this->state = IDLE;//termino el disparo
         }
     }
 }
@@ -111,12 +126,17 @@ void PlayerState::next_state(uint8_t cmd) {
     } else if (cmd == RELOAD) {
         if (this->arma->try_reload())
             this->state = RELOADING;
-        else
-            this->state = IDLE;
+        //else
+            //this->state = IDLE;
     } else if (cmd == SHOOT) {
         attack();
+    } else if (cmd == STOP_SHOOTING) {
+        //this->state = IDLE;
     }
+
     this->move();
+
+    std::cout << "THIS STATE: " << std::to_string(this->state) << std::endl;
 }
 
 void PlayerState::pass_time() {

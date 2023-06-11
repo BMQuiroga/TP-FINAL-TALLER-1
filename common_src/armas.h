@@ -22,6 +22,7 @@ class Arma {
     bool try_shoot();
     bool try_reload();
     uint8_t get_rounds();
+    uint8_t get_delay();
     virtual void create_bullet() = 0;
 };
 

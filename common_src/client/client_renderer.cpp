@@ -7,6 +7,7 @@
 #include "../serialization.h"
 //#include <arpa/inet.h>
 #define Y_OFFSET 805
+#define GAME_FRAME_RATE 30
 
 ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates) : 
     events(events),
@@ -61,7 +62,7 @@ void ClientRenderer::GameLoop() {
         renderer.Present();
         unsigned int end_ticks = SDL_GetTicks();
         unsigned int ticks_delta = frame_ticks - end_ticks;
-        SDL_Delay((1000/30) - ticks_delta);
+        SDL_Delay((1000/GAME_FRAME_RATE) - ticks_delta);
     }
 }
 

@@ -24,6 +24,7 @@
 
 #define MAX_PLAYERS 2
 #define FAILURE -1
+#define GAME_TICK_RATE 15
 
 enum GameState {
     CREATED, STARTED, ENDED
@@ -112,7 +113,7 @@ class GameLoop : public Thread {
     }
 
     void run() override {
-        int delayMilliseconds = static_cast<int>(1000.0 / 15);
+        int delayMilliseconds = static_cast<int>(1000.0 / GAME_TICK_RATE);
         while (state != ENDED) {
             auto startTime = std::chrono::high_resolution_clock::now();
             GameEvent event;
