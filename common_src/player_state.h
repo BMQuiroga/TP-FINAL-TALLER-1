@@ -34,7 +34,7 @@ class PlayerState : public GameEntity {
 
     // Procesa la solicitud del cliente y actualiza el estado actual del jugador
     void next_state(uint8_t cmd);
-
+    void take_damage(uint8_t damage);
     void pass_time();
 
     std::string get_name();

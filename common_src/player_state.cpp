@@ -34,6 +34,13 @@ std::string PlayerState::get_name() {
     return name;
 }
 
+void PlayerState::take_damage(uint8_t damage) {
+    if (damage > hit_points)
+        hit_points = 0;
+    else
+        hit_points -= damage;
+}
+
 PlayerStateReference PlayerState::make_ref() {
     PlayerStateReference ref;
     ref.id = id;
@@ -53,33 +60,14 @@ void PlayerState::attack() {
 }
 
 void PlayerState::move() {
-    std::vector<uint16_t> prev_position({x, y});
-    GameEntity::move();
-
-    bool moved = false;
-    if (this->direction[0] != 0) {
-        if (prev_position[0] != x) {
-            moved = true;
-        }
-    } else if (this->direction[1] != 0) {
-        if (prev_position[1] != y) {
-            moved = true;
-        }
-    }
-
+    bool moved = GameEntity::move();
     if (moved) {
         if (this->state == IDLE) {
             this->state = MOVING;
-        } else if (this->state == ATTACKING) {
-            this->state = ATTACKING_AND_MOVING;
         }
     } else {
-        if (this->state == ATTACKING_AND_MOVING) {
-            this->state = ATTACKING;
-        } else if (this->state == MOVING) {
+        if (this->state == MOVING) {
             this->state = IDLE;
-        } else if (this->state == RELOADING) {
-            this->state = RELOADING;
         }
     }
 }
@@ -123,6 +111,8 @@ void PlayerState::next_state(uint8_t cmd) {
     } else if (cmd == RELOAD) {
         if (this->arma->try_reload())
             this->state = RELOADING;
+        else
+            this->state = IDLE;
     } else if (cmd == SHOOT) {
         attack();
     }
