@@ -5,7 +5,7 @@
 int GameEntity::next_id = 1;
 
 GameEntity::GameEntity(const std::string &name, int16_t max_x, int16_t max_y) : 
-name(name), direction(2, 0), x(2), y(0), facing_direction(RIGHT), speed(5) {
+name(name), direction(2, 0), x(2), y(0), facing_direction(RIGHT), speed(10) {
     this->id = next_id++;
     this->state = IDLE;
     this->max_x = max_x;
@@ -33,6 +33,11 @@ GameEntity::~GameEntity() {}
 std::string GameEntity::get_name() {
     return name;
 }
+
+int8_t GameEntity::get_state() {
+    return state;
+}
+
 void GameEntity::move() {
     int16_t new_x = (int16_t)x + (speed * this->direction[0]);
     if (new_x < 0) {

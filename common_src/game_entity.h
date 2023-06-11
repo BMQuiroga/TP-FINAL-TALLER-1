@@ -47,6 +47,7 @@ class GameEntity {
     GameEntity(GameEntity&&);
     ~GameEntity();
     std::string get_name();
+    int8_t get_state();
 };
 
 #endif
