@@ -32,12 +32,12 @@ ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
     ProtocolResponse resp;
     receive_number(&resp.content_type, s, was_closed);
     receive_number(&resp.size, s, was_closed);
-    std::cout << "Content Type: " << std::to_string(resp.content_type) << 
-    std::endl;
-    std::cout << "Response size: " << std::to_string(resp.size) << std::endl;
+    // std::cout << "Content Type: " << std::to_string(resp.content_type) << 
+    // std::endl;
+    // std::cout << "Response size: " << std::to_string(resp.size) << std::endl;
     resp.content = std::vector<int8_t>(resp.size);
     s.recvall(resp.content.data(), resp.size, was_closed);
-    std::cout << "ended CProtocol get" << std::endl;
+    // std::cout << "ended CProtocol get" << std::endl;
     return resp;
 }
 
@@ -52,7 +52,7 @@ void CProtocol::send(
 }
 
 void CProtocol::send_command(Intention& command, Socket &s, bool *was_closed) {
-    uint8_t command_id = (uint8_t) command.get_intention();
+    int command_id = command.get_intention();
     // send_one_byte(command_id, s);
     send_number(command_id, s, was_closed);
 }
@@ -65,7 +65,7 @@ void CProtocol::send_lobby_command(
     Serializer serializer;
     ProtocolRequest req;
     GameReference ref;
-    req.cmd = (uint8_t) get_command_type(command.name);
+    req.cmd = get_command_type(command.name);
     if (command.name == JOINGAME) {
         ref.id = (uint32_t) std::stoi(command.parameter);
     } else if (command.name == INPUTNAME) {
@@ -86,10 +86,10 @@ void CProtocol::send_lobby_command(
         bytes_sent += s.sendall(
             req.content.data(), req.content.size(), was_closed);
     }
-    std::cout << "Content size: " << 
-    std::to_string(req.content.size()) << std::endl;
-    std::cout << "Sent " << 
-    std::to_string(bytes_sent) <<" to server" << std::endl;
+    // std::cout << "Content size: " << 
+    // std::to_string(req.content.size()) << std::endl;
+    // std::cout << "Sent " << 
+    // std::to_string(bytes_sent) <<" to server" << std::endl;
 }
 
 uint8_t* CProtocol::receive_render(Socket &s) {

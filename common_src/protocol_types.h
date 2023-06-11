@@ -30,7 +30,7 @@ enum ResponseType {
 
 // Solicitud del cliente
 struct ProtocolRequest {
-    uint8_t cmd; // command (SHOOT, MOVE, etc)
+    int cmd; // command (SHOOT, MOVE, etc)
     std::vector<int8_t> content; // request content
 };
 
