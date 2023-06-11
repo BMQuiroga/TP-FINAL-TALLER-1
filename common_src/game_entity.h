@@ -6,6 +6,9 @@
 #include <map>
 #include <string>
 
+#define DEFAULT_MAX_X 1920
+#define DEFAULT_MAX_Y 95
+
 // 0 idle, 1 attack, 2 dead, 3 grenade, 4 hurt 5 recharge, 6 shot, 7 walk, 
 // 8 fall, 9 run, 10 protect, 11 run+atack, 12 bite, 13 scream, 14 eating
 enum entity_state { 

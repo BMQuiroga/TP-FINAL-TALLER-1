@@ -20,7 +20,6 @@ bool Arma::try_shoot() {
         //std::cout << "shoot" << std::endl;
         balas--;
         delay = delay_disparo;
-        this->create_bullet();
         return true;
     }
     return false;
@@ -44,11 +43,11 @@ void Arma::advance_time() {
         
 }
 
-void Arma1::create_bullet() {
+void Arma1::create_bullet(uint16_t x, uint16_t y, entity_direction direc, std::list<Bullet>& vec) {
     //uint16_t x = this->owner->position.at(0);
     //uint16_t y = this->owner->position.at(1);
     //uint8_t direction = this->owner->facing_direction;
-
+    vec.push_back(Bullet(25,1,direc,false,x,y));
 }
 
 Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd, PlayerState * owner) {

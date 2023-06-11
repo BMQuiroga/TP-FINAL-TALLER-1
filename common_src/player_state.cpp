@@ -55,8 +55,10 @@ PlayerStateReference PlayerState::make_ref() {
 }
 
 void PlayerState::attack() {
-    if(this->arma->try_shoot())
+    if(this->arma->try_shoot()) {
         this->state = ATTACKING;
+    }//ya no se usa porque no puedo devolver la bala o pasar el vec por parametro
+    
     //else
         //this->state = IDLE;
 }
@@ -104,7 +106,7 @@ void PlayerState::shoot(int flag) {
     }
 }*/
 
-void PlayerState::next_state(uint8_t cmd) {
+void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec) {
     if (cmd == MOVE_DOWN) {
         direction[1] = 1;
     } else if (cmd == MOVE_UP) {
@@ -129,7 +131,11 @@ void PlayerState::next_state(uint8_t cmd) {
         //else
             //this->state = IDLE;
     } else if (cmd == SHOOT) {
-        attack();
+        if(this->arma->try_shoot()) {
+            this->state = ATTACKING;
+            this->arma->create_bullet(x,y,facing_direction,vec);
+            //el -64 es para que salga la bala del medio del modelo
+        }
     } else if (cmd == STOP_SHOOTING) {
         //this->state = IDLE;
     }

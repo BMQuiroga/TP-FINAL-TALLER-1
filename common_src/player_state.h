@@ -6,12 +6,10 @@
 #include "game_entity.h"
 #include "protocol_types.h"
 #include "armas.h"
+#include "bullet.h"
 
 #define GUN_MAGAZINE_SIZE 10
 #define STARTING_HIT_POINTS 100
-#define DEFAULT_MAX_X 1920
-//#define DEFAULT_MAX_Y 900
-#define DEFAULT_MAX_Y 95
 
 class Arma;
 
@@ -33,7 +31,7 @@ class PlayerState : public GameEntity {
     ~PlayerState();
 
     // Procesa la solicitud del cliente y actualiza el estado actual del jugador
-    void next_state(uint8_t cmd);
+    void next_state(uint8_t cmd, std::list<Bullet>& vec);
     void take_damage(uint8_t damage);
     void pass_time();
 

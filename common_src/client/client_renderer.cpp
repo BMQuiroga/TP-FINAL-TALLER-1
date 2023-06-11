@@ -8,6 +8,7 @@
 //#include <arpa/inet.h>
 #define Y_OFFSET 805
 #define GAME_FRAME_RATE 30
+#define MIN_MAX_VOLUME 128
 
 ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates) : 
     events(events),
@@ -18,6 +19,7 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse
     renderer(window, -1, SDL_RENDERER_ACCELERATED),
     mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096) {
     this->assets = AssetManager::Instance(this->renderer);
+    Mix_VolumeMusic(MIN_MAX_VOLUME / 10);
     //mixer.OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 }
 
@@ -39,6 +41,7 @@ void ClientRenderer::GameLoop() {
                 GameStateResponse update = serializer.deserialize_game_state(new_update.content);
                 for (PlayerStateReference &player : update.players) {
                     std::cout << "Player: " << std::endl << 
+                        "- id: " << std::to_string(player.id) << std::endl <<
                         "- name: " << player.name << std::endl <<
                         "- state: " << std::to_string(player.state) << std::endl <<
                         "- hit points: " << std::to_string(player.hit_points) << std::endl <<

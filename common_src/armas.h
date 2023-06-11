@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "player_state.h"
+#include "bullet.h"
 
 class PlayerState;
 
@@ -23,13 +24,13 @@ class Arma {
     bool try_reload();
     uint8_t get_rounds();
     uint8_t get_delay();
-    virtual void create_bullet() = 0;
+    virtual void create_bullet(uint16_t x, uint16_t y, entity_direction direc, std::list<Bullet>& vec) = 0;
 };
 
 class Arma1 : public Arma {
     public:
     Arma1(PlayerState * owner);
-    void create_bullet() override;
+    void create_bullet(uint16_t x, uint16_t y, entity_direction direc, std::list<Bullet>& vec) override;
 };
 
 #endif

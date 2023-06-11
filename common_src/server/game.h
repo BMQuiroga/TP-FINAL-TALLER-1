@@ -21,6 +21,7 @@
 #include "../client/client_protocol.h"
 #include "../protected_vector.h"
 #include "../serialization.h"
+#include "../bullet.h"
 
 #define MAX_PLAYERS 2
 #define FAILURE -1
@@ -52,6 +53,7 @@ class GameLoop : public Thread {
     Queue<GameEvent> &events;
     uint32_t map[100][100];
     std::vector<PlayerState> players;
+    std::list<Bullet> bullets;
     std::atomic<GameState> state;
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
@@ -78,6 +80,11 @@ class GameLoop : public Thread {
         for (PlayerState &player : players) {
             resp.players.push_back(player.make_ref());
         }
+
+        for (Bullet &b : bullets) {
+            resp.players.push_back(b.make_ref());
+        }
+
         resp.game_state = state;
         return resp;
     }
@@ -93,6 +100,14 @@ class GameLoop : public Thread {
     void pass_time() {
         for (PlayerState &player : players) {
             player.pass_time();
+        }
+        for (auto it = bullets.begin(); it != bullets.end();) {
+            it->move();
+            if (it->is_off_scope()) {
+                it = bullets.erase(it);
+            } else {
+                ++it;
+            }
         }
     }
 
@@ -126,14 +141,14 @@ class GameLoop : public Thread {
                     }
                 } else {
                     PlayerState &player = get_player(event.player_name);
-                    player.next_state(event.req.cmd);
+                    player.next_state(event.req.cmd,bullets);
                 }
                 push_response();
             } else {
                 bool changed = false;
                 for (PlayerState &player : players) {
                     if (player.get_state() != IDLE) {
-                        player.next_state(-1);
+                        player.next_state(-1,bullets);
                         changed = true;
                     }
                 }

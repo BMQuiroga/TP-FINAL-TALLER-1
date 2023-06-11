@@ -46,7 +46,7 @@ std::vector<int8_t> Serializer::serialize(const GameStateResponse &resp) {
     push_number(buf, resp.game_state);
     for (auto player : resp.players) {
         std::cout << "Player: " << std::endl << 
-            "- id: " << player.id << std::endl <<//roto el id
+            "- id: " << std::to_string(player.id) << std::endl <<//roto el id
             "- name: " << player.name << std::endl <<
             "- state: " << std::to_string(player.state) << std::endl <<
             "- hit points: " << std::to_string(player.hit_points) << std::endl <<

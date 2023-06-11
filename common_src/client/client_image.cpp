@@ -2,7 +2,7 @@
 #include "client_image.h"
 #include <iostream>
 
-std::list<Image>* Image::Create(uint8_t* array) {
+std::list<Image>* Image::Create(uint8_t* array) {//ya no se usa
     std::list<Image>* list = new std::list<Image>;
     uint8_t * it = array;
     it++;
