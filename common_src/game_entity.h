@@ -39,7 +39,7 @@ class GameEntity {
     uint16_t speed;
     int8_t state;
     int16_t max_x, max_y;
-    void move();
+    bool move();
     virtual void attack() = 0;
 
   public:

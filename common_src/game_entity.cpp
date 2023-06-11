@@ -38,7 +38,8 @@ int8_t GameEntity::get_state() {
     return state;
 }
 
-void GameEntity::move() {
+bool GameEntity::move() {
+    std::vector<uint16_t> prev_position({x, y});
     int16_t new_x = (int16_t)x + (speed * this->direction[0]);
     if (new_x < 0) {
         new_x = 0;
@@ -53,4 +54,16 @@ void GameEntity::move() {
     }
     x = new_x;
     y = new_y;
+
+    bool moved = false;
+    if (this->direction[0] != 0) {
+        if (prev_position[0] != x) {
+            moved = true;
+        }
+    } else if (this->direction[1] != 0) {
+        if (prev_position[1] != y) {
+            moved = true;
+        }
+    }
+    return moved;
 }
