@@ -43,11 +43,11 @@ void Arma::advance_time() {
     }   
 }
 
-void Arma1::create_bullet(uint16_t x, uint16_t y, entity_direction direc, std::list<Bullet>& vec) {
+void Arma1::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
     //uint16_t x = this->owner->position.at(0);
     //uint16_t y = this->owner->position.at(1);
     //uint8_t direction = this->owner->facing_direction;
-    vec.push_back(Bullet(25,1,direc,false,x,y));
+    vec.push_back(Bullet(25,1,direc,false,position));
 }
 
 Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd, PlayerState * owner) {
@@ -59,6 +59,18 @@ Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd, PlayerState * owner) {
     this->owner = owner;
 }
 
-Arma1::Arma1(PlayerState * owner) : Arma(10,10,2,owner) {}
+// Arma::Arma(Arma &&other) {
+//     if (this == &other) {
+//         return;
+//     }
+//     cargador = other.cargador;
+//     balas = other.balas;
+//     delay_recarga = other.delay_recarga;
+//     delay_disparo = other.delay_disparo;
+//     delay = other.delay;
+//     owner = other.owner;
+// }
+
+Arma1::Arma1(PlayerState * owner) : Arma(10,20,2,owner) {}
 
 

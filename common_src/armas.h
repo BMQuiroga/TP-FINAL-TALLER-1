@@ -5,6 +5,7 @@
 #include <list>
 #include "player_state.h"
 #include "bullet.h"
+#include "math_helper.h"
 
 class PlayerState;
 
@@ -20,18 +21,19 @@ class Arma {
 
     public:
     Arma(uint8_t c, uint8_t dr, uint8_t dd, PlayerState * owner);
+    // Arma (Arma&&);
     void advance_time();
     bool try_shoot();
     bool try_reload();
     uint8_t get_rounds();
     uint8_t get_delay();
-    virtual void create_bullet(uint16_t x, uint16_t y, entity_direction direc, std::list<Bullet>& vec) = 0;
+    virtual void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) = 0;
 };
 
 class Arma1 : public Arma {
     public:
     explicit Arma1(PlayerState * owner);
-    void create_bullet(uint16_t x, uint16_t y, entity_direction direc, std::list<Bullet>& vec) override;
+    void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
 };
 
 #endif
