@@ -13,7 +13,7 @@ PlayerState::PlayerState(
 GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
     this->id = 1;
     this->hit_points = STARTING_HIT_POINTS;
-    this->arma = new Arma1(this);
+    this->arma = new Arma1();
     this->rect_width = PLAYER_RECT_WIDTH;
     this->rect_height = PLAYER_RECT_HEIGHT;
 }
