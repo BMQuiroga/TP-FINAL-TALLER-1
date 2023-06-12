@@ -35,8 +35,10 @@ ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
     // std::cout << "Content Type: " << std::to_string(resp.content_type) << 
     // std::endl;
     // std::cout << "Response size: " << std::to_string(resp.size) << std::endl;
-    resp.content = std::vector<int8_t>(resp.size);
-    s.recvall(resp.content.data(), resp.size, was_closed);
+    if (resp.size > 0) {
+        resp.content = std::vector<int8_t>(resp.size);
+        s.recvall(resp.content.data(), resp.size, was_closed);
+    }
     // std::cout << "ended CProtocol get" << std::endl;
     return resp;
 }
