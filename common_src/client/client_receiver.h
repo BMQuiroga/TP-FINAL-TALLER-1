@@ -21,6 +21,7 @@ public:
     explicit ClientReceiver(
         Socket& socket,
         Queue<ProtocolResponse>& q);
+    ~ClientReceiver() override;
     void run() override;
     bool is_dead();
     void kill();

@@ -17,6 +17,11 @@ ClientLobby::ClientLobby(
 {
 }
 
+ClientLobby::~ClientLobby() {
+    kill();
+    join();
+}
+
 void ClientLobby::run() {
     is_alive = keep_talking = true;
     bool was_closed = false;

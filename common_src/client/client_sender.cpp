@@ -16,6 +16,11 @@ ClientSender::ClientSender(
 {
 }
 
+ClientSender::~ClientSender() {
+    kill();
+    join();
+}
+
 void ClientSender::run() {
     is_alive = keep_talking = true;
     bool was_closed = false;

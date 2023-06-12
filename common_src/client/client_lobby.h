@@ -19,6 +19,7 @@ public:
     explicit ClientLobby(
         Socket& socket,
         Queue<LobbyCommand>& q);
+    ~ClientLobby() override;
     void run() override;
     bool is_dead();
     void kill();

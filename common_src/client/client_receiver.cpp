@@ -18,6 +18,10 @@ ClientReceiver::ClientReceiver(
     q(q)
 {
 }
+ClientReceiver::~ClientReceiver() {
+    kill();
+    join();
+}
 
 void ClientReceiver::run() {
     ProtocolResponse resp;

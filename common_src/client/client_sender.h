@@ -19,6 +19,7 @@ public:
     explicit ClientSender(
         Socket& socket,
         Queue<Intention*>& q);
+    ~ClientSender() override;
     void run() override;
     bool is_dead();
     void kill();
