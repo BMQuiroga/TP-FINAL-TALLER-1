@@ -5,8 +5,8 @@
 #include "game_entity.h"
 #include <string>
 
-#define ZOMBIE_RECT_WIDTH 96
-#define ZOMBIE_RECT_HEIGHT 96
+#define ZOMBIE_RECT_WIDTH 20
+#define ZOMBIE_RECT_HEIGHT 20
 
 enum attack_type {
   ZOMBIE_ATTACK1, 
