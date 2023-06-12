@@ -1,5 +1,6 @@
 #include "game_entity.h"
 #include "./client/client_protocol.h"
+#include <utility>
 #include <arpa/inet.h>
 
 int GameEntity::next_id = 1;

@@ -1,5 +1,7 @@
 #include "player_state.h"
 #include "./client/client_protocol.h"
+#include <list>
+#include <utility>
 #include <arpa/inet.h>
 
 PlayerState::PlayerState(
@@ -55,7 +57,7 @@ PlayerStateReference PlayerState::make_ref() {
 }
 
 void PlayerState::attack() {
-    if(this->arma->try_shoot()) {
+    if (this->arma->try_shoot()) {
         this->state = ATTACKING;
     }//ya no se usa porque no puedo devolver la bala o pasar el vec por parametro
     
@@ -131,7 +133,7 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec) {
         //else
             //this->state = IDLE;
     } else if (cmd == SHOOT) {
-        if(this->arma->try_shoot()) {
+        if (this->arma->try_shoot()) {
             this->state = ATTACKING;
             this->arma->create_bullet(x,y,facing_direction,vec);
             //el -64 es para que salga la bala del medio del modelo

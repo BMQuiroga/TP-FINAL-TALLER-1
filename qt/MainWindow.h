@@ -25,8 +25,10 @@ public:
 
 public slots:
     void receiveInputText(const QString& text);
-    void pickGameOption(const std::string& text);
+    void startJoinGameOption();
+    void startCreateGameOption();
     void receiveInputGame(const QString& text, int number);
+    void receiveGameCode(const QString& text);
 
 private:
     Queue<LobbyCommand>& q;

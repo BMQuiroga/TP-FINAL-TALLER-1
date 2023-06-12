@@ -12,7 +12,12 @@
 #include <algorithm>
 #include <sstream>
 #include <tuple>
+#include <random>
+#include <chrono>
+#include <thread>
+#include <cstdint>
 #include <atomic>
+#include <utility>
 #include "../matchstate.h"
 #include "../queue.h"
 #include "../protocol_types.h"
@@ -22,10 +27,15 @@
 #include "../protected_vector.h"
 #include "../serialization.h"
 #include "../bullet.h"
+#include "../zombie.h"
+#include <ctime>
 
+#define MAX_ZOMBIES 5
 #define MAX_PLAYERS 2
 #define FAILURE -1
 #define GAME_TICK_RATE 15
+#define ZOMBIE_CREATION_TIME_MIN 10000
+#define ZOMBIE_CREATION_TIME_MAX 15000
 
 enum GameState {
     CREATED, STARTED, ENDED
@@ -54,9 +64,11 @@ class GameLoop : public Thread {
     uint32_t map[100][100];
     std::vector<PlayerState> players;
     std::list<Bullet> bullets;
+    std::vector<CommonZombie> zombies;
     std::atomic<GameState> state;
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
+    
   public:
     explicit GameLoop(
         Queue<GameEvent> &events) : events(events), map{0}, state{CREATED} {}
@@ -85,6 +97,9 @@ class GameLoop : public Thread {
             resp.players.push_back(b.make_ref());
         }
 
+        for (CommonZombie &zombie : zombies) {
+            resp.zombies.push_back(zombie.make_ref());
+        }
         resp.game_state = state;
         return resp;
     }
@@ -127,9 +142,30 @@ class GameLoop : public Thread {
         });
     }
 
+    // Function to generate a random number within a given range
+    int getRandomNumber(int min, int max) {
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distrib(min, max);
+        return distrib(gen);
+    }
+
+    // Function to handle enemy spawns
+    void spawn_enemy() {
+        // Spawn an enemy
+        int x = getRandomNumber(0, 800);  // Random X position within game area
+        int y = getRandomNumber(0, 95);  // Random Y position within game area
+        CommonZombie common_zombie("zombie", x, y);
+        common_zombie.set_id(zombies.size());
+        zombies.push_back(std::move(common_zombie));
+    }
+
     void run() override {
         int delayMilliseconds = static_cast<int>(1000.0 / GAME_TICK_RATE);
+        auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()).count();
         while (state != ENDED) {
+            int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
             auto startTime = std::chrono::high_resolution_clock::now();
             GameEvent event;
             if (events.try_pop(event)) {
@@ -162,6 +198,17 @@ class GameLoop : public Thread {
 
             auto endTime = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+            auto current_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()).count();
+            auto interval = current_time - game_started_time;
+            if (interval % spawn_interval < 100 && interval > 0 && zombies.size() < MAX_ZOMBIES) {
+                spawn_enemy();
+            }
+
+            /*for (CommonZombie &zombie : zombies) {
+                zombie.move()
+            }*/
+            
 
             // Calculate the remaining delay to reach the desired execution frequency
             int remainingDelayMilliseconds = delayMilliseconds - static_cast<int>(duration.count());

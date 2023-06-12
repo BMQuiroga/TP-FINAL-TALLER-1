@@ -37,6 +37,7 @@ void ClientRenderer::GameLoop() {
             //std::cout << "found new update" << std::endl;
             frames_list = new std::list<Image>;
             std::vector<PlayerStateReference>::iterator it;
+            std::vector<ZombieStateReference>::iterator it_zombies;
             if (new_update.content_type == GAME_STATE) {
                 GameStateResponse update = serializer.deserialize_game_state(new_update.content);
                 for (PlayerStateReference &player : update.players) {
@@ -48,8 +49,23 @@ void ClientRenderer::GameLoop() {
                         "- x: " << std::to_string(player.x) << std::endl <<
                         "- y: " << std::to_string(player.y) << std::endl;
                 }
+                for (ZombieStateReference &zombie : update.zombies) {
+                    zombie.id = ZOMBIE + zombie.id;
+                    std::cout << "Zombie: " << std::endl << 
+                        "- id: " << zombie.id << std::endl <<
+                        "- type: " << zombie.zombie_type << std::endl <<
+                        "- state: " << std::to_string(zombie.state) << std::endl <<
+                        "- health: " << std::to_string(zombie.health) << std::endl <<
+                        "- damage: " << std::to_string(zombie.damage) << std::endl <<
+                        "- x: " << std::to_string(zombie.x) << std::endl <<
+                        "- y: " << std::to_string(zombie.y) << std::endl;
+                }
                 for (it = update.players.begin(); it != update.players.end(); ++it) {
                     auto new_Model = Image((*it));
+                    frames_list->push_back(new_Model);
+                }
+                for (it_zombies = update.zombies.begin(); it_zombies != update.zombies.end(); ++it_zombies) {
+                    auto new_Model = Image((*it_zombies));
                     frames_list->push_back(new_Model);
                 }
             } else if (new_update.content_type == LOBBY_STATE) {

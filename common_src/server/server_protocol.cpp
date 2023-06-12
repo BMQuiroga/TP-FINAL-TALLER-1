@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
 #include "server_protocol.h"
 #include "../serialization.h"
 

@@ -1,4 +1,5 @@
 #include "../player_state.h"
+#include "../zombie.h"
 #include "client_image.h"
 #include <iostream>
 
@@ -49,6 +50,16 @@ Image::Image(const PlayerStateReference &state) {
     this->action = state.state;
     this->flip = state.direction;
     this->health = state.hit_points;
+    this->x = state.x;
+    this->y = state.y;
+    this->frame = 0;
+}
+
+Image::Image(const ZombieStateReference &state) {
+    this->id = state.id;
+    this->action = state.state;
+    this->flip = state.direction;
+    this->health = state.health;
     this->x = state.x;
     this->y = state.y;
     this->frame = 0;

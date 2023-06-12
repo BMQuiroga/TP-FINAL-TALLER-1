@@ -6,7 +6,6 @@
 #include <string>
 
 class Serializer {
-
   public:
     // serialization
     template <typename T> void push_number(std::vector<int8_t> &buf, T num);
@@ -19,6 +18,10 @@ class Serializer {
     std::vector<int8_t> serialize(const GameReference &ref);
     std::vector<int8_t> serialize(const LobbyStateResponse &resp);
     // deserialization
+    void serialize_player(const PlayerStateReference &player, std::vector<int8_t> &buf);
+    void serialize_zombie(const ZombieStateReference &zombie, std::vector<int8_t> &buf);
+    int deserialize_player(PlayerStateReference &player_ref, const int8_t *data, int offset);
+    int deserialize_zombie(ZombieStateReference &zombie_ref, const int8_t *data, int offset);
     GameStateResponse deserialize_game_state(const std::vector<int8_t> &content);
     LobbyStateResponse deserialize_lobby_state(const std::vector<int8_t> &content);
     CreateRequest deserialize_create_state(const std::vector<int8_t> &content);

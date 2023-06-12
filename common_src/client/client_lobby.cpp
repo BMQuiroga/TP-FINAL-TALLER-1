@@ -27,6 +27,10 @@ void ClientLobby::run() {
             break;
         }
         protocol.send_lobby_command(command, skt, &was_closed);
+        if (command.name == "join") {
+            ProtocolResponse resp = protocol.get(skt, &was_closed);
+            std::cout << resp.size << std::endl;
+        }
     }
 }
 

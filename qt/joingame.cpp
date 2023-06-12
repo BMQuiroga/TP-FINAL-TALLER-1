@@ -11,11 +11,9 @@ JoinGame::JoinGame(QWidget *parent) : QWidget(parent) {
 
 void JoinGame::connectToGame() {
     QLineEdit* inputCode = findChild<QLineEdit*>("inputCode");
-    QLabel* labelOut = findChild<QLabel*>("message");
     QString code = inputCode->text();
-    QString message = QString("Te uniste a la partida con código %1").arg(code);
-    labelOut->setText(message);
     std::cout << "clicked!!" << std::endl;
+    emit sendGameCodeEntered(code);
 }
 
 void JoinGame::connectEvents() {

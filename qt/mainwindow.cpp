@@ -28,6 +28,7 @@ void MainWindow::showJoinGame()
     // Create and show the new widget (e.g., GameOptionsWidget)
     currentWidget = new JoinGame();
     currentWidget->show();
+    QObject::connect(currentWidget, SIGNAL(sendGameCodeEntered(QString)), this, SLOT(receiveGameCode(QString)));
 }
 
 void MainWindow::showCreateGame()
@@ -64,7 +65,8 @@ void MainWindow::showGameOptionsWidget() {
     // Create and show the new widget (e.g., GameOptionsWidget)
     currentWidget = new GameOption();
     currentWidget->show();
-    QObject::connect(currentWidget, SIGNAL(gameOptionPicked(std::string)), this, SLOT(pickGameOption(std::string)));
+    QObject::connect(currentWidget, SIGNAL(joinGameOptionPicked()), this, SLOT(startJoinGameOption()));
+    QObject::connect(currentWidget, SIGNAL(createGameOptionPicked()), this, SLOT(startCreateGameOption()));
 }
 
 void MainWindow::receiveInputText(const QString& text) {
@@ -82,12 +84,19 @@ void MainWindow::receiveInputGame(const QString& text, int number) {
     q.push(command);
 }
 
-void MainWindow::pickGameOption(const std::string& text) {
-    if (text == JOINGAME) {
-        showJoinGame();
-    } else {
-        showCreateGame();
-    }
+void MainWindow::startJoinGameOption() {
+    showJoinGame();
+}
+
+void MainWindow::startCreateGameOption() {
+    showCreateGame();
+}
+
+void MainWindow::receiveGameCode(const QString& text) {
+    // Handle the received input text
+    qDebug() << "Received input number to join game: " << text;
+    LobbyCommand command(JOINGAME, text.toStdString());
+    q.push(command);
 }
 
 MainWindow::~MainWindow()

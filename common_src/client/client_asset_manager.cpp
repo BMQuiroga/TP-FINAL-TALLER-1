@@ -5,7 +5,6 @@
 
 #define SOLDIER1 1
 #define SOLDIER2 2
-#define ZOMBIE 51
 #define JUMPER 52
 #define SPEAR 53
 #define VENOM 54

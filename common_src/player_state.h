@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <list>
 #include "game_entity.h"
 #include "protocol_types.h"
 #include "armas.h"

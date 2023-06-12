@@ -2,6 +2,7 @@
 #define __ARMA_GENERICA_H__
 
 #include <iostream>
+#include <list>
 #include "player_state.h"
 #include "bullet.h"
 
@@ -29,7 +30,7 @@ class Arma {
 
 class Arma1 : public Arma {
     public:
-    Arma1(PlayerState * owner);
+    explicit Arma1(PlayerState * owner);
     void create_bullet(uint16_t x, uint16_t y, entity_direction direc, std::list<Bullet>& vec) override;
 };
 

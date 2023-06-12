@@ -1,5 +1,6 @@
 #ifndef CLIENT_ASSET_MANAGER_H_
 #define CLIENT_ASSET_MANAGER_H_
+#define ZOMBIE 51
 
 #include "../socket.h"
 #include "../protocol.h"

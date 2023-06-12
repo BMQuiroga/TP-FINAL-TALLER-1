@@ -11,11 +11,11 @@ GameOption::GameOption(QWidget *parent) : QWidget(parent) {
 }
 
 void GameOption::createGame() {
-    emit gameOptionPicked("create");
+    emit createGameOptionPicked();
 }
 
 void GameOption::joinGame() {
-    emit gameOptionPicked("join");
+    emit joinGameOptionPicked();
 }
 
 void GameOption::connectEvents() {
@@ -24,6 +24,6 @@ void GameOption::connectEvents() {
     QPushButton* buttonJoin = findChild<QPushButton*>("joinGameButton");
     QObject::connect(buttonCreate, &QPushButton::clicked,
                      this, &GameOption::createGame);
-    QObject::connect(buttonCreate, &QPushButton::clicked,
-    this, &GameOption::createGame);
+    QObject::connect(buttonJoin, &QPushButton::clicked,
+    this, &GameOption::joinGame);
 }

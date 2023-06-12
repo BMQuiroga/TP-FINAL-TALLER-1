@@ -18,9 +18,9 @@ class PropertyObserver {
  protected:
   std::function<void(Owner*, T, T)> callback;
  public:
-  PropertyObserver(std::function<void(Owner*, T, T)> callback) : 
+  explicit PropertyObserver(std::function<void(Owner*, T, T)> callback) : 
   callback(callback) {}
-  ~PropertyObserver() {};
+  ~PropertyObserver() {}
   void value_changed(Owner *owner, T old_value, T new_value) {
     callback(owner, old_value, new_value);
   }
@@ -32,7 +32,7 @@ class ObservableProperty {
     T value;        // the value of this property
     std::vector<PropertyObserver<T, Owner>*> observers;
  public:
-  ObservableProperty(T initial) : value(initial) {}
+  explicit ObservableProperty(T initial) : value(initial) {}
   ~ObservableProperty(){}
   void attach(PropertyObserver<T, Owner> *observer) {
     observers.push_back(observer);

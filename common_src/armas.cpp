@@ -1,5 +1,6 @@
 #include "armas.h"
 #include "player_state.h"
+#include <list>
 
 bool Arma::try_reload() {
     //std::cout << "try reload" << std::endl;
@@ -39,8 +40,7 @@ void Arma::advance_time() {
     if (this->delay > 0) {
         this->delay--;
         //std::cout << "nuevo delay:" << std::to_string(delay) << std::endl;
-    }
-        
+    }   
 }
 
 void Arma1::create_bullet(uint16_t x, uint16_t y, entity_direction direc, std::list<Bullet>& vec) {
