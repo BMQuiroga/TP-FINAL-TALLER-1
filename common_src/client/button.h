@@ -9,9 +9,15 @@
 
 
 class Button {
+    //la clase tiene logica de boton en sdl
     public:
+    //constructor: toma el texto y el rectangulo donde se renderiza
     Button(const std::string& text, const SDL2pp::Rect& rect);
+
+    //dibuja el boton
     void Render(SDL2pp::Renderer& renderer);
+
+    //dado un evento, devuelve true si el boton fue presionado
     bool HandleEvent(const SDL_Event& event);
 
     private:

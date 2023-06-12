@@ -50,15 +50,14 @@ void Arma1::create_bullet(uint16_t x, uint16_t y, entity_direction direc, std::l
     vec.push_back(Bullet(25,1,direc,false,x,y));
 }
 
-Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd, PlayerState * owner) {
+Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd) {
     this->cargador = c;
     this->balas = c;
     this->delay_recarga = dr;
     this->delay_disparo = dd;
     this->delay = 0;
-    this->owner = owner;
 }
 
-Arma1::Arma1(PlayerState * owner) : Arma(10,10,2,owner) {}
+Arma1::Arma1() : Arma(10,10,2) {}
 
 

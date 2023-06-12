@@ -87,8 +87,6 @@ void ClientRenderer::GameLoop() {
 
 void ClientRenderer::render_all() {
     if (this->actual_frame != nullptr) {
-        //draw_health(actual_frame->front().id);
-        //draw_rounds(actual_frame->front().action);
         for (auto const& it : *actual_frame) {
             //std::cout << "id:" << it.id << std::endl;
             if (it.id > 0 && it.id < 151) {
@@ -147,14 +145,6 @@ void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8
         (*full->get_texture()),
         SDL2pp::Rect(0,0,length,hp_bar_height),
         SDL2pp::Rect(x, y + (hp_bar_height*2) + Y_OFFSET, std::round(hp_percentage), hp_bar_height - 1));
-}
-
-void ClientRenderer::draw_health(uint8_t n) {
-    return;
-}
-
-void ClientRenderer::draw_rounds(uint8_t n) {
-    return;
 }
 
 void ClientRenderer::renderBackground() {

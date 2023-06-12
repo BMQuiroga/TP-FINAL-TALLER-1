@@ -32,6 +32,7 @@
 
 template <typename Send_Type, typename Recv_Type>
 class Protocol {
+    //clase base del protocolo
     private:
     const std::string hostname;
     

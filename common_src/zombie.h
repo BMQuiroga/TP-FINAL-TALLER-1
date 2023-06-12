@@ -23,6 +23,7 @@ enum ZOMBIE_TYPE {
 };
 
 class Zombie : public GameEntity {
+  //clase zombie, hija de GameEntity
   protected:
     uint8_t damage;
     uint8_t health{STARTING_HIT_POINTS};
@@ -36,6 +37,7 @@ class Zombie : public GameEntity {
         int16_t max_y);
     ~Zombie();
     Zombie(Zombie&&);
+    //de un zombie fabrica una GSR para enviar al cliente
     ZombieStateReference make_ref();
     void move();
     void set_id(int new_id);

@@ -15,7 +15,7 @@ GameEntity(name, max_x, max_y) {
     this->max_x = max_x;
     this->max_y = max_y;
     this->hit_points = STARTING_HIT_POINTS;
-    this->arma = new Arma1(this);
+    this->arma = new Arma1();
 }
 
 PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {

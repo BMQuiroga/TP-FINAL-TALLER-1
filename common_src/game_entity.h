@@ -30,6 +30,7 @@ enum entity_state {
   };
 enum entity_direction { LEFT, RIGHT };
 
+//clase virtual para entidad default
 class GameEntity {
   protected:
     static int next_id; // Static member variable to track the next ID
