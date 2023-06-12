@@ -5,7 +5,7 @@
 #include <vector>
 
 struct PlayerStateReference {
-    uint8_t id;
+    uint32_t id;
     std::string name;
     uint8_t hit_points;
     uint8_t rounds;
@@ -15,7 +15,7 @@ struct PlayerStateReference {
     int8_t state;
 };
 struct ZombieStateReference {
-    uint8_t id;
+    uint32_t id;
     uint8_t health;
     uint8_t damage;
     uint8_t zombie_type;
