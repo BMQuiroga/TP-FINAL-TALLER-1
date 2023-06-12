@@ -27,6 +27,7 @@
 #include "../protected_vector.h"
 #include "../serialization.h"
 #include "../bullet.h"
+#include "../physics_manager.h"
 #include "../zombie.h"
 #include <ctime>
 
@@ -36,6 +37,8 @@
 #define GAME_TICK_RATE 15
 #define ZOMBIE_CREATION_TIME_MIN 10000
 #define ZOMBIE_CREATION_TIME_MAX 15000
+
+using namespace std::placeholders;
 
 enum GameState {
     CREATED, STARTED, ENDED
@@ -61,24 +64,44 @@ struct GameEvent {
 class GameLoop : public Thread {
   private:
     Queue<GameEvent> &events;
-    uint32_t map[100][100];
     std::vector<PlayerState> players;
     std::list<Bullet> bullets;
     std::vector<CommonZombie> zombies;
     std::atomic<GameState> state;
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
-    
+    PhysicsManager *physics;
+    // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
-        Queue<GameEvent> &events) : events(events), map{0}, state{CREATED} {}
+        Queue<GameEvent> &events) : events(events), state{CREATED} {
+            physics = PhysicsManager::get_instance();
+            physics->set_layer_collision_mask(
+                CollisionLayer::Friendly,
+                CollisionFlag::Hostile | CollisionFlag::HostileProjectile
+            );
+            physics->set_layer_collision_mask(
+                CollisionLayer::FriendlyProjectile,
+                CollisionFlag::Hostile
+            );
+            physics->set_layer_collision_mask(
+                CollisionLayer::Hostile,
+                CollisionFlag::Friendly | CollisionFlag::FriendlyProjectile
+            );
+            physics->set_layer_collision_mask(
+                CollisionLayer::HostileProjectile,
+                CollisionFlag::Friendly
+            );
+        }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
 
     int join(GameEvent &event) {
         if (state == CREATED && players.size() < MAX_PLAYERS) {
-            PlayerState new_player(event.player_name);
-            // new_player.x.attach(&on_entity_moved);  
-            players.push_back(std::move(new_player));
+            // PlayerState new_player(event.player_name);
+            // new_player.x.attach(&on_entity_moved);
+            players.push_back(PlayerState(event.player_name));
+            // players.push_back(std::move(new_player));
+            // physics->register_entity(&players.back(), CollisionLayer::Friendly);
             message_queues.push_back(*event.player_messages);
             return players.size();
         } else {
@@ -127,7 +150,7 @@ class GameLoop : public Thread {
     }
 
     void _on_entity_moved(GameEntity *entity, uint16_t old, uint16_t new_) {
-        std::cout << "Entity with uuid" << entity->get_name() << "moved!" << std::endl;
+        
     }
 
     void push_response() {
@@ -155,8 +178,8 @@ class GameLoop : public Thread {
         // Spawn an enemy
         int x = getRandomNumber(0, 800);  // Random X position within game area
         int y = getRandomNumber(0, 95);  // Random Y position within game area
-        CommonZombie common_zombie("zombie", x, y);
-        common_zombie.set_id(zombies.size());
+        CommonZombie common_zombie("zombie", Vector2D(x, y));
+        // common_zombie.set_id(zombies.size());
         zombies.push_back(std::move(common_zombie));
     }
 
@@ -208,6 +231,9 @@ class GameLoop : public Thread {
             /*for (CommonZombie &zombie : zombies) {
                 zombie.move()
             }*/
+            if (!zombies.empty()) {
+                physics->update();
+            }
             
 
             // Calculate the remaining delay to reach the desired execution frequency
