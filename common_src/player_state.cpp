@@ -1,5 +1,6 @@
 #include "player_state.h"
 #include "./client/client_protocol.h"
+#include "physics_manager.h"
 #include <list>
 #include <utility>
 #include <arpa/inet.h>
@@ -9,27 +10,25 @@ PlayerState::PlayerState(
     int16_t max_x, 
     int16_t max_y
 ) : 
-GameEntity(name, max_x, max_y) {
+GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
     this->id = 1;
-    this->state = IDLE;
-    this->max_x = max_x;
-    this->max_y = max_y;
     this->hit_points = STARTING_HIT_POINTS;
     this->arma = new Arma1(this);
+    this->rect_width = PLAYER_RECT_WIDTH;
+    this->rect_height = PLAYER_RECT_HEIGHT;
 }
 
 PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {
     if (this == &other)
         return;
-
-    id = other.id;
-    state = other.state;
-    max_x = other.max_x;
-    max_y = other.max_y;
     hit_points = other.hit_points;
     arma = other.arma;
 
     other.arma = nullptr;
+}
+
+void PlayerState::on_collission_detected(GameEntity *other) {
+    // std::cout << "Collision detected!" << std::endl;
 }
 
 std::string PlayerState::get_name() {
@@ -50,8 +49,8 @@ PlayerStateReference PlayerState::make_ref() {
     ref.name = name;
     ref.rounds = arma->get_rounds();
     ref.state = state;
-    ref.x = x;
-    ref.y = y;
+    ref.x = (uint16_t) position.x;
+    ref.y = (uint16_t) position.y;
     ref.direction = facing_direction;
     return ref;
 }
@@ -110,23 +109,23 @@ void PlayerState::shoot(int flag) {
 
 void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec) {
     if (cmd == MOVE_DOWN) {
-        direction[1] = 1;
+        direction.y = 1;
     } else if (cmd == MOVE_UP) {
-        direction[1] = -1;
+        direction.y = -1;
     } else if (cmd == MOVE_RIGHT) {
-        direction[0] = 1;
+        direction.x = 1;
         facing_direction = RIGHT;
     } else if (cmd == MOVE_LEFT) {
-        direction[0] = -1;
+        direction.x = -1;
         facing_direction = LEFT;
     } else if (cmd == STOP_MOVING_DOWN) {
-        direction[1] = 0;
+        direction.y = 0;
     } else if (cmd == STOP_MOVING_UP) {
-        direction[1] = 0;
+        direction.y = 0;
     } else if (cmd == STOP_MOVING_RIGHT) {
-        direction[0] = 0;
+        direction.x = 0;
     } else if (cmd == STOP_MOVING_LEFT) {
-        direction[0] = 0;
+        direction.x = 0;
     } else if (cmd == RELOAD) {
         if (this->arma->try_reload())
             this->state = RELOADING;
@@ -135,7 +134,7 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec) {
     } else if (cmd == SHOOT) {
         if (this->arma->try_shoot()) {
             this->state = ATTACKING;
-            this->arma->create_bullet(x,y,facing_direction,vec);
+            this->arma->create_bullet(position,facing_direction,vec);
             //el -64 es para que salga la bala del medio del modelo
         }
     } else if (cmd == STOP_SHOOTING) {
@@ -161,5 +160,6 @@ void PlayerState::pass_time() {
 PlayerState::~PlayerState() {
     if (arma) {
         delete arma;
+        arma = nullptr;
     }
 }

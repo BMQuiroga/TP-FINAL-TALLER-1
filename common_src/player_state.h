@@ -11,6 +11,8 @@
 
 #define GUN_MAGAZINE_SIZE 10
 #define STARTING_HIT_POINTS 100
+#define PLAYER_RECT_WIDTH 128
+#define PLAYER_RECT_HEIGHT 128
 
 class Arma;
 
@@ -35,6 +37,7 @@ class PlayerState : public GameEntity {
     void next_state(uint8_t cmd, std::list<Bullet>& vec);
     void take_damage(uint8_t damage);
     void pass_time();
+    void on_collission_detected(GameEntity *other) override;
 
     std::string get_name();
     PlayerStateReference make_ref();
