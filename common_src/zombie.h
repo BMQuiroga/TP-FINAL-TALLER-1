@@ -46,6 +46,7 @@ class Zombie : public GameEntity {
     void set_id(int new_id);
     uint8_t get_damage();
     uint8_t get_health();
+    void take_damage(uint8_t damage);
     void on_collission_detected(GameEntity *other) override;
 };
 
@@ -59,7 +60,7 @@ class CommonZombie : public Zombie {
     ~CommonZombie();
     CommonZombie(CommonZombie&&);
     CommonZombie(const CommonZombie&) = default;  // Remove the 'delete'd declaration
-    void attack() override;
+    void attack(GameEntity *other) override;
 };
 
 #endif

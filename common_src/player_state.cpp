@@ -28,7 +28,7 @@ PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {
 }
 
 void PlayerState::on_collission_detected(GameEntity *other) {
-    // std::cout << "Collision detected!" << std::endl;
+    other->attack(this);
 }
 
 std::string PlayerState::get_name() {
@@ -55,7 +55,7 @@ PlayerStateReference PlayerState::make_ref() {
     return ref;
 }
 
-void PlayerState::attack() {
+void PlayerState::attack(GameEntity *other) {
     if (this->arma->try_shoot()) {
         this->state = ATTACKING;
     }//ya no se usa porque no puedo devolver la bala o pasar el vec por parametro

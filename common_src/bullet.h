@@ -14,7 +14,7 @@ class Bullet : public GameEntity {
     Bullet(uint8_t dmg, uint8_t bc, entity_direction direc, bool piercing, Vector2D position);
     PlayerStateReference make_ref();
     void move();
-    void attack() override;
+    void attack(GameEntity *other) override;
     bool is_off_scope();
     void on_collission_detected(GameEntity *other) override;
 };

@@ -23,7 +23,7 @@ class PlayerState : public GameEntity {
     uint8_t hit_points;
     Arma* arma;
     void move();
-    void attack() override;
+    void attack(GameEntity *other) override;
 
   public:
     explicit PlayerState(

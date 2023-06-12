@@ -32,6 +32,13 @@ void Zombie::set_id(int new_id) {
     id = new_id;
 }
 
+void Zombie::take_damage(uint8_t damage) {
+    if (damage > health)
+        health = 0;
+    else
+        health -= damage;
+}
+
 uint8_t Zombie::get_damage()
 {
     return damage;
@@ -82,8 +89,15 @@ CommonZombie::CommonZombie(
     movement_type = ZOMBIE_WALK;
 }
 
-void CommonZombie::attack() {
-    state = ATTACKING;
+void CommonZombie::attack(GameEntity *other) {
+    if (state != ATTACKING){
+        state = ATTACKING;
+        // move towards the player and bite him
+    } else {
+        // collision
+        PlayerState *player = (PlayerState*)other;
+        player->take_damage(damage);
+    }
 }
 
 CommonZombie::CommonZombie(CommonZombie&& other)

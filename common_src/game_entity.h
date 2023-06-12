@@ -52,7 +52,6 @@ class GameEntity {
     int16_t max_x, max_y;
     CollisionLayer collision_layer;
     bool move();
-    virtual void attack() = 0;
 
   public:
     GameEntity(const std::string &name, int16_t max_x, int16_t max_y, CollisionLayer layer);
@@ -69,6 +68,7 @@ class GameEntity {
     uint32_t get_id();
     uint32_t get_physics_id();
     bool check_collision(GameEntity *other);
+    virtual void attack(GameEntity *other) = 0;
     virtual void on_collission_detected(GameEntity *other) = 0;
 };
 

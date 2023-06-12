@@ -29,7 +29,7 @@ void Bullet::on_collission_detected(GameEntity *other) {
 
 }
 
-void Bullet::attack() {
+void Bullet::attack(GameEntity *other) {
     //????????????????
 }
 
