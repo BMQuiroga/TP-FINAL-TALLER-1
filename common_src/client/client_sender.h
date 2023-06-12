@@ -9,6 +9,7 @@
 
 class ClientSender:public Thread {
 private:
+    //recibe comandos en una queue, los popea y envia al servidor
     CProtocol protocol;
     Socket& skt;
     Queue<Intention*>& q;

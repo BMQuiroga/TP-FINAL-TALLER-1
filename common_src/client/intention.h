@@ -29,7 +29,10 @@ class Intention {
 private:
     int id{-1};
 public:
+    //obtiene el codigo de la intencion para enviarla al servidor
     virtual int get_intention() = 0;
+
+    //dado un evento, crea la intencion
     static Intention *make_intention(SDL_Event& event);
 };
 

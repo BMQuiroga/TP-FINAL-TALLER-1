@@ -6,6 +6,7 @@
 #include <string>
 
 class Serializer {
+  //clase que convierte un protocol_type a tira de bytes o viceversa
   public:
     // serialization
     template <typename T> void push_number(std::vector<int8_t> &buf, T num);

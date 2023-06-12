@@ -11,6 +11,7 @@
 #include "client_image.h"
 
 class ClientRenderer {
+    //logica de renderizacion, ejecutada sobre el hilo main
     private:
     Queue<Intention*> &events;
     Queue<ProtocolResponse> &updates;
@@ -22,17 +23,27 @@ class ClientRenderer {
     SDL2pp::Renderer renderer;
     SDL2pp::Mixer mixer;
 
-    void draw_health(uint8_t n);
-    void draw_rounds(uint8_t n);
+    //renderiza la lista de imagenes actual_frame, llama n veces a render o play
     void render_all();
+
+    //renderiza una imagen de la lista
     void render(Image & im);
+
+    //renderiza el fondo
     void renderBackground();
+
+    //renderiza una barra de vida dada la longitud, coordenadas y health points
     void renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp);
+
+    //maneja eventos para enviarlos al servidor
     bool handleEvents();
+
+    //en el caso que la id sea de sonido, reproduce el sonido y le incrementa los frames para que no se vuelva a reproducir
     void play(Image & im);
 
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates);
+    //gameloop: renderiza el background y el actual_frame en loop mientras lo actualiza
     void GameLoop();
     ~ClientRenderer();
 };

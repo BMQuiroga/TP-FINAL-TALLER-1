@@ -16,16 +16,22 @@ class AssetManager {
     std::map<int,std::shared_ptr<Asset>> map;
     std::map<int,SDL2pp::Music> sound_map;
 
+    //constructor
+    explicit AssetManager(SDL2pp::Renderer & renderer);
+
     public:
+    //singleton
+    //se llama para instanciar al objeto, o en caso de ya estar construido, devuelve el puntero
     static AssetManager* Instance(SDL2pp::Renderer & renderer);
 
+    //libera el objeto
     static void Release();
 
+    //obtiene el asset con codigo
     Asset* GetAsset(int code);
 
-    void play(int code, SDL2pp::Mixer & mixer);
-
-    explicit AssetManager(SDL2pp::Renderer & renderer);
+    //reproduce el sonido con codigo y mixer de parametro
+    void play(int code, SDL2pp::Mixer & mixer);  
 };
 
 #endif

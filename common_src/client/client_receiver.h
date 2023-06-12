@@ -10,6 +10,7 @@
 #include "client_image.h"
 
 class ClientReceiver:public Thread {
+//thread que recibe imagenes de modelos a renderizar
 private:
     CProtocol protocol;
     Socket& skt;

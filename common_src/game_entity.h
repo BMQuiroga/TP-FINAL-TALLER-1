@@ -36,6 +36,7 @@ enum entity_state {
   };
 enum entity_direction { LEFT, RIGHT };
 
+//clase virtual para entidad default
 class GameEntity {
   protected:
     // static uint32_t next_id;

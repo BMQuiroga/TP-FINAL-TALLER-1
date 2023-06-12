@@ -95,6 +95,7 @@ class GameLoop : public Thread {
         }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
 
+    //une al player a la partida
     int join(GameEvent &event) {
         if (state == CREATED && players.size() < MAX_PLAYERS) {
             // PlayerState new_player(event.player_name);
@@ -109,6 +110,7 @@ class GameLoop : public Thread {
         }
     }
 
+    //crea un GSR con jugadores, zombies y eventos para enviar al cliente
     GameStateResponse make_response() {
         GameStateResponse resp;
         
@@ -127,6 +129,7 @@ class GameLoop : public Thread {
         return resp;
     }
 
+    //devuelve al jugador con uuid
     PlayerState& get_player(const std::string &uuid) {
         for (PlayerState &player : players) {
             if (player.get_name() == uuid) {
@@ -135,6 +138,7 @@ class GameLoop : public Thread {
         }
     }
 
+    //actualiza las armas de los jugadores y mueve las balas
     void pass_time() {
         for (PlayerState &player : players) {
             player.pass_time();
@@ -153,6 +157,7 @@ class GameLoop : public Thread {
         
     }
 
+    //envia la GSR
     void push_response() {
         GameStateResponse resp = make_response();
         std::for_each(message_queues.begin(), message_queues.end(),
