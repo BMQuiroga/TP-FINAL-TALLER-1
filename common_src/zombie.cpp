@@ -1,4 +1,5 @@
 #include "zombie.h"
+#include "physics_manager.h"
 #include <string>
 #include <utility>
 
@@ -6,7 +7,13 @@ Zombie::Zombie(
     const std::string &name,
     int16_t max_x, 
     int16_t max_y
-) : GameEntity(name, max_x, max_y) {}
+) : GameEntity(
+    name,
+    max_x, max_y,
+    CollisionLayer::Hostile) {
+    rect_width = ZOMBIE_RECT_HEIGHT;
+    rect_height = ZOMBIE_RECT_HEIGHT;
+}
 
 Zombie::~Zombie() {}
 
@@ -18,6 +25,8 @@ void Zombie::move() {
         state = IDLE;
     }
 }
+
+void Zombie::on_collission_detected(GameEntity *other) {}
 
 void Zombie::set_id(int new_id) {
     id = new_id;
@@ -37,10 +46,6 @@ Zombie::Zombie(Zombie&& other)
     : GameEntity(std::move(other)) {
     if (this == &other)
         return;
-    id = other.id;
-    state = other.state;
-    max_x = other.max_x;
-    max_y = other.max_y;
     damage = other.damage;
     zombie_type = other.zombie_type;
     attack_type = other.attack_type;
@@ -57,22 +62,21 @@ ZombieStateReference Zombie::make_ref()
     ref.state = state;
     ref.attack_type = attack_type;
     ref.movement_type = movement_type;
-    ref.x = x;
-    ref.y = y;
+    ref.x = (uint16_t)position.x;
+    ref.y = (uint16_t)position.y;
     ref.direction = facing_direction;
     return ref;
 }
 
 CommonZombie::CommonZombie(
     const std::string &name,
-    uint16_t position_x,
-    uint16_t position_y,
+    Vector2D position,
     int16_t max_x, 
     int16_t max_y
 ) : Zombie(name, max_x, max_y) {
+    id = 51;
     damage = 10;
-    x = position_x;
-    y = position_y;
+    position = position;
     zombie_type = ZOMBIE;
     attack_type = ZOMBIE_BITE;
     movement_type = ZOMBIE_WALK;

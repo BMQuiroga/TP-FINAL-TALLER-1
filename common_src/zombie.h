@@ -5,6 +5,9 @@
 #include "game_entity.h"
 #include <string>
 
+#define ZOMBIE_RECT_WIDTH 96
+#define ZOMBIE_RECT_HEIGHT 96
+
 enum attack_type {
   ZOMBIE_ATTACK1, 
   ZOMBIE_ATTACK2, 
@@ -41,14 +44,14 @@ class Zombie : public GameEntity {
     void set_id(int new_id);
     uint8_t get_damage();
     uint8_t get_health();
+    void on_collission_detected(GameEntity *other) override;
 };
 
 class CommonZombie : public Zombie {
   public:
     CommonZombie(
         const std::string &name,
-        uint16_t position_x,
-        uint16_t position_y,
+        Vector2D position,
         int16_t max_x = DEFAULT_MAX_X,
         int16_t max_y = DEFAULT_MAX_Y);
     ~CommonZombie();

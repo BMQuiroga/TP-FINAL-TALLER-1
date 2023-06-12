@@ -50,7 +50,6 @@ void ClientRenderer::GameLoop() {
                         "- y: " << std::to_string(player.y) << std::endl;
                 }
                 for (ZombieStateReference &zombie : update.zombies) {
-                    zombie.id = ZOMBIE + zombie.id;
                     std::cout << "Zombie: " << std::endl << 
                         "- id: " << zombie.id << std::endl <<
                         "- type: " << zombie.zombie_type << std::endl <<
