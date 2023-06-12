@@ -5,10 +5,12 @@
 
 Zombie::Zombie(
     const std::string &name,
+    Vector2D position,
     int16_t max_x, 
     int16_t max_y
 ) : GameEntity(
     name,
+    position,
     max_x, max_y,
     CollisionLayer::Hostile) {
     rect_width = ZOMBIE_RECT_HEIGHT;
@@ -80,10 +82,9 @@ CommonZombie::CommonZombie(
     Vector2D position,
     int16_t max_x, 
     int16_t max_y
-) : Zombie(name, max_x, max_y) {
+) : Zombie(name, position, max_x, max_y) {
     id = 51;
     damage = 10;
-    position = position;
     zombie_type = ZOMBIE;
     attack_type = ZOMBIE_BITE;
     movement_type = ZOMBIE_WALK;

@@ -183,8 +183,8 @@ class GameLoop : public Thread {
         // Spawn an enemy
         int x = getRandomNumber(0, 800);  // Random X position within game area
         int y = getRandomNumber(0, 95);  // Random Y position within game area
-        CommonZombie common_zombie("zombie", Vector2D(x, y));
-        // common_zombie.set_id(zombies.size());
+        Vector2D position(x, y);
+        CommonZombie common_zombie("zombie", position);
         zombies.push_back(std::move(common_zombie));
     }
 

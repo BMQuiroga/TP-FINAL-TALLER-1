@@ -36,6 +36,7 @@ class Zombie : public GameEntity {
   public:
     Zombie(
         const std::string &name,
+        Vector2D position,
         int16_t max_x, 
         int16_t max_y);
     ~Zombie();
