@@ -6,17 +6,22 @@
 #include <vector>
 #include "../serialization.h"
 //#include <arpa/inet.h>
-#define Y_OFFSET 805
+#define Y_OFFSET 505
+#define GAME_FRAME_RATE 30
+#define MIN_MAX_VOLUME 128
 
-ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates) : 
+ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name) : 
     events(events),
     updates(updates),
+    player_name(player_name),
     sdl(SDL_INIT_VIDEO),
     window("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_RESIZABLE),
     actual_frame(nullptr),
     renderer(window, -1, SDL_RENDERER_ACCELERATED),
     mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096) {
     this->assets = AssetManager::Instance(this->renderer);
+    Mix_VolumeMusic(MIN_MAX_VOLUME / 10);
+    std::cout << "player name is " << this->player_name << std::endl;
     //mixer.OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 }
 
@@ -31,21 +36,36 @@ void ClientRenderer::GameLoop() {
         running = this->handleEvents();
         renderer.Clear();
         if (updates.try_pop(new_update)) {
-            //std::cout << "found new update" << std::endl;
             frames_list = new std::list<Image>;
             std::vector<PlayerStateReference>::iterator it;
+            std::vector<ZombieStateReference>::iterator it_zombies;
             if (new_update.content_type == GAME_STATE) {
                 GameStateResponse update = serializer.deserialize_game_state(new_update.content);
                 for (PlayerStateReference &player : update.players) {
                     std::cout << "Player: " << std::endl << 
+                        "- id: " << std::to_string(player.id) << std::endl <<
                         "- name: " << player.name << std::endl <<
                         "- state: " << std::to_string(player.state) << std::endl <<
                         "- hit points: " << std::to_string(player.hit_points) << std::endl <<
                         "- x: " << std::to_string(player.x) << std::endl <<
                         "- y: " << std::to_string(player.y) << std::endl;
                 }
+                for (ZombieStateReference &zombie : update.zombies) {
+                    std::cout << "Zombie: " << std::endl << 
+                        "- id: " << zombie.id << std::endl <<
+                        "- type: " << zombie.zombie_type << std::endl <<
+                        "- state: " << std::to_string(zombie.state) << std::endl <<
+                        "- health: " << std::to_string(zombie.health) << std::endl <<
+                        "- damage: " << std::to_string(zombie.damage) << std::endl <<
+                        "- x: " << std::to_string(zombie.x) << std::endl <<
+                        "- y: " << std::to_string(zombie.y) << std::endl;
+                }
                 for (it = update.players.begin(); it != update.players.end(); ++it) {
                     auto new_Model = Image((*it));
+                    frames_list->push_back(new_Model);
+                }
+                for (it_zombies = update.zombies.begin(); it_zombies != update.zombies.end(); ++it_zombies) {
+                    auto new_Model = Image((*it_zombies));
                     frames_list->push_back(new_Model);
                 }
             } else if (new_update.content_type == LOBBY_STATE) {
@@ -61,14 +81,12 @@ void ClientRenderer::GameLoop() {
         renderer.Present();
         unsigned int end_ticks = SDL_GetTicks();
         unsigned int ticks_delta = frame_ticks - end_ticks;
-        SDL_Delay((1000/30) - ticks_delta);
+        SDL_Delay((1000/GAME_FRAME_RATE) - ticks_delta);
     }
 }
 
 void ClientRenderer::render_all() {
     if (this->actual_frame != nullptr) {
-        //draw_health(actual_frame->front().id);
-        //draw_rounds(actual_frame->front().action);
         for (auto const& it : *actual_frame) {
             //std::cout << "id:" << it.id << std::endl;
             if (it.id > 0 && it.id < 151) {
@@ -88,11 +106,9 @@ void ClientRenderer::play(Image & im) {
 }
 
 void ClientRenderer::render(Image & im) {
-    //std::cout << "entra al render" << std::endl;
     uint16_t x = im.x;
     uint16_t y = im.y;
     Asset * asset = assets->GetAsset(im.id + im.action*1000);
-    //std::cout << "cosas:" << std::to_string(im.id + im.action*1000) << " " << std::to_string(im.frame) << std::endl;
     //Asset * asset = assets->GetAsset(1);
 
     im.frame++;
@@ -109,8 +125,34 @@ void ClientRenderer::render(Image & im) {
         0,
         SDL2pp::NullOpt,
         im.flip > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
-    if (im.health != 0)
+
+    if (im.name == player_name) {
+        renderOwn(im);
+    } else if (im.health != 0)
         renderHealth(asset->get_length(),x,y,im.health);
+}
+
+void ClientRenderer::renderOwn(Image & im) {
+    int hearts = im.health / 10;
+    Asset * asset = assets->GetAsset(-3);
+
+    for (int i = 0; i < hearts; i++) {
+        renderer.Copy(
+            (*asset->get_texture()),
+            SDL2pp::NullOpt,
+            SDL2pp::Rect(50 + 55*i, 830, 50, 50)
+        );
+    }
+
+    Asset * asset2 = assets->GetAsset(-4);
+
+    for (int i = 0; i < im.rounds; i++) {
+        renderer.Copy(
+            (*asset2->get_texture()),
+            SDL2pp::NullOpt,
+            SDL2pp::Rect(50 + 55*i, 930, 50, 50)
+        );
+    }
 }
 
 void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp) {
@@ -129,23 +171,15 @@ void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8
         SDL2pp::Rect(x, y + (hp_bar_height*2) + Y_OFFSET, std::round(hp_percentage), hp_bar_height - 1));
 }
 
-void ClientRenderer::draw_health(uint8_t n) {
-    return;
-}
-
-void ClientRenderer::draw_rounds(uint8_t n) {
-    return;
-}
-
 void ClientRenderer::renderBackground() {
     Asset * asset = assets->GetAsset(0);
     renderer.Copy(
         (*asset->get_texture()),
-        SDL2pp::NullOpt,
-        SDL2pp::Rect(0, 0, 1920, 1080),
-        0.0,                // don't rotate
-        SDL2pp::NullOpt,    // rotation center - not needed
-        SDL_FLIP_NONE);
+        SDL2pp::Rect(0, 300, 1920, 780),
+        SDL2pp::Point(0,0)
+    );
+    renderer.SetDrawColor(*assets->get_default_color());
+    renderer.FillRect(SDL2pp::Rect(0, 780, 1920, 300));
 }
 
 ClientRenderer::~ClientRenderer() {

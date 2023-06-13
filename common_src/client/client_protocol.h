@@ -24,17 +24,22 @@ class CProtocol : public Protocol<ProtocolRequest, ProtocolResponse> {
     void send_one_byte(uint8_t n, Socket &s);
 
     public:
+    //envia una intencion (4 bytes)
     void send_command(Intention& command, Socket &s, bool *was_closed);
 
+    //envia los comandos de lobby
     void send_lobby_command(const LobbyCommand &command, Socket &s, bool *was_closed);
 
     //recibe la image a renderizar del server
     uint8_t* receive_render(Socket &s);
 
+    //arma una ProtocolResponse
     ProtocolResponse get(Socket &skt, bool *was_closed) override;
     
+    //necesaria por ser virtual pura de protocol, no implementada
     void send(Socket &skt, const ProtocolRequest &request, bool was_closed) override;
 
+    //devuelve el tipo de comando
     int get_command_type(const std::string& resource);
 };
 

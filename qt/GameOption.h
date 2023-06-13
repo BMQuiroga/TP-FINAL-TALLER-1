@@ -8,7 +8,8 @@ class GameOption : public QWidget {
 public:
     explicit GameOption(QWidget *parent = 0);
 signals:
-    void gameOptionPicked(const std::string& text);
+    void joinGameOptionPicked();
+    void createGameOptionPicked();
 private:
     void createGame();
     void joinGame();

@@ -1,8 +1,9 @@
 #include "../player_state.h"
+#include "../zombie.h"
 #include "client_image.h"
 #include <iostream>
 
-std::list<Image>* Image::Create(uint8_t* array) {
+std::list<Image>* Image::Create(uint8_t* array) {//ya no se usa
     std::list<Image>* list = new std::list<Image>;
     uint8_t * it = array;
     it++;
@@ -49,6 +50,18 @@ Image::Image(const PlayerStateReference &state) {
     this->action = state.state;
     this->flip = state.direction;
     this->health = state.hit_points;
+    this->x = state.x;
+    this->y = state.y;
+    this->frame = 0;
+    this->name = state.name;
+    this->rounds = state.rounds;
+}
+
+Image::Image(const ZombieStateReference &state) {
+    this->id = state.id;
+    this->action = state.state;
+    this->flip = state.direction;
+    this->health = state.health;
     this->x = state.x;
     this->y = state.y;
     this->frame = 0;

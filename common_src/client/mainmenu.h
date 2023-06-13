@@ -5,6 +5,7 @@
 
 
 class MainMenu {
+    //clase menu en sdl
     public:
     MainMenu();
     ~MainMenu();

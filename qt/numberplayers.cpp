@@ -19,7 +19,6 @@ void NumberPlayers::setNumberOfPlayers() {
     QString created_message = QString("Partida creada para %1 jugadores").arg(number);
     labelOut->setText(created_message);
     emit inputNumberEntered(name, std::stoi(number.toStdString()));
-    std::cout << "clicked!!" << std::endl;
 }
 
 void NumberPlayers::connectEvents() {

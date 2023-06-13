@@ -9,6 +9,7 @@
 
 class ClientSender:public Thread {
 private:
+    //recibe comandos en una queue, los popea y envia al servidor
     CProtocol protocol;
     Socket& skt;
     Queue<Intention*>& q;
@@ -19,6 +20,7 @@ public:
     explicit ClientSender(
         Socket& socket,
         Queue<Intention*>& q);
+    ~ClientSender() override;
     void run() override;
     bool is_dead();
     void kill();

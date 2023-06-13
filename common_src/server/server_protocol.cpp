@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
 #include "server_protocol.h"
 #include "../serialization.h"
 
@@ -31,6 +32,8 @@ void ServerProtocol::send(Socket &skt, const ProtocolResponse &resp, bool was_cl
     int bytes_sent = 0;
     bytes_sent += send_number(resp.content_type, skt, &was_closed);
     bytes_sent += send_number(resp.size, skt, &was_closed);
-    bytes_sent += skt.sendall(resp.content.data(), resp.content.size(), &was_closed);
+    if (!resp.content.empty()) {
+        bytes_sent += skt.sendall(resp.content.data(), resp.content.size(), &was_closed);
+    }
     std::cout << "sent " << std::to_string(bytes_sent) << " bytes to client" << std::endl;
 }

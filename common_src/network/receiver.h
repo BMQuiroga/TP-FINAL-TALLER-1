@@ -25,7 +25,7 @@ template <typename Send_Type, typename Recv_Type>
 class Receiver:public Thread {
 private:
     Socket& skt;
-    Queue<Send_Type>& q;
+    // Queue<Send_Type>& q;
     Protocol<Send_Type, Recv_Type>& protocol;
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_alive;
@@ -33,10 +33,10 @@ private:
 
 public:
     explicit Receiver(Socket& socket,
-        Queue<Send_Type>& q,
+        // Queue<Send_Type>& q,
         Protocol<Send_Type, Recv_Type>& protocol) : 
         skt(socket),
-        q(q),
+        // q(q),
         protocol(protocol) {}
 
     void register_callback(std::function<void(Recv_Type& message)> callback) {
@@ -62,7 +62,7 @@ public:
     }
     void kill() {
         keep_talking = false;
-        q.close();
+        // q.close();
     }
 };
 

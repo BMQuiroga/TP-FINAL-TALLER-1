@@ -10,6 +10,7 @@
 #include "client_image.h"
 
 class ClientReceiver:public Thread {
+//thread que recibe imagenes de modelos a renderizar
 private:
     CProtocol protocol;
     Socket& skt;
@@ -21,6 +22,7 @@ public:
     explicit ClientReceiver(
         Socket& socket,
         Queue<ProtocolResponse>& q);
+    ~ClientReceiver() override;
     void run() override;
     bool is_dead();
     void kill();

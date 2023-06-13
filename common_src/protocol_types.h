@@ -5,10 +5,22 @@
 #include <vector>
 
 struct PlayerStateReference {
-    uint8_t id;
+    uint32_t id;
     std::string name;
     uint8_t hit_points;
     uint8_t rounds;
+    uint8_t direction;
+    uint16_t x;
+    uint16_t y;
+    int8_t state;
+};
+struct ZombieStateReference {
+    uint32_t id;
+    uint8_t health;
+    uint8_t damage;
+    uint8_t zombie_type;
+    uint8_t attack_type;
+    uint8_t movement_type;
     uint8_t direction;
     uint16_t x;
     uint16_t y;
@@ -45,6 +57,7 @@ struct ProtocolResponse {
 struct GameStateResponse {
     int game_state;
     std::vector<PlayerStateReference> players;
+    std::vector<ZombieStateReference> zombies;
     GameStateResponse() = default;
 };
 

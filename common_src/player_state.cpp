@@ -1,19 +1,47 @@
 #include "player_state.h"
 #include "./client/client_protocol.h"
+#include "physics_manager.h"
+#include <list>
+#include <utility>
 #include <arpa/inet.h>
 
-PlayerState::PlayerState(const std::string &name, int16_t max_x, int16_t max_y) : 
-name(name), direction(2, 0), position(2, 0), facing_direction(RIGHT), speed(5) {
-    this->id = 1;
-    this->rounds = GUN_MAGAZINE_SIZE;
-    this->state = IDLE;
-    this->max_x = max_x;
-    this->max_y = max_y;
+PlayerState::PlayerState(
+    const std::string &name,
+    int id,
+    int16_t max_x, 
+    int16_t max_y
+) : 
+GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
+    this->id = id;
     this->hit_points = STARTING_HIT_POINTS;
+    this->arma = new Arma1();
+    this->rect_width = PLAYER_RECT_WIDTH;
+    this->rect_height = PLAYER_RECT_HEIGHT;
+}
+
+PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {
+    if (this == &other)
+        return;
+    hit_points = other.hit_points;
+    arma = other.arma;
+
+    other.arma = nullptr;
+}
+
+void PlayerState::on_collission_detected(GameEntity *other) {
+    other->attack(this);
 }
 
 std::string PlayerState::get_name() {
     return name;
+}
+
+void PlayerState::take_damage(uint8_t damage) {
+    std::cout << "baambaam" << std::endl;
+    if (damage > hit_points)
+        hit_points = 0;
+    else
+        hit_points -= damage;
 }
 
 PlayerStateReference PlayerState::make_ref() {
@@ -21,57 +49,49 @@ PlayerStateReference PlayerState::make_ref() {
     ref.id = id;
     ref.hit_points = hit_points;
     ref.name = name;
-    ref.rounds = rounds;
+    ref.rounds = arma->get_rounds();
     ref.state = state;
-    ref.x = position[0];
-    ref.y = position[1];
+    ref.x = (uint16_t) position.x;
+    ref.y = (uint16_t) position.y;
     ref.direction = facing_direction;
     return ref;
 }
 
+void PlayerState::attack(GameEntity *other) {
+    //if (this->arma->try_shoot()) {
+        //this->state = ATTACKING;
+    //}//ya no se usa porque no puedo devolver la bala o pasar el vec por parametro
+    
+    //else
+        //this->state = IDLE;
+}
+
 void PlayerState::move() {
-    std::vector<uint16_t> prev_position(this->position);
-    int16_t new_x = (int16_t)this->position[0] + (speed * this->direction[0]);
-    if (new_x < 0) {
-        new_x = 0;
-    } else if (new_x >= this->max_x) {
-        new_x = this->max_x - 1;
-    }
-    int16_t new_y = (int16_t)this->position[1] + (speed * this->direction[1]);
-    if (new_y < 0) {
-        new_y = 0;
-    } else if (new_y >= this->max_y) {
-        new_y = this->max_y - 1;
-    }
-    this->position[0] = new_x;
-    this->position[1] = new_y;
+    //estas lineas son para que la animacion de reloading se mantenga hasta que se termine de recargar
+    //lo mismo para la de disparar
 
-    bool moved = false;
-    if (this->direction[0] != 0) {
-        if (prev_position[0] != this->position[0]) {
-            moved = true;
-        }
-    } else if (this->direction[1] != 0) {
-        if (prev_position[1] != this->position[1]) {
-            moved = true;
-        }
-    }
+    int8_t delay = this->arma->get_delay();
 
+    bool moved = GameEntity::move();
     if (moved) {
         if (this->state == IDLE) {
             this->state = MOVING;
-        } else if (this->state == ATTACKING) {
-            this->state = ATTACKING_AND_MOVING;
+        } else if ((this->state == RELOADING) && (delay == 0)) {
+            this->state = MOVING;//termino la recarga
+        } else if ((this->state == ATTACKING) && (delay == 0)) {
+            this->state = MOVING;//termino el disparo
         }
     } else {
-        if (this->state == ATTACKING_AND_MOVING) {
-            this->state = ATTACKING;
-        } else if (this->state == MOVING) {
+        if (this->state == MOVING) {
             this->state = IDLE;
+        } else if ((this->state == RELOADING) && (delay == 0)) {
+            this->state = IDLE;//termino la recarga
+        } else if ((this->state == ATTACKING) && (delay == 0)) {
+            this->state = IDLE;//termino el disparo
         }
     }
 }
-
+/*
 void PlayerState::shoot(int flag) {
     if (flag && this->rounds > 0) {
         this->rounds--;
@@ -87,62 +107,47 @@ void PlayerState::shoot(int flag) {
             this->state = MOVING;
         }
     }
-}
+}*/
 
-void PlayerState::next_state(int cmd) {
+void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec) {
     if (cmd == MOVE_DOWN) {
-        direction[1] = 1;
+        direction.y = 1;
     } else if (cmd == MOVE_UP) {
-        direction[1] = -1;
+        direction.y = -1;
     } else if (cmd == MOVE_RIGHT) {
-        direction[0] = 1;
+        direction.x = 1;
         facing_direction = RIGHT;
     } else if (cmd == MOVE_LEFT) {
-        direction[0] = -1;
+        direction.x = -1;
         facing_direction = LEFT;
     } else if (cmd == STOP_MOVING_DOWN) {
-        direction[1] = 0;
+        direction.y = 0;
     } else if (cmd == STOP_MOVING_UP) {
-        direction[1] = 0;
+        direction.y = 0;
     } else if (cmd == STOP_MOVING_RIGHT) {
-        direction[0] = 0;
+        direction.x = 0;
     } else if (cmd == STOP_MOVING_LEFT) {
-        direction[0] = 0;
+        direction.x = 0;
+    } else if (cmd == RELOAD) {
+        if (this->arma->try_reload())
+            this->state = RELOADING;
+        //else
+            //this->state = IDLE;
+    } else if (cmd == SHOOT) {
+        if (this->arma->try_shoot()) {
+            this->state = ATTACKING;
+            this->arma->create_bullet(position,facing_direction,vec);
+            //el -64 es para que salga la bala del medio del modelo
+        }
+    } else if (cmd == STOP_SHOOTING) {
+        //this->state = IDLE;
     }
+
     this->move();
-    // switch (req->cmd) {
-    //     case NOP:
-    //         if (this->state == ATTACKING) {
-    //             this->shoot(1);
-    //         } else if (this->state == MOVING) {
-    //             this->move();
-    //         } else if (this->state == ATTACKING_AND_MOVING) {
-    //             this->move();
-    //             this->shoot(1);
-    //         }
-    //         break;
+}
 
-    //     case SHOOT:
-    //         this->shoot(req->args[0]);
-    //         if (this->state == MOVING || this->state == ATTACKING_AND_MOVING) {
-    //             this->move();
-    //         }
-    //         break;
-
-    //     case MOVE:
-    //         this->direction[0] = req->args[0];
-    //         this->direction[1] = req->args[1];
-    //         this->move();
-    //         if (this->state == ATTACKING || this->state == ATTACKING_AND_MOVING) {
-    //             this->shoot(1);
-    //         }
-    //         break;
-
-    //     case RELOAD:
-    //         this->state = IDLE;
-    //         this->rounds = GUN_MAGAZINE_SIZE;
-    //         break;
-    //     }
+void PlayerState::pass_time() {
+    this->arma->advance_time();
 }
 
 // void PlayerState::as_response(protocol_response_t *response) {
@@ -152,4 +157,9 @@ void PlayerState::next_state(int cmd) {
 //     response->rounds = htons(this->rounds);
 // }
 
-PlayerState::~PlayerState() {}
+PlayerState::~PlayerState() {
+    if (arma) {
+        delete arma;
+        arma = nullptr;
+    }
+}

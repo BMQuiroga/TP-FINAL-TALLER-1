@@ -3,57 +3,44 @@
 
 #include <vector>
 #include <string>
+#include <list>
+#include "game_entity.h"
 #include "protocol_types.h"
+#include "armas.h"
+#include "bullet.h"
+#include "game_config.h"
 
-#define GUN_MAGAZINE_SIZE 10
-#define STARTING_HIT_POINTS 100
-#define DEFAULT_MAX_X 1820
-#define DEFAULT_MAX_Y 900
+class Arma;
 
-// 0 idle, 1 attack, 2 dead, 3 grenade, 4 hurt 5 recharge, 6 shot, 7 walk, 8 fall, 9 run, 10 protect, 11 run+atack, 12 bite, 13 scream, 14 eating
-enum player_state { 
-  IDLE, 
-  ATTACKING, 
-  DEAD, 
-  THROWING_GRENADE, 
-  HURT, 
-  RELOADING, 
-  SHOT, 
-  MOVING, 
-  FALLING, 
-  RUNNING, 
-  BLOCKING, 
-  ATTACKING_AND_MOVING, 
-  BITING, 
-  SCREAMING, 
-  EATING 
-  };
-enum player_direction { LEFT, RIGHT };
-
-// Clase encargada de manejar la lógica del jugador (almacenar y actualizar su estado)
-class PlayerState {
+// Clase encargada de manejar la lógica del jugador
+//  (almacenar y actualizar su estado)
+class PlayerState : public GameEntity {
   private:
-    uint8_t id;
-    std::string name;
     uint8_t hit_points;
-    uint8_t rounds;
-    std::vector<int8_t> direction;
-    uint8_t facing_direction;
-    std::vector<uint16_t> position;
-    uint16_t speed;
-    int8_t state;
-    int16_t max_x, max_y;
+    Arma* arma;
     void move();
-    void shoot(int flag);
+    void attack(GameEntity *other) override;
 
   public:
-    explicit PlayerState(const std::string &name, int16_t max_x = DEFAULT_MAX_X, int16_t max_y = DEFAULT_MAX_Y);
+    explicit PlayerState(
+      const std::string &name,
+      int id,
+      int16_t max_x = DEFAULT_MAX_X,
+      int16_t max_y = DEFAULT_MAX_Y);
+    PlayerState(PlayerState&&);
     ~PlayerState();
 
     // Procesa la solicitud del cliente y actualiza el estado actual del jugador
-    void next_state(int cmd);
+    void next_state(uint8_t cmd, std::list<Bullet>& vec);
+    void take_damage(uint8_t damage);
+    void pass_time();
+    void on_collission_detected(GameEntity *other) override;
 
     std::string get_name();
     PlayerStateReference make_ref();
+    PlayerState(const PlayerState& other) = default;
+    PlayerState& operator=(const PlayerState& other) = default;
+
+    //friend class Arma;
 };
 #endif

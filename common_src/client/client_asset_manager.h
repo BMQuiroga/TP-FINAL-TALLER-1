@@ -1,5 +1,6 @@
 #ifndef CLIENT_ASSET_MANAGER_H_
 #define CLIENT_ASSET_MANAGER_H_
+#define ZOMBIE 51
 
 #include "../socket.h"
 #include "../protocol.h"
@@ -14,17 +15,29 @@ class AssetManager {
     static AssetManager* sInstance;
     std::map<int,std::shared_ptr<Asset>> map;
     std::map<int,SDL2pp::Music> sound_map;
+    //SDL2pp::Font default_font;
+    SDL2pp::Color default_color;
+
+    //constructor
+    explicit AssetManager(SDL2pp::Renderer & renderer);
 
     public:
+    //singleton
+    //se llama para instanciar al objeto, o en caso de ya estar construido, devuelve el puntero
     static AssetManager* Instance(SDL2pp::Renderer & renderer);
 
+    //libera el objeto
     static void Release();
 
+    //obtiene el asset con codigo
     Asset* GetAsset(int code);
 
-    void play(int code, SDL2pp::Mixer & mixer);
+    //reproduce el sonido con codigo y mixer de parametro
+    void play(int code, SDL2pp::Mixer & mixer);  
 
-    explicit AssetManager(SDL2pp::Renderer & renderer);
+    SDL2pp::Color* get_default_color();
+
+    /*SDL2pp::Font* get_default_font();*/
 };
 
 #endif

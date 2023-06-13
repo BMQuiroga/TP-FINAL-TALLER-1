@@ -5,7 +5,6 @@
 
 #define SOLDIER1 1
 #define SOLDIER2 2
-#define ZOMBIE 51
 #define JUMPER 52
 #define SPEAR 53
 #define VENOM 54
@@ -47,12 +46,17 @@ void AssetManager::Release() {
 
 //(0 idle, 1 attack, 2 dead, 3 grenade, 4 hurt 5 recharge, 6 shot, 7 walk, 8 fall, 9 run, 10 protect, 11 run+atack, 12 bite, 13 scream, 14 eating)
 
-AssetManager::AssetManager(SDL2pp::Renderer & renderer) {
+AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
+	//default_font("../resources/Fonts/ARIAL.TTF", 99),
+	default_color(50,50,50,255)
+	{
+	map.emplace(-4, std::make_shared<Asset>("../resources/HPBar/bullet.png", 0, 300, 300, 1, renderer, 0));
+	map.emplace(-3, std::make_shared<Asset>("../resources/HPBar/heart.png", 0, 300, 300, 1, renderer, 0));
 	map.emplace(-2, std::make_shared<Asset>("../resources/HPBar/EmptyBar.png", 0, 300, 300, 1, renderer, 0));
 	//map.emplace(-2, Asset::Create("../resources/HPBar/EmptyBar.png", 0, 300, 300, 1, renderer, 0));
 	map.emplace(-1, std::make_shared<Asset>("../resources/HPBar/FullBar.png", 0, 300, 300, 1, renderer, 0));
 
-	map.emplace(BACKGROUND, std::make_shared<Asset>("../resources/backgrounds/War1/Bright/War.png", 0, 1920, 1080, 1, renderer, 0));
+	map.emplace(BACKGROUND, std::make_shared<Asset>("../resources/backgrounds/War1/Bright/War.png", 0, 1920, 1080, 1, renderer, 1));
 
     map.emplace(SOLDIER1 + IDLE_, std::make_shared<Asset>("../resources/Soldier_1/Idle.png", 0, 128, 128, 7, renderer, 0));
 	map.emplace(SOLDIER1 + ATTACK_, std::make_shared<Asset>("../resources/Soldier_1/Attack.png", 0, 128, 128, 3, renderer, 0));
@@ -122,6 +126,8 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) {
 	map.emplace(ZOMBIE + RUN_, std::make_shared<Asset>("../resources/Zombie/Run.png", 0, 96, 96, 7, renderer, 0));
 
 	sound_map.emplace(151,SDL2pp::Music("../resources/Sound/singleshot.mp3"));
+
+
 }
 
 Asset* AssetManager::GetAsset(int code) {
@@ -131,3 +137,13 @@ Asset* AssetManager::GetAsset(int code) {
 void AssetManager::play(int code, SDL2pp::Mixer & mixer) {
 	mixer.PlayMusic(sound_map.at(code), 1);
 }
+
+SDL2pp::Color* AssetManager::get_default_color() {
+	SDL2pp::Color* p = &default_color;
+	return p;
+}
+/*
+SDL2pp::Font* AssetManager::get_default_font() {
+	SDL2pp::Font* p = &default_font;
+	return p;
+}*/

@@ -17,6 +17,11 @@ ClientLobby::ClientLobby(
 {
 }
 
+ClientLobby::~ClientLobby() {
+    kill();
+    join();
+}
+
 void ClientLobby::run() {
     is_alive = keep_talking = true;
     bool was_closed = false;
@@ -27,6 +32,9 @@ void ClientLobby::run() {
             break;
         }
         protocol.send_lobby_command(command, skt, &was_closed);
+        /*if (command.name == "join") {
+            ProtocolResponse resp = protocol.get(skt, &was_closed);
+        }*/
     }
 }
 

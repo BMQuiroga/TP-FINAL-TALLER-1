@@ -12,52 +12,45 @@ void CProtocol::send_one_byte(uint8_t n, Socket &s) {
     s.sendall(&n,ONE_BYTE);
 }
 
-/*void foo(Socket &s, bool *was_closed, ProtocolResponse &resp) {
-    PlayerStateReference ref;
-    uint8_t q;
-    //uint16_t k;
-    s.recvall(&q, 1, was_closed);
-    ref.id = q;
-    //std::cout << q << "<-" << std::endl;
-    s.recvall(&ref.x, sizeof(ref.x), was_closed);
-    s.recvall(&ref.y, sizeof(ref.y), was_closed);
-    s.recvall(&ref.direction, sizeof(ref.direction), was_closed);
-    // s.recvall(&ref.rounds, sizeof(ref.rounds), was_closed);
-    s.recvall(&ref.state, sizeof(ref.state), was_closed);
-    s.recvall(&ref.hit_points, sizeof(ref.hit_points), was_closed);
-    resp.players.push_back(ref);
-    std::cout << ref.id << "---" <<ref.state << std::endl;}*/
-
 ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
     ProtocolResponse resp;
     receive_number(&resp.content_type, s, was_closed);
     receive_number(&resp.size, s, was_closed);
-    std::cout << "Content Type: " << std::to_string(resp.content_type) << std::endl;
-    std::cout << "Response size: " << std::to_string(resp.size) << std::endl;
-    resp.content = std::vector<int8_t>(resp.size);
-    s.recvall(resp.content.data(), resp.size, was_closed);
-    std::cout << "ended CProtocol get" << std::endl;
+    // std::cout << "Content Type: " << std::to_string(resp.content_type) << 
+    // std::endl;
+    // std::cout << "Response size: " << std::to_string(resp.size) << std::endl;
+    if (resp.size > 0) {
+        resp.content = std::vector<int8_t>(resp.size);
+        s.recvall(resp.content.data(), resp.size, was_closed);
+    }
     return resp;
 }
 
 
 
-void CProtocol::send(Socket &skt, /*const*/ ProtocolRequest /*&*/request, bool was_closed) {
+void CProtocol::send(
+    Socket &skt, 
+    const ProtocolRequest &request, 
+    bool was_closed
+) {
      // TODO
 }
 
 void CProtocol::send_command(Intention& command, Socket &s, bool *was_closed) {
-    uint8_t command_id = (uint8_t) command.get_intention();
-    send_one_byte(command_id, s);
-    //send_number(command_id, s, was_closed);
+    int command_id = command.get_intention();
+    // send_one_byte(command_id, s);
+    send_number(command_id, s, was_closed);
 }
 
-void CProtocol::send_lobby_command(const LobbyCommand &command, Socket &s, bool *was_closed)
-{
+void CProtocol::send_lobby_command(
+    const LobbyCommand &command, 
+    Socket &s, 
+    bool *was_closed
+) {
     Serializer serializer;
     ProtocolRequest req;
     GameReference ref;
-    req.cmd = (uint8_t) get_command_type(command.name);
+    req.cmd = get_command_type(command.name);
     if (command.name == JOINGAME) {
         ref.id = (uint32_t) std::stoi(command.parameter);
     } else if (command.name == INPUTNAME) {
@@ -75,10 +68,13 @@ void CProtocol::send_lobby_command(const LobbyCommand &command, Socket &s, bool 
     bytes_sent += send_number(req.cmd, s, was_closed);
     if (!req.content.empty()) {
         bytes_sent += send_number((uint16_t)req.content.size(), s, was_closed);
-        bytes_sent += s.sendall(req.content.data(), req.content.size(), was_closed);
+        bytes_sent += s.sendall(
+            req.content.data(), req.content.size(), was_closed);
     }
-    std::cout << "Content size: " << std::to_string(req.content.size()) << std::endl;
-    std::cout << "Sent " << std::to_string(bytes_sent) <<" to server" << std::endl;
+    // std::cout << "Content size: " << 
+    // std::to_string(req.content.size()) << std::endl;
+    // std::cout << "Sent " << 
+    // std::to_string(bytes_sent) <<" to server" << std::endl;
 }
 
 uint8_t* CProtocol::receive_render(Socket &s) {
