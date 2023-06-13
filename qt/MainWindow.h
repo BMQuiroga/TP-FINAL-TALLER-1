@@ -29,10 +29,12 @@ public slots:
     void startCreateGameOption();
     void receiveInputGame(const QString& text, int number);
     void receiveGameCode(const QString& text);
+    std::string get_player_name();
 
 private:
     Queue<LobbyCommand>& q;
     QWidget* currentWidget {nullptr};
     Ui::MainWindow *ui;
+    std::string player_name;
 };
 #endif // MAINWINDOW_H

@@ -73,6 +73,7 @@ void MainWindow::receiveInputText(const QString& text) {
     // Handle the received input text
     qDebug() << "Received input text: " << text;
     showGameOptionsWidget();
+    player_name = text.toStdString();
     LobbyCommand command(INPUTNAME, text.toStdString());
     q.push(command);
 }
@@ -101,6 +102,11 @@ void MainWindow::receiveGameCode(const QString& text) {
     q.push(command);
     LobbyCommand end_command(ENDLOBBY, "");
     q.push(end_command);
+}
+
+std::string MainWindow::get_player_name()
+{
+    return player_name;
 }
 
 MainWindow::~MainWindow()

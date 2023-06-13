@@ -15,6 +15,7 @@ class ClientRenderer {
     private:
     Queue<Intention*> &events;
     Queue<ProtocolResponse> &updates;
+    std::string player_name;
     std::list<Image>* actual_frame;
     AssetManager * assets;
 
@@ -42,7 +43,7 @@ class ClientRenderer {
     void play(Image & im);
 
     public:
-    explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates);
+    explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name);
     //gameloop: renderiza el background y el actual_frame en loop mientras lo actualiza
     void GameLoop();
     ~ClientRenderer();
