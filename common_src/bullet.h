@@ -1,8 +1,8 @@
 #ifndef _BULLET_H
 #define _BULLET_H
 
-#include "game_entity.h"
 #include "protocol_types.h"
+#include "zombie.h"
 #include <list>
 
 class Bullet : public GameEntity {

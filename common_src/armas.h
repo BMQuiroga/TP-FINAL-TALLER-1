@@ -3,11 +3,8 @@
 
 #include <iostream>
 #include <list>
-#include "player_state.h"
 #include "bullet.h"
 #include "math_helper.h"
-
-class PlayerState;
 
 class Arma {
     protected:

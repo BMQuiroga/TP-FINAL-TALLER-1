@@ -1,6 +1,7 @@
 #include "bullet.h"
 #include "protocol_types.h"
 #include "physics_manager.h"
+#include "zombie.h"
 
 Bullet::Bullet(uint8_t dmg, uint8_t bc, entity_direction direc, bool piercing, Vector2D position) :
     GameEntity(
