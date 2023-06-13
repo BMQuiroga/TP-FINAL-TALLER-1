@@ -27,16 +27,13 @@ void ClientLobby::run() {
     bool was_closed = false;
     while (keep_talking) {
         LobbyCommand command = q.pop();
-        std::cout << command.name << std::endl;
         if (command.name == "end") {
-            std::cout << "the end for lobby :D" << std::endl;
             kill();
             break;
         }
         protocol.send_lobby_command(command, skt, &was_closed);
         /*if (command.name == "join") {
             ProtocolResponse resp = protocol.get(skt, &was_closed);
-            std::cout << resp.size << std::endl;
         }*/
     }
 }

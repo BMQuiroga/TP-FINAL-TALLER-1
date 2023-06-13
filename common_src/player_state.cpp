@@ -143,8 +143,6 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec) {
     }
 
     this->move();
-
-    std::cout << "THIS STATE: " << std::to_string(this->state) << std::endl;
 }
 
 void PlayerState::pass_time() {

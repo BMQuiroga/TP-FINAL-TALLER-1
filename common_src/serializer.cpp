@@ -59,7 +59,7 @@ std::vector<int8_t> Serializer::serialize(const GameStateResponse &resp) {
 
 void Serializer::serialize_player(const PlayerStateReference &player, std::vector<int8_t> &buf) {
     std::cout << "Player: " << std::endl << 
-    "- id: " << player.id << std::endl <<//roto el id
+    "- id: " << std::to_string(player.id) << std::endl <<//roto el id
     "- name: " << player.name << std::endl <<
     "- state: " << std::to_string(player.state) << std::endl <<
     "- hit points: " << std::to_string(player.hit_points) << std::endl <<
@@ -77,7 +77,7 @@ void Serializer::serialize_player(const PlayerStateReference &player, std::vecto
 
 void Serializer::serialize_zombie(const ZombieStateReference &zombie, std::vector<int8_t> &buf) {
     std::cout << "Zombie: " << std::endl << 
-    "- id: " << zombie.id << std::endl <<//roto el id
+    "- id: " << zombie.id << std::endl << //roto el id
     "- state: " << std::to_string(zombie.state) << std::endl <<
     "- health: " << std::to_string(zombie.health) << std::endl <<
     "- damage: " << std::to_string(zombie.damage) << std::endl <<
