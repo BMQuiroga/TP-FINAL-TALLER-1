@@ -131,12 +131,13 @@ class GameLoop : public Thread {
     }
 
     //devuelve al jugador con uuid
-    PlayerState& get_player(const std::string &uuid) {
+    PlayerState* get_player(const std::string &uuid) {
         for (PlayerState &player : players) {
             if (player.get_name() == uuid) {
-                return player;
+                return &player;
             }
         }
+        return nullptr;
     }
 
     PlayerState& get_random_player() {
@@ -211,8 +212,9 @@ class GameLoop : public Thread {
                         state = STARTED;
                     }
                 } else {
-                    PlayerState &player = get_player(event.player_name);
-                    player.next_state(event.req.cmd,bullets);
+                    PlayerState *player = get_player(event.player_name);
+                    if (player)
+                        player->next_state(event.req.cmd,bullets);
                 }
                 // push_response();
             } else {
