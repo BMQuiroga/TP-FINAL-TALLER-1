@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <string>
+#include <memory>
 #include <functional>
 #include <list>
 #include <map>
@@ -100,7 +101,7 @@ class GameLoop : public Thread {
         if (state == CREATED && players.size() < MAX_PLAYERS) {
             // PlayerState new_player(event.player_name);
             // new_player.x.attach(&on_entity_moved);
-            players.push_back(PlayerState(event.player_name));
+            players.push_back(PlayerState(event.player_name, players.size() + 1));
             // players.push_back(std::move(new_player));
             // physics->register_entity(&players.back(), CollisionLayer::Friendly);
             message_queues.push_back(*event.player_messages);
@@ -136,6 +137,11 @@ class GameLoop : public Thread {
                 return player;
             }
         }
+    }
+
+    PlayerState& get_random_player() {
+        int player_id = getRandomNumber(1, players.size());
+        return players[player_id];
     }
 
     //actualiza las armas de los jugadores y mueve las balas
@@ -184,7 +190,8 @@ class GameLoop : public Thread {
         int x = getRandomNumber(0, 800);  // Random X position within game area
         int y = getRandomNumber(0, 95);  // Random Y position within game area
         Vector2D position(x, y);
-        CommonZombie common_zombie("zombie", position);
+        PlayerState& player_to_follow = get_random_player();
+        CommonZombie common_zombie("zombie", position, player_to_follow);
         zombies.push_back(std::move(common_zombie));
     }
 
@@ -221,6 +228,23 @@ class GameLoop : public Thread {
                 if (changed)
                     push_response();
             }
+
+            for (CommonZombie &zombie : zombies) {
+                int x = getRandomNumber(-1, 1);
+                int y = getRandomNumber(-1, 1);
+                zombie.set_direction(x, y);
+                zombie.move();
+                // if (zombie.has_target()){
+                //     zombie.move();
+                //     zombie.next_state();
+                //     continue;
+                // }
+                // std::cout << "start chasing player" << std::endl;
+                // std::cout << zombie.has_target() << std::endl;
+                // PlayerState& player_to_follow = get_random_player();
+                // zombie.set_target(player_to_follow);
+                // zombie.move();
+            }
             
             pass_time();
 
@@ -233,9 +257,7 @@ class GameLoop : public Thread {
                 spawn_enemy();
             }
 
-            /*for (CommonZombie &zombie : zombies) {
-                zombie.move()
-            }*/
+
             if (!zombies.empty()) {
                 physics->update();
             }

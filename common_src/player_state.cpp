@@ -6,12 +6,13 @@
 #include <arpa/inet.h>
 
 PlayerState::PlayerState(
-    const std::string &name, 
+    const std::string &name,
+    int id,
     int16_t max_x, 
     int16_t max_y
 ) : 
 GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
-    this->id = 1;
+    this->id = id;
     this->hit_points = STARTING_HIT_POINTS;
     this->arma = new Arma1();
     this->rect_width = PLAYER_RECT_WIDTH;
@@ -33,6 +34,16 @@ void PlayerState::on_collission_detected(GameEntity *other) {
 
 std::string PlayerState::get_name() {
     return name;
+}
+
+Vector2D PlayerState::get_location()
+{
+    return position;
+}
+
+Vector2D PlayerState::get_direction()
+{
+    return direction;
 }
 
 void PlayerState::take_damage(uint8_t damage) {

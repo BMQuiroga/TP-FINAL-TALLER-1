@@ -28,6 +28,7 @@ class PlayerState : public GameEntity {
   public:
     explicit PlayerState(
       const std::string &name,
+      int id,
       int16_t max_x = DEFAULT_MAX_X,
       int16_t max_y = DEFAULT_MAX_Y);
     PlayerState(PlayerState&&);
@@ -40,7 +41,11 @@ class PlayerState : public GameEntity {
     void on_collission_detected(GameEntity *other) override;
 
     std::string get_name();
+    Vector2D get_location();
+    Vector2D get_direction();
     PlayerStateReference make_ref();
+    PlayerState(const PlayerState& other) = default;
+    PlayerState& operator=(const PlayerState& other) = default;
 
     //friend class Arma;
 };

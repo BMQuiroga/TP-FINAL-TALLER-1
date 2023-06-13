@@ -6,13 +6,14 @@
 Zombie::Zombie(
     const std::string &name,
     Vector2D position,
+    PlayerState &player,
     int16_t max_x, 
     int16_t max_y
 ) : GameEntity(
     name,
     position,
     max_x, max_y,
-    CollisionLayer::Hostile) {
+    CollisionLayer::Hostile), target_player(player) {
     rect_width = ZOMBIE_RECT_HEIGHT;
     rect_height = ZOMBIE_RECT_HEIGHT;
 }
@@ -26,6 +27,7 @@ void Zombie::move() {
     } else {
         state = IDLE;
     }
+    std::cout << "my state is " << std::to_string(state) << std::endl;
 }
 
 void Zombie::on_collission_detected(GameEntity *other) {}
@@ -41,6 +43,53 @@ void Zombie::take_damage(uint8_t damage) {
         health -= damage;
 }
 
+void Zombie::set_target(PlayerState& player) {
+    target_player = player;
+    Vector2D target_position = Vector2D(100, 2);
+    has_target_set = true;
+}
+
+bool Zombie::has_target() {
+    return has_target_set;
+}
+
+void Zombie::set_direction(int x, int y) {
+    direction.x = x;
+    if (x == 0) {
+        direction.y = y;
+    }
+}
+
+void Zombie::next_state() {
+    Vector2D target_position = target_player.get_location();
+    // Calculate the direction vector from the zombie to the player
+    Vector2D target_direction = target_position - position;
+    // Normalize the target direction if it's not too close to zero
+    float threshold = 0.001f;
+    float magnitude = target_direction.magnitude();
+    if (magnitude > threshold) {
+        target_direction.x /= magnitude;
+        target_direction.y /= magnitude;
+    } else {
+        target_direction = Vector2D(0.0f, 0.0f);  // Set target direction to zero if too close to zero
+    }
+    // Adjust the current direction towards the target direction
+    float dampingFactor = 0.1f;  // Adjust this value to control the damping effect
+    direction += dampingFactor * (target_direction - direction);
+    // Normalize the direction
+    magnitude = direction.magnitude();
+    if (magnitude > threshold) {
+        direction.x /= magnitude;
+        direction.y /= magnitude;
+    } else {
+        direction = Vector2D(0.0f, 0.0f);  // Set direction to zero if too close to zero
+    }
+
+    // Normalize the direction vector
+    // direction = new_direction.normalized();
+    // std::cout << "My new direction is " << direction.x << "and y " << direction.y << std::endl;
+}
+
 uint8_t Zombie::get_damage()
 {
     return damage;
@@ -52,7 +101,7 @@ uint8_t Zombie::get_health()
 }
 
 Zombie::Zombie(Zombie&& other)
-    : GameEntity(std::move(other)) {
+    : GameEntity(std::move(other)), target_player(other.target_player) {
     if (this == &other)
         return;
     damage = other.damage;
@@ -80,9 +129,10 @@ ZombieStateReference Zombie::make_ref()
 CommonZombie::CommonZombie(
     const std::string &name,
     Vector2D position,
+    PlayerState &player,
     int16_t max_x, 
     int16_t max_y
-) : Zombie(name, position, max_x, max_y) {
+) : Zombie(name, position, player, max_x, max_y) {
     id = 51;
     damage = 10;
     zombie_type = ZOMBIE;
