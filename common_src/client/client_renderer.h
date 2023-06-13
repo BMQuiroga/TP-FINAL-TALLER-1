@@ -42,6 +42,9 @@ class ClientRenderer {
     //en el caso que la id sea de sonido, reproduce el sonido y le incrementa los frames para que no se vuelva a reproducir
     void play(Image & im);
 
+    //renderiza la vida y balas propias
+    void renderOwn(Image & im);
+
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name);
     //gameloop: renderiza el background y el actual_frame en loop mientras lo actualiza

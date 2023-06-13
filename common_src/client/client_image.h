@@ -13,6 +13,8 @@ struct Image {
     uint16_t x;
     uint16_t y;
     uint8_t frame;
+    uint8_t rounds;
+    std::string name;
 
     //EN DESUSO construye la imagen directamente de la tira de bits
     static std::list<Image>* Create(uint8_t* array);
