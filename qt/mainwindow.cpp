@@ -82,6 +82,8 @@ void MainWindow::receiveInputGame(const QString& text, int number) {
     qDebug() << "Received input number: " << text;
     LobbyCommand command(CREATEGAME, text.toStdString(), number);
     q.push(command);
+    LobbyCommand end_command(ENDLOBBY, "");
+    q.push(end_command);
 }
 
 void MainWindow::startJoinGameOption() {
@@ -97,6 +99,8 @@ void MainWindow::receiveGameCode(const QString& text) {
     qDebug() << "Received input number to join game: " << text;
     LobbyCommand command(JOINGAME, text.toStdString());
     q.push(command);
+    LobbyCommand end_command(ENDLOBBY, "");
+    q.push(end_command);
 }
 
 MainWindow::~MainWindow()

@@ -34,6 +34,7 @@ public:
 
     //dado un evento, crea la intencion
     static Intention *make_intention(SDL_Event& event);
+    ~Intention();
 };
 
 #endif

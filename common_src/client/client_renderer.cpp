@@ -34,7 +34,6 @@ void ClientRenderer::GameLoop() {
         running = this->handleEvents();
         renderer.Clear();
         if (updates.try_pop(new_update)) {
-            //std::cout << "found new update" << std::endl;
             frames_list = new std::list<Image>;
             std::vector<PlayerStateReference>::iterator it;
             std::vector<ZombieStateReference>::iterator it_zombies;
@@ -105,11 +104,9 @@ void ClientRenderer::play(Image & im) {
 }
 
 void ClientRenderer::render(Image & im) {
-    //std::cout << "entra al render" << std::endl;
     uint16_t x = im.x;
     uint16_t y = im.y;
     Asset * asset = assets->GetAsset(im.id + im.action*1000);
-    //std::cout << "cosas:" << std::to_string(im.id + im.action*1000) << " " << std::to_string(im.frame) << std::endl;
     //Asset * asset = assets->GetAsset(1);
 
     im.frame++;

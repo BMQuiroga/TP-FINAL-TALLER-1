@@ -56,10 +56,10 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QLineEdit" name="inputName"/>
+      <widget class="QLineEdit" name="inputCode"/>
      </item>
      <item>
-      <widget class="QPushButton" name="buttonName">
+      <widget class="QPushButton" name="buttonCode">
        <property name="text">
         <string>Enviar</string>
        </property>
