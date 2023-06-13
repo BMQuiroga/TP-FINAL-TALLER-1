@@ -50,6 +50,8 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	//default_font("../resources/Fonts/ARIAL.TTF", 99),
 	default_color(50,50,50,255)
 	{
+	map.emplace(-4, std::make_shared<Asset>("../resources/HPBar/bullet.png", 0, 300, 300, 1, renderer, 0));
+	map.emplace(-3, std::make_shared<Asset>("../resources/HPBar/heart.png", 0, 300, 300, 1, renderer, 0));
 	map.emplace(-2, std::make_shared<Asset>("../resources/HPBar/EmptyBar.png", 0, 300, 300, 1, renderer, 0));
 	//map.emplace(-2, Asset::Create("../resources/HPBar/EmptyBar.png", 0, 300, 300, 1, renderer, 0));
 	map.emplace(-1, std::make_shared<Asset>("../resources/HPBar/FullBar.png", 0, 300, 300, 1, renderer, 0));

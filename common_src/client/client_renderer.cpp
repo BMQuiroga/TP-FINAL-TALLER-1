@@ -126,7 +126,6 @@ void ClientRenderer::render(Image & im) {
         SDL2pp::NullOpt,
         im.flip > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
 
-    std::cout << "imname: " << im.name << std::endl;
     if (im.name == player_name) {
         renderOwn(im);
     } else if (im.health != 0)
@@ -135,21 +134,23 @@ void ClientRenderer::render(Image & im) {
 
 void ClientRenderer::renderOwn(Image & im) {
     int hearts = im.health / 10;
-    Asset * asset = assets->GetAsset(0);
+    Asset * asset = assets->GetAsset(-3);
 
     for (int i = 0; i < hearts; i++) {
         renderer.Copy(
             (*asset->get_texture()),
             SDL2pp::NullOpt,
-            SDL2pp::Rect(50 + 100*i, 830, 50, 50)
+            SDL2pp::Rect(50 + 55*i, 830, 50, 50)
         );
     }
 
+    Asset * asset2 = assets->GetAsset(-4);
+
     for (int i = 0; i < im.rounds; i++) {
         renderer.Copy(
-            (*asset->get_texture()),
+            (*asset2->get_texture()),
             SDL2pp::NullOpt,
-            SDL2pp::Rect(50 + 100*i, 930, 50, 50)
+            SDL2pp::Rect(50 + 55*i, 930, 50, 50)
         );
     }
 }
