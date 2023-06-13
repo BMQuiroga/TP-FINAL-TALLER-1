@@ -10,9 +10,10 @@
 #define GAME_FRAME_RATE 30
 #define MIN_MAX_VOLUME 128
 
-ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates) : 
+ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name) : 
     events(events),
     updates(updates),
+    player_name(player_name),
     sdl(SDL_INIT_VIDEO),
     window("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_RESIZABLE),
     actual_frame(nullptr),
@@ -20,6 +21,7 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse
     mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096) {
     this->assets = AssetManager::Instance(this->renderer);
     Mix_VolumeMusic(MIN_MAX_VOLUME / 10);
+    std::cout << "player name is " << this->player_name << std::endl;
     //mixer.OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 }
 
