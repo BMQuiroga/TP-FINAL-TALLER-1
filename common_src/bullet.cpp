@@ -1,6 +1,7 @@
 #include "bullet.h"
 #include "protocol_types.h"
 #include "physics_manager.h"
+#include "zombie.h"
 
 Bullet::Bullet(uint8_t dmg, uint8_t bc, entity_direction direc, bool piercing, Vector2D position) :
     GameEntity(
@@ -26,11 +27,22 @@ void Bullet::move() {
 }
 
 void Bullet::on_collission_detected(GameEntity *other) {
-
+    if (this->bullet_count > 0 && this->damage > 0) {
+        attack(other);
+    }
 }
 
 void Bullet::attack(GameEntity *other) {
-    //????????????????
+    Zombie *z = (Zombie*)other;
+    if (piercing) {
+        z->take_damage(damage);
+        damage = damage / 2;
+    } else {
+        while ((bullet_count > 0) && (z->get_health() > 0)) {
+            z->take_damage(damage);
+            bullet_count--;
+        }
+    }
 }
 
 bool Bullet::is_off_scope() {
