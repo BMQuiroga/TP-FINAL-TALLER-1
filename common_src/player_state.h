@@ -8,11 +8,7 @@
 #include "protocol_types.h"
 #include "armas.h"
 #include "bullet.h"
-
-#define GUN_MAGAZINE_SIZE 10
-#define STARTING_HIT_POINTS 100
-#define PLAYER_RECT_WIDTH 20
-#define PLAYER_RECT_HEIGHT 20
+#include "game_config.h"
 
 class Arma;
 

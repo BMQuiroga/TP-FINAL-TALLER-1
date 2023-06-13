@@ -184,7 +184,8 @@ class GameLoop : public Thread {
         int x = getRandomNumber(0, 800);  // Random X position within game area
         int y = getRandomNumber(0, 95);  // Random Y position within game area
         Vector2D position(x, y);
-        CommonZombie common_zombie("zombie", position);
+        PlayerState& player_to_follow = get_random_player();
+        CommonZombie common_zombie("zombie", position, &player_to_follow);
         zombies.push_back(std::move(common_zombie));
     }
 
@@ -207,19 +208,13 @@ class GameLoop : public Thread {
                     PlayerState &player = get_player(event.player_name);
                     player.next_state(event.req.cmd,bullets);
                 }
-                push_response();
+                // push_response();
             } else {
-                bool changed = false;
                 for (PlayerState &player : players) {
                     if (player.get_state() != IDLE) {
                         player.next_state(-1,bullets);
-                        changed = true;
                     }
                 }
-                // If any of the players has continued an action, broadcast it 
-                // to the other players (example: movement)
-                if (changed)
-                    push_response();
             }
             
             pass_time();
@@ -233,13 +228,10 @@ class GameLoop : public Thread {
                 spawn_enemy();
             }
 
-            /*for (CommonZombie &zombie : zombies) {
-                zombie.move()
-            }*/
             if (!zombies.empty()) {
                 physics->update();
             }
-            
+            push_response();
 
             // Calculate the remaining delay to reach the desired execution frequency
             int remainingDelayMilliseconds = delayMilliseconds - static_cast<int>(duration.count());

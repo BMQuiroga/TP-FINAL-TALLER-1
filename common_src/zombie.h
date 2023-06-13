@@ -1,12 +1,9 @@
 #ifndef _ZOMBIE_H
 #define _ZOMBIE_H
 
-#include "player_state.h"
+#include "protocol_types.h"
 #include "game_entity.h"
 #include <string>
-
-#define ZOMBIE_RECT_WIDTH 20
-#define ZOMBIE_RECT_HEIGHT 20
 
 enum attack_type {
   ZOMBIE_ATTACK1, 
@@ -33,10 +30,14 @@ class Zombie : public GameEntity {
     uint8_t zombie_type;
     uint8_t attack_type;
     uint8_t movement_type;
+    bool has_target_set{false};
+    GameEntity *target;
+    Vector2D target_position{VEC2_ZERO};
   public:
     Zombie(
         const std::string &name,
         Vector2D position,
+        GameEntity *target,
         int16_t max_x, 
         int16_t max_y);
     ~Zombie();
@@ -45,6 +46,10 @@ class Zombie : public GameEntity {
     ZombieStateReference make_ref();
     void move();
     void set_id(int new_id);
+    void set_target(GameEntity* target);
+    void set_direction(int x, int y);
+    void next_state();
+    bool has_target();
     uint8_t get_damage();
     uint8_t get_health();
     void take_damage(uint8_t damage);
@@ -56,6 +61,7 @@ class CommonZombie : public Zombie {
     CommonZombie(
         const std::string &name,
         Vector2D position,
+        GameEntity *target,
         int16_t max_x = DEFAULT_MAX_X,
         int16_t max_y = DEFAULT_MAX_Y);
     ~CommonZombie();
