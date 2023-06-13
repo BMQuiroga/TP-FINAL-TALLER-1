@@ -31,10 +31,11 @@
 #include "../zombie.h"
 #include <ctime>
 
-#define MAX_ZOMBIES 5
+#define MAX_ZOMBIES 4
 #define MAX_PLAYERS 2
+#define ZOMBIE_SEEKING_DISTANCE 400
 #define FAILURE -1
-#define GAME_TICK_RATE 15
+#define GAME_TICK_RATE 5
 #define ZOMBIE_CREATION_TIME_MIN 10000
 #define ZOMBIE_CREATION_TIME_MAX 15000
 
@@ -66,7 +67,7 @@ class GameLoop : public Thread {
     Queue<GameEvent> &events;
     std::vector<PlayerState> players;
     std::list<Bullet> bullets;
-    std::vector<CommonZombie> zombies;
+    std::list<CommonZombie> zombies;
     std::atomic<GameState> state;
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
@@ -152,6 +153,16 @@ class GameLoop : public Thread {
                 ++it;
             }
         }
+        for (auto it = zombies.begin(); it != zombies.end();) {
+            if (it->get_health() == 0) {
+                it = zombies.erase(it);
+            } else {
+                ++it;
+            }
+        }
+        
+
+
     }
 
     void _on_entity_moved(GameEntity *entity, uint16_t old, uint16_t new_) {
@@ -190,6 +201,40 @@ class GameLoop : public Thread {
         zombies.push_back(std::move(common_zombie));
     }
 
+    void move_to_closest(CommonZombie &z) {
+        float closest_x = 0;
+        float closest_y = 0;
+        Vector2D this_pos = z.get_location();
+        int distance = 9999;
+        for (PlayerState &player : players) {
+            Vector2D vector = player.get_location();
+            int new_d = calculateDistance(this_pos,vector);
+            if (new_d < distance) {
+                distance = new_d;
+                closest_x = vector.x;
+                closest_y = vector.y;
+            }
+        }
+        float next_pos_x = this_pos.x - closest_x;
+        float next_pos_y = this_pos.y - closest_y;
+        int direction_x = next_pos_x > 0 ? -1 : next_pos_x < 0 ? 1 : 0;
+        int direction_y = next_pos_y > 0 ? -1 : next_pos_y < 0 ? 1 : 0;
+        if (distance < ZOMBIE_SEEKING_DISTANCE)
+            z.set_direction(direction_x,direction_y);
+        else
+            z.set_direction(0,0);
+        // if (zombie.has_target()){
+        //     zombie.move();
+        //     zombie.next_state();
+        //     continue;
+        // }
+        // std::cout << "start chasing player" << std::endl;
+        // std::cout << zombie.has_target() << std::endl;
+        // PlayerState& player_to_follow = get_random_player();
+        // zombie.set_target(player_to_follow);
+        z.move();
+    }
+
     void run() override {
         int delayMilliseconds = static_cast<int>(1000.0 / GAME_TICK_RATE);
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -217,6 +262,10 @@ class GameLoop : public Thread {
                         player.next_state(-1,bullets);
                     }
                 }
+            }
+
+            for (CommonZombie &zombie : zombies) {
+                move_to_closest(zombie);
             }
             
             pass_time();

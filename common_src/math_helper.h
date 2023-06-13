@@ -2,6 +2,7 @@
 #define _MATHHELPER_H
 
 #include <math.h>
+#include <cmath>
 
 #define PI 3.14159265
 #define DEG_TO_RAD PI / 180.0f
@@ -103,6 +104,14 @@ inline Vector2D lerp(Vector2D& start, Vector2D& end, float time)
     float mag = (end - start).magnitude();
     return start + dir * mag * time;
 }
+
+inline int calculateDistance(Vector2D a, Vector2D b) {
+    double deltaX = a.x - b.x;
+    double deltaY = a.y - b.y;
+    double distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
+    return distance;
+}
+
 
 const Vector2D VEC2_ZERO = { 0.0f, 0.0f };
 const Vector2D VEC2_ONE = { 1.0f, 1.0f };
