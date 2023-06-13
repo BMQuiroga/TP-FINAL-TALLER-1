@@ -37,6 +37,7 @@ std::string PlayerState::get_name() {
 }
 
 void PlayerState::take_damage(uint8_t damage) {
+    std::cout << "baambaam" << std::endl;
     if (damage > hit_points)
         hit_points = 0;
     else

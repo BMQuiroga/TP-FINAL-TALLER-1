@@ -17,7 +17,7 @@ Zombie::Zombie(
     CollisionLayer::Hostile), target(target) {
     rect_width = ZOMBIE_RECT_HEIGHT;
     rect_height = ZOMBIE_RECT_HEIGHT;
-    speed = 2;
+    speed = 4;
 }
 
 Zombie::~Zombie() {}
@@ -32,7 +32,17 @@ void Zombie::move() {
     std::cout << "my state is " << std::to_string(state) << std::endl;
 }
 
-void Zombie::on_collission_detected(GameEntity *other) {}
+void Zombie::on_collission_detected(GameEntity *other) {
+    /*if (state != ATTACKING) {
+        state = ATTACKING;
+        // move towards the player and bite him
+    } else {
+        // collision
+        PlayerState *player = (PlayerState*)other;
+        //std::cout << "boomboom" << std::endl;
+        player->take_damage(damage);
+    }*/
+}
 
 void Zombie::set_id(int new_id) {
     id = new_id;
@@ -57,9 +67,9 @@ bool Zombie::has_target() {
 
 void Zombie::set_direction(int x, int y) {
     direction.x = x;
-    if (x == 0) {
+    //if (x == 0) {
         direction.y = y;
-    }
+    //}
 }
 
 void Zombie::next_state() {
@@ -136,21 +146,26 @@ CommonZombie::CommonZombie(
     int16_t max_y
 ) : Zombie(name, position, target, max_x, max_y) {
     id = 51;
-    damage = 10;
+    damage = 5;
     zombie_type = ZOMBIE;
     attack_type = ZOMBIE_BITE;
     movement_type = ZOMBIE_WALK;
 }
 
 void CommonZombie::attack(GameEntity *other) {
-    if (state != ATTACKING){
+    //esto es un poco turbio pero funciona asi:
+    //como siempre el zombie esta moving, siempre entraria al if y nunca al else
+    //asi que las detecciones de colisiones del zombie y del player ambas hacen lo mismo,
+    //una setea el flag y la otra como ya esta attacking, hace el daño
+    /*if (state != ATTACKING) {
         state = ATTACKING;
         // move towards the player and bite him
-    } else {
+    } else {*/
         // collision
         PlayerState *player = (PlayerState*)other;
+        //std::cout << "boomboom22222" << std::endl;
         player->take_damage(damage);
-    }
+    //}
 }
 
 CommonZombie::CommonZombie(CommonZombie&& other)
