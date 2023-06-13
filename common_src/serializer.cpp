@@ -58,7 +58,7 @@ std::vector<int8_t> Serializer::serialize(const GameStateResponse &resp) {
 }
 
 void Serializer::serialize_player(const PlayerStateReference &player, std::vector<int8_t> &buf) {
-    std::cout << "Player: " << std::endl << 
+    std::cout << "Player (serialize player): " << std::endl << 
     "- id: " << std::to_string(player.id) << std::endl <<//roto el id
     "- name: " << player.name << std::endl <<
     "- state: " << std::to_string(player.state) << std::endl <<
@@ -67,6 +67,7 @@ void Serializer::serialize_player(const PlayerStateReference &player, std::vecto
     "- y: " << std::to_string(player.y) << std::endl <<
     "- direction: " << std::to_string(player.direction) << std::endl;
     push_number(buf, player.id);
+    push_string(buf,player.name);
     push_number(buf, player.x);
     push_number(buf, player.y);
     push_number(buf, player.direction);
@@ -102,6 +103,7 @@ void Serializer::serialize_zombie(const ZombieStateReference &zombie, std::vecto
 
 int Serializer::deserialize_player(PlayerStateReference &player_ref, const int8_t *data, int offset) {
     offset += copy_number(data+offset, &player_ref.id);
+    offset += copy_string(data+offset, player_ref.name);
     offset += copy_number(data+offset, &player_ref.x);
     offset += copy_number(data+offset, &player_ref.y);
     offset += copy_number(data+offset, &player_ref.direction);
