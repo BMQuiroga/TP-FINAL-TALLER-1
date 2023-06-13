@@ -53,6 +53,8 @@ Image::Image(const PlayerStateReference &state) {
     this->x = state.x;
     this->y = state.y;
     this->frame = 0;
+    this->name = state.name;
+    this->rounds = state.rounds;
 }
 
 Image::Image(const ZombieStateReference &state) {
