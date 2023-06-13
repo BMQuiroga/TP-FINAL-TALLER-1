@@ -3,6 +3,7 @@
 #define INPUTNAME "inputName"
 #define JOINGAME "joinGame"
 #define CREATEGAME "createGame"
+#define ENDLOBBY "end"
 #include <string>
 struct LobbyCommand
 {

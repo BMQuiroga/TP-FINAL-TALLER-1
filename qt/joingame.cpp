@@ -12,7 +12,6 @@ JoinGame::JoinGame(QWidget *parent) : QWidget(parent) {
 void JoinGame::connectToGame() {
     QLineEdit* inputCode = findChild<QLineEdit*>("inputCode");
     QString code = inputCode->text();
-    std::cout << "clicked!!" << std::endl;
     emit sendGameCodeEntered(code);
 }
 

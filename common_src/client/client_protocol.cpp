@@ -12,22 +12,6 @@ void CProtocol::send_one_byte(uint8_t n, Socket &s) {
     s.sendall(&n,ONE_BYTE);
 }
 
-/*void foo(Socket &s, bool *was_closed, ProtocolResponse &resp) {
-    PlayerStateReference ref;
-    uint8_t q;
-    //uint16_t k;
-    s.recvall(&q, 1, was_closed);
-    ref.id = q;
-    //std::cout << q << "<-" << std::endl;
-    s.recvall(&ref.x, sizeof(ref.x), was_closed);
-    s.recvall(&ref.y, sizeof(ref.y), was_closed);
-    s.recvall(&ref.direction, sizeof(ref.direction), was_closed);
-    // s.recvall(&ref.rounds, sizeof(ref.rounds), was_closed);
-    s.recvall(&ref.state, sizeof(ref.state), was_closed);
-    s.recvall(&ref.hit_points, sizeof(ref.hit_points), was_closed);
-    resp.players.push_back(ref);
-    std::cout << ref.id << "---" <<ref.state << std::endl;}*/
-
 ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
     ProtocolResponse resp;
     receive_number(&resp.content_type, s, was_closed);
@@ -39,7 +23,6 @@ ProtocolResponse CProtocol::get(Socket &s, bool *was_closed) {
         resp.content = std::vector<int8_t>(resp.size);
         s.recvall(resp.content.data(), resp.size, was_closed);
     }
-    // std::cout << "ended CProtocol get" << std::endl;
     return resp;
 }
 

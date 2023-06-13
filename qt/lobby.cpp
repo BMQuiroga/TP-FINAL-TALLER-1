@@ -9,7 +9,6 @@ Lobby::Lobby(QWidget *parent) : QWidget(parent) {
 }
 
 void Lobby::sendInputName() {
-    std::cout << "clicked!!" << std::endl;
     inputName = findChild<QLineEdit*>("inputName");
     QString name = inputName->text();
     emit inputTextEntered(name);
