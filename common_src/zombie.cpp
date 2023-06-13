@@ -17,6 +17,7 @@ Zombie::Zombie(
     CollisionLayer::Hostile), target(target) {
     rect_width = ZOMBIE_RECT_HEIGHT;
     rect_height = ZOMBIE_RECT_HEIGHT;
+    speed = 2;
 }
 
 Zombie::~Zombie() {}

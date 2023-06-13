@@ -6,7 +6,7 @@
 #include <vector>
 #include "../serialization.h"
 //#include <arpa/inet.h>
-#define Y_OFFSET 805
+#define Y_OFFSET 505
 #define GAME_FRAME_RATE 30
 #define MIN_MAX_VOLUME 128
 
@@ -150,11 +150,11 @@ void ClientRenderer::renderBackground() {
     Asset * asset = assets->GetAsset(0);
     renderer.Copy(
         (*asset->get_texture()),
-        SDL2pp::NullOpt,
-        SDL2pp::Rect(0, 0, 1920, 1080),
-        0.0,                // don't rotate
-        SDL2pp::NullOpt,    // rotation center - not needed
-        SDL_FLIP_NONE);
+        SDL2pp::Rect(0, 300, 1920, 780),
+        SDL2pp::Point(0,0)
+    );
+    renderer.SetDrawColor(*assets->get_default_color());
+    renderer.FillRect(SDL2pp::Rect(0, 780, 1920, 300));
 }
 
 ClientRenderer::~ClientRenderer() {

@@ -4,7 +4,7 @@
 //#include <arpa/inet.h>
 
 Asset::Asset(const std::string &path, uint8_t offset, uint16_t height, uint16_t length, uint8_t frames, SDL2pp::Renderer& r, uint32_t colorkey)
-    : offset(offset), height(height), length(length), frames(frames), texture(r, SDL2pp::Surface(path).SetColorKey(true, colorkey)){
+    : offset(offset), height(height), length(length), frames(frames), texture(r, SDL2pp::Surface(path).SetColorKey(colorkey == 0 ? true : false, colorkey)){
 }
 
 uint8_t Asset::get_offset() {

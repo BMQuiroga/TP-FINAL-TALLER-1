@@ -45,11 +45,11 @@ int main(int argc, char *argv[]) { try {
     if (app.exec()) {
         throw std::runtime_error("La aplicación QT finalizó de forma incorrecta");
     }
-
+    /*
     MainMenu main;
     if (main.Start() == -1) {
         return ret;
-    }
+    }*/
     
     Queue<Intention*> events_q(1000);
     Queue<ProtocolResponse> updates_q(1000);
