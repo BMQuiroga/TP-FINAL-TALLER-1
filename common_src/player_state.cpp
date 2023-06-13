@@ -36,16 +36,6 @@ std::string PlayerState::get_name() {
     return name;
 }
 
-Vector2D PlayerState::get_location()
-{
-    return position;
-}
-
-Vector2D PlayerState::get_direction()
-{
-    return direction;
-}
-
 void PlayerState::take_damage(uint8_t damage) {
     if (damage > hit_points)
         hit_points = 0;

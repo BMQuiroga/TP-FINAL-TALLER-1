@@ -66,6 +66,14 @@ uint32_t GameEntity::get_physics_id() {
     return physics_id;
 }
 
+Vector2D GameEntity::get_location() {
+    return position;
+}
+
+Vector2D GameEntity::get_direction() {
+    return direction;
+}
+
 bool GameEntity::check_collision(GameEntity *other) {
     SDL_Rect _this, _other;
     _this.x = position.x;

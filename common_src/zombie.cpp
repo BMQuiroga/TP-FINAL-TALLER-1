@@ -1,19 +1,20 @@
 #include "zombie.h"
 #include "physics_manager.h"
+#include "player_state.h"
 #include <string>
 #include <utility>
 
 Zombie::Zombie(
     const std::string &name,
     Vector2D position,
-    PlayerState &player,
+    GameEntity *target,
     int16_t max_x, 
     int16_t max_y
 ) : GameEntity(
     name,
     position,
     max_x, max_y,
-    CollisionLayer::Hostile), target_player(player) {
+    CollisionLayer::Hostile), target(target) {
     rect_width = ZOMBIE_RECT_HEIGHT;
     rect_height = ZOMBIE_RECT_HEIGHT;
 }
@@ -43,8 +44,8 @@ void Zombie::take_damage(uint8_t damage) {
         health -= damage;
 }
 
-void Zombie::set_target(PlayerState& player) {
-    target_player = player;
+void Zombie::set_target(GameEntity *target) {
+    this->target = target;
     Vector2D target_position = Vector2D(100, 2);
     has_target_set = true;
 }
@@ -61,7 +62,7 @@ void Zombie::set_direction(int x, int y) {
 }
 
 void Zombie::next_state() {
-    Vector2D target_position = target_player.get_location();
+    Vector2D target_position = target->get_location();
     // Calculate the direction vector from the zombie to the player
     Vector2D target_direction = target_position - position;
     // Normalize the target direction if it's not too close to zero
@@ -101,7 +102,7 @@ uint8_t Zombie::get_health()
 }
 
 Zombie::Zombie(Zombie&& other)
-    : GameEntity(std::move(other)), target_player(other.target_player) {
+    : GameEntity(std::move(other)), target(other.target) {
     if (this == &other)
         return;
     damage = other.damage;
@@ -129,10 +130,10 @@ ZombieStateReference Zombie::make_ref()
 CommonZombie::CommonZombie(
     const std::string &name,
     Vector2D position,
-    PlayerState &player,
+    GameEntity *target,
     int16_t max_x, 
     int16_t max_y
-) : Zombie(name, position, player, max_x, max_y) {
+) : Zombie(name, position, target, max_x, max_y) {
     id = 51;
     damage = 10;
     zombie_type = ZOMBIE;

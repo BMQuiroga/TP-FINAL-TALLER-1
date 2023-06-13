@@ -8,9 +8,7 @@
 #include "math_helper.h"
 #include "observable_property.h"
 #include "physics_manager.h"
-
-#define DEFAULT_MAX_X 1920
-#define DEFAULT_MAX_Y 95
+#include "game_config.h"
 
 class PhysicsManager;
 enum class CollisionLayer;
@@ -69,6 +67,8 @@ class GameEntity {
     int8_t get_state();
     uint32_t get_id();
     uint32_t get_physics_id();
+    Vector2D get_location();
+    Vector2D get_direction();
     bool check_collision(GameEntity *other);
     virtual void attack(GameEntity *other) = 0;
     virtual void on_collission_detected(GameEntity *other) = 0;

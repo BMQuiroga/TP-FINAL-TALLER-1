@@ -8,11 +8,7 @@
 #include "protocol_types.h"
 #include "armas.h"
 #include "bullet.h"
-
-#define GUN_MAGAZINE_SIZE 10
-#define STARTING_HIT_POINTS 100
-#define PLAYER_RECT_WIDTH 20
-#define PLAYER_RECT_HEIGHT 20
+#include "game_config.h"
 
 class Arma;
 
@@ -41,8 +37,6 @@ class PlayerState : public GameEntity {
     void on_collission_detected(GameEntity *other) override;
 
     std::string get_name();
-    Vector2D get_location();
-    Vector2D get_direction();
     PlayerStateReference make_ref();
     PlayerState(const PlayerState& other) = default;
     PlayerState& operator=(const PlayerState& other) = default;
