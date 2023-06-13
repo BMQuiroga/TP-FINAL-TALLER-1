@@ -36,7 +36,7 @@ Intention *Intention::make_intention(SDL_Event &event)
         }           
     }
     
-    if (event.type == SDL_KEYDOWN) {
+    if (event.type == SDL_KEYUP) {
         SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&) event;
         switch (keyEvent.keysym.sym) {
             case SDLK_LEFT: {
