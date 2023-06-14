@@ -30,6 +30,14 @@
 #define EAT_ 14000
 #define JUMP_ 15000
 
+#define REVIVE_SCREEN -7
+#define WIN_SCREEN -6
+#define DEATH_SCREEN -5
+#define BULLET_MODEL -4
+#define HEART_MODEL -3
+#define EMPTY_HPBAR -2
+#define FULL_HPBAR -1
+
 AssetManager* AssetManager::sInstance = NULL;
 
 AssetManager* AssetManager::Instance(SDL2pp::Renderer & renderer) {
@@ -50,11 +58,13 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	//default_font("../resources/Fonts/ARIAL.TTF", 99),
 	default_color(50,50,50,255)
 	{
-	map.emplace(-4, std::make_shared<Asset>("../resources/HPBar/bullet.png", 0, 300, 300, 1, renderer, 0));
-	map.emplace(-3, std::make_shared<Asset>("../resources/HPBar/heart.png", 0, 300, 300, 1, renderer, 0));
-	map.emplace(-2, std::make_shared<Asset>("../resources/HPBar/EmptyBar.png", 0, 300, 300, 1, renderer, 0));
-	//map.emplace(-2, Asset::Create("../resources/HPBar/EmptyBar.png", 0, 300, 300, 1, renderer, 0));
-	map.emplace(-1, std::make_shared<Asset>("../resources/HPBar/FullBar.png", 0, 300, 300, 1, renderer, 0));
+	map.emplace(REVIVE_SCREEN, std::make_shared<Asset>("../resources/HPBar/ReviveScreen.png", 0, 1920, 1080, 1, renderer, 1));
+	map.emplace(WIN_SCREEN, std::make_shared<Asset>("../resources/HPBar/WinScreen.png", 0, 1920, 1080, 1, renderer, 1));
+	map.emplace(DEATH_SCREEN, std::make_shared<Asset>("../resources/HPBar/DeathScreen.png", 0, 1920, 1080, 1, renderer, 1));
+	map.emplace(BULLET_MODEL, std::make_shared<Asset>("../resources/HPBar/bullet.png", 0, 300, 300, 1, renderer, 0));
+	map.emplace(HEART_MODEL, std::make_shared<Asset>("../resources/HPBar/heart.png", 0, 300, 300, 1, renderer, 0));
+	map.emplace(EMPTY_HPBAR, std::make_shared<Asset>("../resources/HPBar/EmptyBar.png", 0, 300, 300, 1, renderer, 0));
+	map.emplace(FULL_HPBAR, std::make_shared<Asset>("../resources/HPBar/FullBar.png", 0, 300, 300, 1, renderer, 0));
 
 	map.emplace(BACKGROUND, std::make_shared<Asset>("../resources/backgrounds/War1/Bright/War.png", 0, 1920, 1080, 1, renderer, 1));
 
@@ -126,8 +136,8 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	map.emplace(ZOMBIE + RUN_, std::make_shared<Asset>("../resources/Zombie/Run.png", 0, 96, 96, 7, renderer, 0));
 
 	sound_map.emplace(151,SDL2pp::Music("../resources/Sound/singleshot.mp3"));
-
-
+	sound_map.emplace(152,SDL2pp::Music("../resources/Sound/DeathScreen.mp3"));
+	sound_map.emplace(153,SDL2pp::Music("../resources/Sound/VictoryScreen.mp3"));
 }
 
 Asset* AssetManager::GetAsset(int code) {

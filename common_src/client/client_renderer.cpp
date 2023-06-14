@@ -14,6 +14,8 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse
     events(events),
     updates(updates),
     player_name(player_name),
+    running(true),
+    revive_screen(false),
     sdl(SDL_INIT_VIDEO),
     window("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_RESIZABLE),
     actual_frame(nullptr),
@@ -30,7 +32,6 @@ void ClientRenderer::GameLoop() {
     std::list<Image>* frames_list = nullptr;
     ProtocolResponse new_update;
     Serializer serializer;
-    bool running = true;
     while (running) {
         unsigned int frame_ticks = SDL_GetTicks();	
         running = this->handleEvents();
@@ -78,6 +79,8 @@ void ClientRenderer::GameLoop() {
         }
         renderBackground();
         render_all();
+        if (revive_screen)
+            ReviveScreen();
         renderer.Present();
         unsigned int end_ticks = SDL_GetTicks();
         unsigned int ticks_delta = frame_ticks - end_ticks;
@@ -91,10 +94,14 @@ void ClientRenderer::render_all() {
             //std::cout << "id:" << it.id << std::endl;
             if (it.id > 0 && it.id < 151) {
                 render(const_cast<Image&>(it));
-            } else {
+            } else if (it.id > 150 && it.id < 251){
                 if (it.frame == 0) {
                     play(const_cast<Image&>(it));
                 }
+            } else if (it.id == 251){
+                VictoryScreen();
+            } else if (it.id == 252){
+                DeathScreen();
             }
         }
     }
@@ -198,4 +205,42 @@ bool ClientRenderer::handleEvents() {
         }
     }
     return true;
+}
+
+
+void ClientRenderer::DeathScreen() {
+    running = false;
+    assets->play(152,this->mixer);
+    Asset * asset = assets->GetAsset(-5);
+    for (int i = 0; i < GAME_FRAME_RATE*5 ; i++) {
+        renderer.Copy(
+            (*asset->get_texture()),
+            SDL2pp::Rect(0, 0, 1920, 1080),
+            SDL2pp::Point(0,0)
+        );
+    }
+}
+
+
+void ClientRenderer::VictoryScreen() {
+    running = false;
+    assets->play(153,this->mixer);
+    Asset * asset = assets->GetAsset(-6);
+    for (int i = 0; i < GAME_FRAME_RATE*5 ; i++) {
+        renderer.Copy(
+            (*asset->get_texture()),
+            SDL2pp::Rect(0, 0, 1920, 1080),
+            SDL2pp::Point(0,0)
+        );
+    }
+}
+
+
+void ClientRenderer::ReviveScreen() {
+    Asset * asset = assets->GetAsset(-7);
+    renderer.Copy(
+        (*asset->get_texture()),
+        SDL2pp::Rect(0, 0, 1920, 1080),
+        SDL2pp::Point(0,0)
+    );
 }
