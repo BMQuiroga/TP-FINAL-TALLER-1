@@ -45,6 +45,16 @@ class ClientRenderer {
     //renderiza la vida y balas propias
     void renderOwn(Image & im);
 
+    //renderiza la pantalla de muerte y mata al juego
+    void DeathScreen();
+
+    //renderiza la pantalla de victoria y cierra el juego
+    void VictoryScreen();
+
+    //pantalla de revive, entras cuando tu personaje muere, mientras estes en esta pantalla, no podras moverte o disparar
+    //reapareceras despues de un tiempo. Si todos los jugadores de una partida estan en muertos, se pierde la partida
+    void ReviveScreen();
+
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name);
     //gameloop: renderiza el background y el actual_frame en loop mientras lo actualiza
