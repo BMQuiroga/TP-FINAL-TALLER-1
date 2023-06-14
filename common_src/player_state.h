@@ -10,6 +10,8 @@
 #include "bullet.h"
 #include "game_config.h"
 
+#define RESPAWN_TIME 100
+
 class Arma;
 
 // Clase encargada de manejar la lógica del jugador
@@ -17,6 +19,7 @@ class Arma;
 class PlayerState : public GameEntity {
   private:
     uint8_t hit_points;
+    int8_t respawn_time;
     Arma* arma;
     void move();
     void attack(GameEntity *other) override;
@@ -35,6 +38,9 @@ class PlayerState : public GameEntity {
     void take_damage(uint8_t damage);
     void pass_time();
     void on_collission_detected(GameEntity *other) override;
+    bool is_dead();
+    //uint8_t get_respawn_time();
+    //void try_respawn();
 
     std::string get_name();
     PlayerStateReference make_ref();

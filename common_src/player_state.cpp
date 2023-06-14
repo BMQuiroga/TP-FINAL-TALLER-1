@@ -17,6 +17,7 @@ GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
     this->arma = new Arma1();
     this->rect_width = PLAYER_RECT_WIDTH;
     this->rect_height = PLAYER_RECT_HEIGHT;
+    this->respawn_time = -1;
 }
 
 PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {
@@ -38,10 +39,12 @@ std::string PlayerState::get_name() {
 
 void PlayerState::take_damage(uint8_t damage) {
     std::cout << "baambaam" << std::endl;
-    if (damage > hit_points)
+    if (damage > hit_points) {
         hit_points = 0;
-    else
+        //respawn_time = RESPAWN_TIME;
+    } else {
         hit_points -= damage;
+    } 
 }
 
 PlayerStateReference PlayerState::make_ref() {
@@ -146,8 +149,23 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec) {
     this->move();
 }
 
+bool PlayerState::is_dead() {
+    return hit_points == 0;
+}
+
 void PlayerState::pass_time() {
     this->arma->advance_time();
+    //-1 seria que esta vivo
+    //cuando muere, se pone un timer
+    //cuando el timer baja a 0, el jugador revive
+    if (this->hit_points == 0 && this->respawn_time > 0) {
+        respawn_time--;
+    } else if (this->hit_points == 0 && this->respawn_time == 0) {
+        respawn_time = -1;
+        this->hit_points = 100;
+    } else if (this->hit_points == 0 && this->respawn_time == -1) {
+        respawn_time = RESPAWN_TIME;
+    }
 }
 
 // void PlayerState::as_response(protocol_response_t *response) {
