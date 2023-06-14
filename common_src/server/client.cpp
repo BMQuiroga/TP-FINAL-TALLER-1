@@ -51,6 +51,7 @@ void Client::handle_request(ProtocolRequest &message) {
             JoinRequest join_req = serializer.deserialize_join_state(message.content); 
             std::cout << "game code is: " << join_req.game_code << std::endl;
             int join_code = game_handler.join_game(join_req.game_code, name, responses);
+            joined_game = join_code;
             if (join_code == JOIN_FAILURE) {
                 ProtocolResponse resp;
                 resp.content_type = JOIN;
