@@ -157,10 +157,10 @@ void CommonZombie::attack(GameEntity *other) {
     //como siempre el zombie esta moving, siempre entraria al if y nunca al else
     //asi que las detecciones de colisiones del zombie y del player ambas hacen lo mismo,
     //una setea el flag y la otra como ya esta attacking, hace el daño
-    /*if (state != ATTACKING) {
+    //if (state != ATTACKING) {
         state = ATTACKING;
         // move towards the player and bite him
-    } else {*/
+    //} else {
         // collision
         PlayerState *player = (PlayerState*)other;
         //std::cout << "boomboom22222" << std::endl;
