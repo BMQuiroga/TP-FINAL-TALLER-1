@@ -39,6 +39,7 @@
 #define GAME_TICK_RATE 5
 #define ZOMBIE_CREATION_TIME_MIN 10000
 #define ZOMBIE_CREATION_TIME_MAX 15000
+#define SCORE_TO_WIN 2
 
 using namespace std::placeholders;
 
@@ -73,6 +74,7 @@ class GameLoop : public Thread {
     ProtectedVector<Queue<ProtocolResponse>*> message_queues;
     Serializer serializer;
     PhysicsManager *physics;
+    uint16_t score;
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
@@ -94,8 +96,23 @@ class GameLoop : public Thread {
                 CollisionLayer::HostileProjectile,
                 CollisionFlag::Friendly
             );
+            score = 0;
         }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
+
+    PlayerStateReference make_defeat() {
+        PlayerStateReference a;
+        a.id = 252;
+        a.name = "defeat";
+        return a;
+    }
+
+    PlayerStateReference make_victory() {
+        PlayerStateReference a;
+        a.id = 251;
+        a.name = "victory";
+        return a;
+    }
 
     //une al player a la partida
     int join(GameEvent &event) {
@@ -128,7 +145,22 @@ class GameLoop : public Thread {
             resp.zombies.push_back(zombie.make_ref());
         }
         resp.game_state = state;
+
+        if (score >= SCORE_TO_WIN)
+            resp.players.push_back(make_victory());
+        else if (is_everyone_dead())
+            resp.players.push_back(make_defeat());
+
         return resp;
+    }
+
+    bool is_everyone_dead() {
+        int i = 0;
+        for (PlayerState &player : players) {
+            if (player.is_dead())
+                i++;
+        }
+        return i == players.size();
     }
 
     //devuelve al jugador con uuid
@@ -162,6 +194,7 @@ class GameLoop : public Thread {
         for (auto it = zombies.begin(); it != zombies.end();) {
             if (it->get_health() == 0) {
                 it = zombies.erase(it);
+                score++;
             } else {
                 ++it;
             }
@@ -207,7 +240,7 @@ class GameLoop : public Thread {
         zombies.push_back(std::move(common_zombie));
     }
 
-    void move_to_closest(CommonZombie &z) {
+    void move_to_closest(CommonZombie &z) {//en un futuro, metodo de zombie y no de gameloop
         float closest_x = 0;
         float closest_y = 0;
         Vector2D this_pos = z.get_location();

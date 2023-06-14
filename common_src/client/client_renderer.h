@@ -18,6 +18,9 @@ class ClientRenderer {
     std::string player_name;
     std::list<Image>* actual_frame;
     AssetManager * assets;
+    bool running;
+    bool revive_screen;
+    bool defeat;
 
     SDL2pp::SDL sdl;
     SDL2pp::Window window;

@@ -15,6 +15,7 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse
     updates(updates),
     player_name(player_name),
     running(true),
+    defeat(false),
     revive_screen(false),
     sdl(SDL_INIT_VIDEO),
     window("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_RESIZABLE),
@@ -86,6 +87,8 @@ void ClientRenderer::GameLoop() {
         unsigned int ticks_delta = frame_ticks - end_ticks;
         SDL_Delay((1000/GAME_FRAME_RATE) - ticks_delta);
     }
+    if (defeat)
+        DeathScreen();
 }
 
 void ClientRenderer::render_all() {
@@ -101,7 +104,8 @@ void ClientRenderer::render_all() {
             } else if (it.id == 251){
                 VictoryScreen();
             } else if (it.id == 252){
-                DeathScreen();
+                defeat = true;
+                running = false;
             }
         }
     }
@@ -140,6 +144,11 @@ void ClientRenderer::render(Image & im) {
 }
 
 void ClientRenderer::renderOwn(Image & im) {
+    if (im.health == 0)
+        revive_screen = true;
+    else
+        revive_screen = false;
+
     int hearts = im.health / 10;
     Asset * asset = assets->GetAsset(-3);
 
@@ -209,15 +218,16 @@ bool ClientRenderer::handleEvents() {
 
 
 void ClientRenderer::DeathScreen() {
-    running = false;
     assets->play(152,this->mixer);
     Asset * asset = assets->GetAsset(-5);
     for (int i = 0; i < GAME_FRAME_RATE*5 ; i++) {
+        renderer.Clear();
         renderer.Copy(
             (*asset->get_texture()),
             SDL2pp::Rect(0, 0, 1920, 1080),
             SDL2pp::Point(0,0)
         );
+        renderer.Present();
     }
 }
 
@@ -227,11 +237,13 @@ void ClientRenderer::VictoryScreen() {
     assets->play(153,this->mixer);
     Asset * asset = assets->GetAsset(-6);
     for (int i = 0; i < GAME_FRAME_RATE*5 ; i++) {
+        renderer.Clear();
         renderer.Copy(
             (*asset->get_texture()),
             SDL2pp::Rect(0, 0, 1920, 1080),
             SDL2pp::Point(0,0)
         );
+        renderer.Present();
     }
 }
 
