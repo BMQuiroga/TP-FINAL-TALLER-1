@@ -243,7 +243,9 @@ class GameLoop : public Thread {
             int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
             auto startTime = std::chrono::high_resolution_clock::now();
             GameEvent event;
-            if (events.try_pop(event)) {
+            int n_events = 0;
+            while (events.try_pop(event) && n_events < EVENTS_PER_LOOP) {
+                n_events++;
                 // std::cout << "Popped event with cmd=" << std::to_string(event.req.cmd) << std::endl;
                 if (event.req.cmd == JOIN) {
                     int code = join(event);
@@ -256,11 +258,10 @@ class GameLoop : public Thread {
                         player->next_state(event.req.cmd,bullets);
                 }
                 // push_response();
-            } else {
-                for (PlayerState &player : players) {
-                    if (player.get_state() != IDLE) {
-                        player.next_state(-1,bullets);
-                    }
+            }
+            for (PlayerState &player : players) {
+                if (player.get_state() != IDLE) {
+                    player.next_state(-1,bullets);
                 }
             }
 

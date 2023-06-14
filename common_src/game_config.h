@@ -10,6 +10,7 @@
 #define DEFAULT_MAX_X 1920
 #define DEFAULT_MAX_Y 95
 #define STARTING_HIT_POINTS 100
+#define EVENTS_PER_LOOP 20
 
 // Player
 #define GUN_MAGAZINE_SIZE 10
