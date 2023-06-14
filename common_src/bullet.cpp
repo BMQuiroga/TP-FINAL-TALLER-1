@@ -15,6 +15,7 @@ Bullet::Bullet(uint8_t dmg, uint8_t bc, entity_direction direc, bool piercing, V
     this->piercing = piercing;
     this->facing_direction = direc;
     this->bullet_count = bc;
+    this->state = 0;
 }
 
 void Bullet::move() {
@@ -57,6 +58,10 @@ PlayerStateReference Bullet::make_ref() {
     a.name = "";
     a.hit_points = 0;
     a.id = 151;//importante para que sea un sonido
+    a.state = state++;
+    //importante, la bala solo hace sonido en el cliente cuando state = 0
+    //osea, solo cuando se dispara por primera vez
+
     //std::cout << "MAKE REF with id: " << a.id <<std::endl;
     return a;
 }

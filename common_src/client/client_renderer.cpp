@@ -112,8 +112,8 @@ void ClientRenderer::render_all() {
 }
 
 void ClientRenderer::play(Image & im) {
-    assets->play(im.id,this->mixer);
-    im.frame++;
+    if (im.action == 0)
+        assets->play(im.id,this->mixer);
 }
 
 void ClientRenderer::render(Image & im) {
