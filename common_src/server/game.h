@@ -51,7 +51,7 @@ struct GameEvent {
     std::string player_name;
     Queue<ProtocolResponse> *player_messages;
     GameEvent() {}
-    GameEvent(ProtocolRequest &req, std::string &uuid, Queue<ProtocolResponse> &q) : req(req), player_name(uuid), player_messages(&q) {}
+    GameEvent(ProtocolRequest &req, std::string &uuid, Queue<ProtocolResponse> *q) : req(req), player_name(uuid), player_messages(q) {}
     GameEvent& operator=(const GameEvent& other) {
         if (this == &other)
             return *this;
@@ -70,7 +70,7 @@ class GameLoop : public Thread {
     std::list<Bullet> bullets;
     std::list<CommonZombie> zombies;
     std::atomic<GameState> state;
-    ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
+    ProtectedVector<Queue<ProtocolResponse>*> message_queues;
     Serializer serializer;
     PhysicsManager *physics;
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
@@ -105,7 +105,7 @@ class GameLoop : public Thread {
             players.push_back(PlayerState(event.player_name, players.size() + 1));
             // players.push_back(std::move(new_player));
             // physics->register_entity(&players.back(), CollisionLayer::Friendly);
-            message_queues.push_back(*event.player_messages);
+            message_queues.push_back(event.player_messages);
             return players.size();
         } else {
             return FAILURE;
@@ -179,12 +179,12 @@ class GameLoop : public Thread {
     void push_response() {
         GameStateResponse resp = make_response();
         std::for_each(message_queues.begin(), message_queues.end(),
-            [this, resp](Queue<ProtocolResponse> & queue) {
+            [this, resp](Queue<ProtocolResponse> *queue) {
                 ProtocolResponse response;
                 response.content_type = GAME_STATE;
                 response.content = serializer.serialize(resp);
                 response.size = response.content.size();
-                queue.push(response);
+                queue->push(response);
         });
     }
 
@@ -249,7 +249,9 @@ class GameLoop : public Thread {
             int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
             auto startTime = std::chrono::high_resolution_clock::now();
             GameEvent event;
-            if (events.try_pop(event)) {
+            int n_events = 0;
+            while (events.try_pop(event) && n_events < EVENTS_PER_LOOP) {
+                n_events++;
                 // std::cout << "Popped event with cmd=" << std::to_string(event.req.cmd) << std::endl;
                 if (event.req.cmd == JOIN) {
                     int code = join(event);
@@ -261,15 +263,12 @@ class GameLoop : public Thread {
                     if (player)
                         player->next_state(event.req.cmd,bullets);
                 }
-                // push_response();
-            } else {
-                for (PlayerState &player : players) {
-                    if (player.get_state() != IDLE) {
-                        player.next_state(-1,bullets);
-                    }
+            }
+            for (PlayerState &player : players) {
+                if (player.get_state() != IDLE) {
+                    player.next_state(-1,bullets);
                 }
             }
-
             for (CommonZombie &zombie : zombies) {
                 move_to_closest(zombie);
             }
@@ -318,14 +317,8 @@ class Game {
         void push_event(
             ProtocolRequest &req,
             std::string &player_name,
-            Queue<ProtocolResponse> &player_messages);
+            Queue<ProtocolResponse> *player_messages);
         void start();
-
-        /**
-         * Agrego la cola de un jugador nuevo en la lista de colas
-         * de jugadores
-        */
-        void add_player(Queue<ProtocolResponse>& q);
         /**
          * Pusheo un mensaje nuevo en las colas de
          * todos los juegos unidos en la partida

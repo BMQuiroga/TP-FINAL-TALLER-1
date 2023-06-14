@@ -40,7 +40,7 @@ Queue<ProtocolResponse>& q) {
 // }
 
 int GameHandler::join_game(int code,
-std::string &player_name, Queue<ProtocolResponse>& q) {
+std::string &player_name, Queue<ProtocolResponse> *q) {
     bool game_exists = matches.has(code);
     if (game_exists) {
         Game &game = get_game(code);
