@@ -100,7 +100,7 @@ class GameLoop : public Thread {
         if (state == CREATED && players.size() < MAX_PLAYERS) {
             // PlayerState new_player(event.player_name);
             // new_player.x.attach(&on_entity_moved);
-            players.push_back(PlayerState(event.player_name));
+            players.push_back(PlayerState(event.player_name, players.size() + 1));
             // players.push_back(std::move(new_player));
             // physics->register_entity(&players.back(), CollisionLayer::Friendly);
             message_queues.push_back(*event.player_messages);
@@ -184,7 +184,7 @@ class GameLoop : public Thread {
         int x = getRandomNumber(0, 800);  // Random X position within game area
         int y = getRandomNumber(0, 95);  // Random Y position within game area
         Vector2D position(x, y);
-        PlayerState& player_to_follow = get_random_player();
+        PlayerState& player_to_follow = players[0];
         CommonZombie common_zombie("zombie", position, &player_to_follow);
         zombies.push_back(std::move(common_zombie));
     }

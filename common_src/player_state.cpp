@@ -6,12 +6,13 @@
 #include <arpa/inet.h>
 
 PlayerState::PlayerState(
-    const std::string &name, 
+    const std::string &name,
+    int id,
     int16_t max_x, 
     int16_t max_y
 ) : 
 GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
-    this->id = 1;
+    this->id = id;
     this->hit_points = STARTING_HIT_POINTS;
     this->arma = new Arma1();
     this->rect_width = PLAYER_RECT_WIDTH;

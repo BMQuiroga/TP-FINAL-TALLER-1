@@ -24,6 +24,7 @@ class PlayerState : public GameEntity {
   public:
     explicit PlayerState(
       const std::string &name,
+      int id,
       int16_t max_x = DEFAULT_MAX_X,
       int16_t max_y = DEFAULT_MAX_Y);
     PlayerState(PlayerState&&);
