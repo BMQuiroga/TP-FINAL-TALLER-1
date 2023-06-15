@@ -303,9 +303,7 @@ class GameLoop : public Thread {
                 } else {
                     PlayerState *player = get_player(event.player_name);
                     if (event.req.cmd < 0) {
-                        std::cout << "disconnecting!" << std::endl;
                         remove_player_from_game(event.player_messages);
-                        player->disconnect();
                         if (message_queues.size() == 0) {
                             state = ENDED;
                             break;
