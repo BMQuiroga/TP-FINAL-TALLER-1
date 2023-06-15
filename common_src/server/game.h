@@ -134,7 +134,8 @@ class GameLoop : public Thread {
         }
 
         for (Bullet &b : bullets) {
-            resp.players.push_back(b.make_ref());
+            if (b.get_state() == 0)
+                resp.players.push_back(b.make_ref());
         }
 
         for (CommonZombie &zombie : zombies) {

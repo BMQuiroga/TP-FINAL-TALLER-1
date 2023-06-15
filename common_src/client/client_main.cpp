@@ -62,6 +62,11 @@ int main(int argc, char *argv[]) { try {
     client_renderer.GameLoop(); //<--- magia
     skt.shutdown(0);
     skt.close();
+    events_q.close();
+    updates_q.close();
+    client_sender.join();
+    client_receiver.join();
+    client_receiver.join();
     ret = 0;
     return ret;
 } catch (const std::exception& err) {
