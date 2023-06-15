@@ -146,11 +146,15 @@ class GameLoop : public Thread {
         }
         resp.game_state = state;
 
-        if (score >= SCORE_TO_WIN)
+        if (score >= SCORE_TO_WIN) {
             resp.players.push_back(make_victory());
-        else if (is_everyone_dead())
+            this->state = ENDED;
+        }
+            
+        else if (is_everyone_dead()) {
             resp.players.push_back(make_defeat());
-
+            this->state = ENDED;
+        }
         return resp;
     }
 
