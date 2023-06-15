@@ -1,6 +1,7 @@
 #include "bullet.h"
 #include "protocol_types.h"
 #include "physics_manager.h"
+#include "zombie.h"
 
 Bullet::Bullet(uint8_t dmg, uint8_t bc, entity_direction direc, bool piercing, Vector2D position) :
     GameEntity(
@@ -14,6 +15,7 @@ Bullet::Bullet(uint8_t dmg, uint8_t bc, entity_direction direc, bool piercing, V
     this->piercing = piercing;
     this->facing_direction = direc;
     this->bullet_count = bc;
+    this->state = 0;
 }
 
 void Bullet::move() {
@@ -26,11 +28,22 @@ void Bullet::move() {
 }
 
 void Bullet::on_collission_detected(GameEntity *other) {
-
+    if (this->bullet_count > 0 && this->damage > 0) {
+        attack(other);
+    }
 }
 
 void Bullet::attack(GameEntity *other) {
-    //????????????????
+    Zombie *z = (Zombie*)other;
+    if (piercing) {
+        z->take_damage(damage);
+        damage = damage / 2;
+    } else {
+        while ((bullet_count > 0) && (z->get_health() > 0)) {
+            z->take_damage(damage);
+            bullet_count--;
+        }
+    }
 }
 
 bool Bullet::is_off_scope() {
@@ -45,6 +58,10 @@ PlayerStateReference Bullet::make_ref() {
     a.name = "";
     a.hit_points = 0;
     a.id = 151;//importante para que sea un sonido
+    a.state = state++;
+    //importante, la bala solo hace sonido en el cliente cuando state = 0
+    //osea, solo cuando se dispara por primera vez
+
     //std::cout << "MAKE REF with id: " << a.id <<std::endl;
     return a;
 }

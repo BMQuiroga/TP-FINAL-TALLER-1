@@ -61,10 +61,9 @@ PlayerStateReference PlayerState::make_ref() {
 }
 
 void PlayerState::attack(GameEntity *other) {
-    if (this->arma->try_shoot()) {
-        this->state = ATTACKING;
-    }//ya no se usa porque no puedo devolver la bala o pasar el vec por parametro
-    
+    //if (this->arma->try_shoot()) {
+        //this->state = ATTACKING;
+    //}//ya no se usa porque no puedo devolver la bala o pasar el vec por parametro    
     //else
         //this->state = IDLE;
 }
