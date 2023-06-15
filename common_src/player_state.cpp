@@ -112,6 +112,12 @@ void PlayerState::shoot(int flag) {
 }*/
 
 void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec) {
+    if (this->hit_points == 0) {
+        this->state = DEAD;
+        this->arma->advance_time();
+        return;
+    }
+    
     if (cmd == MOVE_DOWN) {
         direction.y = 1;
     } else if (cmd == MOVE_UP) {

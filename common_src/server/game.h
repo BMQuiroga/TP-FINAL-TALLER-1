@@ -172,6 +172,11 @@ class GameLoop : public Thread {
         return nullptr;
     }
 
+    PlayerState& get_random_player() {
+        int player_id = getRandomNumber(1, players.size());
+        return players[player_id];
+    }
+
     //actualiza las armas de los jugadores y mueve las balas
     void pass_time() {
         for (PlayerState &player : players) {
@@ -229,7 +234,7 @@ class GameLoop : public Thread {
         int x = getRandomNumber(0, 800);  // Random X position within game area
         int y = getRandomNumber(0, 95);  // Random Y position within game area
         Vector2D position(x, y);
-        PlayerState& player_to_follow = players[0];
+        PlayerState& player_to_follow = get_random_player();
         CommonZombie common_zombie("zombie", position, &player_to_follow);
         zombies.push_back(std::move(common_zombie));
     }

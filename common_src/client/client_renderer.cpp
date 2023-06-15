@@ -112,23 +112,23 @@ void ClientRenderer::render_all() {
 }
 
 void ClientRenderer::play(Image & im) {
-    assets->play(im.id,this->mixer);
-    im.frame++;
+    if (im.action == 0)
+        assets->play(im.id,this->mixer);
 }
 
 void ClientRenderer::render(Image & im) {
     uint16_t x = im.x;
     uint16_t y = im.y;
     Asset * asset = assets->GetAsset(im.id + im.action*1000);
-    //Asset * asset = assets->GetAsset(1);
 
     im.frame++;
-    while (im.frame >= asset->get_frames())
-        im.frame -=  asset->get_frames();
-    
-    //std::cout << "image x and y:" << x << " " << y << " " << im.frame << std::endl;
-    //std::cout << "lenght and height" << asset->get_length() << " " << asset->get_height() << std::endl;
-
+    while (im.frame >= asset->get_frames()) {
+        if (im.action != 2)
+            im.frame -=  asset->get_frames();
+        else
+            im.frame = asset->get_frames() -1;
+            //el modelo al morir, se queda tirado en el piso, sin repetir la animacion de muerte
+    }
     renderer.Copy(
         (*asset->get_texture()),
         SDL2pp::Rect(asset->get_length() * im.frame, 0, asset->get_length(), asset->get_height()),
