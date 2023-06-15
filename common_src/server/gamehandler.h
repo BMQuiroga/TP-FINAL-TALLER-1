@@ -151,7 +151,7 @@ class GameHandler {
          * no existe.
         */
         int join_game(int code, std::string &player_name, 
-        Queue<ProtocolResponse> *q);
+        Queue<ProtocolResponse> &q);
         // /**
         //  * Recibo una de los comandos (join, create) para iniciar 
         //  * una partida (handshake),

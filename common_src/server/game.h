@@ -52,7 +52,7 @@ struct GameEvent {
     std::string player_name;
     Queue<ProtocolResponse> *player_messages;
     GameEvent() {}
-    GameEvent(ProtocolRequest &req, std::string &uuid, Queue<ProtocolResponse> *q) : req(req), player_name(uuid), player_messages(q) {}
+    GameEvent(ProtocolRequest &req, std::string &uuid, Queue<ProtocolResponse> &q) : req(req), player_name(uuid), player_messages(&q) {}
     GameEvent& operator=(const GameEvent& other) {
         if (this == &other)
             return *this;
@@ -71,7 +71,7 @@ class GameLoop : public Thread {
     std::list<Bullet> bullets;
     std::list<CommonZombie> zombies;
     std::atomic<GameState> state;
-    ProtectedVector<Queue<ProtocolResponse>*> message_queues;
+    ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
     PhysicsManager *physics;
     uint16_t score;
@@ -117,12 +117,8 @@ class GameLoop : public Thread {
     //une al player a la partida
     int join(GameEvent &event) {
         if (state == CREATED && players.size() < MAX_PLAYERS) {
-            // PlayerState new_player(event.player_name);
-            // new_player.x.attach(&on_entity_moved);
             players.push_back(PlayerState(event.player_name, players.size() + 1));
-            // players.push_back(std::move(new_player));
-            // physics->register_entity(&players.back(), CollisionLayer::Friendly);
-            message_queues.push_back(event.player_messages);
+            message_queues.push_back(*event.player_messages);
             return players.size();
         } else {
             return FAILURE;
@@ -177,6 +173,14 @@ class GameLoop : public Thread {
         return nullptr;
     }
 
+    void remove_player_from_game(Queue<ProtocolResponse> *q) {
+        message_queues.erase(
+            [q](Queue<ProtocolResponse>& queue) {
+                return &queue == q;
+            }
+        );
+    }
+
     PlayerState& get_random_player() {
         int player_id = getRandomNumber(1, players.size());
         return players[player_id];
@@ -216,12 +220,12 @@ class GameLoop : public Thread {
     void push_response() {
         GameStateResponse resp = make_response();
         std::for_each(message_queues.begin(), message_queues.end(),
-            [this, resp](Queue<ProtocolResponse> *queue) {
+            [this, resp](Queue<ProtocolResponse> & queue) {
                 ProtocolResponse response;
                 response.content_type = GAME_STATE;
                 response.content = serializer.serialize(resp);
                 response.size = response.content.size();
-                queue->push(response);
+                queue.push(response);
         });
     }
 
@@ -297,8 +301,17 @@ class GameLoop : public Thread {
                     }
                 } else {
                     PlayerState *player = get_player(event.player_name);
-                    if (player)
+                    if (event.req.cmd < 0) {
+                        std::cout << "disconnecting!" << std::endl;
+                        remove_player_from_game(event.player_messages);
+                        player->disconnect();
+                        if (message_queues.size() == 0) {
+                            state = ENDED;
+                            break;
+                        }
+                    } else if (player) {
                         player->next_state(event.req.cmd,bullets);
+                    }
                 }
             }
             for (PlayerState &player : players) {
@@ -354,7 +367,7 @@ class Game {
         void push_event(
             ProtocolRequest &req,
             std::string &player_name,
-            Queue<ProtocolResponse> *player_messages);
+            Queue<ProtocolResponse> &player_messages);
         void start();
         /**
          * Pusheo un mensaje nuevo en las colas de

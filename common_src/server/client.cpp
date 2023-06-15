@@ -25,7 +25,10 @@ Client::Client(
 
 void Client::handle_request(ProtocolRequest &message) {
     if (joined_game >= 0) {
-        game_handler.get_game(joined_game).push_event(message, name, &responses);
+        game_handler.get_game(joined_game).push_event(message, name, std::ref(responses));
+        if (message.cmd < 0) {
+            kill();
+        }
     } else {
         Serializer serializer;
         // TODO: If this is a create game request, then create the 
@@ -36,7 +39,7 @@ void Client::handle_request(ProtocolRequest &message) {
             GameReference create_req = serializer.deserialize_game_reference(message.content);
             Game &game = game_handler.create_new_game(create_req.name, responses);
             game.start();
-            game_handler.join_game(game.get_id(), name, &responses);
+            game_handler.join_game(game.get_id(), name, responses);
             joined_game = game.get_id();
         }
         if (message.cmd == LIST) {
@@ -49,7 +52,7 @@ void Client::handle_request(ProtocolRequest &message) {
         }
         if (message.cmd == JOIN) {
             JoinRequest join_req = serializer.deserialize_join_state(message.content); 
-            int join_code = game_handler.join_game(join_req.game_code, name, &responses);
+            int join_code = game_handler.join_game(join_req.game_code, name, responses);
             joined_game = join_code;
             if (join_code == JOIN_FAILURE) {
                 joined_game = -1;
@@ -71,21 +74,6 @@ void Client::start()
 {
     receiver.start();
     sender.start();
-    /*
-    ProtocolRequest req;
-    req.cmd = JOIN;
-    if (game_handler.get_game_count() == 0) {
-        Game &game = game_handler.create_new_game("test", responses);
-        game.start();
-        joined_game = game.get_id();
-        std::cout << "Created game with id: " << std::to_string(joined_game) << std::endl;
-        game.push_event(std::ref(req), uuid, responses);
-    } else {
-        Game &game = game_handler.get_game(joined_game);
-        game.push_event(std::ref(req), uuid, responses);
-    }
-    std::cout << "Pushing event: " << "(req=JOIN, name=" << uuid << ")" << std::endl;
-    */
 }
 
 void Client::join()

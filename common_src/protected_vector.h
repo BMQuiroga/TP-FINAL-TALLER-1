@@ -42,6 +42,12 @@ class ProtectedVector {
         std::lock_guard<std::mutex> lock(mtx);
         return vec.empty();
     }
+    
+    template<typename Predicate>
+    void erase(Predicate pred) {
+        std::lock_guard<std::mutex> lock(mtx);
+        vec.erase(std::remove_if(vec.begin(), vec.end(), pred), vec.end());
+    }
 
     iterator begin() {
         return vec.begin();

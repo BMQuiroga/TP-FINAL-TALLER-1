@@ -45,6 +45,9 @@ struct ProtocolRequest {
     int cmd; // command (SHOOT, MOVE, etc)
     std::vector<int8_t> content; // request content
 };
+struct InvalidRequest : ProtocolRequest {
+    int cmd {-1};
+};
 
 // Respuesta que se devuelve al cliente despues de cada solicitud
 struct ProtocolResponse {

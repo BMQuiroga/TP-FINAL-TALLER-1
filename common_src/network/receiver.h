@@ -48,7 +48,11 @@ public:
         bool was_closed = false;
         while (keep_talking) {
             auto message = protocol.get(skt, &was_closed);
-            if (!keep_talking) {
+            if (was_closed) {
+                InvalidRequest closing_message;
+                for (auto &callback : callbacks) {
+                    callback(closing_message);
+                }
                 kill();
                 break;
             }

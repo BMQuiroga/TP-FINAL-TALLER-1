@@ -40,7 +40,7 @@ Queue<ProtocolResponse>& q) {
 // }
 
 int GameHandler::join_game(int code,
-std::string &player_name, Queue<ProtocolResponse> *q) {
+std::string &player_name, Queue<ProtocolResponse> &q) {
     bool game_exists = matches.has(code);
     if (game_exists) {
         Game &game = get_game(code);
@@ -52,20 +52,3 @@ std::string &player_name, Queue<ProtocolResponse> *q) {
         return JOIN_FAILURE;
     }
 }
-
-// MatchState GameHandler::start_game_chat(
-//     const std::string &command, const std::string &parameters,
-//     Queue<MatchState>& q)
-// {
-//     if (command == "create") {
-//         MatchState state(create_new_game(parameters, q));
-//         q.push(state);
-//         return state;
-//     } else if (command == "join") {
-//         MatchState state(join_game(std::stoi(parameters), q));
-//         q.push(state);
-//         return state;
-//     }
-//     MatchState state("invalid", -1, false);
-//     return state;
-// }
