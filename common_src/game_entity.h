@@ -61,8 +61,6 @@ class GameEntity {
     );
     GameEntity(GameEntity&&);
     ~GameEntity();
-    GameEntity(const GameEntity& other) = default;
-    GameEntity& operator=(const GameEntity& other) = default;
     std::string get_name();
     int8_t get_state();
     uint32_t get_id();

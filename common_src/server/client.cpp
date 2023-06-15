@@ -50,7 +50,9 @@ void Client::handle_request(ProtocolRequest &message) {
         if (message.cmd == JOIN) {
             JoinRequest join_req = serializer.deserialize_join_state(message.content); 
             int join_code = game_handler.join_game(join_req.game_code, name, &responses);
+            joined_game = join_code;
             if (join_code == JOIN_FAILURE) {
+                joined_game = -1;
                 ProtocolResponse resp;
                 resp.content_type = JOIN;
                 serializer.push_number(resp.content, JOIN_FAILURE);

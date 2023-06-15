@@ -44,8 +44,6 @@ class PlayerState : public GameEntity {
 
     std::string get_name();
     PlayerStateReference make_ref();
-    PlayerState(const PlayerState& other) = default;
-    PlayerState& operator=(const PlayerState& other) = default;
 
     //friend class Arma;
 };
