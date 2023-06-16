@@ -1,0 +1,367 @@
+==64724== Memcheck, a memory error detector
+==64724== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==64724== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==64724== Command: ./server 8080
+==64724== Parent PID: 54010
+==64724== 
+==64724== Thread 5:
+==64724== Conditional jump or move depends on uninitialised value(s)
+==64724==    at 0x49A2160: SDL_HasIntersection_REAL (in /usr/local/lib/libSDL2-2.0.so.0.2700.0)
+==64724==    by 0x48A9A1B: SDL_HasIntersection (in /usr/local/lib/libSDL2-2.0.so.0.2700.0)
+==64724==    by 0x1445C7: GameEntity::check_collision(GameEntity*) (game_entity.cpp:87)
+==64724==    by 0x145001: PhysicsManager::update() (physiscs_manager.cpp:76)
+==64724==    by 0x14FF48: GameLoop::run() (game.h:337)
+==64724==    by 0x15C669: Thread::main() (thread.h:24)
+==64724==    by 0x15EE37: void std::__invoke_impl<void, void (Thread::*)(), Thread*>(std::__invoke_memfun_deref, void (Thread::*&&)(), Thread*&&) (invoke.h:74)
+==64724==    by 0x15ED8A: std::__invoke_result<void (Thread::*)(), Thread*>::type std::__invoke<void (Thread::*)(), Thread*>(void (Thread::*&&)(), Thread*&&) (invoke.h:96)
+==64724==    by 0x15ECEA: void std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:253)
+==64724==    by 0x15EC9F: std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::operator()() (std_thread.h:260)
+==64724==    by 0x15EC7F: std::thread::_State_impl<std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> > >::_M_run() (std_thread.h:211)
+==64724==    by 0x4CC32B2: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==  Uninitialised value was created by a stack allocation
+==64724==    at 0x142FD0: Arma1::create_bullet(Vector2D, entity_direction, std::__cxx11::list<Bullet, std::allocator<Bullet> >&) (armas.cpp:46)
+==64724== 
+==64724== Conditional jump or move depends on uninitialised value(s)
+==64724==    at 0x49A216B: SDL_HasIntersection_REAL (in /usr/local/lib/libSDL2-2.0.so.0.2700.0)
+==64724==    by 0x48A9A1B: SDL_HasIntersection (in /usr/local/lib/libSDL2-2.0.so.0.2700.0)
+==64724==    by 0x1445C7: GameEntity::check_collision(GameEntity*) (game_entity.cpp:87)
+==64724==    by 0x145001: PhysicsManager::update() (physiscs_manager.cpp:76)
+==64724==    by 0x14FF48: GameLoop::run() (game.h:337)
+==64724==    by 0x15C669: Thread::main() (thread.h:24)
+==64724==    by 0x15EE37: void std::__invoke_impl<void, void (Thread::*)(), Thread*>(std::__invoke_memfun_deref, void (Thread::*&&)(), Thread*&&) (invoke.h:74)
+==64724==    by 0x15ED8A: std::__invoke_result<void (Thread::*)(), Thread*>::type std::__invoke<void (Thread::*)(), Thread*>(void (Thread::*&&)(), Thread*&&) (invoke.h:96)
+==64724==    by 0x15ECEA: void std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:253)
+==64724==    by 0x15EC9F: std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::operator()() (std_thread.h:260)
+==64724==    by 0x15EC7F: std::thread::_State_impl<std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> > >::_M_run() (std_thread.h:211)
+==64724==    by 0x4CC32B2: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==  Uninitialised value was created by a stack allocation
+==64724==    at 0x142FD0: Arma1::create_bullet(Vector2D, entity_direction, std::__cxx11::list<Bullet, std::allocator<Bullet> >&) (armas.cpp:46)
+==64724== 
+==64724== Conditional jump or move depends on uninitialised value(s)
+==64724==    at 0x49A2200: SDL_HasIntersection_REAL (in /usr/local/lib/libSDL2-2.0.so.0.2700.0)
+==64724==    by 0x48A9A1B: SDL_HasIntersection (in /usr/local/lib/libSDL2-2.0.so.0.2700.0)
+==64724==    by 0x1445C7: GameEntity::check_collision(GameEntity*) (game_entity.cpp:87)
+==64724==    by 0x145001: PhysicsManager::update() (physiscs_manager.cpp:76)
+==64724==    by 0x14FF48: GameLoop::run() (game.h:337)
+==64724==    by 0x15C669: Thread::main() (thread.h:24)
+==64724==    by 0x15EE37: void std::__invoke_impl<void, void (Thread::*)(), Thread*>(std::__invoke_memfun_deref, void (Thread::*&&)(), Thread*&&) (invoke.h:74)
+==64724==    by 0x15ED8A: std::__invoke_result<void (Thread::*)(), Thread*>::type std::__invoke<void (Thread::*)(), Thread*>(void (Thread::*&&)(), Thread*&&) (invoke.h:96)
+==64724==    by 0x15ECEA: void std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:253)
+==64724==    by 0x15EC9F: std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::operator()() (std_thread.h:260)
+==64724==    by 0x15EC7F: std::thread::_State_impl<std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> > >::_M_run() (std_thread.h:211)
+==64724==    by 0x4CC32B2: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==  Uninitialised value was created by a stack allocation
+==64724==    at 0x142FD0: Arma1::create_bullet(Vector2D, entity_direction, std::__cxx11::list<Bullet, std::allocator<Bullet> >&) (armas.cpp:46)
+==64724== 
+==64724== Conditional jump or move depends on uninitialised value(s)
+==64724==    at 0x49A225D: SDL_HasIntersection_REAL (in /usr/local/lib/libSDL2-2.0.so.0.2700.0)
+==64724==    by 0x48A9A1B: SDL_HasIntersection (in /usr/local/lib/libSDL2-2.0.so.0.2700.0)
+==64724==    by 0x1445C7: GameEntity::check_collision(GameEntity*) (game_entity.cpp:87)
+==64724==    by 0x145001: PhysicsManager::update() (physiscs_manager.cpp:76)
+==64724==    by 0x14FF48: GameLoop::run() (game.h:337)
+==64724==    by 0x15C669: Thread::main() (thread.h:24)
+==64724==    by 0x15EE37: void std::__invoke_impl<void, void (Thread::*)(), Thread*>(std::__invoke_memfun_deref, void (Thread::*&&)(), Thread*&&) (invoke.h:74)
+==64724==    by 0x15ED8A: std::__invoke_result<void (Thread::*)(), Thread*>::type std::__invoke<void (Thread::*)(), Thread*>(void (Thread::*&&)(), Thread*&&) (invoke.h:96)
+==64724==    by 0x15ECEA: void std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:253)
+==64724==    by 0x15EC9F: std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::operator()() (std_thread.h:260)
+==64724==    by 0x15EC7F: std::thread::_State_impl<std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> > >::_M_run() (std_thread.h:211)
+==64724==    by 0x4CC32B2: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==  Uninitialised value was created by a stack allocation
+==64724==    at 0x142FD0: Arma1::create_bullet(Vector2D, entity_direction, std::__cxx11::list<Bullet, std::allocator<Bullet> >&) (armas.cpp:46)
+==64724== 
+==64724== 
+==64724== Process terminating with default action of signal 6 (SIGABRT)
+==64724==    at 0x4FB0A7C: __pthread_kill_implementation (pthread_kill.c:44)
+==64724==    by 0x4FB0A7C: __pthread_kill_internal (pthread_kill.c:78)
+==64724==    by 0x4FB0A7C: pthread_kill@@GLIBC_2.34 (pthread_kill.c:89)
+==64724==    by 0x4F5C475: raise (raise.c:26)
+==64724==    by 0x4F427F2: abort (abort.c:79)
+==64724==    by 0x4C89BBD: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x4C9524B: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x4C952B6: std::terminate() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x14DE44: std::thread::~thread() (std_thread.h:152)
+==64724==    by 0x14E24B: Thread::~Thread() (thread.h:33)
+==64724==    by 0x15AA27: GameLoop::~GameLoop() (game.h:67)
+==64724==    by 0x1500B3: Game::~Game() (game.h:352)
+==64724==    by 0x157C95: void __gnu_cxx::new_allocator<std::_List_node<Game> >::destroy<Game>(Game*) (new_allocator.h:168)
+==64724==    by 0x156274: void std::allocator_traits<std::allocator<std::_List_node<Game> > >::destroy<Game>(std::allocator<std::_List_node<Game> >&, Game*) (alloc_traits.h:535)
+==64724== 
+==64724== FILE DESCRIPTORS: 4 open (3 std) at exit.
+==64724== Open file descriptor 3: /home/fedemgp/Escritorio/Taller/tps/2023c1/TP-final/6-quiroga-galdo-escandar/valgrind_logs/server_multiple_matches.txt
+==64724==    <inherited from parent>
+==64724== 
+==64724== 
+==64724== HEAP SUMMARY:
+==64724==     in use at exit: 80,208 bytes in 32 blocks
+==64724==   total heap usage: 9,564 allocs, 9,532 frees, 485,999 bytes allocated
+==64724== 
+==64724== Thread 1:
+==64724== 8 bytes in 1 blocks are still reachable in loss record 1 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x15936B: __gnu_cxx::new_allocator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==64724==    by 0x158341: std::allocator_traits<std::allocator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > > >::allocate(std::allocator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > >&, unsigned long) (alloc_traits.h:464)
+==64724==    by 0x156C71: std::_Vector_base<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > >, std::allocator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > > >::_M_allocate(unsigned long) (stl_vector.h:346)
+==64724==    by 0x154AA0: void std::vector<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > >, std::allocator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > > >::_M_realloc_insert<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > const&>(__gnu_cxx::__normal_iterator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > >*, std::vector<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > >, std::allocator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > > > >, std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > const&) (vector.tcc:440)
+==64724==    by 0x1529F1: std::vector<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > >, std::allocator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > > >::push_back(std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > const&) (stl_vector.h:1198)
+==64724==    by 0x150B15: ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > >::push_back(std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > const&) (protected_vector.h:23)
+==64724==    by 0x14E72A: GameLoop::join(GameEvent&) (game.h:121)
+==64724==    by 0x14FB99: GameLoop::run() (game.h:299)
+==64724==    by 0x15C669: Thread::main() (thread.h:24)
+==64724==    by 0x15EE37: void std::__invoke_impl<void, void (Thread::*)(), Thread*>(std::__invoke_memfun_deref, void (Thread::*&&)(), Thread*&&) (invoke.h:74)
+==64724==    by 0x15ED8A: std::__invoke_result<void (Thread::*)(), Thread*>::type std::__invoke<void (Thread::*)(), Thread*>(void (Thread::*&&)(), Thread*&&) (invoke.h:96)
+==64724== 
+==64724== 16 bytes in 1 blocks are still reachable in loss record 2 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x146594: PlayerState::PlayerState(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, short, short) (player_state.cpp:17)
+==64724==    by 0x14E6D5: GameLoop::join(GameEvent&) (game.h:120)
+==64724==    by 0x14FB99: GameLoop::run() (game.h:299)
+==64724==    by 0x15C669: Thread::main() (thread.h:24)
+==64724==    by 0x15EE37: void std::__invoke_impl<void, void (Thread::*)(), Thread*>(std::__invoke_memfun_deref, void (Thread::*&&)(), Thread*&&) (invoke.h:74)
+==64724==    by 0x15ED8A: std::__invoke_result<void (Thread::*)(), Thread*>::type std::__invoke<void (Thread::*)(), Thread*>(void (Thread::*&&)(), Thread*&&) (invoke.h:96)
+==64724==    by 0x15ECEA: void std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:253)
+==64724==    by 0x15EC9F: std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::operator()() (std_thread.h:260)
+==64724==    by 0x15EC7F: std::thread::_State_impl<std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> > >::_M_run() (std_thread.h:211)
+==64724==    by 0x4CC32B2: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x4FAEB42: start_thread (pthread_create.c:442)
+==64724== 
+==64724== 32 bytes in 1 blocks are still reachable in loss record 3 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x15C92D: std::thread::thread<void (Thread::*)(), Thread*, void>(void (Thread::*&&)(), Thread*&&) (std_thread.h:143)
+==64724==    by 0x15C5E6: Thread::start() (thread.h:15)
+==64724==    by 0x162E2C: main (server_main.cpp:25)
+==64724== 
+==64724== 32 bytes in 1 blocks are still reachable in loss record 4 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x1462DB: __gnu_cxx::new_allocator<GameEntity*>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==64724==    by 0x1460D1: std::allocator_traits<std::allocator<GameEntity*> >::allocate(std::allocator<GameEntity*>&, unsigned long) (alloc_traits.h:464)
+==64724==    by 0x145EE7: std::_Vector_base<GameEntity*, std::allocator<GameEntity*> >::_M_allocate(unsigned long) (stl_vector.h:346)
+==64724==    by 0x14589E: void std::vector<GameEntity*, std::allocator<GameEntity*> >::_M_realloc_insert<GameEntity* const&>(__gnu_cxx::__normal_iterator<GameEntity**, std::vector<GameEntity*, std::allocator<GameEntity*> > >, GameEntity* const&) (vector.tcc:440)
+==64724==    by 0x14544D: std::vector<GameEntity*, std::allocator<GameEntity*> >::push_back(GameEntity* const&) (stl_vector.h:1198)
+==64724==    by 0x144C38: PhysicsManager::register_entity(GameEntity*, CollisionLayer) (physiscs_manager.cpp:23)
+==64724==    by 0x144380: GameEntity::GameEntity(GameEntity&&) (game_entity.cpp:36)
+==64724==    by 0x146635: PlayerState::PlayerState(PlayerState&&) (player_state.cpp:23)
+==64724==    by 0x156820: void __gnu_cxx::new_allocator<PlayerState>::construct<PlayerState, PlayerState>(PlayerState*, PlayerState&&) (new_allocator.h:162)
+==64724==    by 0x1546B4: void std::allocator_traits<std::allocator<PlayerState> >::construct<PlayerState, PlayerState>(std::allocator<PlayerState>&, PlayerState*, PlayerState&&) (alloc_traits.h:516)
+==64724==    by 0x154795: void std::vector<PlayerState, std::allocator<PlayerState> >::_M_realloc_insert<PlayerState>(__gnu_cxx::__normal_iterator<PlayerState*, std::vector<PlayerState, std::allocator<PlayerState> > >, PlayerState&&) (vector.tcc:449)
+==64724== 
+==64724== 32 bytes in 1 blocks are still reachable in loss record 5 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x1462DB: __gnu_cxx::new_allocator<GameEntity*>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==64724==    by 0x1460D1: std::allocator_traits<std::allocator<GameEntity*> >::allocate(std::allocator<GameEntity*>&, unsigned long) (alloc_traits.h:464)
+==64724==    by 0x145EE7: std::_Vector_base<GameEntity*, std::allocator<GameEntity*> >::_M_allocate(unsigned long) (stl_vector.h:346)
+==64724==    by 0x14589E: void std::vector<GameEntity*, std::allocator<GameEntity*> >::_M_realloc_insert<GameEntity* const&>(__gnu_cxx::__normal_iterator<GameEntity**, std::vector<GameEntity*, std::allocator<GameEntity*> > >, GameEntity* const&) (vector.tcc:440)
+==64724==    by 0x14544D: std::vector<GameEntity*, std::allocator<GameEntity*> >::push_back(GameEntity* const&) (stl_vector.h:1198)
+==64724==    by 0x144C38: PhysicsManager::register_entity(GameEntity*, CollisionLayer) (physiscs_manager.cpp:23)
+==64724==    by 0x144380: GameEntity::GameEntity(GameEntity&&) (game_entity.cpp:36)
+==64724==    by 0x1660D9: Zombie::Zombie(Zombie&&) (zombie.cpp:116)
+==64724==    by 0x16631B: CommonZombie::CommonZombie(CommonZombie&&) (zombie.cpp:172)
+==64724==    by 0x15897A: void __gnu_cxx::new_allocator<std::_List_node<CommonZombie> >::construct<CommonZombie, CommonZombie>(CommonZombie*, CommonZombie&&) (new_allocator.h:162)
+==64724==    by 0x1576AE: void std::allocator_traits<std::allocator<std::_List_node<CommonZombie> > >::construct<CommonZombie, CommonZombie>(std::allocator<std::_List_node<CommonZombie> >&, CommonZombie*, CommonZombie&&) (alloc_traits.h:516)
+==64724== 
+==64724== 96 bytes in 1 blocks are still reachable in loss record 6 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x159210: __gnu_cxx::new_allocator<PlayerState>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==64724==    by 0x158247: std::allocator_traits<std::allocator<PlayerState> >::allocate(std::allocator<PlayerState>&, unsigned long) (alloc_traits.h:464)
+==64724==    by 0x1569BD: std::_Vector_base<PlayerState, std::allocator<PlayerState> >::_M_allocate(unsigned long) (stl_vector.h:346)
+==64724==    by 0x15474C: void std::vector<PlayerState, std::allocator<PlayerState> >::_M_realloc_insert<PlayerState>(__gnu_cxx::__normal_iterator<PlayerState*, std::vector<PlayerState, std::allocator<PlayerState> > >, PlayerState&&) (vector.tcc:440)
+==64724==    by 0x152933: PlayerState& std::vector<PlayerState, std::allocator<PlayerState> >::emplace_back<PlayerState>(PlayerState&&) (vector.tcc:121)
+==64724==    by 0x150A91: std::vector<PlayerState, std::allocator<PlayerState> >::push_back(PlayerState&&) (stl_vector.h:1204)
+==64724==    by 0x14E6E4: GameLoop::join(GameEvent&) (game.h:120)
+==64724==    by 0x14FB99: GameLoop::run() (game.h:299)
+==64724==    by 0x15C669: Thread::main() (thread.h:24)
+==64724==    by 0x15EE37: void std::__invoke_impl<void, void (Thread::*)(), Thread*>(std::__invoke_memfun_deref, void (Thread::*&&)(), Thread*&&) (invoke.h:74)
+==64724==    by 0x15ED8A: std::__invoke_result<void (Thread::*)(), Thread*>::type std::__invoke<void (Thread::*)(), Thread*>(void (Thread::*&&)(), Thread*&&) (invoke.h:96)
+==64724== 
+==64724== 128 bytes in 1 blocks are still reachable in loss record 7 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x1462DB: __gnu_cxx::new_allocator<GameEntity*>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==64724==    by 0x1460D1: std::allocator_traits<std::allocator<GameEntity*> >::allocate(std::allocator<GameEntity*>&, unsigned long) (alloc_traits.h:464)
+==64724==    by 0x145EE7: std::_Vector_base<GameEntity*, std::allocator<GameEntity*> >::_M_allocate(unsigned long) (stl_vector.h:346)
+==64724==    by 0x14589E: void std::vector<GameEntity*, std::allocator<GameEntity*> >::_M_realloc_insert<GameEntity* const&>(__gnu_cxx::__normal_iterator<GameEntity**, std::vector<GameEntity*, std::allocator<GameEntity*> > >, GameEntity* const&) (vector.tcc:440)
+==64724==    by 0x14544D: std::vector<GameEntity*, std::allocator<GameEntity*> >::push_back(GameEntity* const&) (stl_vector.h:1198)
+==64724==    by 0x144C38: PhysicsManager::register_entity(GameEntity*, CollisionLayer) (physiscs_manager.cpp:23)
+==64724==    by 0x144380: GameEntity::GameEntity(GameEntity&&) (game_entity.cpp:36)
+==64724==    by 0x1436E0: Bullet::Bullet(Bullet&&) (bullet.h:8)
+==64724==    by 0x14376A: void __gnu_cxx::new_allocator<std::_List_node<Bullet> >::construct<Bullet, Bullet>(Bullet*, Bullet&&) (new_allocator.h:162)
+==64724==    by 0x143603: void std::allocator_traits<std::allocator<std::_List_node<Bullet> > >::construct<Bullet, Bullet>(std::allocator<std::_List_node<Bullet> >&, Bullet*, Bullet&&) (alloc_traits.h:516)
+==64724==    by 0x14346E: std::_List_node<Bullet>* std::__cxx11::list<Bullet, std::allocator<Bullet> >::_M_create_node<Bullet>(Bullet&&) (stl_list.h:637)
+==64724== 
+==64724== 128 bytes in 2 blocks are still reachable in loss record 8 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x1617A9: __gnu_cxx::new_allocator<GameEvent*>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==64724==    by 0x161225: std::allocator_traits<std::allocator<GameEvent*> >::allocate(std::allocator<GameEvent*>&, unsigned long) (alloc_traits.h:464)
+==64724==    by 0x160C8D: std::_Deque_base<GameEvent, std::allocator<GameEvent> >::_M_allocate_map(unsigned long) (stl_deque.h:575)
+==64724==    by 0x1607C5: std::_Deque_base<GameEvent, std::allocator<GameEvent> >::_M_initialize_map(unsigned long) (stl_deque.h:624)
+==64724==    by 0x16049F: std::_Deque_base<GameEvent, std::allocator<GameEvent> >::_Deque_base() (stl_deque.h:438)
+==64724==    by 0x15FF61: std::deque<GameEvent, std::allocator<GameEvent> >::deque() (stl_deque.h:833)
+==64724==    by 0x15FFD4: std::queue<GameEvent, std::deque<GameEvent, std::allocator<GameEvent> > >::queue<std::deque<GameEvent, std::allocator<GameEvent> >, void>() (stl_queue.h:167)
+==64724==    by 0x15F98A: Queue<GameEvent, std::deque<GameEvent, std::allocator<GameEvent> > >::Queue(unsigned int) (queue.h:42)
+==64724==    by 0x15EF08: Game::Game(int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (game.cpp:17)
+==64724==    by 0x161DDC: GameHandler::create_new_game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > >&) (gamehandler.cpp:28)
+==64724==    by 0x15BA3F: Client::handle_request(ProtocolRequest&) (client.cpp:40)
+==64724== 
+==64724== 136 bytes in 1 blocks are still reachable in loss record 9 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x144B34: PhysicsManager::get_instance() (physiscs_manager.cpp:7)
+==64724==    by 0x15F728: GameLoop::GameLoop(Queue<GameEvent, std::deque<GameEvent, std::allocator<GameEvent> > >&) (game.h:82)
+==64724==    by 0x15EF25: Game::Game(int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (game.cpp:18)
+==64724==    by 0x161DDC: GameHandler::create_new_game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > >&) (gamehandler.cpp:28)
+==64724==    by 0x15BA3F: Client::handle_request(ProtocolRequest&) (client.cpp:40)
+==64724==    by 0x15B681: Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}::operator()(ProtocolRequest&) const (client.cpp:22)
+==64724==    by 0x15C2AE: void std::__invoke_impl<void, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&>(std::__invoke_other, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&) (invoke.h:61)
+==64724==    by 0x15C179: std::enable_if<is_invocable_r_v<void, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&>, void>::type std::__invoke_r<void, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&>(Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&) (invoke.h:111)
+==64724==    by 0x15C04C: std::_Function_handler<void (ProtocolRequest&), Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}>::_M_invoke(std::_Any_data const&, ProtocolRequest&) (std_function.h:290)
+==64724==    by 0x15B3F4: std::function<void (ProtocolRequest&)>::operator()(ProtocolRequest&) const (std_function.h:590)
+==64724==    by 0x15AECF: Receiver<ProtocolResponse, ProtocolRequest>::run() (receiver.h:60)
+==64724== 
+==64724== 288 bytes in 1 blocks are possibly lost in loss record 10 of 19
+==64724==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==64724==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==64724==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==64724==    by 0x4FAF834: allocate_stack (allocatestack.c:430)
+==64724==    by 0x4FAF834: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==64724==    by 0x4CC3388: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x15C967: std::thread::thread<void (Thread::*)(), Thread*, void>(void (Thread::*&&)(), Thread*&&) (std_thread.h:143)
+==64724==    by 0x15C5E6: Thread::start() (thread.h:15)
+==64724==    by 0x162E2C: main (server_main.cpp:25)
+==64724== 
+==64724== 576 bytes in 2 blocks are possibly lost in loss record 11 of 19
+==64724==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==64724==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==64724==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==64724==    by 0x4FAF834: allocate_stack (allocatestack.c:430)
+==64724==    by 0x4FAF834: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==64724==    by 0x4CC3388: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x15C967: std::thread::thread<void (Thread::*)(), Thread*, void>(void (Thread::*&&)(), Thread*&&) (std_thread.h:143)
+==64724==    by 0x15C5E6: Thread::start() (thread.h:15)
+==64724==    by 0x15BE45: Client::start() (client.cpp:75)
+==64724==    by 0x14D829: Accepter::run() (accepter.cpp:47)
+==64724==    by 0x15C669: Thread::main() (thread.h:24)
+==64724==    by 0x15EE37: void std::__invoke_impl<void, void (Thread::*)(), Thread*>(std::__invoke_memfun_deref, void (Thread::*&&)(), Thread*&&) (invoke.h:74)
+==64724==    by 0x15ED8A: std::__invoke_result<void (Thread::*)(), Thread*>::type std::__invoke<void (Thread::*)(), Thread*>(void (Thread::*&&)(), Thread*&&) (invoke.h:96)
+==64724==    by 0x15ECEA: void std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:253)
+==64724== 
+==64724== 576 bytes in 2 blocks are possibly lost in loss record 12 of 19
+==64724==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==64724==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==64724==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==64724==    by 0x4FAF834: allocate_stack (allocatestack.c:430)
+==64724==    by 0x4FAF834: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==64724==    by 0x4CC3388: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x15C967: std::thread::thread<void (Thread::*)(), Thread*, void>(void (Thread::*&&)(), Thread*&&) (std_thread.h:143)
+==64724==    by 0x15C5E6: Thread::start() (thread.h:15)
+==64724==    by 0x15BE57: Client::start() (client.cpp:76)
+==64724==    by 0x14D829: Accepter::run() (accepter.cpp:47)
+==64724==    by 0x15C669: Thread::main() (thread.h:24)
+==64724==    by 0x15EE37: void std::__invoke_impl<void, void (Thread::*)(), Thread*>(std::__invoke_memfun_deref, void (Thread::*&&)(), Thread*&&) (invoke.h:74)
+==64724==    by 0x15ED8A: std::__invoke_result<void (Thread::*)(), Thread*>::type std::__invoke<void (Thread::*)(), Thread*>(void (Thread::*&&)(), Thread*&&) (invoke.h:96)
+==64724==    by 0x15ECEA: void std::thread::_Invoker<std::tuple<void (Thread::*)(), Thread*> >::_M_invoke<0ul, 1ul>(std::_Index_tuple<0ul, 1ul>) (std_thread.h:253)
+==64724== 
+==64724== 576 bytes in 2 blocks are possibly lost in loss record 13 of 19
+==64724==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==64724==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==64724==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==64724==    by 0x4FAF834: allocate_stack (allocatestack.c:430)
+==64724==    by 0x4FAF834: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==64724==    by 0x4CC3388: std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x15C967: std::thread::thread<void (Thread::*)(), Thread*, void>(void (Thread::*&&)(), Thread*&&) (std_thread.h:143)
+==64724==    by 0x15C5E6: Thread::start() (thread.h:15)
+==64724==    by 0x15F1A5: Game::start() (game.cpp:44)
+==64724==    by 0x15BA55: Client::handle_request(ProtocolRequest&) (client.cpp:41)
+==64724==    by 0x15B681: Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}::operator()(ProtocolRequest&) const (client.cpp:22)
+==64724==    by 0x15C2AE: void std::__invoke_impl<void, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&>(std::__invoke_other, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&) (invoke.h:61)
+==64724==    by 0x15C179: std::enable_if<is_invocable_r_v<void, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&>, void>::type std::__invoke_r<void, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&>(Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&) (invoke.h:111)
+==64724==    by 0x15C04C: std::_Function_handler<void (ProtocolRequest&), Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}>::_M_invoke(std::_Any_data const&, ProtocolRequest&) (std_function.h:290)
+==64724== 
+==64724== 832 bytes in 8 blocks are still reachable in loss record 14 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x14381F: __gnu_cxx::new_allocator<std::_List_node<Bullet> >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==64724==    by 0x143655: std::allocator_traits<std::allocator<std::_List_node<Bullet> > >::allocate(std::allocator<std::_List_node<Bullet> >&, unsigned long) (alloc_traits.h:464)
+==64724==    by 0x143518: std::__cxx11::_List_base<Bullet, std::allocator<Bullet> >::_M_get_node() (stl_list.h:442)
+==64724==    by 0x143413: std::_List_node<Bullet>* std::__cxx11::list<Bullet, std::allocator<Bullet> >::_M_create_node<Bullet>(Bullet&&) (stl_list.h:634)
+==64724==    by 0x143387: void std::__cxx11::list<Bullet, std::allocator<Bullet> >::_M_insert<Bullet>(std::_List_iterator<Bullet>, Bullet&&) (stl_list.h:1911)
+==64724==    by 0x1432EC: std::__cxx11::list<Bullet, std::allocator<Bullet> >::push_back(Bullet&&) (stl_list.h:1217)
+==64724==    by 0x143047: Arma1::create_bullet(Vector2D, entity_direction, std::__cxx11::list<Bullet, std::allocator<Bullet> >&) (armas.cpp:50)
+==64724==    by 0x146AC8: PlayerState::next_state(unsigned char, std::__cxx11::list<Bullet, std::allocator<Bullet> >&) (player_state.cpp:148)
+==64724==    by 0x14FC93: GameLoop::run() (game.h:312)
+==64724==    by 0x15C669: Thread::main() (thread.h:24)
+==64724==    by 0x15EE37: void std::__invoke_impl<void, void (Thread::*)(), Thread*>(std::__invoke_memfun_deref, void (Thread::*&&)(), Thread*&&) (invoke.h:74)
+==64724== 
+==64724== 992 bytes in 2 blocks are still reachable in loss record 15 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x162D13: __gnu_cxx::new_allocator<std::_List_node<Game> >::allocate(unsigned long, void const*) (new_allocator.h:127)
+==64724==    by 0x162C05: std::allocator_traits<std::allocator<std::_List_node<Game> > >::allocate(std::allocator<std::_List_node<Game> >&, unsigned long) (alloc_traits.h:464)
+==64724==    by 0x162AEC: std::__cxx11::_List_base<Game, std::allocator<Game> >::_M_get_node() (stl_list.h:442)
+==64724==    by 0x162969: std::_List_node<Game>* std::__cxx11::list<Game, std::allocator<Game> >::_M_create_node<Game>(Game&&) (stl_list.h:634)
+==64724==    by 0x1627DB: void std::__cxx11::list<Game, std::allocator<Game> >::_M_insert<Game>(std::_List_iterator<Game>, Game&&) (stl_list.h:1911)
+==64724==    by 0x16263E: std::__cxx11::list<Game, std::allocator<Game> >::push_back(Game&&) (stl_list.h:1217)
+==64724==    by 0x16231B: ProtectedMatchesList::add(Game&) (gamehandler.h:71)
+==64724==    by 0x161DF9: GameHandler::create_new_game(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > >&) (gamehandler.cpp:30)
+==64724==    by 0x15BA3F: Client::handle_request(ProtocolRequest&) (client.cpp:40)
+==64724==    by 0x15B681: Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}::operator()(ProtocolRequest&) const (client.cpp:22)
+==64724==    by 0x15C2AE: void std::__invoke_impl<void, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&>(std::__invoke_other, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&) (invoke.h:61)
+==64724== 
+==64724== 1,008 bytes in 2 blocks are still reachable in loss record 16 of 19
+==64724==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x1618ED: __gnu_cxx::new_allocator<GameEvent>::allocate(unsigned long, void const*) (new_allocator.h:127)
+==64724==    by 0x16161E: std::allocator_traits<std::allocator<GameEvent> >::allocate(std::allocator<GameEvent>&, unsigned long) (alloc_traits.h:464)
+==64724==    by 0x16105B: std::_Deque_base<GameEvent, std::allocator<GameEvent> >::_M_allocate_node() (stl_deque.h:561)
+==64724==    by 0x160A1D: void std::deque<GameEvent, std::allocator<GameEvent> >::_M_push_back_aux<GameEvent const&>(GameEvent const&) (deque.tcc:497)
+==64724==    by 0x16057C: std::deque<GameEvent, std::allocator<GameEvent> >::push_back(GameEvent const&) (stl_deque.h:1505)
+==64724==    by 0x160064: std::queue<GameEvent, std::deque<GameEvent, std::allocator<GameEvent> > >::push(GameEvent const&) (stl_queue.h:266)
+==64724==    by 0x15FB41: Queue<GameEvent, std::deque<GameEvent, std::allocator<GameEvent> > >::push(GameEvent const&) (queue.h:104)
+==64724==    by 0x15F049: Game::push_event(ProtocolRequest&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > >&) (game.cpp:32)
+==64724==    by 0x15B9BB: Client::handle_request(ProtocolRequest&) (client.cpp:28)
+==64724==    by 0x15B681: Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}::operator()(ProtocolRequest&) const (client.cpp:22)
+==64724==    by 0x15C2AE: void std::__invoke_impl<void, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&>(std::__invoke_other, Client::Client(Socket&&, ServerProtocol&, GameHandler&)::{lambda(ProtocolRequest&)#1}&, ProtocolRequest&) (invoke.h:61)
+==64724== 
+==64724== 1,024 bytes in 1 blocks are still reachable in loss record 17 of 19
+==64724==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x4F98C23: _IO_file_doallocate (filedoalloc.c:101)
+==64724==    by 0x4FA7D5F: _IO_doallocbuf (genops.c:347)
+==64724==    by 0x4FA6D5B: _IO_file_underflow@@GLIBC_2.2.5 (fileops.c:485)
+==64724==    by 0x4FA7E15: _IO_default_uflow (genops.c:362)
+==64724==    by 0x4FA1B17: getc (getc.c:40)
+==64724==    by 0x4CF96D0: __gnu_cxx::stdio_sync_filebuf<char, std::char_traits<char> >::uflow() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x4D07D6D: std::istream::get() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x162E3E: main (server_main.cpp:26)
+==64724== 
+==64724== 1,024 bytes in 1 blocks are still reachable in loss record 18 of 19
+==64724==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x4F98C23: _IO_file_doallocate (filedoalloc.c:101)
+==64724==    by 0x4FA7D5F: _IO_doallocbuf (genops.c:347)
+==64724==    by 0x4FA6FDF: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==64724==    by 0x4FA5754: _IO_new_file_xsputn (fileops.c:1243)
+==64724==    by 0x4FA5754: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==64724==    by 0x4F9A056: fwrite (iofwrite.c:39)
+==64724==    by 0x4D23B34: std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x4D23E8A: std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x1474BA: Serializer::serialize_player(PlayerStateReference const&, std::vector<signed char, std::allocator<signed char> >&) (serializer.cpp:61)
+==64724==    by 0x147358: Serializer::serialize(GameStateResponse const&) (serializer.cpp:52)
+==64724==    by 0x14F133: GameLoop::push_response()::{lambda(Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > >&)#1}::operator()(Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > >&) const (game.h:227)
+==64724==    by 0x151727: GameLoop::push_response()::{lambda(Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > >&)#1} std::for_each<__gnu_cxx::__normal_iterator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > >*, std::vector<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > >, std::allocator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > > > >, GameLoop::push_response()::{lambda(Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > >&)#1}>(__gnu_cxx::__normal_iterator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > >*, std::vector<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > >, std::allocator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > > > >, __gnu_cxx::__normal_iterator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > >*, std::vector<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > >, std::allocator<std::reference_wrapper<Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > > > > > >, GameLoop::push_response()::{lambda(Queue<ProtocolResponse, std::deque<ProtocolResponse, std::allocator<ProtocolResponse> > >&)#1}) (stl_algo.h:3820)
+==64724== 
+==64724== 72,704 bytes in 1 blocks are still reachable in loss record 19 of 19
+==64724==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64724==    by 0x4C91979: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==64724==    by 0x400647D: call_init.part.0 (dl-init.c:70)
+==64724==    by 0x4006567: call_init (dl-init.c:33)
+==64724==    by 0x4006567: _dl_init (dl-init.c:117)
+==64724==    by 0x40202E9: ??? (in /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+==64724==    by 0x1: ???
+==64724==    by 0x1FFF00019E: ???
+==64724==    by 0x1FFF0001A7: ???
+==64724== 
+==64724== LEAK SUMMARY:
+==64724==    definitely lost: 0 bytes in 0 blocks
+==64724==    indirectly lost: 0 bytes in 0 blocks
+==64724==      possibly lost: 2,016 bytes in 7 blocks
+==64724==    still reachable: 78,192 bytes in 25 blocks
+==64724==         suppressed: 0 bytes in 0 blocks
+==64724== 
+==64724== For lists of detected and suppressed errors, rerun with: -s
+==64724== ERROR SUMMARY: 1907 errors from 8 contexts (suppressed: 0 from 0)
