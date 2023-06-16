@@ -9,7 +9,8 @@ PlayerState::PlayerState(
     const std::string &name,
     int id,
     int16_t max_x, 
-    int16_t max_y
+    int16_t max_y,
+    int weapon_code = 1
 ) : 
 GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
     this->id = id;
@@ -18,6 +19,12 @@ GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
     this->rect_width = PLAYER_RECT_WIDTH;
     this->rect_height = PLAYER_RECT_HEIGHT;
     this->respawn_time = -1;
+    if (weapon_code == 1)
+        this->arma = new Arma1();
+    if (weapon_code == 2)
+        this->arma = new Arma2();
+    if (weapon_code == 3)
+        this->arma = new Arma3();
 }
 
 PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {

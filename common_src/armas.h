@@ -43,4 +43,16 @@ class Arma1 : public Arma {
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
 };
 
+class Arma2 : public Arma {
+    public:
+    explicit Arma2();
+    void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
+};
+
+class Arma3 : public Arma {
+    public:
+    explicit Arma3();
+    void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
+};
+
 #endif

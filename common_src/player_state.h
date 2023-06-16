@@ -29,7 +29,8 @@ class PlayerState : public GameEntity {
       const std::string &name,
       int id,
       int16_t max_x = DEFAULT_MAX_X,
-      int16_t max_y = DEFAULT_MAX_Y);
+      int16_t max_y = DEFAULT_MAX_Y,
+      int weapon_code = 1);
     PlayerState(PlayerState&&);
     ~PlayerState();
 
