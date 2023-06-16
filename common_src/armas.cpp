@@ -40,7 +40,11 @@ void Arma::advance_time() {
     if (this->delay > 0) {
         this->delay--;
         //std::cout << "nuevo delay:" << std::to_string(delay) << std::endl;
-    }   
+    }
+    if (this->g_delay > 0) {
+        this->g_delay--;
+        //std::cout << "nuevo delay:" << std::to_string(g_delay) << std::endl;
+    }  
 }
 
 Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd) {
@@ -70,3 +74,36 @@ void Arma3::create_bullet(Vector2D position, entity_direction direc, std::list<B
 Arma3::Arma3() : Arma(20,20,10) {}
 
 
+bool Arma::try_grenade() {
+    if (this->g_delay == 0) {
+        this->g_delay = GRENADE_DELAY;
+        return true;
+    }
+    return false;
+}
+
+int Arma::charge_grenade() {
+    if (this->g_delay == 0 && this->throwing_distance < 20) {
+        this->throwing_distance++;
+        return 1;
+    } else if (this->g_delay == 0 && this->throwing_distance >= 20) {
+        return 2;
+    }
+    if (this->g_delay > 0)
+        return 0;
+}
+
+void Arma1::create_grenade(Vector2D position, std::list<int>& gren/*TODO*/) {
+    //sumarla a la lista
+    this->throwing_distance = 0;
+}
+
+void Arma2::create_grenade(Vector2D position, std::list<int>& gren/*TODO*/) {
+    //sumarla a la lista
+    this->throwing_distance = 0;
+}
+
+void Arma3::create_grenade(Vector2D position, std::list<int>& gren/*TODO*/) {
+    //sumarla a la lista
+    this->throwing_distance = 0;
+}
