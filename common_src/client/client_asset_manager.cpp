@@ -135,9 +135,14 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	map.emplace(ZOMBIE + WALK_, std::make_shared<Asset>("../resources/Zombie/Walk.png", 0, 96, 96, 8, renderer, 0));
 	map.emplace(ZOMBIE + RUN_, std::make_shared<Asset>("../resources/Zombie/Run.png", 0, 96, 96, 7, renderer, 0));
 
-	sound_map.emplace(151,SDL2pp::Music("../resources/Sound/singleshot.mp3"));
+	//sound_map.emplace(151,SDL2pp::Music("../resources/Sound/singleshot.mp3"));
 	sound_map.emplace(152,SDL2pp::Music("../resources/Sound/DeathScreen.mp3"));
 	sound_map.emplace(153,SDL2pp::Music("../resources/Sound/VictoryScreen.mp3"));
+
+	sound_map.emplace(154,SDL2pp::Music("../resources/Sound/IDF.mp3"));
+	sound_map.emplace(155,SDL2pp::Music("../resources/Sound/P90.mp3"));
+	sound_map.emplace(156,SDL2pp::Music("../resources/Sound/Scout.mp3"));
+
 }
 
 Asset* AssetManager::GetAsset(int code) {

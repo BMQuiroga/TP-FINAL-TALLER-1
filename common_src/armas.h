@@ -6,6 +6,8 @@
 #include "bullet.h"
 #include "math_helper.h"
 
+#define GRENADE_DELAY 1000
+
 class Arma {
     protected:
     //public:
@@ -37,19 +39,19 @@ class Arma {
     virtual void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) = 0;
 };
 
-class Arma1 : public Arma {
+class Arma1 : public Arma { //IDF, Granada Explosiva
     public:
     explicit Arma1();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
 };
 
-class Arma2 : public Arma {
+class Arma2 : public Arma { //P90, Bombardeo
     public:
     explicit Arma2();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
 };
 
-class Arma3 : public Arma {
+class Arma3 : public Arma { //Scout, Smoke
     public:
     explicit Arma3();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;

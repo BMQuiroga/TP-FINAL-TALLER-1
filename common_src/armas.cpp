@@ -52,30 +52,21 @@ Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd) {
 }
 
 void Arma1::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
-    //uint16_t x = this->owner->position.at(0);
-    //uint16_t y = this->owner->position.at(1);
-    //uint8_t direction = this->owner->facing_direction;
-    vec.push_back(Bullet(25,1,direc,false,position));
+    vec.push_back(Bullet(5,20,direc,false,position));
 }
 
-Arma1::Arma1() : Arma(10,10,2) {}
+Arma1::Arma1() : Arma(50,40,20) {}
 
 void Arma2::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
-    //uint16_t x = this->owner->position.at(0);
-    //uint16_t y = this->owner->position.at(1);
-    //uint8_t direction = this->owner->facing_direction;
-    vec.push_back(Bullet(25,1,direc,false,position));
+    vec.push_back(Bullet(3,10,direc,false,position));
 }
 
-Arma2::Arma2() : Arma(10,10,2) {}
+Arma2::Arma2() : Arma(30,10,10) {}
 
 void Arma3::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
-    //uint16_t x = this->owner->position.at(0);
-    //uint16_t y = this->owner->position.at(1);
-    //uint8_t direction = this->owner->facing_direction;
-    vec.push_back(Bullet(25,1,direc,false,position));
+    vec.push_back(Bullet(150,1,direc,true,position));
 }
 
-Arma3::Arma3() : Arma(10,10,2) {}
+Arma3::Arma3() : Arma(20,20,10) {}
 
 
