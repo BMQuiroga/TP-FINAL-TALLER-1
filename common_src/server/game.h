@@ -231,10 +231,6 @@ class GameLoop : public Thread {
 
     // Function to handle enemy spawns
     void spawn_enemy() {
-        // Spawn an enemy
-        
-        //PlayerState& player_to_follow = get_random_player();
-        //CommonZombie common_zombie("zombie", position, &player_to_follow);
         zombies.push_back(Zombie::get_random_zombie());
     }
 
@@ -273,8 +269,19 @@ class GameLoop : public Thread {
                     player.next_state(-1,bullets); 
                 }
             }
+            int zombies_to_spawn_via_witch = 0;
             for (Zombie* &zombie : zombies) {
-                zombie->calculate_next_movement(players);
+                int i = zombie->calculate_next_movement(players);
+                if (i = CODE_WITCH_SPAWN)
+                    zombies_to_spawn_via_witch++;
+                if (i = CODE_VENOM_PROJECTILE) {
+                    Vector2D vec = zombie->get_location();
+                    float direc = zombie->get_direction().x;
+                    //TODO crear el proyectil enemigo
+                }           
+            }
+            for (int i = 0; i < zombies_to_spawn_via_witch ; i++) {
+                spawn_enemy();
             }
             
             pass_time();
