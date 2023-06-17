@@ -1,13 +1,14 @@
 #include "zombie.h"
 #include "physics_manager.h"
 #include "player_state.h"
+#include "math_helper.h"
 #include <string>
 #include <utility>
 
 Zombie::~Zombie() {}
 
 Zombie* Zombie::get_random_zombie() {
-    int q = get_random_number(0,4);
+    int q = getRandomNumber(0,4);
     int x = getRandomNumber(0, 800);  // Random X position within game area
     int y = getRandomNumber(0, 95);  // Random Y position within game area
     Vector2D position(x, y);
@@ -146,7 +147,7 @@ CommonZombie::CommonZombie(
     movement_type = ZOMBIE_WALK;
 }
 
-void CommonZombie::attack(GameEntity *other) {
+void Zombie::attack(GameEntity *other) {
     state = ATTACKING;
     PlayerState *player = (PlayerState*)other;
     player->take_damage(damage);
@@ -222,6 +223,7 @@ Venom::Venom(
     rect_width = VENOM_RECT_WIDTH;
     health = VENOM_HP;
     speed = VENOM_SPEED;
+    cooldown = 0;
 }
 
 Witch::Witch(
@@ -240,7 +242,7 @@ Witch::Witch(
     speed = 0;
 }
 
-int Zombie::calculate_next_movement(std::list<GameEntity>& players) {
+int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
     float closest_x = 0;
     float closest_y = 0;
     Vector2D this_pos = get_location();
@@ -267,14 +269,14 @@ int Zombie::calculate_next_movement(std::list<GameEntity>& players) {
     return CODE_NULL;
 }
 
-int Witch::calculate_next_movement(std::list<GameEntity>& players) {
+int Witch::calculate_next_movement(std::vector<PlayerState>& players) {
     if (state == IDLE) {
         int x = getRandomNumber(0,30);
         if (x == 2) {
             state = SCREAMING;
         }
     } else if (state == SCREAMING) {
-        int x = getRandomNumber(0,10)
+        int x = getRandomNumber(0,10);
         if (x == 2) {
             return CODE_WITCH_SPAWN;
         }
@@ -282,15 +284,15 @@ int Witch::calculate_next_movement(std::list<GameEntity>& players) {
     return CODE_NULL;
 }
 
-int Jumper::calculate_next_movement(std::list<GameEntity>& players) {
+int Jumper::calculate_next_movement(std::vector<PlayerState>& players) {
     if (this->state == HURT && cooldown > 0) {
         cooldown--;
     } else if (this->state == HURT && cooldown == 0) {
         this->state = IDLE;
     } else if (this->state == IDLE) {
-        set_objetive();
+        set_objetive(players);
     } else if (this->state == JUMPING) {
-        if (jump) { //termina el salto, entra en cooldown
+        if (jump()) { //termina el salto, entra en cooldown
             this->state = HURT;
             this->cooldown = 20;
             this->objetive.x = -1;
@@ -300,7 +302,7 @@ int Jumper::calculate_next_movement(std::list<GameEntity>& players) {
     return CODE_NULL;
 }
 
-void Jumper::set_objetive() {
+void Jumper::set_objetive(std::vector<PlayerState>& players) {
     float closest_x = 0;
     float closest_y = 0;
     Vector2D this_pos = get_location();
@@ -334,7 +336,9 @@ bool Jumper::jump() {
     move();
 }
 
-int Venom::calculate_next_movement(std::list<GameEntity>& players) {
+int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (cooldown > 0)
+        cooldown--;
     float closest_x = 0;
     float closest_y = 0;
     Vector2D this_pos = get_location();
@@ -352,13 +356,27 @@ int Venom::calculate_next_movement(std::list<GameEntity>& players) {
         float next_pos_y = this_pos.y - closest_y;
         int direction_y = next_pos_y > 0 ? -1 : next_pos_y < 0 ? 1 : 0;
         set_direction(0,direction_y);
+        if (abs(next_pos_y) < 20) {
+            if (cooldown == 0) {
+                state = THROWING_GRENADE;
+                cooldown = VENOM_PROJECTILE_COOLDOWN;
+                return CODE_VENOM_PROJECTILE;
+            } else {
+                return CODE_NULL;
+            }
+        }
     } else {
         set_direction(0,0);
     }   
     move();
-    if (abs(next_pos_y) < 20) {
-        state = THROWING_GRENADE;
-        return CODE_VENOM_PROJECTILE;
-    }
     return CODE_NULL;
+}
+
+void Jumper::attack(GameEntity * other) {
+    PlayerState *player = (PlayerState*)other;
+    player->take_damage(damage);
+}
+
+void Witch::attack(GameEntity * other) {
+    //nothing
 }

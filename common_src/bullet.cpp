@@ -26,7 +26,7 @@ void Bullet::move() {
         position.x+=95;
     }
     if (falloff)
-        this->damage = damage * 4 / 3
+        this->damage = damage * 4 / 3;
 
     //std::cout << "MOVED" << std::endl;
 }
@@ -63,11 +63,11 @@ PlayerStateReference Bullet::make_ref() {
     a.hit_points = 0;
     a.state = state++;
     if (piercing)
-        a.id = 156//scout
+        a.id = 156;//scout
     else if (falloff)
-        a.id = 154//idf
+        a.id = 154;//idf
     else
-        a.id = 155//p90
+        a.id = 155;//p90
 
     //importante, la bala solo hace sonido en el cliente cuando state = 0
     //osea, solo cuando se dispara por primera vez

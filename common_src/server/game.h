@@ -137,8 +137,8 @@ class GameLoop : public Thread {
                 resp.players.push_back(b.make_ref());
         }
 
-        for (Zombie &zombie : zombies) {
-            resp.zombies.push_back(zombie.make_ref());
+        for (Zombie* &zombie : zombies) {
+            resp.zombies.push_back(zombie->make_ref());
         }
         resp.game_state = state;
 
@@ -200,7 +200,7 @@ class GameLoop : public Thread {
             }
         }
         for (auto it = zombies.begin(); it != zombies.end();) {
-            if (it->get_health() == 0) {
+            if ((*it)->get_health() == 0) {
                 it = zombies.erase(it);
                 score++;
             } else {
@@ -273,8 +273,8 @@ class GameLoop : public Thread {
                     player.next_state(-1,bullets); 
                 }
             }
-            for (CommonZombie &zombie : zombies) {
-                zombie.calculate_next_movement(players);
+            for (Zombie* &zombie : zombies) {
+                zombie->calculate_next_movement(players);
             }
             
             pass_time();

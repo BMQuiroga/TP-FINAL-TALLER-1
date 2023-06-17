@@ -10,7 +10,7 @@ PlayerState::PlayerState(
     int id,
     int16_t max_x, 
     int16_t max_y,
-    int weapon_code = 1
+    int weapon_code
 ) : 
 GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
     this->id = id;

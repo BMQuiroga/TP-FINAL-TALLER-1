@@ -16,7 +16,7 @@ class Arma {
     uint8_t delay_recarga;//CONSTANTE, TIEMPO QUE TARDA EN RECARGAR
     uint8_t delay_disparo;//CONSTANTE, TIEMPO ENTRE DISPAROS
     uint8_t delay;  // NO CONSTANTE, DELAY QUE QUEDA PARA DISPARAR
-    uint8_t g_delay; // NO CONSTANTE, DELAY QUE QUEDA PARA GRANADA
+    uint16_t g_delay; // NO CONSTANTE, DELAY QUE QUEDA PARA GRANADA
     uint8_t throwing_distance; //NO CTE, DISTANCIA QUE CUBRE
 
     public:
@@ -47,28 +47,28 @@ class Arma {
     virtual void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) = 0;
 
     //crea una granada en la lista de granadas???
-    virtual void create_grenade(Vector2D position, std::list<int>& gren/*TODO*/) = 0;
+    virtual void create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) = 0;
 };
 
 class Arma1 : public Arma { //IDF, Granada Explosiva
     public:
     explicit Arma1();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
-    void create_grenade(Vector2D position, std::list<int>& gren/*TODO*/) override;
+    void create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) override;
 };
 
 class Arma2 : public Arma { //P90, Bombardeo
     public:
     explicit Arma2();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
-    void create_grenade(Vector2D position, std::list<int>& gren/*TODO*/) override;
+    void create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) override;
 };
 
 class Arma3 : public Arma { //Scout, Smoke
     public:
     explicit Arma3();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
-    void create_grenade(Vector2D position, std::list<int>& gren/*TODO*/) override;
+    void create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) override;
 };
 
 #endif

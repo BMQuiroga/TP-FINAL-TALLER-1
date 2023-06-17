@@ -6,6 +6,8 @@
 #include <memory>
 #include <string>
 
+class PlayerState;
+
 enum attack_type {
   ZOMBIE_ATTACK1, 
   ZOMBIE_ATTACK2, 
@@ -41,7 +43,6 @@ class Zombie : public GameEntity {
     Zombie(
         const std::string &name,
         Vector2D position,
-        GameEntity *target,
         int16_t max_x, 
         int16_t max_y);
     ~Zombie();
@@ -56,7 +57,8 @@ class Zombie : public GameEntity {
     uint8_t get_health();
     void take_damage(uint8_t damage);
     void on_collission_detected(GameEntity *other) override;
-    virtual int calculate_next_movement(std::list<GameEntity>& players);
+    virtual int calculate_next_movement(std::vector<PlayerState>& players);
+    virtual void attack(GameEntity *other) override;
 };
 
 class CommonZombie : public Zombie {
@@ -69,7 +71,6 @@ class CommonZombie : public Zombie {
     ~CommonZombie();
     CommonZombie(CommonZombie&&);
     CommonZombie(const CommonZombie&) = default;  // Remove the 'delete'd declaration
-    void attack(GameEntity *other) override;
 };
 
 class Jumper : public Zombie {
@@ -86,8 +87,8 @@ class Jumper : public Zombie {
     Jumper(Jumper&&);
     Jumper(const Jumper&) = default;  // Remove the 'delete'd declaration
     void attack(GameEntity *other) override;
-    int calculate_next_movement(std::list<GameEntity>& players);
-    void set_objetive();
+    int calculate_next_movement(std::vector<PlayerState>& players);
+    void set_objetive(std::vector<PlayerState>& players);
     bool jump();
 };
 
@@ -101,7 +102,6 @@ class Spear : public Zombie {
     ~Spear();
     Spear(Spear&&);
     Spear(const Spear&) = default;  // Remove the 'delete'd declaration
-    void attack(GameEntity *other) override;
 };
 
 class Witch : public Zombie {
@@ -115,10 +115,12 @@ class Witch : public Zombie {
     Witch(Witch&&);
     Witch(const Witch&) = default;  // Remove the 'delete'd declaration
     void attack(GameEntity *other) override;
-    int calculate_next_movement(std::list<GameEntity>& players);
+    int calculate_next_movement(std::vector<PlayerState>& players);
 };
 
 class Venom : public Zombie {
+  private:
+    int cooldown;
   public:
     Venom(
         const std::string &name,
@@ -128,10 +130,7 @@ class Venom : public Zombie {
     ~Venom();
     Venom(Venom&&);
     Venom(const Venom&) = default;  // Remove the 'delete'd declaration
-    void attack(GameEntity *other) override;
-    int calculate_next_movement(std::list<GameEntity>& players);
+    int calculate_next_movement(std::vector<PlayerState>& players);
 };
-
-
 
 #endif

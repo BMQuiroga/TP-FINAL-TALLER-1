@@ -56,7 +56,7 @@ Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd) {
 }
 
 void Arma1::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
-    vec.push_back(Bullet(5,20,direc,false,position));
+    vec.push_back(Bullet(5,20,direc,false,position,true));
 }
 
 Arma1::Arma1() : Arma(50,40,20) {}
@@ -93,17 +93,17 @@ int Arma::charge_grenade() {
         return 0;
 }
 
-void Arma1::create_grenade(Vector2D position, std::list<int>& gren/*TODO*/) {
+void Arma1::create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) {
     //sumarla a la lista
     this->throwing_distance = 0;
 }
 
-void Arma2::create_grenade(Vector2D position, std::list<int>& gren/*TODO*/) {
+void Arma2::create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) {
     //sumarla a la lista
     this->throwing_distance = 0;
 }
 
-void Arma3::create_grenade(Vector2D position, std::list<int>& gren/*TODO*/) {
+void Arma3::create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) {
     //sumarla a la lista
     this->throwing_distance = 0;
 }
