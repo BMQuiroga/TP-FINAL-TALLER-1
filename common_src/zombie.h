@@ -31,10 +31,13 @@ class Zombie : public GameEntity {
     uint8_t zombie_type;
     uint8_t attack_type;
     uint8_t movement_type;
+    int seeking_distance;
     bool has_target_set{false};
     GameEntity *target;
     Vector2D target_position{VEC2_ZERO};
   public:
+    static Zombie* get_random_zombie();
+
     Zombie(
         const std::string &name,
         Vector2D position,
@@ -47,14 +50,13 @@ class Zombie : public GameEntity {
     ZombieStateReference make_ref();
     void move();
     void set_id(int new_id);
-    void set_target(GameEntity* target);
     void set_direction(int x, int y);
-    void next_state();
-    bool has_target();
+    //void next_state();
     uint8_t get_damage();
     uint8_t get_health();
     void take_damage(uint8_t damage);
     void on_collission_detected(GameEntity *other) override;
+    virtual int calculate_next_movement(std::list<GameEntity>& players);
 };
 
 class CommonZombie : public Zombie {
@@ -62,7 +64,6 @@ class CommonZombie : public Zombie {
     CommonZombie(
         const std::string &name,
         Vector2D position,
-        GameEntity *target,
         int16_t max_x = DEFAULT_MAX_X,
         int16_t max_y = DEFAULT_MAX_Y);
     ~CommonZombie();
@@ -70,5 +71,67 @@ class CommonZombie : public Zombie {
     CommonZombie(const CommonZombie&) = default;  // Remove the 'delete'd declaration
     void attack(GameEntity *other) override;
 };
+
+class Jumper : public Zombie {
+  private:
+    int cooldown;
+    Vector2D objetive;
+  public:
+    Jumper(
+        const std::string &name,
+        Vector2D position,
+        int16_t max_x = DEFAULT_MAX_X,
+        int16_t max_y = DEFAULT_MAX_Y);
+    ~Jumper();
+    Jumper(Jumper&&);
+    Jumper(const Jumper&) = default;  // Remove the 'delete'd declaration
+    void attack(GameEntity *other) override;
+    int calculate_next_movement(std::list<GameEntity>& players);
+    void set_objetive();
+    bool jump();
+};
+
+class Spear : public Zombie {
+  public:
+    Spear(
+        const std::string &name,
+        Vector2D position,
+        int16_t max_x = DEFAULT_MAX_X,
+        int16_t max_y = DEFAULT_MAX_Y);
+    ~Spear();
+    Spear(Spear&&);
+    Spear(const Spear&) = default;  // Remove the 'delete'd declaration
+    void attack(GameEntity *other) override;
+};
+
+class Witch : public Zombie {
+  public:
+    Witch(
+        const std::string &name,
+        Vector2D position,
+        int16_t max_x = DEFAULT_MAX_X,
+        int16_t max_y = DEFAULT_MAX_Y);
+    ~Witch();
+    Witch(Witch&&);
+    Witch(const Witch&) = default;  // Remove the 'delete'd declaration
+    void attack(GameEntity *other) override;
+    int calculate_next_movement(std::list<GameEntity>& players);
+};
+
+class Venom : public Zombie {
+  public:
+    Venom(
+        const std::string &name,
+        Vector2D position,
+        int16_t max_x = DEFAULT_MAX_X,
+        int16_t max_y = DEFAULT_MAX_Y);
+    ~Venom();
+    Venom(Venom&&);
+    Venom(const Venom&) = default;  // Remove the 'delete'd declaration
+    void attack(GameEntity *other) override;
+    int calculate_next_movement(std::list<GameEntity>& players);
+};
+
+
 
 #endif

@@ -30,7 +30,8 @@ enum entity_state {
   ATTACKING_AND_MOVING, 
   BITING, 
   SCREAMING, 
-  EATING 
+  EATING,
+  JUMPING
   };
 enum entity_direction { LEFT, RIGHT };
 

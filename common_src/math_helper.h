@@ -112,6 +112,14 @@ inline int calculateDistance(Vector2D a, Vector2D b) {
     return distance;
 }
 
+// Function to generate a random number within a given range
+inline int getRandomNumber(int min, int max) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(min, max);
+    return distrib(gen);
+}
+
 
 const Vector2D VEC2_ZERO = { 0.0f, 0.0f };
 const Vector2D VEC2_ONE = { 1.0f, 1.0f };
