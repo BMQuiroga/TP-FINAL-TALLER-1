@@ -141,7 +141,7 @@ void ClientRenderer::render(Image & im) {
     if (im.name == player_name) {
         renderOwn(im);
     } else if (im.health != 0)
-        renderHealth(asset->get_length(),x,y,im.health);
+        renderHealth(x,y,im.health);
 }
 
 void ClientRenderer::renderOwn(Image & im) {
@@ -172,20 +172,19 @@ void ClientRenderer::renderOwn(Image & im) {
     }
 }
 
-void ClientRenderer::renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp) {
-    uint16_t hp_bar_height = 3;
+void ClientRenderer::renderHealth(uint16_t x, uint16_t y, uint8_t hp) {
     Asset * full = assets->GetAsset(-1);
     Asset * empty = assets->GetAsset(-2);
-    float hp_percentage = (length -1)*hp/100;
+    float hp_percentage = 50*hp/100;
 
     renderer.Copy(
         (*empty->get_texture()),
-        SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + (hp_bar_height*2) + Y_OFFSET, length - 1, hp_bar_height - 1));
+        SDL2pp::Rect(0,0,50,HP_BAR_HEIGHT),
+        SDL2pp::Rect(x , y + (HP_BAR_HEIGHT*2) + Y_OFFSET, HP_BAR_LENGTH - 1, HP_BAR_HEIGHT - 1));
     renderer.Copy(
         (*full->get_texture()),
-        SDL2pp::Rect(0,0,length,hp_bar_height),
-        SDL2pp::Rect(x, y + (hp_bar_height*2) + Y_OFFSET, std::round(hp_percentage), hp_bar_height - 1));
+        SDL2pp::Rect(0,0,HP_BAR_LENGTH,HP_BAR_HEIGHT),
+        SDL2pp::Rect(x , y + (HP_BAR_HEIGHT*2) + Y_OFFSET, std::round(hp_percentage) - 1, HP_BAR_HEIGHT - 1));
 }
 
 void ClientRenderer::renderBackground() {

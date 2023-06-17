@@ -6,6 +6,11 @@
  * and reads them from a YAML file upon initialization
  */
 
+
+//renderer
+#define HP_BAR_LENGTH 50
+#define HP_BAR_HEIGHT 3
+
 // common
 #define DEFAULT_MAX_X 1920
 #define DEFAULT_MAX_Y 145

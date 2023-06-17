@@ -9,6 +9,7 @@
 #include "intention.h"
 #include "client_asset_manager.h"
 #include "client_image.h"
+#include "../game_config.h"
 
 class ClientRenderer {
     //logica de renderizacion, ejecutada sobre el hilo main
@@ -37,7 +38,7 @@ class ClientRenderer {
     void renderBackground();
 
     //renderiza una barra de vida dada la longitud, coordenadas y health points
-    void renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp);
+    void renderHealth(uint16_t x, uint16_t y, uint8_t hp);
 
     //maneja eventos para enviarlos al servidor
     bool handleEvents();
