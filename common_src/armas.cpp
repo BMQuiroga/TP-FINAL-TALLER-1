@@ -20,7 +20,11 @@ bool Arma::try_shoot() {
     if (delay == 0 && balas > 0) {
         //std::cout << "shoot" << std::endl;
         balas--;
-        delay = delay_disparo;
+        if (balas == 0) {
+            this->try_reload();
+        } else {
+            delay = delay_disparo;
+        }
         return true;
     }
     return false;

@@ -10,8 +10,6 @@
 #include "bullet.h"
 #include "game_config.h"
 
-#define RESPAWN_TIME 100
-
 class Arma;
 
 // Clase encargada de manejar la lógica del jugador
