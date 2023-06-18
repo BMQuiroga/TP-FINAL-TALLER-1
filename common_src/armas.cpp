@@ -47,36 +47,38 @@ void Arma::advance_time() {
     }  
 }
 
-Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd) {
+Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd, uint16_t gd) {
     this->cargador = c;
     this->balas = c;
     this->delay_recarga = dr;
     this->delay_disparo = dd;
     this->delay = 0;
+    this->g_delay_cte = gd;
+    this->g_delay = 0;
 }
 
 void Arma1::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
-    vec.push_back(Bullet(5,20,direc,false,position,true));
+    vec.push_back(Bullet(ARMA1_DAMAGE,ARMA1_BULLET_COUNT,direc,false,position,true));
 }
 
-Arma1::Arma1() : Arma(50,40,20) {}
+Arma1::Arma1() : Arma(ARMA1_MAGAZINE,ARMA1_RELOAD_DELAY,ARMA1_SHOOT_DELAY,ARMA1_GRENADE_DELAY) {}
 
 void Arma2::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
-    vec.push_back(Bullet(3,10,direc,false,position));
+    vec.push_back(Bullet(ARMA2_DAMAGE,ARMA2_BULLET_COUNT,direc,false,position));
 }
 
-Arma2::Arma2() : Arma(30,10,10) {}
+Arma2::Arma2() : Arma(ARMA2_MAGAZINE,ARMA2_RELOAD_DELAY,ARMA2_SHOOT_DELAY,ARMA2_GRENADE_DELAY) {}
 
 void Arma3::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
-    vec.push_back(Bullet(150,1,direc,true,position));
+    vec.push_back(Bullet(ARMA3_DAMAGE,ARMA3_BULLET_COUNT,direc,true,position));
 }
 
-Arma3::Arma3() : Arma(20,20,10) {}
+Arma3::Arma3() : Arma(ARMA3_MAGAZINE,ARMA3_RELOAD_DELAY,ARMA3_SHOOT_DELAY,ARMA3_GRENADE_DELAY) {}
 
 
 bool Arma::try_grenade() {
     if (this->g_delay == 0) {
-        this->g_delay = GRENADE_DELAY;
+        this->g_delay = this->g_delay_cte;
         return true;
     }
     return false;

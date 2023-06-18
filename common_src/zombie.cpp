@@ -9,8 +9,8 @@ Zombie::~Zombie() {}
 
 Zombie* Zombie::get_random_zombie() {
     int q = getRandomNumber(0,4);
-    int x = getRandomNumber(0, 800);  // Random X position within game area
-    int y = getRandomNumber(0, 95);  // Random Y position within game area
+    int x = getRandomNumber(0, DEFAULT_MAX_Y);  // Random X position within game area
+    int y = getRandomNumber(0, DEFAULT_MAX_Y);  // Random Y position within game area
     Vector2D position(x, y);
     if (q == 0) {
         return new CommonZombie("Common",position);
@@ -141,7 +141,7 @@ CommonZombie::CommonZombie(
     int16_t max_y
 ) : Zombie(name, position, max_x, max_y) {
     id = 51;
-    damage = 5;
+    damage = ZOMBIE_DAMAGE;
     zombie_type = ZOMBIE;
     attack_type = ZOMBIE_BITE;
     movement_type = ZOMBIE_WALK;
@@ -171,7 +171,7 @@ Zombie::Zombie(
     CollisionLayer::Hostile) {
     rect_width = ZOMBIE_RECT_HEIGHT;
     rect_height = ZOMBIE_RECT_HEIGHT;
-    speed = 4;
+    speed = ZOMBIE_SPEED;
     seeking_distance = ZOMBIE_SEEKING_DISTANCE;
 }
 
