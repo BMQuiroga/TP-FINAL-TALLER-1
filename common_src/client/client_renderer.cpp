@@ -22,7 +22,7 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse
     renderer(window, -1, SDL_RENDERER_ACCELERATED),
     mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096) {
     this->assets = AssetManager::Instance(this->renderer);
-    Mix_VolumeMusic(MIN_MAX_VOLUME / 10);
+    Mix_VolumeMusic(MIN_MAX_VOLUME / 100 * GAME_VOLUME);
     std::cout << "player name is " << this->player_name << std::endl;
     //mixer.OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 }

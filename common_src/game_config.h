@@ -13,6 +13,7 @@
 #define Y_OFFSET 505
 #define GAME_FRAME_RATE 30
 #define MIN_MAX_VOLUME 128
+#define GAME_VOLUME 10
 
 //game.h
 #define GAME_TICK_RATE 5
