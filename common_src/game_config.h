@@ -19,7 +19,7 @@
 #define ZOMBIE_CREATION_TIME_MIN 10000
 #define ZOMBIE_CREATION_TIME_MAX 15000
 #define SCORE_TO_WIN 2
-#define MAX_ZOMBIES 1
+#define MAX_ZOMBIES 4
 #define MAX_PLAYERS 2
 
 //playerstate.h
@@ -82,7 +82,7 @@
 #define VENOM_HP 50
 #define VENOM_SPEED 2
 #define VENOM_PROJECTILE_COOLDOWN 20
-#define VENOM_DAMAGE 1
+#define VENOM_DAMAGE 3
 
 //Witch
 #define WITCH_SEEKING_DISTANCE 800
