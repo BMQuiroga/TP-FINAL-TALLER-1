@@ -59,6 +59,9 @@ class ClientRenderer {
     //reapareceras despues de un tiempo. Si todos los jugadores de una partida estan en muertos, se pierde la partida
     void ReviveScreen();
 
+    //sincroniza el fotograma con respecto de la nueva imagen del server, hace fluidas las animaciones
+    uint8_t get_frame(Image & im);
+
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name);
     //gameloop: renderiza el background y el actual_frame en loop mientras lo actualiza

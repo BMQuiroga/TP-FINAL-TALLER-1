@@ -71,6 +71,11 @@ void Zombie::set_direction(int x, int y) {
     //if (x == 0) {
         direction.y = y;
     //}
+    if (x < 0) {
+        this->facing_direction = LEFT;
+    } else {
+        this->facing_direction = RIGHT;
+    }
 }
 /*
 void Zombie::next_state() {
@@ -220,7 +225,7 @@ Venom::Venom(
     int16_t max_y
 ) : Zombie(name, position, max_x, max_y) {
     id = 54;
-    damage = 2;//daño melee
+    damage = VENOM_DAMAGE;//daño melee
     zombie_type = VENOM;
     attack_type = ZOMBIE_ATTACK2;
     movement_type = ZOMBIE_WALK;

@@ -63,17 +63,22 @@ void ClientRenderer::GameLoop() {
                 }
                 for (it = update.players.begin(); it != update.players.end(); ++it) {
                     auto new_Model = Image((*it));
+                    new_Model.frame = get_frame(new_Model);
                     frames_list->push_back(new_Model);
                 }
                 for (it_zombies = update.zombies.begin(); it_zombies != update.zombies.end(); ++it_zombies) {
                     auto new_Model = Image((*it_zombies));
+                    new_Model.frame = get_frame(new_Model);
                     frames_list->push_back(new_Model);
                 }
             } else if (new_update.content_type == LOBBY_STATE) {
                 // LobbyStateResponse update = serializer.deserialize(new_update.content);
             }
             //std::cout << "created image" << std::endl;
-            this->actual_frame = Image::Replace(this->actual_frame,frames_list);
+            //this->actual_frame = Image::Replace(this->actual_frame,frames_list);
+            if (actual_frame)
+                delete actual_frame;
+            this->actual_frame = frames_list;
             //std::cout << "replaced image" << std::endl;
             //std::cout << actual_frame->size() << std::endl;
         }
@@ -88,6 +93,20 @@ void ClientRenderer::GameLoop() {
     }
     if (defeat)
         DeathScreen();
+}
+
+uint8_t ClientRenderer::get_frame(Image & im) {
+    if (!actual_frame)
+        return 0;
+    std::list<Image>::iterator it1 = actual_frame->begin();
+    while (it1 != actual_frame->end()) {
+        if ((*it1).id == im.id) {
+            if ((*it1).action == im.action) {
+                return (*it1).frame + 1;
+            }
+        }
+        ++it1;
+    }
 }
 
 void ClientRenderer::render_all() {
@@ -166,7 +185,7 @@ void ClientRenderer::renderOwn(Image & im) {
         renderer.Copy(
             (*asset2->get_texture()),
             SDL2pp::NullOpt,
-            SDL2pp::Rect(50 + 55*i, 930, 50, 50)
+            SDL2pp::Rect(50 + 20*i, 930, 50, 50)
         );
     }
 }

@@ -226,7 +226,7 @@ class GameLoop : public Thread {
 
     // Function to handle enemy spawns
     void spawn_enemy() {
-        zombies.push_back(Zombie::get_random_zombie(1));
+        zombies.push_back(Zombie::get_random_zombie(3));
     }
 
     void run() override {
@@ -275,7 +275,7 @@ class GameLoop : public Thread {
                     //TODO crear el proyectil enemigo
                 }           
             }
-            std::cout << "ZOMBIES SPAWNED VIA WITCH: " << zombies_to_spawn_via_witch << std::endl;
+            //std::cout << "ZOMBIES SPAWNED VIA WITCH: " << zombies_to_spawn_via_witch << std::endl;
             for (int i = 0; i < zombies_to_spawn_via_witch ; i++) {
                 spawn_enemy();
             }

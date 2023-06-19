@@ -109,7 +109,7 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	map.emplace(SPEAR + RUN_, std::make_shared<Asset>("../resources/Spear/Run.png", 0, 128, 128, 6, renderer, 0));
 
 	map.emplace(VENOM + IDLE_, std::make_shared<Asset>("../resources/Venom/Idle.png", 0, 128, 128, 7, renderer, 0));
-	map.emplace(VENOM + ATTACK_, std::make_shared<Asset>("../resources/Venom/Attack2.png", 0, 128, 128, 8, renderer, 0));
+	map.emplace(VENOM + ATTACK_, std::make_shared<Asset>("../resources/Venom/Attack2.png", 0, 128, 128, 14, renderer, 0));
 	map.emplace(VENOM + GRENADE_, std::make_shared<Asset>("../resources/Venom/Attack1.png", 0, 128, 128, 8, renderer, 0));
 	map.emplace(VENOM + DEAD_, std::make_shared<Asset>("../resources/Venom/Dead.png", 0, 128, 128, 6, renderer, 0));
 	map.emplace(VENOM + JUMP_, std::make_shared<Asset>("../resources/Venom/Jump.png", 0, 128, 128, 9, renderer, 0));
