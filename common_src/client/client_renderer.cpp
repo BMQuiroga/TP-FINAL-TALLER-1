@@ -6,9 +6,8 @@
 #include <vector>
 #include "../serialization.h"
 //#include <arpa/inet.h>
-#define Y_OFFSET 505
-#define GAME_FRAME_RATE 30
-#define MIN_MAX_VOLUME 128
+#include "../game_config.h"
+
 
 ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name) : 
     events(events),

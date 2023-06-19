@@ -6,8 +6,6 @@
 #include "bullet.h"
 #include "math_helper.h"
 
-#define GRENADE_DELAY 1000 //CONSTANTE, TIEMPO ENTRE GRANADAS
-
 class Arma {
     protected:
     //public:
@@ -16,15 +14,15 @@ class Arma {
     uint8_t delay_recarga;//CONSTANTE, TIEMPO QUE TARDA EN RECARGAR
     uint8_t delay_disparo;//CONSTANTE, TIEMPO ENTRE DISPAROS
     uint8_t delay;  // NO CONSTANTE, DELAY QUE QUEDA PARA DISPARAR
+    uint16_t g_delay_cte; //CONSTANTE, TIEMPO ENTRE GRANADAS
     uint16_t g_delay; // NO CONSTANTE, DELAY QUE QUEDA PARA GRANADA
     uint8_t throwing_distance; //NO CTE, DISTANCIA QUE CUBRE
 
     public:
     //constructor
-    Arma(uint8_t c, uint8_t dr, uint8_t dd);
+    Arma(uint8_t c, uint8_t dr, uint8_t dd, uint16_t gd);
 
     //decrementa en 1 el delay
-    // Arma (Arma&&);
     void advance_time();
 
     //intenta disparar, lo logra si el delay es 0 y hay balas

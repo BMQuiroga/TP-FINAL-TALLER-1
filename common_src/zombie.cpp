@@ -146,7 +146,7 @@ CommonZombie::CommonZombie(
     int16_t max_y
 ) : Zombie(name, position, max_x, max_y) {
     id = 51;
-    damage = 5;
+    damage = ZOMBIE_DAMAGE;
     zombie_type = ZOMBIE;
     attack_type = ZOMBIE_BITE;
     movement_type = ZOMBIE_WALK;
@@ -176,7 +176,7 @@ Zombie::Zombie(
     CollisionLayer::Hostile) {
     rect_width = ZOMBIE_RECT_HEIGHT;
     rect_height = ZOMBIE_RECT_HEIGHT;
-    speed = 4;
+    speed = ZOMBIE_SPEED;
     seeking_distance = ZOMBIE_SEEKING_DISTANCE;
 }
 
