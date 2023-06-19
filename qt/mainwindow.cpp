@@ -7,10 +7,12 @@
 #include <ostream>
 #include <string>
 #include <QDebug>
+#include "../common_src/protocol_types.h"
 #include "./ui_MainWindow.h"
 #include "lobby_command.h"
 
-MainWindow::MainWindow(Queue<LobbyCommand>& q, Queue<int>& q_responses, QWidget *parent) :
+MainWindow::MainWindow(Queue<LobbyCommand>& q, 
+    Queue<LobbyGameStateResponse>& q_responses, QWidget *parent) :
     q(q),
     q_responses(q_responses),
     QMainWindow(parent), 
@@ -45,6 +47,7 @@ void MainWindow::showCreateGame()
     currentWidget = new NumberPlayers();
     currentWidget->show();
     QObject::connect(currentWidget, SIGNAL(inputNumberEntered(QString, int)), this, SLOT(receiveInputGame(QString, int)));
+    QObject::connect(this, SIGNAL(createdGameWithCode(int)), currentWidget, SLOT(receiveNewGameCreatedCode(int)));
 }
 
 void MainWindow::showLobbyWidget() {
@@ -86,6 +89,8 @@ void MainWindow::receiveInputGame(const QString& text, int number) {
     qDebug() << "Received input number: " << text;
     LobbyCommand command(CREATEGAME, text.toStdString(), number);
     q.push(command);
+    LobbyGameStateResponse result = q_responses.pop();
+    emit createdGameWithCode(result.game_code);
     LobbyCommand end_command(ENDLOBBY, "");
     q.push(end_command);
 }
@@ -100,17 +105,14 @@ void MainWindow::startCreateGameOption() {
 
 void MainWindow::receiveGameCode(const QString& text) {
     // Handle the received input text
-    qDebug() << "Received input number to join game: " << text;
     LobbyCommand command(JOINGAME, text.toStdString());
     q.push(command);
-    int result = q_responses.pop();
-    if (result == 0) {
-        std::cout << "joining successfully!" << std::endl;
+    LobbyGameStateResponse result = q_responses.pop();
+    if (result.succeeded == 0) {
+        emit joinedSuccessfully();
         LobbyCommand end_command(ENDLOBBY, "");
         q.push(end_command);
-        emit joinedSuccessfully();
     } else {
-        std::cout << "joining failed" << std::endl;
         emit failedToJoin();
     }
 }

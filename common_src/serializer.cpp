@@ -184,7 +184,7 @@ std::vector<int8_t> Serializer::serialize(const LobbyStateResponse &resp) {
     return buf;
 }
 
-std::vector<int8_t> Serializer::serialize(const JoinedGameResponse &resp)
+std::vector<int8_t> Serializer::serialize(const LobbyGameStateResponse &resp)
 {
     std::vector<int8_t> buf;
     push_number(buf, resp.game_code);
@@ -207,9 +207,9 @@ LobbyStateResponse Serializer::deserialize_lobby_state(const std::vector<int8_t>
     return resp;
 }
 
-JoinedGameResponse Serializer::deserialize_join_response(const std::vector<int8_t> &content)
+LobbyGameStateResponse Serializer::deserialize_join_response(const std::vector<int8_t> &content)
 {
-    JoinedGameResponse resp;
+    LobbyGameStateResponse resp;
     const int8_t *data = content.data();
     int offset = 0, size = content.size();
     offset += copy_number(data+offset, &resp.game_code);

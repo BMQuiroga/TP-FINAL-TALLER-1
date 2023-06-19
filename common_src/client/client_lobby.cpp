@@ -12,7 +12,7 @@
 ClientLobby::ClientLobby(
     Socket& socket, 
     Queue<LobbyCommand>& q,
-    Queue<int> &q_responses) :
+    Queue<LobbyGameStateResponse> &q_responses) :
     protocol(), 
     skt(socket),
     q(q),
@@ -36,11 +36,11 @@ void ClientLobby::run() {
             break;
         }
         protocol.send_lobby_command(command, skt, &was_closed);
-        if (command.name == JOINGAME /*|| command.name == CREATEGAME */) {
+        if (command.name == JOINGAME || command.name == CREATEGAME) {
             Serializer serializer;
             ProtocolResponse resp = protocol.get(skt, &was_closed);
-            JoinedGameResponse joined_response = serializer.deserialize_join_response(resp.content);
-            q_responses.push(joined_response.succeeded);
+            LobbyGameStateResponse joined_response = serializer.deserialize_join_response(resp.content);
+            q_responses.push(joined_response);
         }
     }
 }

@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <string>
 #include "../common_src/queue.h"
+#include "../common_src/protocol_types.h"
 #include "lobby_command.h"
 
 QT_BEGIN_NAMESPACE
@@ -16,7 +17,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(Queue<LobbyCommand>& q, Queue<int>& q_responses, QWidget *parent = nullptr);
+    explicit MainWindow(Queue<LobbyCommand>& q, 
+        Queue<LobbyGameStateResponse>& q_responses, QWidget *parent = nullptr);
     void showLobbyWidget();
     void showJoinGame();
     void showCreateGame();
@@ -34,10 +36,11 @@ public slots:
 signals:
     void joinedSuccessfully();
     void failedToJoin();
+    void createdGameWithCode(int code);
 
 private:
     Queue<LobbyCommand>& q;
-    Queue<int>& q_responses;
+    Queue<LobbyGameStateResponse>& q_responses;
     QWidget* currentWidget {nullptr};
     Ui::MainWindow *ui;
     std::string player_name;
