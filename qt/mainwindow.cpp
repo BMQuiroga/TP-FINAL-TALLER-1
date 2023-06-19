@@ -53,7 +53,7 @@ void MainWindow::showLobbyWidget() {
     // Create and show the new widget (e.g., LobbyWidget)
     currentWidget = new Lobby();
     currentWidget->show();
-    QObject::connect(currentWidget, SIGNAL(inputTextEntered(QString)), this, SLOT(receiveInputText(QString)));
+    QObject::connect(currentWidget, SIGNAL(inputPlayerInfoEntered(QString, int)), this, SLOT(receivePlayerInfo(QString, int)));
 }
 
 void MainWindow::showGameOptionsWidget() {
@@ -69,12 +69,12 @@ void MainWindow::showGameOptionsWidget() {
     QObject::connect(currentWidget, SIGNAL(createGameOptionPicked()), this, SLOT(startCreateGameOption()));
 }
 
-void MainWindow::receiveInputText(const QString& text) {
+void MainWindow::receivePlayerInfo(const QString& text, int number) {
     // Handle the received input text
     qDebug() << "Received input text: " << text;
     showGameOptionsWidget();
     player_name = text.toStdString();
-    LobbyCommand command(INPUTNAME, text.toStdString());
+    LobbyCommand command(INPUTNAME, player_name, number);
     q.push(command);
 }
 

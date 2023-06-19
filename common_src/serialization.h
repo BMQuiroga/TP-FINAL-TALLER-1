@@ -26,7 +26,7 @@ class Serializer {
     GameStateResponse deserialize_game_state(const std::vector<int8_t> &content);
     LobbyStateResponse deserialize_lobby_state(const std::vector<int8_t> &content);
     CreateRequest deserialize_create_state(const std::vector<int8_t> &content);
-    InputNameRequest deserialize_input_name(const std::vector<int8_t> &content);
+    NewPlayerRequest deserialize_input_name(const std::vector<int8_t> &content);
     JoinRequest deserialize_join_state(const std::vector<int8_t> &content);
     GameReference deserialize_game_reference(const std::vector<int8_t> &content);
 };

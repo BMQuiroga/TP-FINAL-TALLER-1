@@ -13,6 +13,7 @@ struct PlayerStateReference {
     uint16_t x;
     uint16_t y;
     int8_t state;
+    uint8_t weapon_code;
 };
 struct ZombieStateReference {
     uint32_t id;
@@ -71,8 +72,9 @@ struct CreateRequest {
     // explicit CreateRequest(std::string &name) : cmd(CREATE), name(name) {}
 };
 
-struct InputNameRequest {
+struct NewPlayerRequest {
     std::string name; // name of the player
+    int weapon_code;
 };
 
 struct JoinRequest {

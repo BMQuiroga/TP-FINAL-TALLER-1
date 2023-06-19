@@ -211,13 +211,13 @@ CreateRequest Serializer::deserialize_create_state(const std::vector<int8_t> &co
     return resp;
 }
 
-InputNameRequest Serializer::deserialize_input_name(const std::vector<int8_t> &content)
+NewPlayerRequest Serializer::deserialize_input_name(const std::vector<int8_t> &content)
 {
-    InputNameRequest resp;
+    NewPlayerRequest resp;
     const int8_t *data = content.data();
     int offset = 0, size = content.size();
-    std::string test("");
     offset += copy_string(data+offset, resp.name);
+    offset += copy_number(data+offset, &resp.weapon_code);
     return resp;
 }
 

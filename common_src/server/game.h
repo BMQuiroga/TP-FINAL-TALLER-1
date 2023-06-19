@@ -44,14 +44,21 @@ enum GameState {
 struct GameEvent {
     ProtocolRequest req;
     std::string player_name;
+    int weapon_code;
     Queue<ProtocolResponse> *player_messages;
     GameEvent() {}
-    GameEvent(ProtocolRequest &req, std::string &uuid, Queue<ProtocolResponse> &q) : req(req), player_name(uuid), player_messages(&q) {}
+    GameEvent(ProtocolRequest &req, std::string &uuid, 
+    int weapon, Queue<ProtocolResponse> &q) : 
+        req(req), 
+        player_name(uuid), 
+        weapon_code(weapon),
+        player_messages(&q) {}
     GameEvent& operator=(const GameEvent& other) {
         if (this == &other)
             return *this;
         req = other.req;
         player_name = other.player_name;
+        weapon_code = other.weapon_code;
         player_messages = other.player_messages;
 
         return *this;
@@ -111,7 +118,8 @@ class GameLoop : public Thread {
     //une al player a la partida
     int join(GameEvent &event) {
         if (state == CREATED && players.size() < MAX_PLAYERS) {
-            players.push_back(PlayerState(event.player_name, players.size() + 1));
+            std::cout << "creo nuevo jugador en join del gameloop con weapon code " << event.weapon_code << std::endl;
+            players.push_back(PlayerState(event.player_name, players.size() + 1, event.weapon_code));
             message_queues.push_back(*event.player_messages);
             return players.size();
         } else {
@@ -324,6 +332,7 @@ class Game {
         void push_event(
             ProtocolRequest &req,
             std::string &player_name,
+            int weapon_code,
             Queue<ProtocolResponse> &player_messages);
         void start();
         /**

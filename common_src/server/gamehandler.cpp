@@ -40,13 +40,13 @@ Queue<ProtocolResponse>& q) {
 // }
 
 int GameHandler::join_game(int code,
-std::string &player_name, Queue<ProtocolResponse> &q) {
+std::string &player_name, int weapon_code, Queue<ProtocolResponse> &q) {
     bool game_exists = matches.has(code);
     if (game_exists) {
         Game &game = get_game(code);
         ProtocolRequest req;
         req.cmd = JOIN;
-        game.push_event(std::ref(req), player_name, q);
+        game.push_event(std::ref(req), player_name, weapon_code, q);
         return JOIN_SUCCESS;
     } else {
         return JOIN_FAILURE;

@@ -8,18 +8,21 @@ Lobby::Lobby(QWidget *parent) : QWidget(parent) {
     connectEvents();
 }
 
-void Lobby::sendInputName() {
+void Lobby::sendNewPlayerInfo() {
     inputName = findChild<QLineEdit*>("inputName");
+    playerType = findChild<QSpinBox*>("playerType");
     QString name = inputName->text();
-    emit inputTextEntered(name);
+    QString player_type = playerType->text();
+    emit inputPlayerInfoEntered(name, std::stoi(player_type.toStdString()));
     inputName->clear();
+    playerType->clear();
 }
 
 void Lobby::connectEvents() {
     // Conecto el evento del boton
     QPushButton* buttonName = findChild<QPushButton*>("buttonName");
     QObject::connect(buttonName, &QPushButton::clicked,
-                     this, &Lobby::sendInputName);
+                     this, &Lobby::sendNewPlayerInfo);
 }
 
 Lobby::~Lobby() {

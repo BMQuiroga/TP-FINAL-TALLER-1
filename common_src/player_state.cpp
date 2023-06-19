@@ -8,9 +8,9 @@
 PlayerState::PlayerState(
     const std::string &name,
     int id,
+    int weapon_code,
     int16_t max_x, 
-    int16_t max_y,
-    int weapon_code
+    int16_t max_y
 ) : 
 GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
     this->id = id;

@@ -26,9 +26,10 @@ GameReference Game::make_ref() {
 void Game::push_event(
     ProtocolRequest &req,
     std::string &player_name,
+    int weapon_code,
     Queue<ProtocolResponse> &player_messages
 ) {
-    GameEvent ev(req, player_name, player_messages);
+    GameEvent ev(req, player_name, weapon_code, player_messages);
     events.push(std::ref(ev));
 }
 

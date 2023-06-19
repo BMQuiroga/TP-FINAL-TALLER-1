@@ -25,7 +25,7 @@ Client::Client(
 
 void Client::handle_request(ProtocolRequest &message) {
     if (joined_game >= 0) {
-        game_handler.get_game(joined_game).push_event(message, name, std::ref(responses));
+        game_handler.get_game(joined_game).push_event(message, name, weapon_code, std::ref(responses));
         if (message.cmd < 0) {
             kill();
         }
@@ -39,7 +39,7 @@ void Client::handle_request(ProtocolRequest &message) {
             GameReference create_req = serializer.deserialize_game_reference(message.content);
             Game &game = game_handler.create_new_game(create_req.name, responses);
             game.start();
-            game_handler.join_game(game.get_id(), name, responses);
+            game_handler.join_game(game.get_id(), name, weapon_code, responses);
             joined_game = game.get_id();
         }
         if (message.cmd == LIST) {
@@ -52,7 +52,7 @@ void Client::handle_request(ProtocolRequest &message) {
         }
         if (message.cmd == JOIN) {
             JoinRequest join_req = serializer.deserialize_join_state(message.content); 
-            int join_code = game_handler.join_game(join_req.game_code, name, responses);
+            int join_code = game_handler.join_game(join_req.game_code, name, weapon_code, responses);
             joined_game = join_code;
             if (join_code == JOIN_FAILURE) {
                 joined_game = -1;
@@ -64,8 +64,9 @@ void Client::handle_request(ProtocolRequest &message) {
             }
         }
         if (message.cmd == PLAYERNAME) {
-            InputNameRequest name_req = serializer.deserialize_input_name(message.content);
-            name = name_req.name;
+            NewPlayerRequest new_player_req = serializer.deserialize_input_name(message.content);
+            name = new_player_req.name;
+            weapon_code = new_player_req.weapon_code;
         }
     }
 }

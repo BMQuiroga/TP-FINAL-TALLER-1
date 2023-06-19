@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLineEdit>
+#include <QSpinBox>
 #include <QObject>
 
 
@@ -12,11 +13,12 @@ public:
     explicit Lobby(QWidget *parent = 0);
     ~Lobby();
 signals:
-    void inputTextEntered(const QString& text);
+    void inputPlayerInfoEntered(const QString& text, int number);
 private:
-    void sendInputName();
+    void sendNewPlayerInfo();
     void connectEvents();
     QLineEdit* inputName;
+    QSpinBox* playerType;
 };
 
 #endif // LOBBY_H
