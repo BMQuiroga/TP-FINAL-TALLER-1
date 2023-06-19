@@ -10,8 +10,6 @@
 #include "bullet.h"
 #include "game_config.h"
 
-#define RESPAWN_TIME 100
-
 class Arma;
 
 // Clase encargada de manejar la lógica del jugador
@@ -30,7 +28,7 @@ class PlayerState : public GameEntity {
       int id,
       int16_t max_x = DEFAULT_MAX_X,
       int16_t max_y = DEFAULT_MAX_Y,
-      int weapon_code = 1);
+      int weapon_code = 3);
     PlayerState(PlayerState&&);
     ~PlayerState();
 

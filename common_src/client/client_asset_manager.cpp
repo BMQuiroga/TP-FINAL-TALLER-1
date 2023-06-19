@@ -5,6 +5,7 @@
 
 #define SOLDIER1 1
 #define SOLDIER2 2
+#define ZOMBIE 51
 #define JUMPER 52
 #define SPEAR 53
 #define VENOM 54
@@ -108,7 +109,8 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	map.emplace(SPEAR + RUN_, std::make_shared<Asset>("../resources/Spear/Run.png", 0, 128, 128, 6, renderer, 0));
 
 	map.emplace(VENOM + IDLE_, std::make_shared<Asset>("../resources/Venom/Idle.png", 0, 128, 128, 7, renderer, 0));
-	map.emplace(VENOM + ATTACK_, std::make_shared<Asset>("../resources/Venom/Attack1.png", 0, 128, 128, 8, renderer, 0));
+	map.emplace(VENOM + ATTACK_, std::make_shared<Asset>("../resources/Venom/Attack2.png", 0, 128, 128, 14, renderer, 0));
+	map.emplace(VENOM + GRENADE_, std::make_shared<Asset>("../resources/Venom/Attack1.png", 0, 128, 128, 8, renderer, 0));
 	map.emplace(VENOM + DEAD_, std::make_shared<Asset>("../resources/Venom/Dead.png", 0, 128, 128, 6, renderer, 0));
 	map.emplace(VENOM + JUMP_, std::make_shared<Asset>("../resources/Venom/Jump.png", 0, 128, 128, 9, renderer, 0));
 	map.emplace(VENOM + HURT_, std::make_shared<Asset>("../resources/Venom/Hurt.png", 0, 128, 128, 3, renderer, 0));
@@ -135,9 +137,14 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	map.emplace(ZOMBIE + WALK_, std::make_shared<Asset>("../resources/Zombie/Walk.png", 0, 96, 96, 8, renderer, 0));
 	map.emplace(ZOMBIE + RUN_, std::make_shared<Asset>("../resources/Zombie/Run.png", 0, 96, 96, 7, renderer, 0));
 
-	sound_map.emplace(151,SDL2pp::Music("../resources/Sound/singleshot.mp3"));
+	//sound_map.emplace(151,SDL2pp::Music("../resources/Sound/singleshot.mp3"));
 	sound_map.emplace(152,SDL2pp::Music("../resources/Sound/DeathScreen.mp3"));
 	sound_map.emplace(153,SDL2pp::Music("../resources/Sound/VictoryScreen.mp3"));
+
+	sound_map.emplace(154,SDL2pp::Music("../resources/Sound/IDF.mp3"));
+	sound_map.emplace(155,SDL2pp::Music("../resources/Sound/P90.mp3"));
+	sound_map.emplace(156,SDL2pp::Music("../resources/Sound/Scout.mp3"));
+
 }
 
 Asset* AssetManager::GetAsset(int code) {

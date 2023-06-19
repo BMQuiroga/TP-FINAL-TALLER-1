@@ -30,16 +30,10 @@
 #include "../bullet.h"
 #include "../physics_manager.h"
 #include "../zombie.h"
+#include "../game_config.h"
 #include <ctime>
 
-#define MAX_ZOMBIES 4
-#define MAX_PLAYERS 2
-#define ZOMBIE_SEEKING_DISTANCE 400
 #define FAILURE -1
-#define GAME_TICK_RATE 5
-#define ZOMBIE_CREATION_TIME_MIN 10000
-#define ZOMBIE_CREATION_TIME_MAX 15000
-#define SCORE_TO_WIN 2
 
 using namespace std::placeholders;
 
@@ -69,7 +63,7 @@ class GameLoop : public Thread {
     Queue<GameEvent> &events;
     std::vector<PlayerState> players;
     std::list<Bullet> bullets;
-    std::list<CommonZombie> zombies;
+    std::list<Zombie*> zombies;
     std::atomic<GameState> state;
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
@@ -138,8 +132,8 @@ class GameLoop : public Thread {
                 resp.players.push_back(b.make_ref());
         }
 
-        for (CommonZombie &zombie : zombies) {
-            resp.zombies.push_back(zombie.make_ref());
+        for (Zombie* &zombie : zombies) {
+            resp.zombies.push_back(zombie->make_ref());
         }
         resp.game_state = state;
 
@@ -201,7 +195,7 @@ class GameLoop : public Thread {
             }
         }
         for (auto it = zombies.begin(); it != zombies.end();) {
-            if (it->get_health() == 0) {
+            if ((*it)->get_health() == 0) {
                 it = zombies.erase(it);
                 score++;
             } else {
@@ -230,57 +224,9 @@ class GameLoop : public Thread {
         });
     }
 
-    // Function to generate a random number within a given range
-    int getRandomNumber(int min, int max) {
-        static std::random_device rd;
-        static std::mt19937 gen(rd());
-        std::uniform_int_distribution<> distrib(min, max);
-        return distrib(gen);
-    }
-
     // Function to handle enemy spawns
     void spawn_enemy() {
-        // Spawn an enemy
-        int x = getRandomNumber(0, 800);  // Random X position within game area
-        int y = getRandomNumber(0, 95);  // Random Y position within game area
-        Vector2D position(x, y);
-        PlayerState& player_to_follow = get_random_player();
-        CommonZombie common_zombie("zombie", position, &player_to_follow);
-        zombies.push_back(std::move(common_zombie));
-    }
-
-    void move_to_closest(CommonZombie &z) {//en un futuro, metodo de zombie y no de gameloop
-        float closest_x = 0;
-        float closest_y = 0;
-        Vector2D this_pos = z.get_location();
-        int distance = 9999;
-        for (PlayerState &player : players) {
-            Vector2D vector = player.get_location();
-            int new_d = calculateDistance(this_pos,vector);
-            if (new_d < distance) {
-                distance = new_d;
-                closest_x = vector.x;
-                closest_y = vector.y;
-            }
-        }
-        float next_pos_x = this_pos.x - closest_x;
-        float next_pos_y = this_pos.y - closest_y;
-        int direction_x = next_pos_x > 0 ? -1 : next_pos_x < 0 ? 1 : 0;
-        int direction_y = next_pos_y > 0 ? -1 : next_pos_y < 0 ? 1 : 0;
-        if (distance < ZOMBIE_SEEKING_DISTANCE)
-            z.set_direction(direction_x,direction_y);
-        else
-            z.set_direction(0,0);
-        // if (zombie.has_target()){
-        //     zombie.move();
-        //     zombie.next_state();
-        //     continue;
-        // }
-        // std::cout << "start chasing player" << std::endl;
-        // std::cout << zombie.has_target() << std::endl;
-        // PlayerState& player_to_follow = get_random_player();
-        // zombie.set_target(player_to_follow);
-        z.move();
+        zombies.push_back(Zombie::get_random_zombie(3));
     }
 
     void run() override {
@@ -315,11 +261,23 @@ class GameLoop : public Thread {
             }
             for (PlayerState &player : players) {
                 if (player.get_state() != IDLE) {
-                    player.next_state(-1,bullets);
+                    player.next_state(-1,bullets); 
                 }
             }
-            for (CommonZombie &zombie : zombies) {
-                move_to_closest(zombie);
+            int zombies_to_spawn_via_witch = 0;
+            for (Zombie* &zombie : zombies) {
+                int i = zombie->calculate_next_movement(players);
+                if (i == CODE_WITCH_SPAWN)
+                    zombies_to_spawn_via_witch++;
+                if (i == CODE_VENOM_PROJECTILE) {
+                    Vector2D vec = zombie->get_location();
+                    float direc = zombie->get_direction().x;
+                    //TODO crear el proyectil enemigo
+                }           
+            }
+            //std::cout << "ZOMBIES SPAWNED VIA WITCH: " << zombies_to_spawn_via_witch << std::endl;
+            for (int i = 0; i < zombies_to_spawn_via_witch ; i++) {
+                spawn_enemy();
             }
             
             pass_time();

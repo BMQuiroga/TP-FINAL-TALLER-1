@@ -3,6 +3,8 @@
 
 #include <math.h>
 #include <cmath>
+#include <random>
+
 
 #define PI 3.14159265
 #define DEG_TO_RAD PI / 180.0f
@@ -110,6 +112,14 @@ inline int calculateDistance(Vector2D a, Vector2D b) {
     double deltaY = a.y - b.y;
     double distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
     return distance;
+}
+
+// Function to generate a random number within a given range
+inline int getRandomNumber(int min, int max) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(min, max);
+    return distrib(gen);
 }
 
 

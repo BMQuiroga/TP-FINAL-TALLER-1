@@ -10,7 +10,7 @@ PlayerState::PlayerState(
     int id,
     int16_t max_x, 
     int16_t max_y,
-    int weapon_code = 1
+    int weapon_code
 ) : 
 GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
     this->id = id;
@@ -90,7 +90,7 @@ void PlayerState::move() {
             this->state = MOVING;//termino la recarga
         } else if ((this->state == ATTACKING) && (delay == 0)) {
             this->state = MOVING;//termino el disparo
-        }
+        } 
     } else {
         if (this->state == MOVING) {
             this->state = IDLE;
@@ -157,6 +157,20 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec) {
         }
     } else if (cmd == STOP_SHOOTING) {
         //this->state = IDLE;
+    } else if (cmd = THROW_GRENADE) {
+        if (this->arma->try_grenade()) {
+            this->arma->create_grenade(position,NULL);
+            this->state = IDLE;
+        }
+    } else if (cmd = PREPARE_GRENADE) {
+        int u = this->arma->charge_grenade();
+        if (u==1)
+            this->state = THROWING_GRENADE;
+        if (u==2) {
+            this->state = IDLE;
+            take_damage(50);
+            this->arma->create_grenade(position,NULL);
+        }
     }
 
     this->move();

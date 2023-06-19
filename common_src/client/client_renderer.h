@@ -9,6 +9,7 @@
 #include "intention.h"
 #include "client_asset_manager.h"
 #include "client_image.h"
+#include "../game_config.h"
 
 class ClientRenderer {
     //logica de renderizacion, ejecutada sobre el hilo main
@@ -37,7 +38,7 @@ class ClientRenderer {
     void renderBackground();
 
     //renderiza una barra de vida dada la longitud, coordenadas y health points
-    void renderHealth(uint16_t length, uint16_t x, uint16_t y, uint8_t hp);
+    void renderHealth(uint16_t x, uint16_t y, uint8_t hp);
 
     //maneja eventos para enviarlos al servidor
     bool handleEvents();
@@ -57,6 +58,9 @@ class ClientRenderer {
     //pantalla de revive, entras cuando tu personaje muere, mientras estes en esta pantalla, no podras moverte o disparar
     //reapareceras despues de un tiempo. Si todos los jugadores de una partida estan en muertos, se pierde la partida
     void ReviveScreen();
+
+    //sincroniza el fotograma con respecto de la nueva imagen del server, hace fluidas las animaciones
+    uint8_t get_frame(Image & im);
 
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name);

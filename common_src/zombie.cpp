@@ -1,26 +1,36 @@
 #include "zombie.h"
 #include "physics_manager.h"
 #include "player_state.h"
+#include "math_helper.h"
 #include <string>
 #include <utility>
 
-Zombie::Zombie(
-    const std::string &name,
-    Vector2D position,
-    GameEntity *target,
-    int16_t max_x, 
-    int16_t max_y
-) : GameEntity(
-    name,
-    position,
-    max_x, max_y,
-    CollisionLayer::Hostile), target(target) {
-    rect_width = ZOMBIE_RECT_HEIGHT;
-    rect_height = ZOMBIE_RECT_HEIGHT;
-    speed = 4;
-}
-
 Zombie::~Zombie() {}
+
+Zombie* Zombie::get_random_zombie(int secure) {
+    int q;
+    if (secure == -1) {
+        q = getRandomNumber(0,4);
+    } else {
+        q = secure;
+    }
+    int x = getRandomNumber(0, 800);  // Random X position within game area
+    int y = getRandomNumber(0, 95);  // Random Y position within game area
+    Vector2D position(x, y);
+    if (q == 0) {
+        return new CommonZombie("Common",position);
+    } else if (q == 1) {
+        return new Jumper("Jumper",position);
+    } else if (q == 2) {
+        return new Spear("Spear",position);
+    } else if (q == 3) {
+        return new Venom("Venom",position);
+    } else if (q == 4) {
+        return new Witch("Witch",position);
+    }
+    std::cout << "ERROR: GETRANDOMZOMBIE RETURNS NULL" << std::endl;
+    return nullptr;
+}
 
 void Zombie::move() {
     bool moved = GameEntity::move();
@@ -55,23 +65,19 @@ void Zombie::take_damage(uint8_t damage) {
         health -= damage;
 }
 
-void Zombie::set_target(GameEntity *target) {
-    this->target = target;
-    Vector2D target_position = Vector2D(100, 2);
-    has_target_set = true;
-}
-
-bool Zombie::has_target() {
-    return has_target_set;
-}
 
 void Zombie::set_direction(int x, int y) {
     direction.x = x;
     //if (x == 0) {
         direction.y = y;
     //}
+    if (x < 0) {
+        this->facing_direction = LEFT;
+    } else {
+        this->facing_direction = RIGHT;
+    }
 }
-
+/*
 void Zombie::next_state() {
     Vector2D target_position = target->get_location();
     // Calculate the direction vector from the zombie to the player
@@ -100,7 +106,7 @@ void Zombie::next_state() {
     // Normalize the direction vector
     // direction = new_direction.normalized();
     // std::cout << "My new direction is " << direction.x << "and y " << direction.y << std::endl;
-}
+}*/
 
 uint8_t Zombie::get_damage()
 {
@@ -113,7 +119,7 @@ uint8_t Zombie::get_health()
 }
 
 Zombie::Zombie(Zombie&& other)
-    : GameEntity(std::move(other)), target(other.target) {
+    : GameEntity(std::move(other)) {
     if (this == &other)
         return;
     damage = other.damage;
@@ -125,7 +131,7 @@ Zombie::Zombie(Zombie&& other)
 ZombieStateReference Zombie::make_ref()
 {
     ZombieStateReference ref;
-    ref.id = id;
+    ref.id = get_id();
     ref.damage = damage;
     ref.health = health;
     ref.zombie_type = zombie_type;
@@ -141,31 +147,20 @@ ZombieStateReference Zombie::make_ref()
 CommonZombie::CommonZombie(
     const std::string &name,
     Vector2D position,
-    GameEntity *target,
     int16_t max_x, 
     int16_t max_y
-) : Zombie(name, position, target, max_x, max_y) {
+) : Zombie(name, position, max_x, max_y) {
     id = 51;
-    damage = 5;
+    damage = ZOMBIE_DAMAGE;
     zombie_type = ZOMBIE;
     attack_type = ZOMBIE_BITE;
     movement_type = ZOMBIE_WALK;
 }
 
-void CommonZombie::attack(GameEntity *other) {
-    //esto es un poco turbio pero funciona asi:
-    //como siempre el zombie esta moving, siempre entraria al if y nunca al else
-    //asi que las detecciones de colisiones del zombie y del player ambas hacen lo mismo,
-    //una setea el flag y la otra como ya esta attacking, hace el daño
-    //if (state != ATTACKING) {
-        state = ATTACKING;
-        // move towards the player and bite him
-    //} else {
-        // collision
-        PlayerState *player = (PlayerState*)other;
-        //std::cout << "boomboom22222" << std::endl;
-        player->take_damage(damage);
-    //}
+void Zombie::attack(GameEntity *other) {
+    state = ATTACKING;
+    PlayerState *player = (PlayerState*)other;
+    player->take_damage(damage);
 }
 
 CommonZombie::CommonZombie(CommonZombie&& other)
@@ -173,3 +168,225 @@ CommonZombie::CommonZombie(CommonZombie&& other)
 }
 
 CommonZombie::~CommonZombie() {}
+
+Zombie::Zombie(
+    const std::string &name,
+    Vector2D position,
+    int16_t max_x, 
+    int16_t max_y
+) : GameEntity(
+    name,
+    position,
+    max_x, max_y,
+    CollisionLayer::Hostile) {
+    rect_width = ZOMBIE_RECT_HEIGHT;
+    rect_height = ZOMBIE_RECT_HEIGHT;
+    speed = ZOMBIE_SPEED;
+    seeking_distance = ZOMBIE_SEEKING_DISTANCE;
+}
+
+Spear::Spear(
+    const std::string &name,
+    Vector2D position,
+    int16_t max_x, 
+    int16_t max_y
+) : Zombie(name, position, max_x, max_y) {
+    id = 53;
+    damage = SPEAR_DAMAGE;
+    zombie_type = SPEAR;
+    attack_type = ZOMBIE_ATTACK1;
+    movement_type = ZOMBIE_WALK;
+    rect_width = SPEAR_RECT_WIDTH;
+    health = SPEAR_HP;
+    speed = SPEAR_SPEED;
+}
+
+Jumper::Jumper(
+    const std::string &name,
+    Vector2D position,
+    int16_t max_x, 
+    int16_t max_y
+) : Zombie(name, position, max_x, max_y), objetive(-1,-1) {
+    id = 52;
+    damage = JUMPER_DAMAGE;
+    zombie_type = JUMPER;
+    attack_type = ZOMBIE_JUMP;
+    movement_type = ZOMBIE_WALK;
+    seeking_distance = JUMPER_SEEKING_DISTANCE;
+    health = JUMPER_HP;
+    speed = JUMPER_SPEED;
+    cooldown = 0;
+}
+
+Venom::Venom(
+    const std::string &name,
+    Vector2D position,
+    int16_t max_x, 
+    int16_t max_y
+) : Zombie(name, position, max_x, max_y) {
+    id = 54;
+    damage = VENOM_DAMAGE;//daño melee
+    zombie_type = VENOM;
+    attack_type = ZOMBIE_ATTACK2;
+    movement_type = ZOMBIE_WALK;
+    seeking_distance = VENOM_SEEKING_DISTANCE;
+    rect_width = VENOM_RECT_WIDTH;
+    health = VENOM_HP;
+    speed = VENOM_SPEED;
+    cooldown = 0;
+}
+
+Witch::Witch(
+    const std::string &name,
+    Vector2D position,
+    int16_t max_x, 
+    int16_t max_y
+) : Zombie(name, position, max_x, max_y) {
+    id = 55;
+    damage = 0;
+    zombie_type = WITCH;
+    attack_type = ZOMBIE_SCREAM;
+    movement_type = ZOMBIE_WALK;
+    seeking_distance = WITCH_SEEKING_DISTANCE;
+    health = WITCH_HP;
+    speed = 0;
+}
+
+int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
+    float closest_x = 0;
+    float closest_y = 0;
+    Vector2D this_pos = get_location();
+    int distance = 99999;
+    for (GameEntity &player : players) {
+        Vector2D vector = player.get_location();
+        int new_d = calculateDistance(this_pos,vector);
+        if (new_d < distance) {
+            distance = new_d;
+            closest_x = vector.x;
+            closest_y = vector.y;
+        }
+    }
+    if (distance < seeking_distance) {
+        float next_pos_x = this_pos.x - closest_x;
+        float next_pos_y = this_pos.y - closest_y;
+        int direction_x = next_pos_x > 0 ? -1 : next_pos_x < 0 ? 1 : 0;
+        int direction_y = next_pos_y > 0 ? -1 : next_pos_y < 0 ? 1 : 0;
+        set_direction(direction_x,direction_y);
+    } else {
+        set_direction(0,0);
+    }   
+    move();
+    return CODE_NULL;
+}
+
+int Witch::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (state == IDLE) {
+        int x = getRandomNumber(0,30);
+        if (x == 2) {
+            state = SCREAMING;
+        }
+    } else if (state == SCREAMING) {
+        int x = getRandomNumber(0,10);
+        if (x == 2) {
+            return CODE_WITCH_SPAWN;
+        }
+    }
+    return CODE_NULL;
+}
+
+int Jumper::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->state == HURT && cooldown > 0) {
+        cooldown--;
+    } else if (this->state == HURT && cooldown == 0) {
+        this->state = IDLE;
+    } else if (this->state == IDLE) {
+        set_objetive(players);
+    } else if (this->state == JUMPING) {
+        if (jump()) { //termina el salto, entra en cooldown
+            this->state = HURT;
+            this->cooldown = 20;
+            this->objetive.x = -1;
+            this->objetive.y = -1;
+        }
+    }
+    return CODE_NULL;
+}
+
+void Jumper::set_objetive(std::vector<PlayerState>& players) {
+    float closest_x = 0;
+    float closest_y = 0;
+    Vector2D this_pos = get_location();
+    int distance = 99999;
+    for (GameEntity &player : players) {
+        Vector2D vector = player.get_location();
+        int new_d = calculateDistance(this_pos,vector);
+        if (new_d < distance) {
+            distance = new_d;
+            closest_x = vector.x;
+            closest_y = vector.y;
+        }
+    }
+    if (distance < seeking_distance) {
+        objetive.x = closest_x;
+        objetive.y = closest_y;
+        state = JUMPING;
+    }
+}
+
+bool Jumper::jump() {
+    Vector2D this_pos = position;
+    if (calculateDistance(this_pos,objetive) < 19) {
+        return true;//termina el salto
+    }
+    float next_pos_x = this_pos.x - objetive.x;
+    float next_pos_y = this_pos.y - objetive.y;
+    int direction_x = next_pos_x > 0 ? -1 : next_pos_x < 0 ? 1 : 0;
+    int direction_y = next_pos_y > 0 ? -1 : next_pos_y < 0 ? 1 : 0;
+    set_direction(direction_x,direction_y);
+    move();
+}
+
+int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (cooldown > 0)
+        cooldown--;
+    float closest_x = 0;
+    float closest_y = 0;
+    Vector2D this_pos = get_location();
+    int distance = 99999;
+    for (GameEntity &player : players) {
+        Vector2D vector = player.get_location();
+        int new_d = calculateDistance(this_pos,vector);
+        if (new_d < distance) {
+            distance = new_d;
+            closest_x = vector.x;
+            closest_y = vector.y;
+        }
+    }
+    if (distance < seeking_distance) {
+        float next_pos_y = this_pos.y - closest_y;
+        int direction_y = next_pos_y > 0 ? -1 : next_pos_y < 0 ? 1 : 0;
+        set_direction(0,direction_y);
+        if (abs(next_pos_y) < 20) {
+            if (cooldown == 0) {
+                state = THROWING_GRENADE;
+                cooldown = VENOM_PROJECTILE_COOLDOWN;
+                return CODE_VENOM_PROJECTILE;
+            } else {
+                return CODE_NULL;
+            }
+        }
+    } else {
+        set_direction(0,0);
+    }   
+    move();
+    return CODE_NULL;
+}
+
+void Jumper::attack(GameEntity * other) {
+    PlayerState *player = (PlayerState*)other;
+    player->take_damage(damage);
+}
+
+void Witch::attack(GameEntity * other) {
+    //nothing
+}
