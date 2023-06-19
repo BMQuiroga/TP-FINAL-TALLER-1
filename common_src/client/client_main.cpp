@@ -66,7 +66,6 @@ int main(int argc, char *argv[]) { try {
     updates_q.close();
     client_sender.join();
     client_receiver.join();
-    client_receiver.join();
     ret = 0;
     return ret;
 } catch (const std::exception& err) {

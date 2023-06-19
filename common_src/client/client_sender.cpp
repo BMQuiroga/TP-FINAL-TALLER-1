@@ -18,19 +18,23 @@ ClientSender::ClientSender(
 
 ClientSender::~ClientSender() {
     kill();
-    join();
 }
 
 void ClientSender::run() {
     is_alive = keep_talking = true;
     bool was_closed = false;
     while (keep_talking) {
-        Intention *command = q.pop();
-        if (command->get_intention() == END) {
+        try {
+            Intention *command = q.pop();
+            if (command->get_intention() == END) {
+                kill();
+                break;
+            }
+            protocol.send_command(*command, skt, &was_closed);
+        } catch (...) {
+            std::cout << "The sender was closed" << std::endl;
             kill();
-            break;
         }
-        protocol.send_command(*command, skt, &was_closed);
     }
 }
 

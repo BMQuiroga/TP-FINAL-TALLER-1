@@ -7,7 +7,6 @@ un asset
 
 * **(P3)** El main del cliente tiene mucho codigo suelto, faltan clases RAII para asegurarte que los hilos se joineen
 debidamente sin importar excepciones que se lancen
-* **(P1)** El client receiver y sender están haciendo un doble join (en la función main y en su destructor), ojo con eso.
 * **(P1)** Si `ticks_delta` es mayor que `(1000/GAME_FRAME_RATE)` (puede pasar en modo survival cuando tengas muchos zombies y el render tarde mucho en dibujar todo) tu cliente se va a colgar en un sleep MUY grande. Atajate de que esto no suceda
 * **(P4)** Hay mucho número mágico en el cliente que no se entiende que significan.
 
@@ -122,7 +121,6 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 - [ ] **(P1)** Se muestra tiempo transcurrido
 ## Controles
 - [x] se controla via teclado
-- [ ] **(P1)** Recarga automatica (cuando te quedás sin balas)
 - [x] Recarga manual (mediante botón de recarga)
 - [ ] **(P1)** distancia de lanzado de granada depende de cuanto tiempo se mantiene presionado la tecla
 - [ ] **(P1)** Si mantenés mucho tiempo presionado la tecla de lanzar granada, explota en la mano

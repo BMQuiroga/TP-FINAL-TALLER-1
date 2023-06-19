@@ -20,7 +20,6 @@ ClientReceiver::ClientReceiver(
 }
 ClientReceiver::~ClientReceiver() {
     kill();
-    join();
 }
 
 void ClientReceiver::run() {

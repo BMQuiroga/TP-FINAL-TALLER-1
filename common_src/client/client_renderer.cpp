@@ -29,6 +29,7 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse
 
 void ClientRenderer::GameLoop() {
     // std::list<Image>* new_update = nullptr;
+    int wait_time = 1000/GAME_FRAME_RATE;
     std::list<Image>* frames_list = nullptr;
     ProtocolResponse new_update;
     Serializer serializer;
@@ -89,7 +90,8 @@ void ClientRenderer::GameLoop() {
         renderer.Present();
         unsigned int end_ticks = SDL_GetTicks();
         unsigned int ticks_delta = frame_ticks - end_ticks;
-        SDL_Delay((1000/GAME_FRAME_RATE) - ticks_delta);
+        if (wait_time > ticks_delta)
+            SDL_Delay(wait_time - ticks_delta);
     }
     if (defeat)
         DeathScreen();
