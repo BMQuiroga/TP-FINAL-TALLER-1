@@ -7,8 +7,13 @@
 
 Zombie::~Zombie() {}
 
-Zombie* Zombie::get_random_zombie() {
-    int q = getRandomNumber(0,4);
+Zombie* Zombie::get_random_zombie(int secure) {
+    int q;
+    if (secure == -1) {
+        q = getRandomNumber(0,4);
+    } else {
+        q = secure;
+    }
     int x = getRandomNumber(0, 800);  // Random X position within game area
     int y = getRandomNumber(0, 95);  // Random Y position within game area
     Vector2D position(x, y);

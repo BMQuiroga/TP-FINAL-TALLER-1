@@ -38,7 +38,7 @@ class Zombie : public GameEntity {
     GameEntity *target;
     Vector2D target_position{VEC2_ZERO};
   public:
-    static Zombie* get_random_zombie();
+    static Zombie* get_random_zombie(int secure);
 
     Zombie(
         const std::string &name,
