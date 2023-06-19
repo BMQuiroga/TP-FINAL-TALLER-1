@@ -91,8 +91,7 @@ struct LobbyStateResponse {
     std::vector<GameReference> games;
     LobbyStateResponse() = default;
 };
-
-struct JoinedGameResponse {
+struct LobbyGameStateResponse {
     int game_code;
     int succeeded;
 };

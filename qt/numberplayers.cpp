@@ -27,3 +27,10 @@ void NumberPlayers::connectEvents() {
     QObject::connect(buttonGreet, &QPushButton::clicked,
                      this, &NumberPlayers::setNumberOfPlayers);
 }
+
+void NumberPlayers::receiveNewGameCreatedCode(int code) {
+    QLabel* gameCodeLabel = findChild<QLabel*>("gameCodeLabel");
+    QString code_message = QString::number(code);
+    QString output_message = QString("Codigo de la partida: %1").arg(code_message);
+    gameCodeLabel->setText(output_message);
+}

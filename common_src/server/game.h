@@ -118,7 +118,6 @@ class GameLoop : public Thread {
     //une al player a la partida
     int join(GameEvent &event) {
         if (state == CREATED && players.size() < MAX_PLAYERS) {
-            std::cout << "creo nuevo jugador en join del gameloop con weapon code " << event.weapon_code << std::endl;
             players.push_back(PlayerState(event.player_name, players.size() + 1, event.weapon_code));
             message_queues.push_back(*event.player_messages);
             return players.size();

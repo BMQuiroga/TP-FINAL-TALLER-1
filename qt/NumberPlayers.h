@@ -9,6 +9,8 @@ class NumberPlayers : public QWidget {
     Q_OBJECT
 public:
     explicit NumberPlayers(QWidget *parent = 0);
+public slots:
+    void receiveNewGameCreatedCode(int code);
 signals:
     void inputNumberEntered(const QString& text, int number);
 private:

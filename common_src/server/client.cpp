@@ -36,17 +36,19 @@ void Client::handle_request(ProtocolRequest &message) {
         // then try to joint the game and return its current state on success
         // or 0 on failure.
         if (message.cmd == CREATE) {
-            // JoinedGameResponse resp;
-            // ProtocolResponse response;
-            // response.content_type = CREATE;
+            LobbyGameStateResponse resp;
+            ProtocolResponse response;
+            response.content_type = CREATE;
             GameReference create_req = serializer.deserialize_game_reference(message.content);
             Game &game = game_handler.create_new_game(create_req.name, responses);
             game.start();
             game_handler.join_game(game.get_id(), name, weapon_code, responses);
             joined_game = game.get_id();
-            // resp.game_code = joined_game;
-            // response.content = serializer.serialize(resp);
-            // resp.succeeded = true;
+            resp.game_code = joined_game;
+            resp.succeeded = JOIN_SUCCESS;
+            response.content = serializer.serialize(resp);
+            response.size = response.content.size();
+            responses.push(std::ref(response));
         }
         if (message.cmd == LIST) {
             LobbyStateResponse resp;
@@ -59,7 +61,7 @@ void Client::handle_request(ProtocolRequest &message) {
         if (message.cmd == JOIN) {
             JoinRequest join_req = serializer.deserialize_join_state(message.content);
             ProtocolResponse response;
-            JoinedGameResponse resp; 
+            LobbyGameStateResponse resp; 
             int join_code = game_handler.join_game(join_req.game_code, name, weapon_code, responses);
             joined_game = join_code;
             resp.game_code = joined_game;
