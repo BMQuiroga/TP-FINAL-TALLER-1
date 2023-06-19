@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(Queue<LobbyCommand>& q, QWidget *parent = nullptr);
+    explicit MainWindow(Queue<LobbyCommand>& q, Queue<int>& q_responses, QWidget *parent = nullptr);
     void showLobbyWidget();
     void showJoinGame();
     void showCreateGame();
@@ -31,8 +31,13 @@ public slots:
     void receiveGameCode(const QString& text);
     std::string get_player_name();
 
+signals:
+    void joinedSuccessfully();
+    void failedToJoin();
+
 private:
     Queue<LobbyCommand>& q;
+    Queue<int>& q_responses;
     QWidget* currentWidget {nullptr};
     Ui::MainWindow *ui;
     std::string player_name;

@@ -10,8 +10,9 @@
 #include "./ui_MainWindow.h"
 #include "lobby_command.h"
 
-MainWindow::MainWindow(Queue<LobbyCommand>& q, QWidget *parent) :
+MainWindow::MainWindow(Queue<LobbyCommand>& q, Queue<int>& q_responses, QWidget *parent) :
     q(q),
+    q_responses(q_responses),
     QMainWindow(parent), 
     ui(new Ui::MainWindow)
 {
@@ -29,6 +30,8 @@ void MainWindow::showJoinGame()
     currentWidget = new JoinGame();
     currentWidget->show();
     QObject::connect(currentWidget, SIGNAL(sendGameCodeEntered(QString)), this, SLOT(receiveGameCode(QString)));
+    QObject::connect(this, SIGNAL(joinedSuccessfully()), currentWidget, SLOT(receiveSuccessfulJoin()));
+    QObject::connect(this, SIGNAL(failedToJoin()), currentWidget, SLOT(receiveUnsuccessfulJoin()));
 }
 
 void MainWindow::showCreateGame()
@@ -100,8 +103,16 @@ void MainWindow::receiveGameCode(const QString& text) {
     qDebug() << "Received input number to join game: " << text;
     LobbyCommand command(JOINGAME, text.toStdString());
     q.push(command);
-    LobbyCommand end_command(ENDLOBBY, "");
-    q.push(end_command);
+    int result = q_responses.pop();
+    if (result == 0) {
+        std::cout << "joining successfully!" << std::endl;
+        LobbyCommand end_command(ENDLOBBY, "");
+        q.push(end_command);
+        emit joinedSuccessfully();
+    } else {
+        std::cout << "joining failed" << std::endl;
+        emit failedToJoin();
+    }
 }
 
 std::string MainWindow::get_player_name()

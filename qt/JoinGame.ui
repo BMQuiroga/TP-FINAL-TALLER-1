@@ -43,6 +43,19 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+    <widget class="QLabel" name="outputLabel">
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string></string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

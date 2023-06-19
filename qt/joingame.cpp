@@ -21,3 +21,17 @@ void JoinGame::connectEvents() {
     QObject::connect(buttonCode, &QPushButton::clicked,
                      this, &JoinGame::connectToGame);
 }
+
+void JoinGame::editOutputMessage(const std::string& message) {
+    QLabel* labelOut = findChild<QLabel*>("outputLabel");
+    QString created_message = QString::fromStdString(message);
+    labelOut->setText(created_message);
+}
+
+void JoinGame::receiveUnsuccessfulJoin() {
+    editOutputMessage(FAILURE_MESSAGE);
+}
+
+void JoinGame::receiveSuccessfulJoin() {
+    editOutputMessage(SUCCESS_MESSAGE);
+}

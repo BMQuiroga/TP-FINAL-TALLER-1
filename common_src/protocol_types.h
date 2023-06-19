@@ -58,6 +58,10 @@ struct ProtocolResponse {
     std::vector<int8_t> content; // response content
 };
 
+struct LobbyCommandResponse {
+    int result;
+};
+
 struct GameStateResponse {
     int game_state;
     std::vector<PlayerStateReference> players;
@@ -86,6 +90,11 @@ struct JoinRequest {
 struct LobbyStateResponse {
     std::vector<GameReference> games;
     LobbyStateResponse() = default;
+};
+
+struct JoinedGameResponse {
+    int game_code;
+    int succeeded;
 };
 
 #endif

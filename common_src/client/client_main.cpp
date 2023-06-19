@@ -35,12 +35,12 @@ int main(int argc, char *argv[]) { try {
 
     Socket skt(hostname, servname);
     Queue<LobbyCommand> lobby_commands_q(1000);
-    Queue<LobbyCommand> lobby_receiver_q(1000);
+    Queue<int> lobby_receiver_q(1000);
     // Clase que contiene el loop principal
     QApplication app(argc, argv);
-    ClientLobby client_lobby(std::ref(skt), std::ref(lobby_commands_q));
+    ClientLobby client_lobby(std::ref(skt), std::ref(lobby_commands_q), std::ref(lobby_receiver_q));
     client_lobby.start();
-    MainWindow w(std::ref(lobby_commands_q));
+    MainWindow w(std::ref(lobby_commands_q), std::ref(lobby_receiver_q));
 
     if (app.exec()) {
         throw std::runtime_error("La aplicación QT finalizó de forma incorrecta");

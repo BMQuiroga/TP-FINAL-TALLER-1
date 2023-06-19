@@ -18,6 +18,7 @@ class Serializer {
     std::vector<int8_t> serialize(const GameStateResponse &resp);
     std::vector<int8_t> serialize(const GameReference &ref);
     std::vector<int8_t> serialize(const LobbyStateResponse &resp);
+    std::vector<int8_t> serialize(const JoinedGameResponse &resp);
     // deserialization
     void serialize_player(const PlayerStateReference &player, std::vector<int8_t> &buf);
     void serialize_zombie(const ZombieStateReference &zombie, std::vector<int8_t> &buf);
@@ -25,6 +26,7 @@ class Serializer {
     int deserialize_zombie(ZombieStateReference &zombie_ref, const int8_t *data, int offset);
     GameStateResponse deserialize_game_state(const std::vector<int8_t> &content);
     LobbyStateResponse deserialize_lobby_state(const std::vector<int8_t> &content);
+    JoinedGameResponse deserialize_join_response(const std::vector<int8_t> &content);
     CreateRequest deserialize_create_state(const std::vector<int8_t> &content);
     NewPlayerRequest deserialize_input_name(const std::vector<int8_t> &content);
     JoinRequest deserialize_join_state(const std::vector<int8_t> &content);

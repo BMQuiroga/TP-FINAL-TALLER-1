@@ -12,13 +12,15 @@ private:
     CProtocol protocol;
     Socket& skt;
     Queue<LobbyCommand>& q;
+    Queue<int>& q_responses;
     std::atomic<bool> keep_talking{true};
     std::atomic<bool> is_alive{true};
 
 public:
     explicit ClientLobby(
         Socket& socket,
-        Queue<LobbyCommand>& q);
+        Queue<LobbyCommand>& q,
+        Queue<int>& q_responses);
     ~ClientLobby() override;
     void run() override;
     bool is_dead();

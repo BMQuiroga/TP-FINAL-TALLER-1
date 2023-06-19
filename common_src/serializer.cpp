@@ -184,6 +184,13 @@ std::vector<int8_t> Serializer::serialize(const LobbyStateResponse &resp) {
     return buf;
 }
 
+std::vector<int8_t> Serializer::serialize(const JoinedGameResponse &resp)
+{
+    std::vector<int8_t> buf;
+    push_number(buf, resp.game_code);
+    push_number(buf, resp.succeeded);
+    return buf;
+}
 
 LobbyStateResponse Serializer::deserialize_lobby_state(const std::vector<int8_t> &content) {
     LobbyStateResponse resp;
@@ -200,12 +207,21 @@ LobbyStateResponse Serializer::deserialize_lobby_state(const std::vector<int8_t>
     return resp;
 }
 
+JoinedGameResponse Serializer::deserialize_join_response(const std::vector<int8_t> &content)
+{
+    JoinedGameResponse resp;
+    const int8_t *data = content.data();
+    int offset = 0, size = content.size();
+    offset += copy_number(data+offset, &resp.game_code);
+    offset += copy_number(data+offset, &resp.succeeded);
+    return resp;
+}
+
 CreateRequest Serializer::deserialize_create_state(const std::vector<int8_t> &content)
 {
     CreateRequest resp;
     const int8_t *data = content.data();
     int offset = 0, size = content.size();
-    std::string test("");
     offset += copy_number(data+offset, &resp.max_number);
     offset += copy_string(data+offset, resp.name);
     return resp;
