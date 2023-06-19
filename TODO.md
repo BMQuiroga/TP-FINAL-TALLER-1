@@ -40,9 +40,6 @@ reciba el codigo para pasarselós a sus amigos, o que puedas listar partidas cre
 * Si cierro el lobby del cliente sin haberme joineado o creado partida, abre una ventana de juego que es injugable. Hay que chequear si el jugador se joineó/creó una partida para saber si tenés que abrir la ventana de SDL o no
 
 
-# Performance (5/5)
-El consumo tanto del cliente como del servidor en lo que respecta a CPU y memoria es bajo, buen trabajo!
-
 # Instalación (3/5)
 * El juego se puede compilar sin problemas.
 * **(P3)** No hay instalador. Los paths a los assets debería ser variable en función de si estás ejecutandoló en modo desarrollo (paths locales) o si estás en producción (`/usr/bin/` para los ejecutables, `/var/left4dead/` para las configuraciones). Pueden usar CMake Para definir una macro de compilación (ver `add_compile_definitions`) y en donde quieran
@@ -56,52 +53,19 @@ std::string filepath = CONFIG_BASE_PATH "/server/config.yaml"
 # Features (2/5)
 Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 ## Zombies
-### Infectados
-- [x] Caminan o permanecen quietos si no son molestados
-- [x] Cuando el jugador esté en el rango de vision los persigue 
-- [x] golpe con mordidas o golpes
 
 ### Jumper
 - [ ] **(P0)** Salta sobre sus victimas
 - [ ] **(P0)** produce daño cuando cae sobre las victimas
 - [ ] **(P0)** salto tiene animación previa de aviso
 
-### Witch
-- [ ] **(P0)** ocasionalmente grita para atraer infectados
-
-### Spear
-- [ ] **(P2)** usan armas como lanzas
-
 ### Venom
 - [ ] **(P2)** ataque a distancia
-- [ ] **(P2)** daña a todo jugador que esté en contacto con el ataque
 
 ## Jugador
 - [x] Munición infinita
 - [x] Tiempo de recarga 
 - [ ] **(P0)** Todos salvo P90 pueden lanzar granadas explosivas y de humo
-
-
-### IDF
-- [ ] **(P2)** rafaga de 20 balas 
-	* Pareciera haber rafagas (por la animación) pero a nivel daño no se aprecia
-- [ ] **(P1)** daño a corta distancia alto
-	* Pareciera generarse el mismo daño ya sea a corta distancia o a larga distancia
-- [ ] **(P1)** daño menor a larga distancia
-- [x] Recarga cada 50 rafagas
-	* **(P0)** No hay recarga automatica
-
-### P90
-
-- [ ] **(P2)** rafagas de 10 balas
-- [ ] **(P1)** daño no reducido a largas distancias
-- [ ] **(P0)** recarga cada 30 rafagas
-
-### Scout
-- [ ] **(P0)** Rifle de 1 bala
-- [ ] **(P0)** Atraviesa infectados
-- [ ] **(P1)** Daño se reduce por cada impacto entre infectados
-- [ ] **(P0)** recarga cada 20 bbalas
 
 
 ## Granadas
