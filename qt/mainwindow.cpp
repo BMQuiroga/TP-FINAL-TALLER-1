@@ -15,7 +15,7 @@
 #include "../common_src/protocol_types.h"
 #include "./ui_MainWindow.h"
 #include "lobby_command.h"
-#include "lobbywidget.h"
+//#include "lobbywidget.h"
 
 MainWindow::MainWindow(Queue<LobbyCommand>& q, 
     Queue<LobbyGameStateResponse>& q_responses, QWidget *parent) :

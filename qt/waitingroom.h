@@ -25,7 +25,7 @@ private:
     QLabel* counterLabel;
     QLabel* NumberPlayersLabel;
     QTimer* timer;
-    int counter{15};
+    int counter{10};
 };
 
 #endif // WAITING_ROOM_H

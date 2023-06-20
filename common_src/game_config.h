@@ -21,7 +21,7 @@
 #define ZOMBIE_CREATION_TIME_MAX 15000
 #define SCORE_TO_WIN 2
 #define MAX_ZOMBIES 4
-#define MAX_PLAYERS 2
+#define MAX_PLAYERS 1
 #define WAIT_TIME_START_GAME 10000
 
 //playerstate.h
