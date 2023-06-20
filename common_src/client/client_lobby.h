@@ -13,6 +13,7 @@ private:
     Socket& skt;
     Queue<LobbyCommand>& q;
     Queue<LobbyGameStateResponse>& q_responses;
+    std::atomic<bool> player_signed_up{false};
     std::atomic<bool> keep_talking{true};
     std::atomic<bool> is_alive{true};
 

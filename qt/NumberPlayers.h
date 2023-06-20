@@ -11,11 +11,15 @@ public:
     explicit NumberPlayers(QWidget *parent = 0);
 public slots:
     void receiveNewGameCreatedCode(int code);
+    void deactivate();
 signals:
     void inputNumberEntered(const QString& text, int number);
+    void windowClosed();
 private:
     void setNumberOfPlayers();
     void connectEvents();
+    void closeEvent(QCloseEvent *event);
+    bool is_active {true};
     QLineEdit* inputGameName;
 };
 

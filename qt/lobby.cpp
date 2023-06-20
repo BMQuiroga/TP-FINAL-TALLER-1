@@ -1,6 +1,7 @@
 #include "Lobby.h"
 #include "ui_Lobby.h"
 #include <iostream>
+#include <QKeyEvent>
 
 Lobby::Lobby(QWidget *parent) : QWidget(parent) {
     Ui::Lobby lobby;
@@ -16,6 +17,17 @@ void Lobby::sendNewPlayerInfo() {
     emit inputPlayerInfoEntered(name, std::stoi(player_type.toStdString()));
     inputName->clear();
     playerType->clear();
+}
+
+void Lobby::deactivate() {
+    is_active = false;
+}
+
+void Lobby::closeEvent(QCloseEvent *event) {
+    if (is_active) {
+        emit windowClosed();
+    }
+    event->accept();
 }
 
 void Lobby::connectEvents() {

@@ -40,6 +40,7 @@ qt5_wrap_ui(UIS_HEADERS
   qt/joingame.ui
   qt/numberplayers.ui
   qt/mainwindow.ui
+  qt/waitingroom.ui
 )
 
 # Habilito el automoc para poder hacer autoconnect de señales

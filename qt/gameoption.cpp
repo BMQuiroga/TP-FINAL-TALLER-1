@@ -1,12 +1,12 @@
 #include "GameOption.h"
 
 #include "ui_GameOption.h"
-#include "JoinGame.h"
 #include "NumberPlayers.h"
+#include <QKeyEvent>
 
 GameOption::GameOption(QWidget *parent) : QWidget(parent) {
-    Ui::GameOption GameOption;
-    GameOption.setupUi(this);
+    Ui::GameOption gameOption;
+    gameOption.setupUi(this);
     connectEvents();
 }
 
@@ -16,6 +16,17 @@ void GameOption::createGame() {
 
 void GameOption::joinGame() {
     emit joinGameOptionPicked();
+}
+
+void GameOption::deactivate() {
+    is_active = false;
+}
+
+void GameOption::closeEvent(QCloseEvent *event) {
+    if (is_active) {
+        emit windowClosed();
+    }
+    event->accept();
 }
 
 void GameOption::connectEvents() {

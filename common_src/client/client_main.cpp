@@ -45,6 +45,13 @@ int main(int argc, char *argv[]) { try {
     if (app.exec()) {
         throw std::runtime_error("La aplicación QT finalizó de forma incorrecta");
     }
+    if (!w.game_started()) {
+        skt.shutdown(0);
+        skt.close();
+        client_lobby.join();
+        ret = 0;
+        return ret;
+    }
     /*
     MainMenu main;
     if (main.Start() == -1) {

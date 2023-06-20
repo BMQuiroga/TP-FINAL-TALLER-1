@@ -38,7 +38,7 @@ struct GameReference {
 };
 
 enum ResponseType {
-    GAME_STATE, LOBBY_STATE
+    GAME_STATE, LOBBY_STATE, GAME_START
 };
 
 // Solicitud del cliente
@@ -94,6 +94,15 @@ struct LobbyStateResponse {
 struct LobbyGameStateResponse {
     int game_code;
     int succeeded;
+    int ready{1};
+    int number_players_connected;
+    int max_number_players;
+};
+
+struct PreGameStateResponse {
+    int ready{1};
+    int number_players_connected;
+    int max_number_players;
 };
 
 #endif

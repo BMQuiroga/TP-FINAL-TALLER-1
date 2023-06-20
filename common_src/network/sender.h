@@ -41,13 +41,18 @@ public:
 
     void run() override {
         while (keep_talking) {
-            Send_Type message;
-            if (is_queue_blocking) {
-                message = q.pop();
-            } else {
-                q.try_pop(message);
+            try {
+                Send_Type message;
+                if (is_queue_blocking) {
+                    message = q.pop();
+                } else {
+                    q.try_pop(message);
+                }
+                protocol.send(skt, message, keep_talking);    
             }
-            protocol.send(skt, message, keep_talking);
+            catch(const ClosedQueue& err) {
+                kill();
+            }
         }
     }
 
@@ -57,7 +62,7 @@ public:
 
     void kill() {
         keep_talking = false;
-        q.close();
+        // q.close();
     }
 };
 

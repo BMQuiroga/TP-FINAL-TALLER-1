@@ -22,8 +22,6 @@ ClientLobby::ClientLobby(
 
 ClientLobby::~ClientLobby()
 {
-    kill();
-    join();
 }
 
 void ClientLobby::run() {
@@ -39,10 +37,23 @@ void ClientLobby::run() {
         if (command.name == JOINGAME || command.name == CREATEGAME) {
             Serializer serializer;
             ProtocolResponse resp = protocol.get(skt, &was_closed);
-            LobbyGameStateResponse joined_response = serializer.deserialize_join_response(resp.content);
-            q_responses.push(joined_response);
+            LobbyGameStateResponse lobby_response = serializer.deserialize_join_response(resp.content);
+            q_responses.push(lobby_response);
+            if (lobby_response.succeeded == 0) {
+                break;
+                player_signed_up = true;
+            }
         }
     }
+    while (keep_talking) {
+        Serializer serializer;
+        ProtocolResponse resp = protocol.get(skt, &was_closed);
+        LobbyGameStateResponse lobby_response = serializer.deserialize_join_response(resp.content);
+        q_responses.push(lobby_response);
+        if (lobby_response.ready == 0) {
+            kill();
+        }
+    }    
 }
 
 bool ClientLobby::is_dead()

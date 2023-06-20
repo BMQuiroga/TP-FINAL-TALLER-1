@@ -231,12 +231,46 @@ class GameLoop : public Thread {
         });
     }
 
+    void push_game_lobby_state(int ready) {
+        LobbyGameStateResponse resp;
+        resp.ready = ready;
+        resp.max_number_players = MAX_PLAYERS;
+        resp.number_players_connected = message_queues.size();
+        resp.game_code;
+        std::for_each(message_queues.begin(), message_queues.end(),
+            [this, resp](Queue<ProtocolResponse> & queue) {
+                ProtocolResponse response;
+                response.content_type = GAME_START;
+                response.content = serializer.serialize(resp);
+                response.size = response.content.size();
+                queue.push(response);
+        });
+    }
+
     // Function to handle enemy spawns
     void spawn_enemy() {
         zombies.push_back(Zombie::get_random_zombie(3));
     }
 
     void run() override {
+        while (state != STARTED) {
+            GameEvent event;
+            int n_events = 0;
+            while (events.try_pop(event) && n_events < EVENTS_PER_LOOP) {
+                n_events++;
+                if (event.req.cmd == JOIN) {
+                    int code = join(event);
+                    if (code != FAILURE && players.size() == MAX_PLAYERS) {
+                        state = STARTED;
+                        push_game_lobby_state(0);
+                    } else {
+                        push_game_lobby_state(1);
+                    }
+                }
+            }
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_TIME_START_GAME));
+        
         int delayMilliseconds = static_cast<int>(1000.0 / GAME_TICK_RATE);
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
@@ -248,22 +282,15 @@ class GameLoop : public Thread {
             while (events.try_pop(event) && n_events < EVENTS_PER_LOOP) {
                 n_events++;
                 // std::cout << "Popped event with cmd=" << std::to_string(event.req.cmd) << std::endl;
-                if (event.req.cmd == JOIN) {
-                    int code = join(event);
-                    if (code != FAILURE && players.size() == MAX_PLAYERS) {
-                        state = STARTED;
+                PlayerState *player = get_player(event.player_name);
+                if (event.req.cmd < 0) {
+                    remove_player_from_game(event.player_messages);
+                    if (message_queues.size() == 0) {
+                        state = ENDED;
+                        break;
                     }
-                } else {
-                    PlayerState *player = get_player(event.player_name);
-                    if (event.req.cmd < 0) {
-                        remove_player_from_game(event.player_messages);
-                        if (message_queues.size() == 0) {
-                            state = ENDED;
-                            break;
-                        }
-                    } else if (player) {
-                        player->next_state(event.req.cmd,bullets);
-                    }
+                } else if (player) {
+                    player->next_state(event.req.cmd,bullets);
                 }
             }
             for (PlayerState &player : players) {

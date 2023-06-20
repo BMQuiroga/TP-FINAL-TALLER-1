@@ -1,12 +1,15 @@
 #include "NumberPlayers.h"
-#include "GameOption.h"
 #include "ui_NumberPlayers.h"
 #include <iostream>
+#include <thread>
+#include <chrono>
+#include <QThread>
+#include <QKeyEvent>
 #include <string>
 
-NumberPlayers::NumberPlayers(QWidget *parent) : QWidget(parent) {
-    Ui::numberPlayers lobby;
-    lobby.setupUi(this);
+NumberPlayers::NumberPlayers(QWidget *parent) : QWidget(parent)  {
+    Ui::numberPlayers numberPlayers;
+    numberPlayers.setupUi(this);
     connectEvents();
 }
 
@@ -28,9 +31,22 @@ void NumberPlayers::connectEvents() {
                      this, &NumberPlayers::setNumberOfPlayers);
 }
 
+void NumberPlayers::deactivate() {
+    is_active = false;
+}
+
+void NumberPlayers::closeEvent(QCloseEvent *event) {
+    if (is_active) {
+        emit windowClosed();
+    }
+    event->accept();
+}
+
 void NumberPlayers::receiveNewGameCreatedCode(int code) {
     QLabel* gameCodeLabel = findChild<QLabel*>("gameCodeLabel");
     QString code_message = QString::number(code);
     QString output_message = QString("Codigo de la partida: %1").arg(code_message);
     gameCodeLabel->setText(output_message);
+    // QThread::sleep(3);
+    // std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(3));
 }

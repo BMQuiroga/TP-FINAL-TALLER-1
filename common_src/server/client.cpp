@@ -31,10 +31,10 @@ void Client::handle_request(ProtocolRequest &message) {
         }
     } else {
         Serializer serializer;
-        // TODO: If this is a create game request, then create the 
+        // If this is a create game request, then create the 
         // game and return its initial state. If it's a join game request
-        // then try to joint the game and return its current state on success
-        // or 0 on failure.
+        // then try to join the game and return its current state on success
+        // or 1 on failure.
         if (message.cmd == CREATE) {
             LobbyGameStateResponse resp;
             ProtocolResponse response;
@@ -106,4 +106,5 @@ void Client::kill()
     skt.close();
     receiver.kill();
     sender.kill();
+    responses.close();
 }

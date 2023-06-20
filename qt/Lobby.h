@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QObject>
+#include <QKeyEvent>
 
 
 class Lobby : public QWidget {
@@ -12,11 +13,16 @@ class Lobby : public QWidget {
 public:
     explicit Lobby(QWidget *parent = 0);
     ~Lobby();
+public slots:
+    void deactivate();
 signals:
     void inputPlayerInfoEntered(const QString& text, int number);
+    void windowClosed();
 private:
     void sendNewPlayerInfo();
     void connectEvents();
+    void closeEvent(QCloseEvent *event);
+    bool is_active {true};
     QLineEdit* inputName;
     QSpinBox* playerType;
 };
