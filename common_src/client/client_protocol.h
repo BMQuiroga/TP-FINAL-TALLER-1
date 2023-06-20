@@ -17,6 +17,9 @@
 #define STOP_MOVING_DOWN 7
 #define SHOOT 8
 #define STOP_SHOOTING 9
+#define RELOAD 14
+#define PREPARE_GRENADE 15
+#define THROW_GRENADE 16
 
 class CProtocol : public Protocol<ProtocolRequest, ProtocolResponse> {
     private:
