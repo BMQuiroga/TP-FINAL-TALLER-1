@@ -25,14 +25,14 @@ la configuración del server para que el movimiento sea mas fluído y rápido.
 al movimiento. Podrían agregar un delay entre los cambios de distintos frames para que se ajuste la animación al
 movimiento que hace (es decir, que entre salto de frame, sucedan X segundos ajustable para modificarlo en runtime)
 
-* **(P0)** Hay que brindar información en el lobby para poder joinearse a una sala existente, ya sea que el que crea partida 
-reciba el codigo para pasarselós a sus amigos, o que puedas listar partidas creadas. El cierre de la ventana debería ser automático. 
+~~* **(P0)** Hay que brindar información en el lobby para poder joinearse a una sala existente, ya sea que el que crea partida 
+reciba el codigo para pasarselós a sus amigos, o que puedas listar partidas creadas. El cierre de la ventana debería ser automático.~~
 
 # Robustez / Valgrind (todo prioridad P0) (2/5)
 * Tanto cliente como servidor siempre cierran con un sigsegv por excepciones no catcheadas
 * El server tiene muchas variables sin inicializar, y memory leaks (se adjuntas logs de valgrind)
 * En el cliente se corrió valgrind usando QT, y los errores de memoria encontrados parecieran ser todos de agentes externos (falsos positivos de SDL y/o QT). Esto no quiere decir de que no haya leaks, probablemente cuando arreglen el SIGSEGV se detecten leaks otros leaks de memoria.
-* Si cierro el lobby del cliente sin haberme joineado o creado partida, abre una ventana de juego que es injugable. Hay que chequear si el jugador se joineó/creó una partida para saber si tenés que abrir la ventana de SDL o no
+~~* Si cierro el lobby del cliente sin haberme joineado o creado partida, abre una ventana de juego que es injugable. Hay que chequear si el jugador se joineó/creó una partida para saber si tenés que abrir la ventana de SDL o no~~
 
 
 # Instalación (3/5)
@@ -142,7 +142,7 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 - [ ] **(P1)** No hay tests
 
 # Cliente - Servidor (1/5)
-* **(P0)** No se puede ver una partida con varios jugadores. No tengo forma de saber con qué codigo se creó una partida para poder joinearme y tener una partida de dos jugadores.
+~~* **(P0)** No se puede ver una partida con varios jugadores. No tengo forma de saber con qué codigo se creó una partida para poder joinearme y tener una partida de dos jugadores.~~
 
 # Extras
 No hay

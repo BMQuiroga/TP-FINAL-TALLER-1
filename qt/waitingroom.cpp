@@ -6,11 +6,15 @@
 #include <thread>
 #include <QKeyEvent>
 
-WaitingRoom::WaitingRoom(QWidget *parent) : QWidget(parent)  {
+WaitingRoom::WaitingRoom(int game_code, QWidget *parent) : 
+    QWidget(parent), game_code(game_code) {
     Ui::WaitingRoom waitingRoom;
     waitingRoom.setupUi(this);
-    NumberPlayersLabel = findChild<QLabel*>("playersInfoLabel");
+    numberPlayersLabel = findChild<QLabel*>("playersInfoLabel");
     counterLabel = findChild<QLabel*>("counterLabel");
+    gameCodeLabel = findChild<QLabel*>("gameCodeLabel");
+    QString code_message = QString("El código de la partida es: %1").arg(QString::number(game_code));
+    gameCodeLabel->setText(code_message);
     connectEvents();
 }
 
@@ -18,11 +22,11 @@ void WaitingRoom::receiveWaitingInfo(int number_players_connected, int max_numbe
     QString number_connected = QString::number(number_players_connected);
     QString total_number = QString::number(max_number_players);
     QString created_message = QString("%1/%2 jugadores conectados").arg(number_connected, total_number);
-    NumberPlayersLabel->setText(created_message);
+    numberPlayersLabel->setText(created_message);
 }
 
 void WaitingRoom::receiveStartSignal() {
-    NumberPlayersLabel->setText(QString("La partida empezará en:"));
+    numberPlayersLabel->setText(QString("La partida empezará en:"));
     timer->start(1000);
 }
 

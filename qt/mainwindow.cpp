@@ -143,7 +143,7 @@ void MainWindow::showWaitingScreen() {
     }
 
     // Create and show the new widget (e.g., GameOptionsWidget)
-    currentWidget = new WaitingRoom();
+    currentWidget = new WaitingRoom(game_code);
     currentWidget->show();
     QObject::connect(currentWidget, SIGNAL(windowClosed()), this, SLOT(receiveClosedSignal()));
     QObject::connect(this, SIGNAL(deactivateWidget()), currentWidget, SLOT(deactivate()));

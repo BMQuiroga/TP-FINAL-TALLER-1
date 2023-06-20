@@ -44,8 +44,8 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="playersInfoLabel">
+    <item row="2" column="0">
+    <widget class="QLabel" name="gameCodeLabel">
      <property name="font">
       <font>
        <pointsize>14</pointsize>
@@ -60,6 +60,21 @@
     </widget>
    </item>
    <item row="3" column="0">
+    <widget class="QLabel" name="playersInfoLabel">
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
     <widget class="QLabel" name="counterLabel">
      <property name="font">
       <font>

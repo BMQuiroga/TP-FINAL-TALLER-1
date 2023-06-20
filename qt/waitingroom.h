@@ -10,7 +10,7 @@
 class WaitingRoom : public QWidget {
     Q_OBJECT
 public:
-    explicit WaitingRoom(QWidget *parent = 0);
+    explicit WaitingRoom(int game_code, QWidget *parent = 0);
 signals:
     void windowClosed();
 public slots:
@@ -23,8 +23,10 @@ private:
     void closeEvent(QCloseEvent *event);
     bool is_active {true};
     QLabel* counterLabel;
-    QLabel* NumberPlayersLabel;
+    QLabel* numberPlayersLabel;
+    QLabel* gameCodeLabel;
     QTimer* timer;
+    int game_code;
     int counter{10};
 };
 
