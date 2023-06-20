@@ -33,6 +33,7 @@ class Zombie : public GameEntity {
     uint8_t zombie_type;
     uint8_t attack_type;
     uint8_t movement_type;
+    uint8_t show_death_timer;
     int seeking_distance;
     bool has_target_set{false};
     GameEntity *target;
@@ -56,6 +57,7 @@ class Zombie : public GameEntity {
     uint8_t get_damage();
     uint8_t get_health();
     void take_damage(uint8_t damage);
+    bool try_dissapear();
     void on_collission_detected(GameEntity *other) override;
     virtual int calculate_next_movement(std::vector<PlayerState>& players);
     virtual void attack(GameEntity *other) override;

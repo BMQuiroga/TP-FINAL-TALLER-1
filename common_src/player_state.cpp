@@ -119,7 +119,7 @@ void PlayerState::shoot(int flag) {
     }
 }*/
 
-void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec) {
+void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint16_t& bullets) {
     if (this->hit_points == 0) {
         this->state = DEAD;
         this->arma->advance_time();
@@ -153,6 +153,7 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec) {
         if (this->arma->try_shoot()) {
             this->state = ATTACKING;
             this->arma->create_bullet(position,facing_direction,vec);
+            bullets++;
             //el -64 es para que salga la bala del medio del modelo
         }
     } else if (cmd == STOP_SHOOTING) {

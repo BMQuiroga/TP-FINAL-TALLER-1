@@ -72,10 +72,13 @@ class GameLoop : public Thread {
     std::list<Bullet> bullets;
     std::list<Zombie*> zombies;
     std::atomic<GameState> state;
+    std::list<Grenade> grenades;
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
     PhysicsManager *physics;
-    uint16_t score;
+    uint16_t kills;
+    uint16_t shots;
+    int game_ticks;
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
@@ -97,7 +100,9 @@ class GameLoop : public Thread {
                 CollisionLayer::HostileProjectile,
                 CollisionFlag::Friendly
             );
-            score = 0;
+            kills = 0;
+            shots = 0;
+            game_ticks = 0;
         }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
 
@@ -105,6 +110,9 @@ class GameLoop : public Thread {
         PlayerStateReference a;
         a.id = 252;
         a.name = "defeat";
+        a.state = kills;
+        a.x = game_ticks;
+        a.y = shots;
         return a;
     }
 
@@ -112,6 +120,9 @@ class GameLoop : public Thread {
         PlayerStateReference a;
         a.id = 251;
         a.name = "victory";
+        a.state = kills;
+        a.x = game_ticks;
+        a.y = shots;
         return a;
     }
 
@@ -202,9 +213,9 @@ class GameLoop : public Thread {
             }
         }
         for (auto it = zombies.begin(); it != zombies.end();) {
-            if ((*it)->get_health() == 0) {
+            if ((*it)->try_dissapear() == 0) {
                 it = zombies.erase(it);
-                score++;
+                kills++;
             } else {
                 ++it;
             }
@@ -241,6 +252,7 @@ class GameLoop : public Thread {
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
         while (state != ENDED) {
+            game_ticks++;
             int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
             auto startTime = std::chrono::high_resolution_clock::now();
             GameEvent event;

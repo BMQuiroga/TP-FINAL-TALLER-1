@@ -1,6 +1,7 @@
 #include <iostream>
 #include "client_asset_manager.h"
 #include <string>
+#include "../game_config.h"
 //#include <arpa/inet.h>
 
 #define SOLDIER1 1
@@ -11,6 +12,8 @@
 #define VENOM 54
 #define WITCH 55
 #define VENOM_PROJECTILE 101
+#define HE 102
+#define SMOKE 103
 
 #define BACKGROUND 0
 
@@ -137,13 +140,20 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	map.emplace(ZOMBIE + WALK_, std::make_shared<Asset>("../resources/Zombie/Walk.png", 0, 96, 96, 8, renderer, 0));
 	map.emplace(ZOMBIE + RUN_, std::make_shared<Asset>("../resources/Zombie/Run.png", 0, 96, 96, 7, renderer, 0));
 
-	//sound_map.emplace(151,SDL2pp::Music("../resources/Sound/singleshot.mp3"));
+	map.emplace(HE, std::make_shared<Asset>("../resources/Soldier_1/Explosion.png", 0, 128, 128, 9, renderer, 0));
+	map.emplace(SMOKE, std::make_shared<Asset>("../resources/Soldier_1/Smoke.png", 0, 128, 128, 22, renderer, 0));
+
+	sound_map.emplace(0,SDL2pp::Music("../resources/Sound/Music.mp3"));
+
 	sound_map.emplace(152,SDL2pp::Music("../resources/Sound/DeathScreen.mp3"));
 	sound_map.emplace(153,SDL2pp::Music("../resources/Sound/VictoryScreen.mp3"));
-
 	sound_map.emplace(154,SDL2pp::Music("../resources/Sound/IDF.mp3"));
 	sound_map.emplace(155,SDL2pp::Music("../resources/Sound/P90.mp3"));
 	sound_map.emplace(156,SDL2pp::Music("../resources/Sound/Scout.mp3"));
+
+	sound_map.emplace(157,SDL2pp::Music("../resources/Sound/Bounce.mp3"));
+	sound_map.emplace(158,SDL2pp::Music("../resources/Sound/HE.mp3"));
+	sound_map.emplace(159,SDL2pp::Music("../resources/Sound/Smoke.mp3"));
 
 }
 
@@ -158,6 +168,10 @@ void AssetManager::play(int code, SDL2pp::Mixer & mixer) {
 SDL2pp::Color* AssetManager::get_default_color() {
 	SDL2pp::Color* p = &default_color;
 	return p;
+}
+
+void AssetManager::play_music(SDL2pp::Mixer & mixer) {
+	mixer.PlayMusic(sound_map.at(0), -1);
 }
 /*
 SDL2pp::Font* AssetManager::get_default_font() {

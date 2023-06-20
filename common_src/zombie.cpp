@@ -59,9 +59,10 @@ void Zombie::set_id(int new_id) {
 }
 
 void Zombie::take_damage(uint8_t damage) {
-    if (damage > health)
+    if (damage > health) {
         health = 0;
-    else
+        state = DEAD;
+    } else
         health -= damage;
 }
 
@@ -163,6 +164,16 @@ void Zombie::attack(GameEntity *other) {
     player->take_damage(damage);
 }
 
+bool Zombie::try_dissapear() {
+    if (health == 0)
+        this->show_death_timer--;
+    if(show_death_timer == 0)
+        return true;
+    return false;
+}
+
+       
+
 CommonZombie::CommonZombie(CommonZombie&& other)
     : Zombie(std::move(other)) {
 }
@@ -183,6 +194,7 @@ Zombie::Zombie(
     rect_height = ZOMBIE_RECT_HEIGHT;
     speed = ZOMBIE_SPEED;
     seeking_distance = ZOMBIE_SEEKING_DISTANCE;
+    show_death_timer = ZOMBIE_TIMER;
 }
 
 Spear::Spear(
@@ -253,6 +265,8 @@ Witch::Witch(
 }
 
 int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->health == 0)
+        return CODE_NULL;
     float closest_x = 0;
     float closest_y = 0;
     Vector2D this_pos = get_location();
@@ -280,6 +294,8 @@ int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
 }
 
 int Witch::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->health == 0)
+        return CODE_NULL;
     if (state == IDLE) {
         int x = getRandomNumber(0,30);
         if (x == 2) {
@@ -295,6 +311,8 @@ int Witch::calculate_next_movement(std::vector<PlayerState>& players) {
 }
 
 int Jumper::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->health == 0)
+        return CODE_NULL;
     if (this->state == HURT && cooldown > 0) {
         cooldown--;
     } else if (this->state == HURT && cooldown == 0) {
@@ -347,6 +365,8 @@ bool Jumper::jump() {
 }
 
 int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->health == 0)
+        return CODE_NULL;
     if (cooldown > 0)
         cooldown--;
     float closest_x = 0;
