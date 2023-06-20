@@ -68,6 +68,7 @@ struct GameEvent {
 class GameLoop : public Thread {
   private:
     Queue<GameEvent> &events;
+    uint8_t number_players;
     std::vector<PlayerState> players;
     std::list<Bullet> bullets;
     std::list<Zombie*> zombies;
@@ -79,7 +80,8 @@ class GameLoop : public Thread {
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
-        Queue<GameEvent> &events) : events(events), state{CREATED} {
+        Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS) : 
+        events(events), state{CREATED}, number_players(number_players) {
             physics = PhysicsManager::get_instance();
             physics->set_layer_collision_mask(
                 CollisionLayer::Friendly,
@@ -117,7 +119,7 @@ class GameLoop : public Thread {
 
     //une al player a la partida
     int join(GameEvent &event) {
-        if (state == CREATED && players.size() < MAX_PLAYERS) {
+        if (state == CREATED && players.size() < number_players) {
             players.push_back(PlayerState(event.player_name, players.size() + 1, event.weapon_code));
             message_queues.push_back(*event.player_messages);
             return players.size();
@@ -234,7 +236,7 @@ class GameLoop : public Thread {
     void push_game_lobby_state(int ready) {
         LobbyGameStateResponse resp;
         resp.ready = ready;
-        resp.max_number_players = MAX_PLAYERS;
+        resp.max_number_players = number_players;
         resp.number_players_connected = message_queues.size();
         resp.game_code;
         std::for_each(message_queues.begin(), message_queues.end(),
@@ -260,7 +262,7 @@ class GameLoop : public Thread {
                 n_events++;
                 if (event.req.cmd == JOIN) {
                     int code = join(event);
-                    if (code != FAILURE && players.size() == MAX_PLAYERS) {
+                    if (code != FAILURE && players.size() == number_players) {
                         state = STARTED;
                         push_game_lobby_state(0);
                     } else {
@@ -345,12 +347,14 @@ class Game {
     private:
     int id;
     std::string name;
+    uint8_t number_players;
     std::list<std::reference_wrapper<Queue<ProtocolResponse>>> players;
     Queue<GameEvent> events;
     GameLoop loop;
 
     public:
         explicit Game(int id, const std::string& name);
+        explicit Game(int id, const GameReference& game_ref);
         Game(Game&&);
 
         GameReference make_ref();

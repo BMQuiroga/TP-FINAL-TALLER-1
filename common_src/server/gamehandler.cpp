@@ -22,22 +22,15 @@ ProtectedMatchesList& GameHandler::get_games() {
     return matches;
 }
 
-Game& GameHandler::create_new_game(const std::string& name,
+Game& GameHandler::create_new_game(const GameReference& game_ref,
 Queue<ProtocolResponse>& q) {
     int game_code(number_matches.get_counter());
-    Game new_game(game_code, name);
+    Game new_game(game_code, game_ref);
     // new_game.add_player(q);
     matches.add(new_game);
     number_matches.inc();
     return matches.get_game(new_game.get_id());
 }
-
-// void GameHandler::broadcast_message(
-//     const std::string &message,
-//     const int &game_code) {
-//     MatchState state_message("broadcast", game_code, true, message);
-//     matches.send_message_to_game(state_message, game_code);
-// }
 
 int GameHandler::join_game(int code,
 std::string &player_name, int weapon_code, Queue<ProtocolResponse> &q) {

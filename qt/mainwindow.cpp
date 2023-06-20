@@ -161,7 +161,7 @@ void MainWindow::waitForGameToStart() {
     delayTimeForUpdates(1);
     showWaitingScreen();
     delayTimeForUpdates(5);
-    while (!is_game_started) {
+    while (!is_game_started && !is_closed) {
         LobbyGameStateResponse result;
         if (q_responses.try_pop(result)) {
             emit sendWaitingInfo(result.number_players_connected, result.max_number_players);
@@ -190,6 +190,7 @@ int MainWindow::get_game_code() {
 
 void MainWindow::receiveClosedSignal() {
     LobbyCommand end_command(ENDLOBBY, "");
+    is_closed = true;
     q.push(end_command);
 }
 

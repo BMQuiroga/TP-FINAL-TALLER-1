@@ -55,5 +55,6 @@ private:
     std::string player_name {""};
     int game_code {-1};
     bool is_game_started {false};
+    bool is_closed {false};
 };
 #endif // MAINWINDOW_H

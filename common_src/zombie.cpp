@@ -39,7 +39,6 @@ void Zombie::move() {
     } else {
         state = IDLE;
     }
-    std::cout << "my state is " << std::to_string(state) << std::endl;
 }
 
 void Zombie::on_collission_detected(GameEntity *other) {

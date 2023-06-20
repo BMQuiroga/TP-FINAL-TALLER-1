@@ -40,7 +40,7 @@ void Client::handle_request(ProtocolRequest &message) {
             ProtocolResponse response;
             response.content_type = CREATE;
             GameReference create_req = serializer.deserialize_game_reference(message.content);
-            Game &game = game_handler.create_new_game(create_req.name, responses);
+            Game &game = game_handler.create_new_game(create_req, responses);
             game.start();
             game_handler.join_game(game.get_id(), name, weapon_code, responses);
             joined_game = game.get_id();

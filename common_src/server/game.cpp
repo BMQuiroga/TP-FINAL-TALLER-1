@@ -11,6 +11,14 @@
 #include <tuple>
 #include "game.h"
 
+Game::Game(int id, const GameReference &game_ref) :
+    id(id),
+    name(game_ref.name),
+    events(10000),
+    number_players(game_ref.players),
+    loop(events, game_ref.players) {
+}
+
 Game::Game(int id, const std::string& name) :
     id(id),
     name(name),
@@ -35,7 +43,7 @@ void Game::push_event(
 
 Game::Game(Game &&other) : 
     events(std::move(other.events)), 
-    loop(events), 
+    loop(events, other.number_players), 
     players(other.players), 
     name(other.name) {
     id = other.id;

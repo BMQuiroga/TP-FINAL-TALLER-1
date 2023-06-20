@@ -131,7 +131,7 @@ class GameHandler {
          * la partida con el código de la partida y el 
          * comando recibido
         */
-        Game& create_new_game(const std::string& name,
+        Game& create_new_game(const GameReference& game_ref,
         Queue<ProtocolResponse>& q);
         Game& get_game(int code);
         size_t get_game_count();
