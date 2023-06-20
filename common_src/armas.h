@@ -13,6 +13,8 @@
 
 class Grenade;
 
+class Bullet;
+
 class Arma {
     protected:
     //public:

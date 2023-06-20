@@ -39,7 +39,7 @@ void Zombie::move() {
     } else {
         state = IDLE;
     }
-    std::cout << "my state is " << std::to_string(state) << std::endl;
+    //std::cout << "my state is " << std::to_string(state) << std::endl;
 }
 
 void Zombie::on_collission_detected(GameEntity *other) {
@@ -406,6 +406,7 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
             } else {
                 return CODE_NULL;
             }
+        set_direction(0,direction_y);
         }
     } else {
         set_direction(0,0);

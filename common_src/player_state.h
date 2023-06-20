@@ -15,6 +15,7 @@ class Arma;
 
 class Grenade;
 
+class Bullet;
 // Clase encargada de manejar la lógica del jugador
 //  (almacenar y actualizar su estado)
 class PlayerState : public GameEntity {

@@ -74,6 +74,7 @@ class GameLoop : public Thread {
     std::list<Zombie*> zombies;
     std::atomic<GameState> state;
     std::list<Grenade> grenades;
+    std::list<Vomit_Projectile> vomit;
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
     PhysicsManager *physics;
@@ -155,6 +156,10 @@ class GameLoop : public Thread {
             resp.players.push_back(b.make_ref());
         }
 
+        for (Vomit_Projectile &b : vomit) {
+            resp.players.push_back(b.make_ref());
+        }
+
         for (Zombie* &zombie : zombies) {
             resp.zombies.push_back(zombie->make_ref());
         }
@@ -233,9 +238,14 @@ class GameLoop : public Thread {
                 ++it;
             }
         }
-        
-
-
+        for (auto it = vomit.begin(); it != vomit.end();) {
+            it->move();
+            if (it->is_dead()) {
+                it = vomit.erase(it);
+            } else {
+                ++it;
+            }
+        }
     }
 
     void _on_entity_moved(GameEntity *entity, uint16_t old, uint16_t new_) {
@@ -258,7 +268,7 @@ class GameLoop : public Thread {
     // Function to handle enemy spawns
     void spawn_enemy() {
         std::cout << "spawn" << std::endl;
-        zombies.push_back(Zombie::get_random_zombie(1));
+        zombies.push_back(Zombie::get_random_zombie(3));
     }
 
     void run() override {
@@ -304,7 +314,9 @@ class GameLoop : public Thread {
                     zombies_to_spawn_via_witch++;
                 if (i == CODE_VENOM_PROJECTILE) {
                     Vector2D vec = zombie->get_location();
-                    float direc = zombie->get_direction().x;
+                    //float direc = zombie->get_direction().x;
+                    entity_direction direc = zombie->get_direction().x == -1 ? LEFT : RIGHT;
+                    vomit.push_back(Vomit_Projectile(vec,direc));
                     //TODO crear el proyectil enemigo
                 }           
             }
