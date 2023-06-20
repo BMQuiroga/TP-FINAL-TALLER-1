@@ -85,20 +85,16 @@ class GameLoop : public Thread {
             physics = PhysicsManager::get_instance();
             physics->set_layer_collision_mask(
                 CollisionLayer::Friendly,
-                CollisionFlag::Hostile | CollisionFlag::HostileProjectile
-            );
+                CollisionFlag::Hostile | CollisionFlag::HostileProjectile);
             physics->set_layer_collision_mask(
                 CollisionLayer::FriendlyProjectile,
-                CollisionFlag::Hostile
-            );
+                CollisionFlag::Hostile);
             physics->set_layer_collision_mask(
                 CollisionLayer::Hostile,
-                CollisionFlag::Friendly | CollisionFlag::FriendlyProjectile
-            );
+                CollisionFlag::Friendly | CollisionFlag::FriendlyProjectile);
             physics->set_layer_collision_mask(
                 CollisionLayer::HostileProjectile,
-                CollisionFlag::Friendly
-            );
+                CollisionFlag::Friendly);
             score = 0;
         }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
@@ -149,9 +145,7 @@ class GameLoop : public Thread {
         if (score >= SCORE_TO_WIN) {
             resp.players.push_back(make_victory());
             this->state = ENDED;
-        }
-            
-        else if (is_everyone_dead()) {
+        } else if (is_everyone_dead()) {
             resp.players.push_back(make_defeat());
             this->state = ENDED;
         }
@@ -181,8 +175,7 @@ class GameLoop : public Thread {
         message_queues.erase(
             [q](Queue<ProtocolResponse>& queue) {
                 return &queue == q;
-            }
-        );
+            });
     }
 
     PlayerState& get_random_player() {
@@ -211,13 +204,9 @@ class GameLoop : public Thread {
                 ++it;
             }
         }
-        
-
-
     }
 
     void _on_entity_moved(GameEntity *entity, uint16_t old, uint16_t new_) {
-        
     }
 
     //envia la GSR

@@ -4,6 +4,7 @@
 #include "math_helper.h"
 #include <string>
 #include <utility>
+#include <vector>
 
 Zombie::~Zombie() {}
 

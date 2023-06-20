@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <list>
+#include <string>
 
 struct Image {
     //clase manejada por ClientRenderer para dibujar un fotograma

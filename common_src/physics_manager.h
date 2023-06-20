@@ -3,6 +3,7 @@
 
 #include <bitset>
 #include "game_entity.h"
+#include <vector>
 
 class GameEntity;
 

@@ -160,8 +160,9 @@ void ClientRenderer::render(Image & im) {
 
     if (im.name == player_name) {
         renderOwn(im);
-    } else if (im.health != 0)
+    } else if (im.health != 0) {
         renderHealth(x,y,im.health);
+    }
 }
 
 void ClientRenderer::renderOwn(Image & im) {

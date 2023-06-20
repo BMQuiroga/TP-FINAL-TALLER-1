@@ -66,5 +66,4 @@ Intention *Intention::make_intention(SDL_Event &event)
 }
 
 Intention::~Intention() {
-
 }

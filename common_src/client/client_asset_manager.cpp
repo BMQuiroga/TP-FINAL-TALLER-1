@@ -144,7 +144,6 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	sound_map.emplace(154,SDL2pp::Music("../resources/Sound/IDF.mp3"));
 	sound_map.emplace(155,SDL2pp::Music("../resources/Sound/P90.mp3"));
 	sound_map.emplace(156,SDL2pp::Music("../resources/Sound/Scout.mp3"));
-
 }
 
 Asset* AssetManager::GetAsset(int code) {

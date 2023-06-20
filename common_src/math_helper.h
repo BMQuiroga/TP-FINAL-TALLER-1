@@ -14,7 +14,6 @@
 // along with vector magnitude calculations, normalization, and operator overloading of += and -=   
 //--------------------------------------------------------------------------------------------------
 struct Vector2D {
-
     float x;
     float y;
 
@@ -23,7 +22,6 @@ struct Vector2D {
 
     //Calculates the square of the magnitude (preferably used instead of magnitude if possible)   
     float magnitude_squared() {
-
         return x*x + y*y;
     }
 
@@ -35,14 +33,12 @@ struct Vector2D {
     //Returns a directional Vector2D with the same direction as the Vector2D but of length 1    
     // (Does not change the x and y values of the original vector)
     Vector2D normalized() {
-
         float mag = magnitude();
 
         return Vector2D(x / mag, y / mag);
     }
 
     Vector2D& operator +=(const Vector2D& rhs) {
-
         x += rhs.x;
         y += rhs.y;
 
@@ -50,7 +46,6 @@ struct Vector2D {
     }
 
     Vector2D& operator -=(const Vector2D& rhs) {
-
         x -= rhs.x;
         y -= rhs.y;
 
@@ -63,22 +58,18 @@ struct Vector2D {
 };
 
 inline Vector2D operator +(const Vector2D& lhs, const Vector2D& rhs) {
-
     return Vector2D(lhs.x + rhs.x, lhs.y + rhs.y);
 }
 
 inline Vector2D operator -(const Vector2D& lhs, const Vector2D& rhs) {
-
     return Vector2D(lhs.x - rhs.x, lhs.y - rhs.y);
 }
 
 inline Vector2D operator *(const Vector2D& lhs, const float& rhs) {
-
     return Vector2D(lhs.x * rhs, lhs.y * rhs);
 }
 
 inline Vector2D operator *(const float& lhs, const Vector2D& rhs) {
-
     return Vector2D(lhs * rhs.x, lhs * rhs.y);
 }
 

@@ -5,6 +5,7 @@
 
 #include <QWidget>
 #include <QKeyEvent>
+#include <string>
 class JoinGame : public QWidget {
     Q_OBJECT
 public:

@@ -5,6 +5,7 @@
 #include "game_entity.h"
 #include <memory>
 #include <string>
+#include <vector>
 
 class PlayerState;
 
@@ -37,9 +38,9 @@ class Zombie : public GameEntity {
     bool has_target_set{false};
     GameEntity *target;
     Vector2D target_position{VEC2_ZERO};
+
   public:
     static Zombie* get_random_zombie(int secure);
-
     Zombie(
         const std::string &name,
         Vector2D position,

@@ -47,6 +47,4 @@ void NumberPlayers::receiveNewGameCreatedCode(int code) {
     QString code_message = QString::number(code);
     QString output_message = QString("Codigo de la partida: %1").arg(code_message);
     gameCodeLabel->setText(output_message);
-    // QThread::sleep(3);
-    // std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(3));
 }
