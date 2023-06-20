@@ -31,7 +31,7 @@ void ClientRenderer::GameLoop() {
     // std::list<Image>* new_update = nullptr;
     int wait_time = 1000/GAME_FRAME_RATE;
     std::list<Image>* frames_list = nullptr;
-    //this->assets->play_music(this->mixer);
+    //this->assets->play_music(this->mixer); //anda horrible
     ProtocolResponse new_update;
     Serializer serializer;
     while (running) {
@@ -115,7 +115,7 @@ uint8_t ClientRenderer::get_frame(Image & im) {
 
 void ClientRenderer::render_all() {
     if (this->actual_frame != nullptr) {
-        //calculate_offset();
+        calculate_offset();
         for (auto const& it : *actual_frame) {
             //std::cout << "id:" << it.id << std::endl;
             if (it.id > 0 && it.id < 151) {
@@ -142,13 +142,13 @@ void ClientRenderer::play(Image & im) {
 void ClientRenderer::calculate_offset() {
     for (auto const& it : *actual_frame) {
         if (it.name == player_name) {
-            offset = it.x + (RESOLUTION_X/2);
+            offset = (RESOLUTION_X/2) - it.x;
         }      
     }
 }
 
 void ClientRenderer::render(Image & im) {
-    uint16_t x = im.x;
+    uint16_t x = im.x + offset;
     uint16_t y = im.y;
     Asset * asset = assets->GetAsset(im.id + im.action*1000);
 
