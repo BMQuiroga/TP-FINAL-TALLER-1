@@ -313,24 +313,15 @@ class GameLoop : public Thread {
             while (events.try_pop(event) && n_events < EVENTS_PER_LOOP) {
                 n_events++;
                 // std::cout << "Popped event with cmd=" << std::to_string(event.req.cmd) << std::endl;
-                if (event.req.cmd == JOIN) {
-                    int code = join(event);
-                    if (code != FAILURE && players.size() == MAX_PLAYERS) {
-                        state = STARTED;
-                    }
-                } else {
-                    PlayerState *player = get_player(event.player_name);
-                    if (event.req.cmd < 0) {
-                        remove_player_from_game(event.player_messages);
-                        if (message_queues.size() == 0) {
-                            state = ENDED;
-                            break;
-                        }
-                    } else if (player) {
-                        player->next_state(event.req.cmd,bullets,shots,grenades);
+                PlayerState *player = get_player(event.player_name);
+                if (event.req.cmd < 0) {
+                    remove_player_from_game(event.player_messages);
+                    if (message_queues.size() == 0) {
+                        state = ENDED;
+                        break;
                     }
                 } else if (player) {
-                    player->next_state(event.req.cmd,bullets);
+                    player->next_state(event.req.cmd,bullets,shots,grenades);
                 }
             }
             for (PlayerState &player : players) {

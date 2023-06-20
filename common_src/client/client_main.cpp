@@ -71,6 +71,7 @@ int main(int argc, char *argv[]) { try {
     skt.close();
     events_q.close();
     updates_q.close();
+    client_lobby.join();
     client_sender.join();
     client_receiver.join();
     ret = 0;
