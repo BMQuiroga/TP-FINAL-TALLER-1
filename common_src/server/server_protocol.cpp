@@ -35,5 +35,5 @@ void ServerProtocol::send(Socket &skt, const ProtocolResponse &resp, bool was_cl
     if (!resp.content.empty()) {
         bytes_sent += skt.sendall(resp.content.data(), resp.content.size(), &was_closed);
     }
-    std::cout << "sent " << std::to_string(bytes_sent) << " bytes to client" << std::endl;
+    //std::cout << "sent " << std::to_string(bytes_sent) << " bytes to client" << std::endl;
 }

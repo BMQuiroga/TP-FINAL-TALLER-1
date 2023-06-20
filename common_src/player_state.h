@@ -9,8 +9,11 @@
 #include "armas.h"
 #include "bullet.h"
 #include "game_config.h"
+#include "granadas.h"
 
 class Arma;
+
+class Grenade;
 
 // Clase encargada de manejar la lógica del jugador
 //  (almacenar y actualizar su estado)

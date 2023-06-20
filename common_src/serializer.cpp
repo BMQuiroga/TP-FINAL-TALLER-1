@@ -58,6 +58,7 @@ std::vector<int8_t> Serializer::serialize(const GameStateResponse &resp) {
 }
 
 void Serializer::serialize_player(const PlayerStateReference &player, std::vector<int8_t> &buf) {
+    /*
     std::cout << "Player (serialize player): " << std::endl << 
     "- id: " << std::to_string(player.id) << std::endl <<//roto el id
     "- name: " << player.name << std::endl <<
@@ -65,7 +66,7 @@ void Serializer::serialize_player(const PlayerStateReference &player, std::vecto
     "- hit points: " << std::to_string(player.hit_points) << std::endl <<
     "- x: " << std::to_string(player.x) << std::endl <<
     "- y: " << std::to_string(player.y) << std::endl <<
-    "- direction: " << std::to_string(player.direction) << std::endl;
+    "- direction: " << std::to_string(player.direction) << std::endl;*/
     push_number(buf, player.id);
     push_string(buf,player.name);
     push_number(buf, player.x);

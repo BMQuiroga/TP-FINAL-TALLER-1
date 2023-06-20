@@ -11,6 +11,8 @@
 #define AIR_STRIKE 2
 #define SMOKE_GRENADE 3
 
+class Grenade;
+
 class Arma {
     protected:
     //public:
@@ -50,28 +52,31 @@ class Arma {
     virtual void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) = 0;
 
     //crea una granada en la lista de granadas???
-    virtual void create_grenade(Vector2D position, std::list<Grenade>& gren/*TODO*/) = 0;
+    virtual void create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) = 0;
+
+    virtual int damage_on_explode_on_hand();
 };
 
 class Arma1 : public Arma { //IDF, Granada Explosiva
     public:
     explicit Arma1();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
-    void create_grenade(Vector2D position, std::list<Grenade>& gren/*TODO*/) override;
+    void create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) override;
+    int damage_on_explode_on_hand() override;
 };
 
 class Arma2 : public Arma { //P90, Bombardeo
     public:
     explicit Arma2();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
-    void create_grenade(Vector2D position, std::list<Grenade>& gren/*TODO*/) override;
+    void create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) override;
 };
 
 class Arma3 : public Arma { //Scout, Smoke
     public:
     explicit Arma3();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
-    void create_grenade(Vector2D position, std::list<Grenade>& gren/*TODO*/) override;
+    void create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) override;
 };
 
 #endif

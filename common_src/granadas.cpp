@@ -29,16 +29,20 @@ GameEntity("nade",DEFAULT_MAX_X,DEFAULT_MAX_Y,CollisionLayer::FriendlyProjectile
 }
 
 void Grenade::advance_time() {
+    std::cout << "TIME ADVANCED STATE: " << std::to_string(state) << " AND TIME TO CHANGE: " << time_to_change << std::endl;
     this->time_to_change--;
-    if (time_to_change == 0) {
-        state++;
-        if (state == 2)
+    if (time_to_change <= 0) {         
+        if (state == 1) {
+            state = 2;
+        } else if (state == 2) {
+            state = 3;
             time_to_change = GRANADA_DELAY_23;
-        if (state == 3)
+        } else if (state == 3) {
+            state = 4;
             time_to_change = GRANADA_DELAY_3;
-    }
-    if (state == 4){
-        dead = true;
+        } else if (state == 4) {
+            dead = true;
+        }
     }
 }
 
@@ -80,6 +84,6 @@ void Grenade::attack(GameEntity * other) {
     Zombie *z = (Zombie*)other;
     if (smoke)
         z->process_smoke();
-    else
+    else if (!air_strike)
         z->take_damage(this->damage);
 }

@@ -22,7 +22,7 @@
 #define ZOMBIE_CREATION_TIME_MIN 10000
 #define ZOMBIE_CREATION_TIME_MAX 15000
 #define SCORE_TO_WIN 3
-#define MAX_ZOMBIES 4
+#define MAX_ZOMBIES 1
 #define MAX_PLAYERS 2
 
 //playerstate.h
@@ -34,7 +34,7 @@
 #define ARMA1_MAGAZINE 50
 #define ARMA1_RELOAD_DELAY 40
 #define ARMA1_SHOOT_DELAY 20
-#define ARMA1_GRENADE_DELAY 1000
+#define ARMA1_GRENADE_DELAY 10
 
 #define ARMA2_DAMAGE 6
 #define ARMA2_BULLET_COUNT 10
@@ -55,8 +55,9 @@
 #define GRANADA_DAMAGE 95
 #define GRANADA_DELAY_12 10 //tiempo en explotar
 #define GRANADA_DELAY_23 0  //tiempo en aparecer humo
-#define GRANADA_DELAY_3 5   //tiempo en desaparecer el humo
+#define GRANADA_DELAY_3 15   //tiempo en desaparecer el humo
 #define GRANADA_SIZE 128
+#define GRANADA_FUERZA 30 //distancia por tick de tecla apretada
 
 
 // common
@@ -104,7 +105,7 @@
 //Jumper
 #define JUMPER_SEEKING_DISTANCE 200
 #define JUMPER_DAMAGE 35
-#define JUMPER_HP 35
+#define JUMPER_HP 255
 #define JUMPER_SPEED 10
 #define JUMPER_COOLDOWN 20
 

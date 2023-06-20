@@ -365,6 +365,7 @@ bool Jumper::jump() {
     int direction_y = next_pos_y > 0 ? -1 : next_pos_y < 0 ? 1 : 0;
     set_direction(direction_x,direction_y);
     move();
+    return false;
 }
 
 int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
@@ -386,9 +387,12 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
         }
     }
     if (distance < seeking_distance) {
+        float next_pos_x = this_pos.x - closest_x;
         float next_pos_y = this_pos.y - closest_y;
         int direction_y = next_pos_y > 0 ? -1 : next_pos_y < 0 ? 1 : 0;
         set_direction(0,direction_y);
+        if (next_pos_x > 0)
+            facing_direction = LEFT;//como no se mueve en el eje y, siempre estaria mirando hacia adelante, esto es un fix
         if (abs(next_pos_y) < 20) {
             if (cooldown == 0) {
                 state = THROWING_GRENADE;
