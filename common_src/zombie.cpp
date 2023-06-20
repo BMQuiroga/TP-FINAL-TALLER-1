@@ -355,6 +355,9 @@ void Jumper::set_objetive(std::vector<PlayerState>& players) {
 }
 
 bool Jumper::jump() {
+    //std::cout << "DIRECTION SET AT: (" << objetive.x << ", " << objetive.y << " )" << std::endl;
+    //std::cout << "ACTUALLY AT: (" << position.x << ", " << position.y << " )" << std::endl;
+    //std::cout << "0000000000000000000000000000000000000000000000000000" << std::endl;
     Vector2D this_pos = position;
     if (calculateDistance(this_pos,objetive) < 19) {
         return true;//termina el salto
@@ -365,6 +368,8 @@ bool Jumper::jump() {
     int direction_y = next_pos_y > 0 ? -1 : next_pos_y < 0 ? 1 : 0;
     set_direction(direction_x,direction_y);
     move();
+    if (state == MOVING)
+        state = JUMPING;
     return false;
 }
 
@@ -410,8 +415,10 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
 }
 
 void Jumper::attack(GameEntity * other) {
-    PlayerState *player = (PlayerState*)other;
-    player->take_damage(damage);
+    if (state == JUMPING) {
+        PlayerState *player = (PlayerState*)other;
+        player->take_damage(damage);
+    }
 }
 
 void Witch::attack(GameEntity * other) {

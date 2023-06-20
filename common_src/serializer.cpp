@@ -78,6 +78,7 @@ void Serializer::serialize_player(const PlayerStateReference &player, std::vecto
 }
 
 void Serializer::serialize_zombie(const ZombieStateReference &zombie, std::vector<int8_t> &buf) {
+    /*
     std::cout << "Zombie: " << std::endl << 
     "- id: " << zombie.id << std::endl << //roto el id
     "- state: " << std::to_string(zombie.state) << std::endl <<
@@ -88,7 +89,7 @@ void Serializer::serialize_zombie(const ZombieStateReference &zombie, std::vecto
     "- direction: " << std::to_string(zombie.direction) << std::endl <<
     "- zombie type: " << std::to_string(zombie.zombie_type) << std::endl <<
     "- attack_type: " << std::to_string(zombie.attack_type) << std::endl <<
-    "- movement_type: " << std::to_string(zombie.movement_type) << std::endl;
+    "- movement_type: " << std::to_string(zombie.movement_type) << std::endl;*/
 
     push_number(buf, zombie.id);
     push_number(buf, zombie.x);
