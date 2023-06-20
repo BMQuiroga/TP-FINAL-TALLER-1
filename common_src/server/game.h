@@ -268,7 +268,7 @@ class GameLoop : public Thread {
     // Function to handle enemy spawns
     void spawn_enemy() {
         std::cout << "spawn" << std::endl;
-        zombies.push_back(Zombie::get_random_zombie(3));
+        zombies.push_back(Zombie::get_random_zombie(-1));
     }
 
     void run() override {
