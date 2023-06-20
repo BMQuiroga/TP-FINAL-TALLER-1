@@ -22,6 +22,7 @@ class ClientRenderer {
     bool running;
     bool revive_screen;
     bool defeat;
+    int offset;
 
     SDL2pp::SDL sdl;
     SDL2pp::Window window;
@@ -61,6 +62,9 @@ class ClientRenderer {
 
     //sincroniza el fotograma con respecto de la nueva imagen del server, hace fluidas las animaciones
     uint8_t get_frame(Image & im);
+
+    //calcula un offset para que la camara siga al jugador
+    void calculate_offset();
 
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name);

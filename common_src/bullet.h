@@ -3,6 +3,7 @@
 
 #include "protocol_types.h"
 #include "zombie.h"
+#include "player_state.h"
 #include <list>
 
 class Bullet : public GameEntity {
@@ -20,5 +21,16 @@ class Bullet : public GameEntity {
     void on_collission_detected(GameEntity *other) override;
 };
 
+class Vomit_Projectile : public GameEntity {
+  protected:
+    bool dead;
+  public:
+    Vomit_Projectile(Vector2D position, entity_direction direc);
+    void on_collission_detected(GameEntity *other) override;
+    void attack(GameEntity *other) override;
+    void move();
+    bool is_dead();
+    PlayerStateReference make_ref();
+};
 
 #endif

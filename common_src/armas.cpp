@@ -47,7 +47,7 @@ void Arma::advance_time() {
     }
     if (this->g_delay > 0) {
         this->g_delay--;
-        //std::cout << "nuevo delay:" << std::to_string(g_delay) << std::endl;
+        std::cout << "nuevo delay:" << std::to_string(g_delay) << std::endl;
     }  
 }
 
@@ -93,23 +93,44 @@ int Arma::charge_grenade() {
         this->throwing_distance++;
         return 1;
     } else if (this->g_delay == 0 && this->throwing_distance >= 20) {
+        this->throwing_distance = 0;
         return 2;
     }
-    if (this->g_delay > 0)
-        return 0;
+    return 0;
 }
 
-void Arma1::create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) {
-    //sumarla a la lista
+void Arma1::create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
+    std::cout << "DIREC: " << std::to_string(direc) << std::endl;
+    if (direc == LEFT) {
+
+        gren.push_back(Grenade(HE_GRENADE, position.x - (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
+    } else {
+        gren.push_back(Grenade(HE_GRENADE, position.x + (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
+    }
     this->throwing_distance = 0;
+    this->g_delay = this->g_delay_cte;
 }
 
-void Arma2::create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) {
-    //sumarla a la lista
+void Arma2::create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
+    gren.push_back(Grenade(AIR_STRIKE, position.x, position.y, false));
     this->throwing_distance = 0;
+    this->g_delay = this->g_delay_cte;
 }
 
-void Arma3::create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) {
-    //sumarla a la lista
+void Arma3::create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
+    if (direc == LEFT) {
+        gren.push_back(Grenade(SMOKE_GRENADE, position.x - (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
+    } else {
+        gren.push_back(Grenade(SMOKE_GRENADE, position.x + (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
+    }
     this->throwing_distance = 0;
+    this->g_delay = this->g_delay_cte;
+}
+
+int Arma::damage_on_explode_on_hand() {
+    return 0;
+}
+
+int Arma1::damage_on_explode_on_hand() {
+    return 50;
 }

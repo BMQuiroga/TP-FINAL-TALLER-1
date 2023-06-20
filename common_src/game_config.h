@@ -15,11 +15,13 @@
 #define MIN_MAX_VOLUME 128
 #define GAME_VOLUME 10
 
+#define RESOLUTION_X 1920
+
 //game.h
 #define GAME_TICK_RATE 5
 #define ZOMBIE_CREATION_TIME_MIN 10000
 #define ZOMBIE_CREATION_TIME_MAX 15000
-#define SCORE_TO_WIN 2
+#define SCORE_TO_WIN 10
 #define MAX_ZOMBIES 4
 #define MAX_PLAYERS 1
 #define WAIT_TIME_START_GAME 10000
@@ -33,7 +35,7 @@
 #define ARMA1_MAGAZINE 50
 #define ARMA1_RELOAD_DELAY 40
 #define ARMA1_SHOOT_DELAY 20
-#define ARMA1_GRENADE_DELAY 1000
+#define ARMA1_GRENADE_DELAY 10
 
 #define ARMA2_DAMAGE 6
 #define ARMA2_BULLET_COUNT 10
@@ -48,6 +50,16 @@
 #define ARMA3_RELOAD_DELAY 20
 #define ARMA3_SHOOT_DELAY 10
 #define ARMA3_GRENADE_DELAY 1000
+
+//granadas
+
+#define GRANADA_DAMAGE 95
+#define GRANADA_DELAY_12 10 //tiempo en explotar
+#define GRANADA_DELAY_23 0  //tiempo en aparecer humo
+#define GRANADA_DELAY_3 15   //tiempo en desaparecer el humo
+#define GRANADA_SIZE 128
+#define GRANADA_FUERZA 30 //distancia por tick de tecla apretada
+
 
 // common
 #define DEFAULT_MAX_X 1920
@@ -71,6 +83,7 @@
 #define ZOMBIE_SEEKING_DISTANCE 400
 #define ZOMBIE_DAMAGE 5
 #define ZOMBIE_SPEED 4
+#define ZOMBIE_TIMER 15
 
 // Spear
 #define SPEAR_RECT_WIDTH 100
@@ -84,6 +97,9 @@
 #define VENOM_HP 50
 #define VENOM_SPEED 2
 #define VENOM_PROJECTILE_COOLDOWN 20
+#define VENOM_PROJECTILE_DAMAGE 50
+#define VENOM_PROJECTILE_SPEED 10
+#define VENOM_PROJECTILE_SIZE 64
 #define VENOM_DAMAGE 3
 
 //Witch
@@ -91,9 +107,9 @@
 #define WITCH_HP 255
 
 //Jumper
-#define JUMPER_SEEKING_DISTANCE 200
-#define JUMPER_DAMAGE 35
-#define JUMPER_HP 35
+#define JUMPER_SEEKING_DISTANCE 300
+#define JUMPER_DAMAGE 45
+#define JUMPER_HP 50
 #define JUMPER_SPEED 10
 #define JUMPER_COOLDOWN 20
 

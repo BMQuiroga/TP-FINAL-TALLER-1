@@ -31,6 +31,7 @@
 #include "../physics_manager.h"
 #include "../zombie.h"
 #include "../game_config.h"
+#include "../granadas.h"
 #include <ctime>
 
 #define FAILURE -1
@@ -73,10 +74,14 @@ class GameLoop : public Thread {
     std::list<Bullet> bullets;
     std::list<Zombie*> zombies;
     std::atomic<GameState> state;
+    std::list<Grenade> grenades;
+    std::list<Vomit_Projectile> vomit;
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
     PhysicsManager *physics;
-    uint16_t score;
+    uint16_t kills;
+    uint16_t shots;
+    int game_ticks;
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
@@ -94,8 +99,11 @@ class GameLoop : public Thread {
                 CollisionFlag::Friendly | CollisionFlag::FriendlyProjectile);
             physics->set_layer_collision_mask(
                 CollisionLayer::HostileProjectile,
-                CollisionFlag::Friendly);
-            score = 0;
+                CollisionFlag::Friendly
+            );
+            kills = 0;
+            shots = 0;
+            game_ticks = 0;
         }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
 
@@ -103,6 +111,9 @@ class GameLoop : public Thread {
         PlayerStateReference a;
         a.id = 252;
         a.name = "defeat";
+        a.state = kills;
+        a.x = game_ticks;
+        a.y = shots;
         return a;
     }
 
@@ -110,6 +121,9 @@ class GameLoop : public Thread {
         PlayerStateReference a;
         a.id = 251;
         a.name = "victory";
+        a.state = kills;
+        a.x = game_ticks;
+        a.y = shots;
         return a;
     }
 
@@ -137,12 +151,20 @@ class GameLoop : public Thread {
                 resp.players.push_back(b.make_ref());
         }
 
+        for (Grenade &b : grenades) {
+            resp.players.push_back(b.make_ref());
+        }
+
+        for (Vomit_Projectile &b : vomit) {
+            resp.players.push_back(b.make_ref());
+        }
+
         for (Zombie* &zombie : zombies) {
             resp.zombies.push_back(zombie->make_ref());
         }
         resp.game_state = state;
 
-        if (score >= SCORE_TO_WIN) {
+        if (kills >= SCORE_TO_WIN) {
             resp.players.push_back(make_victory());
             this->state = ENDED;
         } else if (is_everyone_dead()) {
@@ -197,9 +219,25 @@ class GameLoop : public Thread {
             }
         }
         for (auto it = zombies.begin(); it != zombies.end();) {
-            if ((*it)->get_health() == 0) {
+            if ((*it)->try_dissapear()) {
                 it = zombies.erase(it);
-                score++;
+                kills++;
+            } else {
+                ++it;
+            }
+        }
+        for (auto it = grenades.begin(); it != grenades.end();) {
+            it->advance_time();
+            if (it->is_dead()) {
+                it = grenades.erase(it);
+            } else {
+                ++it;
+            }
+        }
+        for (auto it = vomit.begin(); it != vomit.end();) {
+            it->move();
+            if (it->is_dead()) {
+                it = vomit.erase(it);
             } else {
                 ++it;
             }
@@ -240,7 +278,8 @@ class GameLoop : public Thread {
 
     // Function to handle enemy spawns
     void spawn_enemy() {
-        zombies.push_back(Zombie::get_random_zombie(3));
+        std::cout << "spawn" << std::endl;
+        zombies.push_back(Zombie::get_random_zombie(-1));
     }
 
     void run() override {
@@ -266,6 +305,7 @@ class GameLoop : public Thread {
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
         while (state != ENDED) {
+            game_ticks++;
             int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
             auto startTime = std::chrono::high_resolution_clock::now();
             GameEvent event;
@@ -273,12 +313,21 @@ class GameLoop : public Thread {
             while (events.try_pop(event) && n_events < EVENTS_PER_LOOP) {
                 n_events++;
                 // std::cout << "Popped event with cmd=" << std::to_string(event.req.cmd) << std::endl;
-                PlayerState *player = get_player(event.player_name);
-                if (event.req.cmd < 0) {
-                    remove_player_from_game(event.player_messages);
-                    if (message_queues.size() == 0) {
-                        state = ENDED;
-                        break;
+                if (event.req.cmd == JOIN) {
+                    int code = join(event);
+                    if (code != FAILURE && players.size() == MAX_PLAYERS) {
+                        state = STARTED;
+                    }
+                } else {
+                    PlayerState *player = get_player(event.player_name);
+                    if (event.req.cmd < 0) {
+                        remove_player_from_game(event.player_messages);
+                        if (message_queues.size() == 0) {
+                            state = ENDED;
+                            break;
+                        }
+                    } else if (player) {
+                        player->next_state(event.req.cmd,bullets,shots,grenades);
                     }
                 } else if (player) {
                     player->next_state(event.req.cmd,bullets);
@@ -286,7 +335,7 @@ class GameLoop : public Thread {
             }
             for (PlayerState &player : players) {
                 if (player.get_state() != IDLE) {
-                    player.next_state(-1,bullets); 
+                    player.next_state(-1,bullets,shots,grenades); 
                 }
             }
             int zombies_to_spawn_via_witch = 0;
@@ -296,7 +345,9 @@ class GameLoop : public Thread {
                     zombies_to_spawn_via_witch++;
                 if (i == CODE_VENOM_PROJECTILE) {
                     Vector2D vec = zombie->get_location();
-                    float direc = zombie->get_direction().x;
+                    //float direc = zombie->get_direction().x;
+                    entity_direction direc = zombie->get_direction().x == -1 ? LEFT : RIGHT;
+                    vomit.push_back(Vomit_Projectile(vec,direc));
                     //TODO crear el proyectil enemigo
                 }           
             }

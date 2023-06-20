@@ -73,3 +73,54 @@ PlayerStateReference Bullet::make_ref() {
     //osea, solo cuando se dispara por primera vez
     return a;
 }
+
+Vomit_Projectile::Vomit_Projectile(Vector2D position, entity_direction direc) :
+    GameEntity(
+        "Im vomit", 
+        position,
+        DEFAULT_MAX_X,
+        DEFAULT_MAX_Y,
+        CollisionLayer::HostileProjectile
+    ) {
+    this->facing_direction = direc;
+    state = 0;
+    this->rect_width = VENOM_PROJECTILE_SIZE;
+    this->rect_height = VENOM_PROJECTILE_SIZE;
+    this->position = position;
+    dead = false;
+}
+
+void Vomit_Projectile::on_collission_detected(GameEntity *other) {
+    if (!dead)
+        attack(other);
+}
+
+void Vomit_Projectile::attack(GameEntity *other) {
+    PlayerState *z = (PlayerState*)other;
+    z->take_damage(VENOM_PROJECTILE_DAMAGE);
+    dead = true;
+}
+
+bool Vomit_Projectile::is_dead() {
+    return dead;
+}
+
+void Vomit_Projectile::move() {
+    if (this->facing_direction == LEFT) {
+        position.x -= VENOM_PROJECTILE_SPEED;
+    } else {
+        position.x += VENOM_PROJECTILE_SPEED;
+    }
+}
+
+PlayerStateReference Vomit_Projectile::make_ref() {
+    PlayerStateReference a;
+    a.direction = facing_direction;
+    a.x = position.x;
+    a.y = position.y;
+    a.name = "";
+    a.hit_points = 0;
+    a.state = 0;
+    a.id = 101; //definido venom projectile en asset manager
+    return a;
+}

@@ -40,6 +40,7 @@ void Zombie::move() {
     } else {
         state = IDLE;
     }
+    //std::cout << "my state is " << std::to_string(state) << std::endl;
 }
 
 void Zombie::on_collission_detected(GameEntity *other) {
@@ -59,9 +60,10 @@ void Zombie::set_id(int new_id) {
 }
 
 void Zombie::take_damage(uint8_t damage) {
-    if (damage > health)
+    if (damage > health) {
         health = 0;
-    else
+        state = DEAD;
+    } else
         health -= damage;
 }
 
@@ -163,6 +165,19 @@ void Zombie::attack(GameEntity *other) {
     player->take_damage(damage);
 }
 
+bool Zombie::try_dissapear() {
+    if (health == 0)
+        this->show_death_timer--;
+    if (show_death_timer == 0)
+        return true;
+    return false;
+}
+
+void Zombie::process_smoke() {
+    
+}
+       
+
 CommonZombie::CommonZombie(CommonZombie&& other)
     : Zombie(std::move(other)) {
 }
@@ -183,6 +198,7 @@ Zombie::Zombie(
     rect_height = ZOMBIE_RECT_HEIGHT;
     speed = ZOMBIE_SPEED;
     seeking_distance = ZOMBIE_SEEKING_DISTANCE;
+    show_death_timer = ZOMBIE_TIMER;
 }
 
 Spear::Spear(
@@ -253,6 +269,8 @@ Witch::Witch(
 }
 
 int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->health == 0)
+        return CODE_NULL;
     float closest_x = 0;
     float closest_y = 0;
     Vector2D this_pos = get_location();
@@ -280,6 +298,8 @@ int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
 }
 
 int Witch::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->health == 0)
+        return CODE_NULL;
     if (state == IDLE) {
         int x = getRandomNumber(0,30);
         if (x == 2) {
@@ -295,6 +315,8 @@ int Witch::calculate_next_movement(std::vector<PlayerState>& players) {
 }
 
 int Jumper::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->health == 0)
+        return CODE_NULL;
     if (this->state == HURT && cooldown > 0) {
         cooldown--;
     } else if (this->state == HURT && cooldown == 0) {
@@ -334,6 +356,9 @@ void Jumper::set_objetive(std::vector<PlayerState>& players) {
 }
 
 bool Jumper::jump() {
+    //std::cout << "DIRECTION SET AT: (" << objetive.x << ", " << objetive.y << " )" << std::endl;
+    //std::cout << "ACTUALLY AT: (" << position.x << ", " << position.y << " )" << std::endl;
+    //std::cout << "0000000000000000000000000000000000000000000000000000" << std::endl;
     Vector2D this_pos = position;
     if (calculateDistance(this_pos,objetive) < 19) {
         return true;//termina el salto
@@ -344,9 +369,14 @@ bool Jumper::jump() {
     int direction_y = next_pos_y > 0 ? -1 : next_pos_y < 0 ? 1 : 0;
     set_direction(direction_x,direction_y);
     move();
+    if (state == MOVING)
+        state = JUMPING;
+    return false;
 }
 
 int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->health == 0)
+        return CODE_NULL;
     if (cooldown > 0)
         cooldown--;
     float closest_x = 0;
@@ -363,9 +393,12 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
         }
     }
     if (distance < seeking_distance) {
+        float next_pos_x = this_pos.x - closest_x;
         float next_pos_y = this_pos.y - closest_y;
         int direction_y = next_pos_y > 0 ? -1 : next_pos_y < 0 ? 1 : 0;
         set_direction(0,direction_y);
+        if (next_pos_x > 0)
+            facing_direction = LEFT;//como no se mueve en el eje y, siempre estaria mirando hacia adelante, esto es un fix
         if (abs(next_pos_y) < 20) {
             if (cooldown == 0) {
                 state = THROWING_GRENADE;
@@ -374,6 +407,7 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
             } else {
                 return CODE_NULL;
             }
+        set_direction(0,direction_y);
         }
     } else {
         set_direction(0,0);
@@ -383,8 +417,10 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
 }
 
 void Jumper::attack(GameEntity * other) {
-    PlayerState *player = (PlayerState*)other;
-    player->take_damage(damage);
+    if (state == JUMPING) {
+        PlayerState *player = (PlayerState*)other;
+        player->take_damage(damage);
+    }
 }
 
 void Witch::attack(GameEntity * other) {
