@@ -93,23 +93,24 @@ int Arma::charge_grenade() {
         this->throwing_distance++;
         return 1;
     } else if (this->g_delay == 0 && this->throwing_distance >= 20) {
+        this->throwing_distance = 0;
         return 2;
     }
     if (this->g_delay > 0)
         return 0;
 }
 
-void Arma1::create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) {
-    //sumarla a la lista
+void Arma1::create_grenade(Vector2D position, std::list<Grenade>& gren/*TODO*/) {
+    gren.push_back(Grenade(HE_GRENADE, position.x + (20*throwing_distance), position.y, throwing_distance == 0));
     this->throwing_distance = 0;
 }
 
-void Arma2::create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) {
-    //sumarla a la lista
+void Arma2::create_grenade(Vector2D position, std::list<Grenade>& gren/*TODO*/) {
+    gren.push_back(Grenade(AIR_STRIKE, position.x, position.y, false));
     this->throwing_distance = 0;
 }
 
-void Arma3::create_grenade(Vector2D position, std::list<int>* gren/*TODO*/) {
-    //sumarla a la lista
+void Arma3::create_grenade(Vector2D position, std::list<Grenade>& gren/*TODO*/) {
+    gren.push_back(Grenade(SMOKE_GRENADE, position.x + (20*throwing_distance), position.y, throwing_distance == 0));
     this->throwing_distance = 0;
 }

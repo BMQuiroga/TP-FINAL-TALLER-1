@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include "player_state.h"
+#include "zombie.h"
 
 class Grenade : public GameEntity {
     private:
@@ -16,16 +17,18 @@ class Grenade : public GameEntity {
 
     public:
     //constructor
-    Grenade(int type, uint16_t x,  uint16_t y);
+    Grenade(int type, uint16_t x,  uint16_t y, bool exploded_on_hand);
 
     //decrementa en 1 el delay
     void advance_time();
 
     PlayerStateReference make_ref();
 
-    void on_collission_detected(GameEntity * other);
+    void on_collission_detected(GameEntity * other) override;
 
-    void attack(GameEntity * other);
+    void attack(GameEntity * other) override;
+
+    bool is_dead();
 };
 
 #endif

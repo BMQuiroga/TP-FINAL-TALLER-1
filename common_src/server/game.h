@@ -151,6 +151,10 @@ class GameLoop : public Thread {
                 resp.players.push_back(b.make_ref());
         }
 
+        for (Grenade &b : grenades) {
+            resp.players.push_back(b.make_ref());
+        }
+
         for (Zombie* &zombie : zombies) {
             resp.zombies.push_back(zombie->make_ref());
         }
@@ -221,6 +225,14 @@ class GameLoop : public Thread {
                 ++it;
             }
         }
+        for (auto it = grenades.begin(); it != grenades.end();) {
+            it->advance_time();
+            if (it->is_dead()) {
+                it = grenades.erase(it);
+            } else {
+                ++it;
+            }
+        }
         
 
 
@@ -275,13 +287,13 @@ class GameLoop : public Thread {
                             break;
                         }
                     } else if (player) {
-                        player->next_state(event.req.cmd,bullets,shots);
+                        player->next_state(event.req.cmd,bullets,shots,grenades);
                     }
                 }
             }
             for (PlayerState &player : players) {
                 if (player.get_state() != IDLE) {
-                    player.next_state(-1,bullets,shots); 
+                    player.next_state(-1,bullets,shots,grenades); 
                 }
             }
             int zombies_to_spawn_via_witch = 0;

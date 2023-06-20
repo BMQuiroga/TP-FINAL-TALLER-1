@@ -33,7 +33,7 @@ class PlayerState : public GameEntity {
     ~PlayerState();
 
     // Procesa la solicitud del cliente y actualiza el estado actual del jugador
-    void next_state(uint8_t cmd, std::list<Bullet>& vec, uint16_t& bullets);
+    void next_state(uint8_t cmd, std::list<Bullet>& vec, uint16_t& bullets, std::list<Grenade>& gren);
     void take_damage(uint8_t damage);
     void pass_time();
     void on_collission_detected(GameEntity *other) override;

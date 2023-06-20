@@ -60,6 +60,7 @@
         "stop_token": "cpp",
         "cinttypes": "cpp",
         "variant": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "future": "cpp"
     }
 }

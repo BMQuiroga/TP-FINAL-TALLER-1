@@ -172,6 +172,9 @@ bool Zombie::try_dissapear() {
     return false;
 }
 
+void Zombie::process_smoke() {
+    
+}
        
 
 CommonZombie::CommonZombie(CommonZombie&& other)

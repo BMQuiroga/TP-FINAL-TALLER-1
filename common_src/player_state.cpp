@@ -119,7 +119,7 @@ void PlayerState::shoot(int flag) {
     }
 }*/
 
-void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint16_t& bullets) {
+void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint16_t& bullets, std::list<Grenade>& gren) {
     if (this->hit_points == 0) {
         this->state = DEAD;
         this->arma->advance_time();
@@ -160,7 +160,7 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint16_t& bull
         //this->state = IDLE;
     } else if (cmd = THROW_GRENADE) {
         if (this->arma->try_grenade()) {
-            this->arma->create_grenade(position,NULL);
+            this->arma->create_grenade(position,gren);
             this->state = IDLE;
         }
     } else if (cmd = PREPARE_GRENADE) {
@@ -170,7 +170,7 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint16_t& bull
         if (u==2) {
             this->state = IDLE;
             take_damage(50);
-            this->arma->create_grenade(position,NULL);
+            this->arma->create_grenade(position,gren);
         }
     }
 

@@ -1,7 +1,10 @@
 #include "granadas.h"
 
-Grenade::Grenade(int type, uint16_t x, uint16_t y) : GameEntity("nade",DEFAULT_MAX_X,DEFAULT_MAX_Y,CollisionLayer::FriendlyProjectile) {
+Grenade::Grenade(int type, uint16_t x, uint16_t y, bool exploded_on_hand) :
+GameEntity("nade",DEFAULT_MAX_X,DEFAULT_MAX_Y,CollisionLayer::FriendlyProjectile) {
     this->state = 1;
+    if (exploded_on_hand)
+        state++;
     this->dead = false;
     this->sound = true;
     if (type == 1) {
@@ -39,6 +42,10 @@ void Grenade::advance_time() {
     }
 }
 
+bool Grenade::is_dead() {
+    return dead;
+}
+
 PlayerStateReference Grenade::make_ref() {
     //si esta en state 1, manda el sonido de la granada rebotando
     //state 2: ruido de explosion
@@ -65,9 +72,14 @@ PlayerStateReference Grenade::make_ref() {
 }
 
 void Grenade::on_collission_detected(GameEntity * other) {
-
+    if (state == 2)
+        attack(other);
 }
 
 void Grenade::attack(GameEntity * other) {
-
+    Zombie *z = (Zombie*)other;
+    if (smoke)
+        z->process_smoke();
+    else
+        z->take_damage(this->damage);
 }

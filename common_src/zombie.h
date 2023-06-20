@@ -58,6 +58,7 @@ class Zombie : public GameEntity {
     uint8_t get_health();
     void take_damage(uint8_t damage);
     bool try_dissapear();
+    void process_smoke();
     void on_collission_detected(GameEntity *other) override;
     virtual int calculate_next_movement(std::vector<PlayerState>& players);
     virtual void attack(GameEntity *other) override;
