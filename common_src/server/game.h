@@ -214,7 +214,7 @@ class GameLoop : public Thread {
             }
         }
         for (auto it = zombies.begin(); it != zombies.end();) {
-            if ((*it)->try_dissapear() == 0) {
+            if ((*it)->try_dissapear()) {
                 it = zombies.erase(it);
                 kills++;
             } else {

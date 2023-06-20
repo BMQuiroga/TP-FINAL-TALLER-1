@@ -141,7 +141,7 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	map.emplace(ZOMBIE + RUN_, std::make_shared<Asset>("../resources/Zombie/Run.png", 0, 96, 96, 7, renderer, 0));
 
 	map.emplace(HE, std::make_shared<Asset>("../resources/Soldier_1/Explosion.png", 0, 128, 128, 9, renderer, 0));
-	map.emplace(SMOKE, std::make_shared<Asset>("../resources/Soldier_1/Smoke.png", 0, 128, 128, 22, renderer, 0));
+	map.emplace(SMOKE, std::make_shared<Asset>("../resources/Soldier_3/Smoke.png", 0, 128, 128, 22, renderer, 0));
 
 	sound_map.emplace(0,SDL2pp::Music("../resources/Sound/Music.mp3"));
 

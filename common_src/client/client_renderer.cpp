@@ -31,7 +31,7 @@ void ClientRenderer::GameLoop() {
     // std::list<Image>* new_update = nullptr;
     int wait_time = 1000/GAME_FRAME_RATE;
     std::list<Image>* frames_list = nullptr;
-    this->assets->play_music(this->mixer);
+    //this->assets->play_music(this->mixer);
     ProtocolResponse new_update;
     Serializer serializer;
     while (running) {

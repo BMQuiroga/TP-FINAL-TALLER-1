@@ -167,7 +167,7 @@ void Zombie::attack(GameEntity *other) {
 bool Zombie::try_dissapear() {
     if (health == 0)
         this->show_death_timer--;
-    if(show_death_timer == 0)
+    if (show_death_timer == 0)
         return true;
     return false;
 }
