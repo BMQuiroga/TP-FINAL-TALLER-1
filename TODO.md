@@ -50,12 +50,9 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 ## Zombies
 
 ### Jumper
-- [ ] **(P0)** Salta sobre sus victimas
-- [ ] **(P0)** produce daño cuando cae sobre las victimas
+
 - [ ] **(P0)** salto tiene animación previa de aviso
 
-### Venom
-- [ ] **(P2)** ataque a distancia
 
 ## Jugador
 - [x] Munición infinita
@@ -64,9 +61,7 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 
 
 ## Granadas
-- [ ] **(P0)** Son infinitas
-- [ ] **(P0)** hay un tiempo de espera entre lanzamientos
-- [ ] **(P0)** explosiva: daña enemigos en la zona. Daña a jugadores aliados también
+- [ ] **(P0)** Daña a jugadores aliados también
 - [ ] **(P2)** humo: no producen daño. Los infectados quedan aturdidos y dejan de correr y saltar, siguen caminando
 
 ## Bombardeo aereo
@@ -91,7 +86,6 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 
 ## Escenario
 - [ ] **(P4)** los crateres son zona por la que no podés caminar
-- [ ] **(P2)** hay una camara que sigue al jugador
 - [ ] **(P1)** Te podés mover a los costados
 - [ ] **(P3)** Hay una ilusion de paralaje
 
