@@ -4,10 +4,8 @@
 definidas en CMake para evitar este hardcode
 * **(P3)** Los assests a agregar podrian venir del YAML, para no tener que recompilar todo si querés agregar o cambiar
 un asset
-
 * **(P3)** El main del cliente tiene mucho codigo suelto, faltan clases RAII para asegurarte que los hilos se joineen
 debidamente sin importar excepciones que se lancen
-* **(P1)** Si `ticks_delta` es mayor que `(1000/GAME_FRAME_RATE)` (puede pasar en modo survival cuando tengas muchos zombies y el render tarde mucho en dibujar todo) tu cliente se va a colgar en un sleep MUY grande. Atajate de que esto no suceda
 * **(P4)** Hay mucho número mágico en el cliente que no se entiende que significan.
 
 ## Server
@@ -17,9 +15,7 @@ debidamente sin importar excepciones que se lancen
 tendrías que mostrar ningún código, sino que indexás directamente por el nombre de  partida.
 * **(P0)** Falta una clase de configuración del juego para tunearlo sin tener que recompilar
 
-# Documentación (2/5)
-* **(P1)** Hay un esqueleto de lo que sería el manual de usuario (le agregaría un par de imagenes para hacerlo mas amigable
-al usuario). Falta crear el manual de proyecto y el manual tecnico
+* **(P1)** Imagenes a la docu
 
 # UX/Jugabilidad (2/5)
 * **(P0)** El personaje avanza bastante lento y atenta negativamente contra la jugabilidad. Hay que tunear
