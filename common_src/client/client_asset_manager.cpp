@@ -171,7 +171,7 @@ SDL2pp::Color* AssetManager::get_default_color() {
 }
 
 void AssetManager::play_music(SDL2pp::Mixer & mixer) {
-	mixer.PlayMusic(sound_map.at(0), -1);
+	//mixer.PlayMusic(sound_map.at(0), -1);
 }
 /*
 SDL2pp::Font* AssetManager::get_default_font() {

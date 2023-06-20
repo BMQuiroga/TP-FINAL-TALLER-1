@@ -36,7 +36,7 @@ class AssetManager {
 
     SDL2pp::Color* get_default_color();
 
-    void play_music(SDL2pp::Mixer & mixer)
+    void play_music(SDL2pp::Mixer & mixer);
 
     /*SDL2pp::Font* get_default_font();*/
 };

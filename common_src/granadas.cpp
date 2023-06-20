@@ -25,7 +25,7 @@ Grenade::Grenade(int type, uint16_t x, uint16_t y) : GameEntity("nade",DEFAULT_M
     this->rect_height = GRANADA_SIZE;
 }
 
-Grenade::advance_time() {
+void Grenade::advance_time() {
     this->time_to_change--;
     if (time_to_change == 0) {
         state++;

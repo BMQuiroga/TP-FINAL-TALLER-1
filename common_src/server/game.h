@@ -31,6 +31,7 @@
 #include "../physics_manager.h"
 #include "../zombie.h"
 #include "../game_config.h"
+#include "../granadas.h"
 #include <ctime>
 
 #define FAILURE -1
@@ -155,7 +156,7 @@ class GameLoop : public Thread {
         }
         resp.game_state = state;
 
-        if (score >= SCORE_TO_WIN) {
+        if (kills >= SCORE_TO_WIN) {
             resp.players.push_back(make_victory());
             this->state = ENDED;
         }
@@ -274,13 +275,13 @@ class GameLoop : public Thread {
                             break;
                         }
                     } else if (player) {
-                        player->next_state(event.req.cmd,bullets);
+                        player->next_state(event.req.cmd,bullets,shots);
                     }
                 }
             }
             for (PlayerState &player : players) {
                 if (player.get_state() != IDLE) {
-                    player.next_state(-1,bullets); 
+                    player.next_state(-1,bullets,shots); 
                 }
             }
             int zombies_to_spawn_via_witch = 0;

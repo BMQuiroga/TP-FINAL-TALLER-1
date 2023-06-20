@@ -22,4 +22,10 @@ class Grenade : public GameEntity {
     void advance_time();
 
     PlayerStateReference make_ref();
+
+    void on_collission_detected(GameEntity * other);
+
+    void attack(GameEntity * other);
 };
+
+#endif
