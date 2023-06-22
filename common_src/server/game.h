@@ -74,6 +74,13 @@ class GameLoop : public Thread {
     std::list<Bullet> bullets;
     std::list<Zombie*> zombies;
     std::atomic<GameState> state;
+    uint8_t game_tick_rate;
+    int zombie_creation_time_min;
+    int zombie_creation_time_max;
+    uint8_t score_to_win;
+    uint16_t max_zombies;
+    uint8_t max_players;
+    uint8_t wait_time_start_game;
     std::list<Grenade> grenades;
     std::list<Vomit_Projectile> vomit;
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
@@ -85,7 +92,7 @@ class GameLoop : public Thread {
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
-        Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS) : 
+        Queue<GameEvent> &events, uint8_t number_players=INVALID) : 
         events(events), state{CREATED}, number_players(number_players) {
             physics = PhysicsManager::get_instance();
             physics->set_layer_collision_mask(
@@ -104,6 +111,14 @@ class GameLoop : public Thread {
             kills = 0;
             shots = 0;
             game_ticks = 0;
+            std::map<std::string, int> gameloop_values = GameConfig::get_instance()->get_gameloop_values();
+            game_tick_rate = gameloop_values["game_tick_rate"];
+            zombie_creation_time_max = gameloop_values["zombie_creation_time_max"];
+            zombie_creation_time_min = gameloop_values["zombie_creation_time_min"];
+            score_to_win = gameloop_values["score_to_win"];
+            max_zombies = gameloop_values["max_zombies"];
+            max_players = number_players > 0 ? number_players : gameloop_values["max_players"];
+            wait_time_start_game = gameloop_values["wait_time_start_game"];
         }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
 
@@ -151,9 +166,9 @@ class GameLoop : public Thread {
                 resp.players.push_back(b.make_ref());
         }
 
-        for (Grenade &b : grenades) {
-            resp.players.push_back(b.make_ref());
-        }
+        // for (Grenade &b : grenades) {
+        //     resp.players.push_back(b.make_ref());
+        // }
 
         for (Vomit_Projectile &b : vomit) {
             resp.players.push_back(b.make_ref());
@@ -164,7 +179,7 @@ class GameLoop : public Thread {
         }
         resp.game_state = state;
 
-        if (kills >= SCORE_TO_WIN) {
+        if (kills >= score_to_win) {
             resp.players.push_back(make_victory());
             this->state = ENDED;
         } else if (is_everyone_dead()) {
@@ -299,14 +314,16 @@ class GameLoop : public Thread {
                 }
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_TIME_START_GAME));
+        std::this_thread::sleep_for(std::chrono::milliseconds(wait_time_start_game));
         
         int delayMilliseconds = static_cast<int>(1000.0 / GAME_TICK_RATE);
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
         while (state != ENDED) {
             game_ticks++;
-            int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
+            int spawn_interval = getRandomNumber(
+                zombie_creation_time_min, 
+                zombie_creation_time_max);
             auto startTime = std::chrono::high_resolution_clock::now();
             GameEvent event;
             int n_events = 0;
@@ -354,7 +371,7 @@ class GameLoop : public Thread {
             auto current_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
             auto interval = current_time - game_started_time;
-            if (interval % spawn_interval < 100 && interval > 0 && zombies.size() < MAX_ZOMBIES) {
+            if (interval % spawn_interval < 100 && interval > 0 && zombies.size() < max_zombies) {
                 spawn_enemy();
             }
 

@@ -50,6 +50,31 @@ void Arma::advance_time() {
         std::cout << "nuevo delay:" << std::to_string(g_delay) << std::endl;
     }  
 }
+Arma::Arma(std::map<std::string, int> &weapon_info) {
+    this->cargador = weapon_info["magazine"];
+    this->balas = weapon_info["bulletcount"];
+    this->delay_recarga = weapon_info["reloaddelay"];
+    this->delay_disparo = weapon_info["shootdelay"];
+    this->delay = 0;
+    this->g_delay_cte = weapon_info["grenadedelay"];
+    this->g_delay = 0;
+    this->damage = weapon_info["damage"];
+    this->bullet_count = weapon_info["bullet_count"];
+}
+
+Arma::Arma(const std::string& weapon_name) {
+    std::map<std::string, int> weapon_info = 
+        GameConfig::get_instance()->get_weapon(weapon_name);
+    this->cargador = weapon_info["magazine"];
+    this->balas = weapon_info["bulletcount"];
+    this->delay_recarga = weapon_info["reloaddelay"];
+    this->delay_disparo = weapon_info["shootdelay"];
+    this->delay = 0;
+    this->g_delay_cte = weapon_info["grenadedelay"];
+    this->g_delay = 0;
+    this->damage = weapon_info["damage"];
+    this->bullet_count = weapon_info["bullet_count"];
+}
 
 Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd, uint16_t gd) {
     this->cargador = c;
@@ -62,22 +87,25 @@ Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd, uint16_t gd) {
 }
 
 void Arma1::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
-    vec.push_back(Bullet(ARMA1_DAMAGE,ARMA1_BULLET_COUNT,direc,false,position,true));
+    vec.push_back(Bullet(damage,bullet_count,direc,false,position,true));
 }
 
-Arma1::Arma1() : Arma(ARMA1_MAGAZINE,ARMA1_RELOAD_DELAY,ARMA1_SHOOT_DELAY,ARMA1_GRENADE_DELAY) {}
+// Arma1::Arma1() : Arma(ARMA1_MAGAZINE,ARMA1_RELOAD_DELAY,ARMA1_SHOOT_DELAY,ARMA1_GRENADE_DELAY) {}
+Arma1::Arma1() : Arma("IDF") {}
 
 void Arma2::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
-    vec.push_back(Bullet(ARMA2_DAMAGE,ARMA2_BULLET_COUNT,direc,false,position));
+    vec.push_back(Bullet(damage,bullet_count,direc,false,position));
 }
 
-Arma2::Arma2() : Arma(ARMA2_MAGAZINE,ARMA2_RELOAD_DELAY,ARMA2_SHOOT_DELAY,ARMA2_GRENADE_DELAY) {}
+Arma2::Arma2() : Arma("P90") {}
+// Arma2::Arma2() : Arma(ARMA2_MAGAZINE,ARMA2_RELOAD_DELAY,ARMA2_SHOOT_DELAY,ARMA2_GRENADE_DELAY) {}
 
 void Arma3::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
-    vec.push_back(Bullet(ARMA3_DAMAGE,ARMA3_BULLET_COUNT,direc,true,position));
+    vec.push_back(Bullet(damage,bullet_count,direc,true,position));
 }
 
-Arma3::Arma3() : Arma(ARMA3_MAGAZINE,ARMA3_RELOAD_DELAY,ARMA3_SHOOT_DELAY,ARMA3_GRENADE_DELAY) {}
+Arma3::Arma3() : Arma("Scout") {}
+// Arma3::Arma3() : Arma(ARMA3_MAGAZINE,ARMA3_RELOAD_DELAY,ARMA3_SHOOT_DELAY,ARMA3_GRENADE_DELAY) {}
 
 
 bool Arma::try_grenade() {

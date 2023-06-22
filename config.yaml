@@ -1,64 +1,142 @@
 Game:
   port: 8082
+  default_max_x: 1920
+  default_max_y: 145
+  starting_hit_points: 100
+  events_per_loop: 20
+  gun_magazine_size: 10
+  player_rect_width: 20
+  player_rect_height: 20
+  Gameloop: 
+    game_tick_rate: 5
+    zombie_creation_time_min: 10000
+    zombie_creation_time_max: 15000
+    score_to_win: 10
+    max_zombies: 4
+    max_players: 1
+    wait_time_start_game: 10000
+  Playerstate: 
+    respawn_time: 100
   MapPaths:
     - Map: { name: Map1, path: ''}
     - Map: { name: Map2, path: ''}
   Weapons:
-    - Weapon: { name: IDF, bulletdamage: 10, firerate: 20, reloadafter: 50 }
-    - Weapon: { name: P90, bulletdamage: 10, firerate: 10, reloadafter: 30 }
-    - Weapon: { name: Scout, bulletdamage: 10, firerate: 1, reloadafter: 20 }
-    - Weapon: { name: Grenade, waittime: 10 }
-    - Weapon: { name: Bombardeo aereo, waittime: 60 }
+    - IDF: { 
+        damage: 5,
+        bulletcount: 20,
+        magazine: 50,
+        shootdelay: 20,
+        reloaddelay: 50,
+        grenadedelay: 10 
+      }
+    - P90: { 
+        damage: 6,
+        bulletcount: 10,
+        magazine: 30,
+        shootdelay: 20,
+        reloaddelay: 30,
+        grenadedelay: 3000 
+      }
+    - Scout: { 
+        damage: 150,
+        bulletcount: 1,
+        magazine: 10, 
+        shootdelay: 10,
+        reloaddelay: 20,
+        grenadedelay: 1000
+      }
+    - Grenade: { 
+        exploding_delay: 10,
+        smoke_appearance_delay: 0,
+        smoke_disappearance_delay: 15,
+        size: 128,
+        fuerza: 30
+      }
+    - Bombardeo aereo: {
+        waittime: 60 
+      }
   Enemies:
-    - Enemy: { name: Infectado, speed: 10 }
-    - Enemy: { name: Jumper, speed: 10 }
-    - Enemy: { name: Witch, speed: 10 }
-    - Enemy: { name: Spear, speed: 10 }
-    - Enemy: { name: Venom, speed: 10 }
+    - Infectado: { 
+        speed: 4,
+        rect_width: 20,
+        rect_height: 20,
+        seeking_distance: 400,
+        damage: 5,
+        timer: 15
+      }
+    - Jumper: { 
+        speed: 10,
+        seeking_distance: 300,
+        damage: 45,
+        hp: 50,
+        cooldown: 20
+      }
+    - Witch: {
+        speed: 1,
+        seeking_distance: 800,
+        hp: 255
+      }
+    - Spear: { 
+        speed: 3,
+        rect_width: 100,
+        hp: 150
+      }
+    - Venom: {  
+        speed: 2,
+        rect_width: 96,
+        seeking_distance: 1000,
+        hp: 50,
+        projectile_cooldown: 20,
+        projectile_damage: 50,
+        projectile_speed: 10,
+        damage: 3
+      }
   Soldiers:
     - Soldier: { 
-      gun: IDF, 
-      grenades: true, 
-      bombardeo: false, 
-      walk sprites: 7,
-      run sprites: 8,
-      idle sprites: 7,
-      hurt sprites: 3,
-      recharge sprites: 13,
-      shot1 sprites: 4,
-      shot2 sprites: 4,
-      grenade sprites: 9,
-      dead sprites: 4,
-      attack sprites: 3
+      grenades: 1, 
+      bombardeo: 0, 
+      walk frames: 7,
+      run frames: 8,
+      idle frames: 7,
+      hurt frames: 3,
+      recharge frames: 13,
+      shot1 frames: 4,
+      shot2 frames: 4,
+      grenade frames: 9,
+      dead frames: 4,
+      attack frames: 3
       }
     - Soldier: { 
-      gun: P90, 
-      grenades: true, 
-      bombardeo: true, 
-      walk sprites: 8,
-      run sprites: 8,
-      idle sprites: 9,
-      hurt sprites: 3,
-      recharge sprites: 7,
-      shot1 sprites: 4,
-      shot2 sprites: 4,
-      grenade sprites: 16,
-      dead sprites: 4,
-      attack sprites: 4
+      grenades: 1, 
+      bombardeo: 1, 
+      walk frames: 8,
+      run frames: 8,
+      idle frames: 9,
+      hurt frames: 3,
+      recharge frames: 7,
+      shot1 frames: 4,
+      shot2 frames: 4,
+      grenade frames: 16,
+      dead frames: 4,
+      attack frames: 4
       }
     - Soldier: { 
-      gun: Scout, 
-      grenades: true, 
-      bombardeo: false, 
-      walk sprites: 8,
-      run sprites: 6,
-      idle sprites: 7,
-      hurt sprites: 4,
-      recharge sprites: 8,
-      shot1 sprites: 4,
-      shot2 sprites: 4,
-      grenade sprites: 8,
-      dead sprites: 5,
-      attack sprites: 5,
-      smoke sprites: 22
+      grenades: 1, 
+      bombardeo: 0, 
+      walk frames: 8,
+      run frames: 6,
+      idle frames: 7,
+      hurt frames: 4,
+      recharge frames: 8,
+      shot1 frames: 4,
+      shot2 frames: 4,
+      grenade frames: 8,
+      dead frames: 5,
+      attack frames: 5,
+      smoke frames: 22
       }
+  Math: {
+    codenull: 0,
+    code venom projectile: 3,
+    code witch spawn: 4
+  }

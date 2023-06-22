@@ -1,5 +1,9 @@
 #ifndef _GAME_CONFIG_H
 #define _GAME_CONFIG_H
+#include <map>
+#include <mutex>
+#include <vector>
+#include <yaml-cpp/yaml.h>
 
 /**
  * TODO: Implement a singleton that holds all configuration values,
@@ -112,5 +116,85 @@
 #define JUMPER_HP 50
 #define JUMPER_SPEED 10
 #define JUMPER_COOLDOWN 20
+
+struct GameLoopSettings {
+    int game_tick_rate;
+    int zombie_creation_time_min;
+    int zombie_creation_time_max;
+    int score_to_win;
+    int max_zombies;
+    int max_players;
+    int wait_time_start_game;
+
+    GameLoopSettings(std::map<std::string, int>& values) {
+        game_tick_rate = values["game_tick_rate"];
+        zombie_creation_time_max = values["zombie_creation_time_max"];
+        zombie_creation_time_min = values["zombie_creation_time_min"];
+        score_to_win = values["score_to_win"];
+        max_zombies = values["max_zombies"];
+        max_players = values["max_players"];
+        wait_time_start_game = values["wait_time_start_game"];
+    }
+};
+
+
+struct GameConfig {
+    private:
+    static GameConfig* sInstance;
+    static std::mutex mutex_;
+
+    //constructor
+    GameConfig();
+    std::map<std::string, std::map<std::string, int>> parseMapNodes(
+        const YAML::Node& config, const std::string& node_name);
+    void parseConfigFile(const std::string& filename);
+
+    //game.h
+
+    // Member variables to store the parsed configuration data
+    int port;
+    int defaultMaxX;
+    int defaultMaxY;
+    int startingHitPoints;
+    int eventsPerLoop;
+    int gunMagazineSize;
+    int playerRectWidth;
+    int playerRectHeight;
+    std::vector<std::pair<std::string, std::string>> mapPaths;
+    std::map<std::string, std::map<std::string, int>> weapons;
+    std::map<std::string, std::map<std::string, int>> enemies;
+    std::map<std::string, std::map<std::string, int>> soldiers;
+    std::map<std::string, int> mathCodes;
+    std::map<std::string, int> gameloop_values;
+
+    public:
+    //singleton
+    //se llama para instanciar al objeto, o en caso de ya estar construido, devuelve el puntero
+    static GameConfig* get_instance();
+    // static GameConfig& getInstance() {
+    //     static GameConfig instance;
+    //     return instance;
+    // }
+
+    // Member functions to access the parsed configuration data
+    int getPort() const;
+    int getDefaultMaxX() const;
+    int getDefaultMaxY() const;
+    int getStartingHitPoints() const;
+    int getEventsPerLoop() const;
+    int getGunMagazineSize() const;
+    int getPlayerRectWidth() const;
+    int getPlayerRectHeight() const;
+    std::map<std::string, int> get_gameloop_values() const;
+    std::vector<std::pair<std::string, std::string>> getMapPaths() const;
+    std::map<std::string, std::map<std::string, int>> getEnemies() const;
+    std::map<std::string, std::map<std::string, int>> getSoldiers() const;
+    std::map<std::string, int> getMathCodes() const;
+    std::map<std::string, int> get_weapon(const std::string& weapon_name);
+    std::map<std::string, int> get_enemy(const std::string& enemy_name);
+    //libera el objeto
+    static void release();
+};
+
 
 #endif

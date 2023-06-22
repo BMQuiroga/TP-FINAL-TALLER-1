@@ -26,10 +26,14 @@ class Arma {
     uint16_t g_delay_cte; //CONSTANTE, TIEMPO ENTRE GRANADAS
     uint16_t g_delay; // NO CONSTANTE, DELAY QUE QUEDA PARA GRANADA
     uint8_t throwing_distance; //NO CTE, DISTANCIA QUE CUBRE
+    uint8_t damage;
+    uint8_t bullet_count;
 
     public:
     //constructor
     Arma(uint8_t c, uint8_t dr, uint8_t dd, uint16_t gd);
+    Arma(const std::string& weapon_name);
+    Arma(std::map<std::string, int> &weapon_info);
 
     //decrementa en 1 el delay
     void advance_time();

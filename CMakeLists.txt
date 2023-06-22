@@ -17,6 +17,8 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED) 
 # SDL2pp
 find_package(SDL2pp REQUIRED)
+# yaml-cpp
+FIND_PACKAGE(yaml-cpp REQUIRED)
 
 # Find the QtWidgets library
 find_package(Qt5Widgets COMPONENTS Widgets REQUIRED)
@@ -91,5 +93,5 @@ add_executable (server
   ${SOURCES}
 )
 
-target_link_libraries(client Threads::Threads SDL2pp::SDL2pp Qt5::Widgets)
-target_link_libraries(server Threads::Threads SDL2pp::SDL2pp)
+target_link_libraries(client Threads::Threads SDL2pp::SDL2pp Qt5::Widgets yaml-cpp)
+target_link_libraries(server Threads::Threads SDL2pp::SDL2pp yaml-cpp)
