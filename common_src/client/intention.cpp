@@ -33,6 +33,9 @@ Intention *Intention::make_intention(SDL_Event &event)
             case SDLK_g: {
                 return new IntentionPrepareGrenade(PREPARE_GRENADE);
             }
+            case SDLK_h: {
+                return new IntentionPrepareGrenade(PREPARE_GRENADE2);
+            }
         }           
     }
     
@@ -56,6 +59,9 @@ Intention *Intention::make_intention(SDL_Event &event)
             }
             case SDLK_g: {
                 return new IntentionThrowGrenade(THROW_GRENADE);
+            }
+            case SDLK_h: {
+                return new IntentionThrowGrenade(THROW_GRENADE2);
             }
         }
     }

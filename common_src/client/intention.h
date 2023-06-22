@@ -23,6 +23,8 @@
 #define RELOAD 14
 #define PREPARE_GRENADE 15
 #define THROW_GRENADE 16
+#define PREPARE_GRENADE2 17
+#define THROW_GRENADE2 18
 #define END -1
 
 class Intention {
