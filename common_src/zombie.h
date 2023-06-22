@@ -30,7 +30,7 @@ class Zombie : public GameEntity {
   //clase zombie, hija de GameEntity
   protected:
     uint8_t damage;
-    uint8_t health{STARTING_HIT_POINTS};
+    uint8_t health{ZOMBIE_HP};
     uint8_t zombie_type;
     uint8_t attack_type;
     uint8_t movement_type;

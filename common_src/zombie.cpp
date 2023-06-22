@@ -284,7 +284,7 @@ int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
             closest_y = vector.y;
         }
     }
-    if (distance < seeking_distance) {
+    if (distance < seeking_distance || this->health < zom_HP) {//en el caso de zomb
         float next_pos_x = this_pos.x - closest_x;
         float next_pos_y = this_pos.y - closest_y;
         int direction_x = next_pos_x > 0 ? -1 : next_pos_x < 0 ? 1 : 0;
