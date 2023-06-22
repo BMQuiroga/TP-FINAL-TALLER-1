@@ -138,7 +138,7 @@ GameStateResponse Serializer::deserialize_game_state(const std::vector<int8_t> &
     data += copy_number(data, &resp.game_state);
     data += copy_number(data, &resp.kills);
     data += copy_number(data, &resp.shots);
-    data += copy_number(data, &resp.time;
+    data += copy_number(data, &resp.time);
     int offset = 0, size = content.size() - sizeof(resp.game_state);
     offset += copy_number(data+offset, &number_players);
     offset += copy_number(data+offset, &number_zombies);

@@ -34,7 +34,7 @@
 #define EAT_ 14000
 #define JUMP_ 15000
 
-#define 3ROAD -8
+#define ROAD -8
 #define REVIVE_SCREEN -7
 #define WIN_SCREEN -6
 #define DEATH_SCREEN -5
@@ -60,9 +60,9 @@ void AssetManager::Release() {
 //(0 idle, 1 attack, 2 dead, 3 grenade, 4 hurt 5 recharge, 6 shot, 7 walk, 8 fall, 9 run, 10 protect, 11 run+atack, 12 bite, 13 scream, 14 eating)
 
 AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
-	default_font("../resources/Fonts/ARIAL.TTF", 30), default_color(50,50,50,255), white_color(255,255,255,255)
+	/*default_font("../resources/Fonts/ARIAL.TTF", 30),*/ default_color(50,50,50,255), white_color(255,255,255,255)
 	{
-	map.emplace(3ROAD, std::make_shared<Asset>("../resources/backgrounds/War1/Bright/3road.png", 0, 1920, 1080, 1, renderer, 1));
+	map.emplace(ROAD, std::make_shared<Asset>("../resources/backgrounds/War1/Bright/3road.png", 0, 1920, 1080, 1, renderer, 1));
 	map.emplace(REVIVE_SCREEN, std::make_shared<Asset>("../resources/HPBar/ReviveScreen.png", 0, 1920, 1080, 1, renderer, 1));
 	map.emplace(WIN_SCREEN, std::make_shared<Asset>("../resources/HPBar/WinScreen.png", 0, 1920, 1080, 1, renderer, 1));
 	map.emplace(DEATH_SCREEN, std::make_shared<Asset>("../resources/HPBar/DeathScreen.png", 0, 1920, 1080, 1, renderer, 1));
@@ -159,6 +159,7 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 }
 
 Asset* AssetManager::GetAsset(int code) {
+	//std::cout << "TRIED TO RENDER: " << std::to_string(code) << std::endl;
     return map.at(code).get();
 }
 
@@ -179,8 +180,8 @@ SDL2pp::Color* AssetManager::get_white_color() {
 void AssetManager::play_music(SDL2pp::Mixer & mixer) {
 	//mixer.PlayMusic(sound_map.at(0), -1);
 }
-
+/*
 SDL2pp::Font* AssetManager::get_default_font() {
 	SDL2pp::Font* p = &default_font;
 	return p;
-}
+}*/

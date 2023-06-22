@@ -13,7 +13,7 @@ PlayerState::PlayerState(
     int16_t max_y
 ) : 
 GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
-    this->id = id;
+    //this->id = id;
     this->hit_points = STARTING_HIT_POINTS;
     this->arma = new Arma1();
     this->rect_width = PLAYER_RECT_WIDTH;
@@ -26,6 +26,7 @@ GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
     if (weapon_code == 3)
         this->arma = new Arma3();
     this->speed = PLAYER_SPEED;
+    this->id = weapon_code;
 }
 
 PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {
@@ -56,6 +57,7 @@ void PlayerState::take_damage(uint8_t damage) {
 }
 
 PlayerStateReference PlayerState::make_ref() {
+    std::cout << "made ref with id: " << std::to_string(id) << std::endl;
     PlayerStateReference ref;
     ref.id = id;
     ref.hit_points = hit_points;
@@ -120,7 +122,7 @@ void PlayerState::shoot(int flag) {
     }
 }*/
 
-void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint16_t& bullets, std::list<Grenade>& gren) {
+void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bullets, std::list<Grenade>& gren) {
     if (this->hit_points == 0) {
         this->state = DEAD;
         this->arma->advance_time();

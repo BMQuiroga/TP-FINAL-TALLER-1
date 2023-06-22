@@ -13,30 +13,30 @@ void ClientRenderer::render_floor() {
     Asset * asset = assets->GetAsset(-8);
     renderer.Copy(
         (*asset->get_texture()),
-        SDL2pp::Rect(0, 300, 1920, 780),
+        SDL2pp::Rect(0, 300, 5760, 780),
         SDL2pp::Point(offset,0)
     );
 }
 
 void ClientRenderer::render_score(uint32_t b, uint32_t k, uint32_t t) {
-    std::string text_s = "Score: " + std::to_string((k*100) - t);
+    std::cout << "RENDERSCORE: " << std::to_string(b) << " " << std::to_string(k) << " " << std::to_string(t) << std::endl;
+    /*std::string text_s = "Score: " + std::to_string((k*100) - t);
     std::string text_k = "Kills: " + std::to_string(k);
     std::string text_b = "Times Shot: " + std::to_string(b);
     std::string text_t = "Time: " + std::to_string(t);
 
-    Button s(text_s,SDL2pp::Rect(50,830,20*text_s.size(),40));
-    Button k(text_k,SDL2pp::Rect(50,880,20*text_k.size(),40));
-    Button b(text_b,SDL2pp::Rect(50,930,20*text_b.size(),40));
-    Button t(text_t,SDL2pp::Rect(50,980,20*text_t.size(),40));
-
-    SDL2pp::Color* def = assets->get_default_color();
+    Button button_s(text_s,SDL2pp::Rect(50,830,20*text_s.size(),40));
+    Button button_k(text_k,SDL2pp::Rect(50,880,20*text_k.size(),40));
+    Button button_b(text_b,SDL2pp::Rect(50,930,20*text_b.size(),40));
+    Button button_t(text_t,SDL2pp::Rect(50,980,20*text_t.size(),40));
+    
     SDL2pp::Color* white = assets->get_white_color();
-    SDL2pp::Font* font = assets->get_default_font();
+    //SDL2pp::Font font("../resources/Fonts/ARIAL.TTF", 30);
 
-    s.Render(this->renderer,white,font,def);
-    k.Render(this->renderer,white,font,def);
-    b.Render(this->renderer,white,font,def);
-    t.Render(this->renderer,white,font,def);
+    button_s.Render(this->renderer,white);
+    button_k.Render(this->renderer,white);
+    button_b.Render(this->renderer,white);
+    button_t.Render(this->renderer,white);*/
 }
 
 ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name) : 
@@ -104,6 +104,7 @@ void ClientRenderer::GameLoop() {
                     frames_list->push_back(new_Model);
                 }
                 render_score(update.shots, update.kills, update.time);
+                //render_score(1,1,1);
             } else if (new_update.content_type == LOBBY_STATE) {
                 // LobbyStateResponse update = serializer.deserialize(new_update.content);
             }
@@ -147,6 +148,7 @@ uint8_t ClientRenderer::get_frame(Image & im) {
 void ClientRenderer::render_all() {
     if (this->actual_frame != nullptr) {
         calculate_offset();
+        render_floor();;
         for (auto const& it : *actual_frame) {
             //std::cout << "id:" << it.id << std::endl;
             if (it.id > 0 && it.id < 151) {
@@ -174,7 +176,19 @@ void ClientRenderer::calculate_offset() {
     for (auto const& it : *actual_frame) {
         if (it.name == player_name) {
             //offset = (RESOLUTION_X/2) - it.x;
-            offset = std::max(min((RESOLUTION_X / 2) - it.x, DEFAULT_MAX_X - RESOLUTION_X), 0);
+            //int a = (RESOLUTION_X / 2) - it.x;;
+            //int b = DEFAULT_MAX_X - RESOLUTION_X;
+            //offset = std::max(std::min(a,0), std::min(b,0));
+            int fix = RESOLUTION_X/2;
+            int max = DEFAULT_MAX_X + 128;//128 es el tamaño del modelo del jugador
+            int x = it.x;
+            if (x < fix)
+                offset = 0;
+            else if (x > (max - fix))
+                offset = RESOLUTION_X - max;
+            else
+                offset = fix - x;
+
             return;
         }      
     }

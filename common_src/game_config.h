@@ -73,7 +73,6 @@
 #define CODE_WITCH_SPAWN 4
 
 // Player
-#define GUN_MAGAZINE_SIZE 10
 #define PLAYER_RECT_WIDTH 20
 #define PLAYER_RECT_HEIGHT 20
 #define PLAYER_SPEED 20
