@@ -1,11 +1,11 @@
 #include "button.h"
 #include <iostream>
 
-void Button::Render(SDL2pp::Renderer& renderer) {
-    renderer.SetDrawColor(SDL2pp::Color(230, 230, 0, 255));
-    renderer.FillRect(this->rect);
-    SDL2pp::Font font("../resources/Fonts/ARIAL.TTF", 99);
-    SDL2pp::Surface surface(font.RenderText_Solid(text, SDL_Color{255, 255, 255, 255}));
+void Button::Render(SDL2pp::Renderer& renderer, SDL2pp::Font& font, SDL2pp::Color* background_color) {
+    //renderer.SetDrawColor(color*);
+    //renderer.FillRect(this->rect);
+    //SDL2pp::Font font(font, 30);
+    SDL2pp::Surface surface(font.RenderText_Solid(text, background_color*));
     SDL2pp::Texture texture(renderer, surface);
     renderer.Copy(texture, SDL2pp::NullOpt, rect);
 }

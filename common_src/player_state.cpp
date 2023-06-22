@@ -25,6 +25,7 @@ GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
         this->arma = new Arma2();
     if (weapon_code == 3)
         this->arma = new Arma3();
+    this->speed = PLAYER_SPEED;
 }
 
 PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {

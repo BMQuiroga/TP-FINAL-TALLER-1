@@ -2,12 +2,42 @@
 #include "client_renderer.h"
 #include <string>
 #include "intention.h"
+#include "button.h"
 #include <cmath>
 #include <vector>
 #include "../serialization.h"
 //#include <arpa/inet.h>
 #include "../game_config.h"
 
+void ClientRenderer::render_floor() {
+    Asset * asset = assets->GetAsset(-8);
+    renderer.Copy(
+        (*asset->get_texture()),
+        SDL2pp::Rect(0, 300, 1920, 780),
+        SDL2pp::Point(offset,0)
+    );
+}
+
+void ClientRenderer::render_score(uint32_t b, uint32_t k, uint32_t t) {
+    std::string text_s = "Score: " + std::to_string((k*100) - t);
+    std::string text_k = "Kills: " + std::to_string(k);
+    std::string text_b = "Times Shot: " + std::to_string(b);
+    std::string text_t = "Time: " + std::to_string(t);
+
+    Button s(text_s,SDL2pp::Rect(50,830,20*text_s.size(),40));
+    Button k(text_k,SDL2pp::Rect(50,880,20*text_k.size(),40));
+    Button b(text_b,SDL2pp::Rect(50,930,20*text_b.size(),40));
+    Button t(text_t,SDL2pp::Rect(50,980,20*text_t.size(),40));
+
+    SDL2pp::Color* def = assets->get_default_color();
+    SDL2pp::Color* white = assets->get_white_color();
+    SDL2pp::Font* font = assets->get_default_font();
+
+    s.Render(this->renderer,white,font,def);
+    k.Render(this->renderer,white,font,def);
+    b.Render(this->renderer,white,font,def);
+    t.Render(this->renderer,white,font,def);
+}
 
 ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name) : 
     events(events),
@@ -73,6 +103,7 @@ void ClientRenderer::GameLoop() {
                     new_Model.frame = get_frame(new_Model);
                     frames_list->push_back(new_Model);
                 }
+                render_score(update.shots, update.kills, update.time);
             } else if (new_update.content_type == LOBBY_STATE) {
                 // LobbyStateResponse update = serializer.deserialize(new_update.content);
             }
@@ -135,14 +166,16 @@ void ClientRenderer::render_all() {
 }
 
 void ClientRenderer::play(Image & im) {
-    if (im.action == 0)
+    if (im.action == 0)//ESTA LINEA GENERA EL PROBLEMA
         assets->play(im.id,this->mixer);
 }
 
 void ClientRenderer::calculate_offset() {
     for (auto const& it : *actual_frame) {
         if (it.name == player_name) {
-            offset = (RESOLUTION_X/2) - it.x;
+            //offset = (RESOLUTION_X/2) - it.x;
+            offset = std::max(min((RESOLUTION_X / 2) - it.x, DEFAULT_MAX_X - RESOLUTION_X), 0);
+            return;
         }      
     }
 }
@@ -189,7 +222,7 @@ void ClientRenderer::renderOwn(Image & im) {
         renderer.Copy(
             (*asset->get_texture()),
             SDL2pp::NullOpt,
-            SDL2pp::Rect(50 + 55*i, 830, 50, 50)
+            SDL2pp::Rect(350 + 55*i, 830, 50, 50)
         );
     }
 
@@ -199,20 +232,20 @@ void ClientRenderer::renderOwn(Image & im) {
         renderer.Copy(
             (*asset2->get_texture()),
             SDL2pp::NullOpt,
-            SDL2pp::Rect(50 + 20*i, 930, 50, 50)
+            SDL2pp::Rect(350 + 20*i, 930, 50, 50)
         );
     }
 }
 
 void ClientRenderer::renderHealth(uint16_t x, uint16_t y, uint8_t hp) {
     Asset * full = assets->GetAsset(-1);
-    Asset * empty = assets->GetAsset(-2);
+    /*Asset * empty = assets->GetAsset(-2);*/
     float hp_percentage = 50*hp/100;
 
-    renderer.Copy(
+    /*renderer.Copy(
         (*empty->get_texture()),
         SDL2pp::Rect(0,0,50,HP_BAR_HEIGHT),
-        SDL2pp::Rect(x , y + (HP_BAR_HEIGHT*2) + Y_OFFSET, HP_BAR_LENGTH - 1, HP_BAR_HEIGHT - 1));
+        SDL2pp::Rect(x , y + (HP_BAR_HEIGHT*2) + Y_OFFSET, HP_BAR_LENGTH - 1, HP_BAR_HEIGHT - 1));*/
     renderer.Copy(
         (*full->get_texture()),
         SDL2pp::Rect(0,0,HP_BAR_LENGTH,HP_BAR_HEIGHT),

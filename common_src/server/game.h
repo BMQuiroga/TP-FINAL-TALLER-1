@@ -79,9 +79,9 @@ class GameLoop : public Thread {
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
     PhysicsManager *physics;
-    uint16_t kills;
-    uint16_t shots;
-    int game_ticks;
+    uint32_t kills;
+    uint32_t shots;
+    uint32_t game_ticks;
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
@@ -163,7 +163,9 @@ class GameLoop : public Thread {
             resp.zombies.push_back(zombie->make_ref());
         }
         resp.game_state = state;
-
+        resp.kills = this->kills;
+        resp.shots = this->shots;
+        resp.time = this->game_ticks / GAME_TICK_RATE;
         if (kills >= SCORE_TO_WIN) {
             resp.players.push_back(make_victory());
             this->state = ENDED;

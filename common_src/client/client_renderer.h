@@ -66,6 +66,12 @@ class ClientRenderer {
     //calcula un offset para que la camara siga al jugador
     void calculate_offset();
 
+    //renderiza el piso, distinto del fondo
+    void render_floor();
+
+    //renderiza las balas, kills y tiempo
+    void render_score(uint32_t b, uint32_t k, uint32_t t);
+
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name);
     //gameloop: renderiza el background y el actual_frame en loop mientras lo actualiza
