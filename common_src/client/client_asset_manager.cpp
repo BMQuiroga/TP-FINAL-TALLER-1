@@ -6,6 +6,7 @@
 
 #define SOLDIER1 1
 #define SOLDIER2 2
+#define SOLDIER3 3
 #define ZOMBIE 51
 #define JUMPER 52
 #define SPEAR 53
@@ -77,21 +78,28 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	map.emplace(SOLDIER1 + ATTACK_, std::make_shared<Asset>("../resources/Soldier_1/Attack.png", 0, 128, 128, 3, renderer, 0));
 	map.emplace(SOLDIER1 + DEAD_, std::make_shared<Asset>("../resources/Soldier_1/Dead.png", 0, 128, 128, 4, renderer, 0));
 	map.emplace(SOLDIER1 + GRENADE_, std::make_shared<Asset>("../resources/Soldier_1/Grenade.png", 0, 128, 128, 9, renderer, 0));
-	map.emplace(SOLDIER1 + HURT_, std::make_shared<Asset>("../resources/Soldier_1/Hurt.png", 0, 128, 128, 3, renderer, 0));
 	map.emplace(SOLDIER1 + RECHARGE_, std::make_shared<Asset>("../resources/Soldier_1/Recharge.png", 0, 128, 128, 13, renderer, 0));
-	map.emplace(SOLDIER1 + SHOT_, std::make_shared<Asset>("../resources/Soldier_1/Shot_1.png", 0, 128, 128, 4, renderer, 0));
+	//map.emplace(SOLDIER1 + SHOT_, std::make_shared<Asset>("../resources/Soldier_1/Shot_1.png", 0, 128, 128, 4, renderer, 0));
 	map.emplace(SOLDIER1 + WALK_, std::make_shared<Asset>("../resources/Soldier_1/Walk.png", 0, 128, 128, 7, renderer, 0));
-	map.emplace(SOLDIER1 + RUN_, std::make_shared<Asset>("../resources/Soldier_1/Run.png", 0, 128, 128, 8, renderer, 0));
+	//map.emplace(SOLDIER1 + RUN_, std::make_shared<Asset>("../resources/Soldier_1/Run.png", 0, 128, 128, 8, renderer, 0));
 
 	map.emplace(SOLDIER2 + IDLE_, std::make_shared<Asset>("../resources/Soldier_2/Idle.png", 0, 128, 128, 9, renderer, 0));
 	map.emplace(SOLDIER2 + ATTACK_, std::make_shared<Asset>("../resources/Soldier_2/Attack.png", 0, 128, 128, 4, renderer, 0));
 	map.emplace(SOLDIER2 + DEAD_, std::make_shared<Asset>("../resources/Soldier_2/Dead.png", 0, 128, 128, 4, renderer, 0));
 	map.emplace(SOLDIER2 + GRENADE_, std::make_shared<Asset>("../resources/Soldier_2/Grenade.png", 0, 128, 128, 16, renderer, 0));
-	map.emplace(SOLDIER2 + HURT_, std::make_shared<Asset>("../resources/Soldier_2/Hurt.png", 0, 128, 128, 3, renderer, 0));
 	map.emplace(SOLDIER2 + RECHARGE_, std::make_shared<Asset>("../resources/Soldier_2/Recharge.png", 0, 128, 128, 7, renderer, 0));
-	map.emplace(SOLDIER2 + SHOT_, std::make_shared<Asset>("../resources/Soldier_2/Shot_1.png", 0, 128, 128, 4, renderer, 0));
+	//map.emplace(SOLDIER2 + SHOT_, std::make_shared<Asset>("../resources/Soldier_2/Shot_1.png", 0, 128, 128, 4, renderer, 0));
 	map.emplace(SOLDIER2 + WALK_, std::make_shared<Asset>("../resources/Soldier_2/Walk.png", 0, 128, 128, 8, renderer, 0));
-	map.emplace(SOLDIER2 + RUN_, std::make_shared<Asset>("../resources/Soldier_2/Run.png", 0, 128, 128, 8, renderer, 0));
+	//map.emplace(SOLDIER2 + RUN_, std::make_shared<Asset>("../resources/Soldier_2/Run.png", 0, 128, 128, 8, renderer, 0));
+
+	map.emplace(SOLDIER3 + IDLE_, std::make_shared<Asset>("../resources/Soldier_3/Idle.png", 0, 128, 128, 7, renderer, 0));
+	map.emplace(SOLDIER3 + ATTACK_, std::make_shared<Asset>("../resources/Soldier_3/Attack.png", 0, 128, 128, 5, renderer, 0));
+	map.emplace(SOLDIER3 + DEAD_, std::make_shared<Asset>("../resources/Soldier_3/Dead.png", 0, 128, 128, 5, renderer, 0));
+	map.emplace(SOLDIER3 + GRENADE_, std::make_shared<Asset>("../resources/Soldier_3/Grenade.png", 0, 128, 128, 8, renderer, 0));
+	map.emplace(SOLDIER3 + RECHARGE_, std::make_shared<Asset>("../resources/Soldier_3/Recharge.png", 0, 128, 128, 8, renderer, 0));
+	//map.emplace(SOLDIER3 + SHOT_, std::make_shared<Asset>("../resources/Soldier_3/Shot_1.png", 0, 128, 128, 4, renderer, 0));
+	map.emplace(SOLDIER3 + WALK_, std::make_shared<Asset>("../resources/Soldier_3/Walk.png", 0, 128, 128, 8, renderer, 0));
+	//map.emplace(SOLDIER3 + RUN_, std::make_shared<Asset>("../resources/Soldier_3/Run.png", 0, 128, 128, 6, renderer, 0));
 
 	map.emplace(JUMPER + IDLE_, std::make_shared<Asset>("../resources/Jumper/Idle.png", 0, 96, 96, 4, renderer, 0));
 	map.emplace(JUMPER + ATTACK_, std::make_shared<Asset>("../resources/Jumper/Attack_1.png", 0, 96, 96, 4, renderer, 0));
@@ -143,6 +151,7 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 
 	map.emplace(HE + DEAD_, std::make_shared<Asset>("../resources/Soldier_1/Explosion.png", 0, 128, 128, 9, renderer, 0));
 	map.emplace(SMOKE + DEAD_, std::make_shared<Asset>("../resources/Soldier_3/Smoke.png", 0, 128, 128, 22, renderer, 0));
+	//DEAD_ es es standar para la animacion que se queda trabada en el ultimo frame en vez de loopear
 
 	sound_map.emplace(0,SDL2pp::Music("../resources/Sound/Music.mp3"));
 
