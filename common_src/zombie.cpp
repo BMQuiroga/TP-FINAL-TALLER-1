@@ -151,10 +151,8 @@ CommonZombie::CommonZombie(
     Vector2D position,
     int16_t max_x, 
     int16_t max_y
-) : Zombie(name, position, max_x, max_y) {
+) : Zombie(name, position, max_x, max_y, ZOMBIE) {
     id = 51;
-    damage = ZOMBIE_DAMAGE;
-    zombie_type = ZOMBIE;
     attack_type = ZOMBIE_BITE;
     movement_type = ZOMBIE_WALK;
 }
@@ -188,17 +186,23 @@ Zombie::Zombie(
     const std::string &name,
     Vector2D position,
     int16_t max_x, 
-    int16_t max_y
+    int16_t max_y,
+    uint8_t zombie_type
 ) : GameEntity(
     name,
     position,
     max_x, max_y,
-    CollisionLayer::Hostile) {
-    rect_width = ZOMBIE_RECT_HEIGHT;
-    rect_height = ZOMBIE_RECT_HEIGHT;
-    speed = ZOMBIE_SPEED;
-    seeking_distance = ZOMBIE_SEEKING_DISTANCE;
-    show_death_timer = ZOMBIE_TIMER;
+    CollisionLayer::Hostile), 
+    zombie_type(zombie_type) {
+    std::map<std::string, int> zombie_values =
+        GameConfig::get_instance()->get_enemy((int) zombie_type);
+    speed = zombie_values["speed"];
+    rect_width = zombie_values["rect_width"];
+    rect_height = zombie_values["rect_height"];
+    seeking_distance = zombie_values["seeking_distance"];
+    show_death_timer = zombie_values["timer"];
+    damage = zombie_values["damage"];
+    health = zombie_values["hp"];
 }
 
 Spear::Spear(
@@ -206,15 +210,10 @@ Spear::Spear(
     Vector2D position,
     int16_t max_x, 
     int16_t max_y
-) : Zombie(name, position, max_x, max_y) {
+) : Zombie(name, position, max_x, max_y, SPEAR) {
     id = 53;
-    damage = SPEAR_DAMAGE;
-    zombie_type = SPEAR;
     attack_type = ZOMBIE_ATTACK1;
     movement_type = ZOMBIE_WALK;
-    rect_width = SPEAR_RECT_WIDTH;
-    health = SPEAR_HP;
-    speed = SPEAR_SPEED;
 }
 
 Jumper::Jumper(
@@ -222,16 +221,11 @@ Jumper::Jumper(
     Vector2D position,
     int16_t max_x, 
     int16_t max_y
-) : Zombie(name, position, max_x, max_y), objetive(-1,-1) {
+) : Zombie(name, position, max_x, max_y, JUMPER), objetive(-1,-1) {
     id = 52;
     damage = JUMPER_DAMAGE;
-    zombie_type = JUMPER;
     attack_type = ZOMBIE_JUMP;
     movement_type = ZOMBIE_WALK;
-    seeking_distance = JUMPER_SEEKING_DISTANCE;
-    health = JUMPER_HP;
-    speed = JUMPER_SPEED;
-    cooldown = 0;
 }
 
 Venom::Venom(
@@ -239,17 +233,10 @@ Venom::Venom(
     Vector2D position,
     int16_t max_x, 
     int16_t max_y
-) : Zombie(name, position, max_x, max_y) {
+) : Zombie(name, position, max_x, max_y, VENOM) {
     id = 54;
-    damage = VENOM_DAMAGE;//daño melee
-    zombie_type = VENOM;
     attack_type = ZOMBIE_ATTACK2;
     movement_type = ZOMBIE_WALK;
-    seeking_distance = VENOM_SEEKING_DISTANCE;
-    rect_width = VENOM_RECT_WIDTH;
-    health = VENOM_HP;
-    speed = VENOM_SPEED;
-    cooldown = 0;
 }
 
 Witch::Witch(
@@ -257,15 +244,12 @@ Witch::Witch(
     Vector2D position,
     int16_t max_x, 
     int16_t max_y
-) : Zombie(name, position, max_x, max_y) {
+) : Zombie(name, position, max_x, max_y, WITCH) {
     id = 55;
     damage = 0;
     zombie_type = WITCH;
     attack_type = ZOMBIE_SCREAM;
     movement_type = ZOMBIE_WALK;
-    seeking_distance = WITCH_SEEKING_DISTANCE;
-    health = WITCH_HP;
-    speed = 0;
 }
 
 int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {

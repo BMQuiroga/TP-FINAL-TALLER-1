@@ -147,6 +147,8 @@ struct GameConfig {
     GameConfig();
     std::map<std::string, std::map<std::string, int>> parseMapNodes(
         const YAML::Node& config, const std::string& node_name);
+    std::vector<std::map<std::string, int>> parseToVector(
+        const YAML::Node& config, const std::string& node_name);
     void parseConfigFile(const std::string& filename);
 
     //game.h
@@ -162,7 +164,7 @@ struct GameConfig {
     int playerRectHeight;
     std::vector<std::pair<std::string, std::string>> mapPaths;
     std::map<std::string, std::map<std::string, int>> weapons;
-    std::map<std::string, std::map<std::string, int>> enemies;
+    std::vector<std::map<std::string, int>> enemies;
     std::map<std::string, std::map<std::string, int>> soldiers;
     std::map<std::string, int> mathCodes;
     std::map<std::string, int> gameloop_values;
@@ -187,11 +189,11 @@ struct GameConfig {
     int getPlayerRectHeight() const;
     std::map<std::string, int> get_gameloop_values() const;
     std::vector<std::pair<std::string, std::string>> getMapPaths() const;
-    std::map<std::string, std::map<std::string, int>> getEnemies() const;
+    std::vector<std::map<std::string, int>> getEnemies() const;
     std::map<std::string, std::map<std::string, int>> getSoldiers() const;
     std::map<std::string, int> getMathCodes() const;
     std::map<std::string, int> get_weapon(const std::string& weapon_name);
-    std::map<std::string, int> get_enemy(const std::string& enemy_name);
+    std::map<std::string, int> get_enemy(int enemy);
     //libera el objeto
     static void release();
 };

@@ -23,7 +23,7 @@ enum movement_type {
 };
 
 enum ZOMBIE_TYPE {
-  JUMPER, VENOM, SPEAR, WITCH, ZOMBIE
+  ZOMBIE, JUMPER, WITCH, SPEAR, VENOM
 };
 
 class Zombie : public GameEntity {
@@ -46,7 +46,8 @@ class Zombie : public GameEntity {
         const std::string &name,
         Vector2D position,
         int16_t max_x, 
-        int16_t max_y);
+        int16_t max_y,
+        uint8_t zombie_type);
     ~Zombie();
     Zombie(Zombie&&);
     //de un zombie fabrica una GSR para enviar al cliente

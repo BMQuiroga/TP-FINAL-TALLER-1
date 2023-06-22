@@ -39,6 +39,25 @@ std::map<std::string, std::map<std::string, int>> GameConfig::parseMapNodes(
     return parsed_nodes;
 }
 
+std::vector<std::map<std::string, int>> GameConfig::parseToVector(
+    const YAML::Node& config, 
+    const std::string& node_name) {
+    std::vector<std::map<std::string, int>> parsed_nodes;
+    const YAML::Node& nodes = config["Game"][node_name];
+    for (const auto& node : nodes) {
+        std::map<std::string, int> node_data;
+        for (const auto& entry : node) {
+            for (const auto& attribute: entry.second) {
+                std::string codeName = attribute.first.as<std::string>();
+                int codeValue = attribute.second.as<int>();
+                node_data[codeName] = codeValue;
+            }
+        }
+        parsed_nodes.push_back(node_data);
+    }
+    return parsed_nodes;
+}
+
 void GameConfig::parseConfigFile(const std::string& filename) {
     YAML::Node config = YAML::LoadFile(filename);
 
@@ -76,7 +95,7 @@ void GameConfig::parseConfigFile(const std::string& filename) {
     // }
 
     // // Parse the enemies
-    enemies = parseMapNodes(config, "Enemies");
+    enemies = parseToVector(config, "Enemies");
     // const YAML::Node& enemiesNode = config["Game"]["Enemies"];
     // for (const auto& enemy : enemiesNode) {
     //     std::map<std::string, std::string> enemyData;
@@ -174,7 +193,7 @@ std::vector<std::pair<std::string, std::string>> GameConfig::getMapPaths() const
     return mapPaths;
 }
 
-std::map<std::string, std::map<std::string, int>> GameConfig::getEnemies() const {
+std::vector<std::map<std::string, int>> GameConfig::getEnemies() const {
     return enemies;
 }
 
@@ -187,7 +206,7 @@ std::map<std::string, int> GameConfig::get_weapon(const std::string &weapon_name
     return weapons[weapon_name];
 }
 
-std::map<std::string, int> GameConfig::get_enemy(const std::string &enemy_name)
+std::map<std::string, int> GameConfig::get_enemy(int enemy)
 {
-    return enemies[enemy_name];
+    return enemies[enemy];
 }

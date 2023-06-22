@@ -56,40 +56,58 @@ Game:
         waittime: 60 
       }
   Enemies:
-    - Infectado: { 
+    - Zombie: { 
         speed: 4,
         rect_width: 20,
         rect_height: 20,
         seeking_distance: 400,
         damage: 5,
+        hp: 100,
+        cooldown: 0,
         timer: 15
       }
     - Jumper: { 
         speed: 10,
+        rect_width: 20,
+        rect_height: 20,
         seeking_distance: 300,
         damage: 45,
         hp: 50,
-        cooldown: 20
+        cooldown: 20,
+        timer: 15
       }
     - Witch: {
-        speed: 1,
+        speed: 0,
+        rect_width: 20,
+        rect_height: 20,
         seeking_distance: 800,
-        hp: 255
+        damage: 0,
+        hp: 255,
+        cooldown: 0,
+        timer: 15
       }
     - Spear: { 
         speed: 3,
         rect_width: 100,
-        hp: 150
+        rect_height: 20,
+        seeking_distance: 0,
+        damage: 0,
+        hp: 150,
+        cooldown: 0,
+        timer: 15
       }
     - Venom: {  
         speed: 2,
         rect_width: 96,
+        rect_height: 20,
         seeking_distance: 1000,
+        damage: 3,
         hp: 50,
+        cooldown: 0,
+        timer: 15,
         projectile_cooldown: 20,
         projectile_damage: 50,
-        projectile_speed: 10,
-        damage: 3
+        projectile_speed: 10
       }
   Soldiers:
     - Soldier: { 
