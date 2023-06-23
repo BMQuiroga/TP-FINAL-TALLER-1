@@ -17,9 +17,13 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED) 
 # SDL2pp
 find_package(SDL2pp REQUIRED)
+# yaml-cpp
+find_package(yaml-cpp REQUIRED)
 
 # Find the QtWidgets library
 find_package(Qt5Widgets COMPONENTS Widgets REQUIRED)
+
+include_directories(${YAML_CPP_INCLUDE_DIRS})
 
 message("Agregando '${PROJECT_BINARY_DIR}'/include como directorio de includes")
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -48,15 +52,23 @@ set(CMAKE_AUTOMOC on)
 # Habilito autorcc para manejar automaticamente los QResources
 set(CMAKE_AUTORCC ON)
 
-file(GLOB SOURCES
-    ./common_src/*.h
-    ./common_src/*.cpp
-    ./common_src/network/*.h
-    ./common_src/network/*.cpp
-    ./common_src/client/*.h
-    ./common_src/client/*.cpp
-    ./qt/*.h
-    ./qt/*.cpp
+# Google Test
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+FetchContent_MakeAvailable(googletest)
+
+file(GLOB CLIENT_SOURCES
+    common_src/*.h
+    common_src/*.cpp
+    common_src/network/*.h
+    common_src/network/*.cpp
+    common_src/client/*.h
+    common_src/client/*.cpp
+    qt/*.h
+    qt/*.cpp
 )
 
 # set(QT_SOURCES
@@ -74,22 +86,50 @@ file(GLOB SOURCES
 
 
 add_executable (client
-  ${SOURCES}
+  ${CLIENT_SOURCES}
   ${UIS_HEADERS}
   # ${QT_SOURCES}
 )
 
-file(GLOB SOURCES
-    ./common_src/*.h
-    ./common_src/*.cpp
-    ./common_src/network/*.h
-    ./common_src/network/*.cpp
-    ./common_src/server/*.h
-    ./common_src/server/*.cpp
+file(GLOB SERVER_SOURCES
+    common_src/*.h
+    common_src/*.cpp
+    common_src/network/*.h
+    common_src/network/*.cpp
+    common_src/server/*.h
+    common_src/server/*.cpp
 )
 add_executable (server
-  ${SOURCES}
+  ${SERVER_SOURCES}
 )
 
-target_link_libraries(client Threads::Threads SDL2pp::SDL2pp Qt5::Widgets)
-target_link_libraries(server Threads::Threads SDL2pp::SDL2pp)
+target_link_libraries(client Threads::Threads SDL2pp::SDL2pp ${YAML_CPP_LIBRARIES} Qt5::Widgets)
+target_link_libraries(server Threads::Threads SDL2pp::SDL2pp ${YAML_CPP_LIBRARIES})
+
+# testing
+enable_testing()
+
+list(REMOVE_ITEM SERVER_SOURCES "${PROJECT_SOURCE_DIR}/common_src/server/server_main.cpp")
+file(GLOB TEST_SOURCES
+    tests/*.cpp
+)
+
+add_executable(
+  test
+  ${TEST_SOURCES}
+  ${SERVER_SOURCES}
+)
+target_link_libraries(
+  test
+  GTest::gtest_main Threads::Threads SDL2pp::SDL2pp ${YAML_CPP_LIBRARIES}
+)
+
+include(GoogleTest)
+gtest_discover_tests(test)
+
+# configuration file
+add_custom_target(copy-files ALL
+  COMMAND ${CMAKE_COMMAND} -E copy
+  ${CMAKE_SOURCE_DIR}/config.yml
+  ${CMAKE_CURRENT_BINARY_DIR}/config.yml
+)
