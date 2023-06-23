@@ -112,8 +112,8 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 ## Controles
 - [x] se controla via teclado
 - [x] Recarga manual (mediante botón de recarga)
-- [ ] **(P1)** distancia de lanzado de granada depende de cuanto tiempo se mantiene presionado la tecla
-- [ ] **(P1)** Si mantenés mucho tiempo presionado la tecla de lanzar granada, explota en la mano
+- [x] **(P1)** distancia de lanzado de granada depende de cuanto tiempo se mantiene presionado la tecla
+- [x] **(P1)** Si mantenés mucho tiempo presionado la tecla de lanzar granada, explota en la mano
 
 
 ## sonidos

@@ -30,6 +30,15 @@ bool Arma::try_shoot() {
     return false;
 }
 
+PlayerStateReference Arma::make_reload() {
+    PlayerStateReference a;
+    a.id = 160;
+    a.x = 0;
+    a.y = 0;
+    a.state = 0;
+    a.hit_points = 0;
+    return a;
+}
 
 uint8_t Arma::get_rounds() {
     return this->balas;

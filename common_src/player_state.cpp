@@ -122,7 +122,7 @@ void PlayerState::shoot(int flag) {
     }
 }*/
 
-void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bullets, std::list<Grenade>& gren) {
+void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bullets, std::list<Grenade>& gren, bool& sr) {
     if (this->hit_points == 0) {
         this->state = DEAD;
         this->arma->advance_time();
@@ -148,8 +148,10 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bull
     } else if (cmd == STOP_MOVING_LEFT) {
         direction.x = 0;
     } else if (cmd == RELOAD) {
-        if (this->arma->try_reload())
+        if (this->arma->try_reload()) {
             this->state = RELOADING;
+            sr = true;
+        }
         //else
             //this->state = IDLE;
     } else if (cmd == SHOOT) {

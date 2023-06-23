@@ -168,8 +168,7 @@ void ClientRenderer::render_all() {
 }
 
 void ClientRenderer::play(Image & im) {
-    if (im.action == 0)//ESTA LINEA GENERA EL PROBLEMA
-        assets->play(im.id,this->mixer);
+    assets->play(im.id,this->mixer);
 }
 
 void ClientRenderer::calculate_offset() {

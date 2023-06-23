@@ -31,6 +31,10 @@ void Bullet::move() {
     //std::cout << "MOVED" << std::endl;
 }
 
+bool Bullet::is_dead() {
+    return this->damage == 0 || this->bullet_count == 0 || is_off_scope();
+}
+
 void Bullet::on_collission_detected(GameEntity *other) {
     if (this->bullet_count > 0 && this->damage > 0) {
         attack(other);
@@ -70,7 +74,6 @@ PlayerStateReference Bullet::make_ref() {
         a.id = 155;//p90
 
     //importante, la bala solo hace sonido en el cliente cuando state = 0
-    //osea, solo cuando se dispara por primera vez
     return a;
 }
 

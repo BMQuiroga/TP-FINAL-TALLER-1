@@ -82,6 +82,7 @@ class GameLoop : public Thread {
     uint32_t kills;
     uint32_t shots;
     uint32_t game_ticks;
+    bool someone_reloaded;
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
@@ -104,6 +105,7 @@ class GameLoop : public Thread {
             kills = 0;
             shots = 0;
             game_ticks = 0;
+            someone_reloaded = false;
         }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
 
@@ -157,6 +159,11 @@ class GameLoop : public Thread {
 
         for (Vomit_Projectile &b : vomit) {
             resp.players.push_back(b.make_ref());
+        }
+
+        if (someone_reloaded) {
+            resp.players.push_back(Arma::make_reload());
+            someone_reloaded = false;
         }
 
         for (Zombie* &zombie : zombies) {
@@ -214,7 +221,7 @@ class GameLoop : public Thread {
         }
         for (auto it = bullets.begin(); it != bullets.end();) {
             it->move();
-            if (it->is_off_scope()) {
+            if (it->is_dead()) {
                 it = bullets.erase(it);
             } else {
                 ++it;
@@ -323,12 +330,12 @@ class GameLoop : public Thread {
                         break;
                     }
                 } else if (player) {
-                    player->next_state(event.req.cmd,bullets,shots,grenades);
+                    player->next_state(event.req.cmd,bullets,shots,grenades,someone_reloaded);
                 }
             }
             for (PlayerState &player : players) {
                 if (player.get_state() != IDLE) {
-                    player.next_state(-1,bullets,shots,grenades); 
+                    player.next_state(-1,bullets,shots,grenades,someone_reloaded); 
                 }
             }
             int zombies_to_spawn_via_witch = 0;

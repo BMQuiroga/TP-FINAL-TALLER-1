@@ -19,6 +19,7 @@ class Bullet : public GameEntity {
     void attack(GameEntity *other) override;
     bool is_off_scope();
     void on_collission_detected(GameEntity *other) override;
+    bool is_dead();
 };
 
 class Vomit_Projectile : public GameEntity {

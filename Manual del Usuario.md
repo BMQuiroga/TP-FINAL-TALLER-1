@@ -19,6 +19,7 @@ libsdl2-ttf 2.20.2
 libsdl2-dev 2.26.5
 libSDL2pp 0.18.1
 qt6-base
+yaml-cpp
 Compilador de C++
 
 Una vez instaladas todas y descargado el proyecto en formato .zip o tar.gz, descomprimirlo y adentro de la carpeta abrir el interprete de comandos.

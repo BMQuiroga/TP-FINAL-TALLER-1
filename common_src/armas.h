@@ -31,6 +31,9 @@ class Arma {
     //constructor
     Arma(uint8_t c, uint8_t dr, uint8_t dd, uint16_t gd);
 
+    //manda un PSR de recarga para que el cliente haga el ruido
+    static PlayerStateReference make_reload();
+
     //decrementa en 1 el delay
     void advance_time();
 
