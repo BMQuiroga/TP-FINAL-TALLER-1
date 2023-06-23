@@ -10,6 +10,13 @@ set(CMAKE_CXX_COMPILER_ID GNU)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -D_POSIX_C_SOURCE=200809L")
 
+# configuration file
+add_custom_target(copy-files ALL
+  COMMAND ${CMAKE_COMMAND} -E copy
+  ${CMAKE_SOURCE_DIR}/config.yml
+  ${CMAKE_CURRENT_BINARY_DIR}/config.yml
+)
+
 # Paquetes necesarios para la compilacion
 # Threads
 set(CMAKE_THREAD_PREFER_PTHREAD ON)                                                                                                                                                                                                           
@@ -126,10 +133,10 @@ target_link_libraries(
 
 include(GoogleTest)
 gtest_discover_tests(test)
-
-# configuration file
-add_custom_target(copy-files ALL
-  COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_SOURCE_DIR}/config.yml
-  ${CMAKE_CURRENT_BINARY_DIR}/config.yml
+add_custom_command(
+     TARGET test
+     COMMENT "Run tests"
+     POST_BUILD 
+     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+     COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION> --verbose --output-on-failures
 )
