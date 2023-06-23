@@ -17,6 +17,7 @@ Bullet::Bullet(uint8_t dmg, uint8_t bc, entity_direction direc, bool piercing, V
     this->bullet_count = bc;
     this->state = 0;
     this->falloff = falloff;
+    std::cout << "MY HITBOX IS: " << this->rect_height << " x " << this->rect_width << std::endl;
 }
 
 void Bullet::move() {
@@ -26,7 +27,7 @@ void Bullet::move() {
         position.x+=95;
     }
     if (falloff)
-        this->damage = damage * 4 / 3;
+        this->damage = damage * 3 / 4;
 
     //std::cout << "MOVED" << std::endl;
 }
@@ -43,15 +44,20 @@ void Bullet::on_collission_detected(GameEntity *other) {
 
 void Bullet::attack(GameEntity *other) {
     Zombie *z = (Zombie*)other;
+
     if (piercing) {
         z->take_damage(damage);
+        std::cout << "PIERCING: Dealt " << std::to_string(damage) << " damage" << std::endl;
         damage = damage / 2;
     } else {
         while ((bullet_count > 0) && (z->get_health() > 0)) {
             z->take_damage(damage);
+            std::cout << "Dealt " << std::to_string(damage) << " damage" << std::endl;
             bullet_count--;
         }
+
     }
+    std::cout << "Bullets left: " << std::to_string(bullet_count) << std::endl;
 }
 
 bool Bullet::is_off_scope() {

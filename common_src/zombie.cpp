@@ -157,12 +157,15 @@ CommonZombie::CommonZombie(
     zombie_type = ZOMBIE;
     attack_type = ZOMBIE_BITE;
     movement_type = ZOMBIE_WALK;
+    health = ZOMBIE_HP;
 }
 
 void Zombie::attack(GameEntity *other) {
-    state = ATTACKING;
-    PlayerState *player = (PlayerState*)other;
-    player->take_damage(damage);
+    if (this->health > 0) {
+        state = ATTACKING;
+        PlayerState *player = (PlayerState*)other;
+        player->take_damage(damage);
+    }
 }
 
 bool Zombie::try_dissapear() {
@@ -284,7 +287,7 @@ int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
             closest_y = vector.y;
         }
     }
-    if (distance < seeking_distance || this->health < zom_HP) {//en el caso de zomb
+    if (distance < seeking_distance || this->health < ZOMBIE_HP) {
         float next_pos_x = this_pos.x - closest_x;
         float next_pos_y = this_pos.y - closest_y;
         int direction_x = next_pos_x > 0 ? -1 : next_pos_x < 0 ? 1 : 0;
@@ -417,7 +420,7 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
 }
 
 void Jumper::attack(GameEntity * other) {
-    if (state == JUMPING) {
+    if (state == JUMPING && health > 0) {
         PlayerState *player = (PlayerState*)other;
         player->take_damage(damage);
     }

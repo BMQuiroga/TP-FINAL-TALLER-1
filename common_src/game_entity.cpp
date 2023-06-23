@@ -16,6 +16,8 @@ GameEntity::GameEntity(
 ) : name(name), direction(2, 0), position(position),
     facing_direction(RIGHT), speed(10), collision_layer(layer) {
     this->id = 0;
+    this->rect_height = 3;
+    this->rect_width = 3;
     this->physics_id = PhysicsManager::get_instance()->register_entity(this, collision_layer);
     this->state = IDLE;
     this->max_x = max_x;
