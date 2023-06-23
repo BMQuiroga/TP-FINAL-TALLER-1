@@ -125,5 +125,19 @@ PlayerStateReference Vomit_Projectile::make_ref() {
     a.hit_points = 0;
     a.state = 0;
     a.id = 101; //definido venom projectile en asset manager
+    if (dead)
+        a.id = 161; //ruido en impacto
+    return a;
+}
+
+PlayerStateReference Vomit_Projectile::make_noise_ref() {
+    PlayerStateReference a;
+    a.direction = facing_direction;
+    a.x = position.x;
+    a.y = position.y;
+    a.name = "";
+    a.hit_points = 0;
+    a.state = this->state++;
+    a.id = 161; //definido ruido de acido en asset manager
     return a;
 }

@@ -32,6 +32,7 @@ class Vomit_Projectile : public GameEntity {
     void move();
     bool is_dead();
     PlayerStateReference make_ref();
+    PlayerStateReference make_noise_ref();
 };
 
 #endif
