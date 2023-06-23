@@ -115,4 +115,30 @@
 #define JUMPER_SPEED 20
 #define JUMPER_COOLDOWN 20
 
+#include <iostream>
+#include <fstream>
+#include <yaml-cpp/yaml.h>
+
+class GameConfig {
+public:
+    static GameConfig* get_instance();
+
+    template <typename T>
+    T get_value(const std::string& key) const {
+        return config_[key].as<T>();
+    }
+
+private:
+    static GameConfig *instance;
+    GameConfig();
+
+    GameConfig(const GameConfig&) = delete;
+    GameConfig& operator=(const GameConfig&) = delete;
+
+    void load_config();
+
+    YAML::Node config_;
+};
+
+
 #endif
