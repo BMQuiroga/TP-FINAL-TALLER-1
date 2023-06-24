@@ -109,17 +109,6 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 - [ ] **(P3)** Se muestra balas disparadas
 - [ ] **(P1)** Se muestra infectados eliminados
 - [ ] **(P1)** Se muestra tiempo transcurrido
-## Controles
-- [x] se controla via teclado
-- [x] Recarga manual (mediante botón de recarga)
-- [x] **(P1)** distancia de lanzado de granada depende de cuanto tiempo se mantiene presionado la tecla
-- [x] **(P1)** Si mantenés mucho tiempo presionado la tecla de lanzar granada, explota en la mano
-
-
-## sonidos
-- [x] Cuando hay disparo
-- [ ] **(P1)** Cuando hay expĺosion
-- [ ] **(P1)** Cuando hay una recarga
 
 ## Musica
 - **(P0)** No hay
