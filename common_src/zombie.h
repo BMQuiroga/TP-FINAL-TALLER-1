@@ -43,6 +43,7 @@ class Zombie : public GameEntity {
 
   public:
     static Zombie* get_random_zombie(int secure);
+    static void generate_clear_the_area(int number_of_zombies, std::list<Zombie*>& list);
     Zombie(
         const std::string &name,
         Vector2D position,

@@ -68,6 +68,10 @@
 #define DEFAULT_MAX_Y 145
 #define EVENTS_PER_LOOP 20
 
+//zombie spawn
+#define SPAWNER_SAFE_AREA_X 250
+#define PERCENT_OF_GUARANTEED_COMMON_ZOMBIES 30
+
 //zombie calculate_next_movement code;
 #define CODE_NULL 0
 #define CODE_VENOM_PROJECTILE 3
