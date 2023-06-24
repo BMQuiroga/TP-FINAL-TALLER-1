@@ -22,9 +22,9 @@ Bullet::Bullet(uint8_t dmg, uint8_t bc, entity_direction direc, bool piercing, V
 
 void Bullet::move() {
     if (this->facing_direction == LEFT) {
-        position.x-=95;
+        position.x -= BULLET_SPEED;
     } else {
-        position.x+=95;
+        position.x += BULLET_SPEED;
     }
     if (falloff)
         this->damage = damage * 3 / 4;
