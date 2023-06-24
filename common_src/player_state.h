@@ -23,6 +23,7 @@ class PlayerState : public GameEntity {
     uint8_t hit_points;
     int8_t respawn_time;
     Arma* arma;
+    int grenade_type;
     void move();
     void attack(GameEntity *other) override;
 

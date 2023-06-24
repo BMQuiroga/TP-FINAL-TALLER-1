@@ -37,31 +37,32 @@
 #define ARMA1_MAGAZINE 50
 #define ARMA1_RELOAD_DELAY 40
 #define ARMA1_SHOOT_DELAY 20
-#define ARMA1_GRENADE_DELAY 10
+#define ARMA1_GRENADE_DELAY 10 //HE
 
 #define ARMA2_DAMAGE 6
 #define ARMA2_BULLET_COUNT 10
 #define ARMA2_MAGAZINE 30
 #define ARMA2_RELOAD_DELAY 10
 #define ARMA2_SHOOT_DELAY 20
-#define ARMA2_GRENADE_DELAY 3000
+#define ARMA2_GRENADE_DELAY 10 //BOMBARDER
 
 #define ARMA3_DAMAGE 150
 #define ARMA3_BULLET_COUNT 1
 #define ARMA3_MAGAZINE 10
 #define ARMA3_RELOAD_DELAY 20
 #define ARMA3_SHOOT_DELAY 10
-#define ARMA3_GRENADE_DELAY 1000
+#define ARMA3_GRENADE_DELAY 10 //SMOKE
 
 //granadas
 
 #define GRANADA_DAMAGE 95
+#define SMOKE_DAMAGE 0
 #define GRANADA_DELAY_12 10 //tiempo en explotar
 #define GRANADA_DELAY_23 0  //tiempo en aparecer humo
 #define GRANADA_DELAY_3 15   //tiempo en desaparecer el humo
 #define GRANADA_SIZE 128
 #define GRANADA_FUERZA 30 //distancia por tick de tecla apretada
-
+#define BOMBARDER_SPACE_IN_BETWEEN 250 //distancia entre boombas del bombardero
 
 // common
 #define DEFAULT_MAX_X 3000

@@ -54,92 +54,174 @@ void Arma::advance_time() {
         this->delay--;
         //std::cout << "nuevo delay:" << std::to_string(delay) << std::endl;
     }
-    if (this->g_delay > 0) {
-        this->g_delay--;
-        std::cout << "nuevo delay:" << std::to_string(g_delay) << std::endl;
-    }  
+    this->grenades->advance_time();
 }
 
-Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd, uint16_t gd) {
+
+Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd) {
     this->cargador = c;
     this->balas = c;
     this->delay_recarga = dr;
     this->delay_disparo = dd;
     this->delay = 0;
-    this->g_delay_cte = gd;
-    this->g_delay = 0;
 }
 
 void Arma1::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
     vec.push_back(Bullet(ARMA1_DAMAGE,ARMA1_BULLET_COUNT,direc,false,position,true));
 }
 
-Arma1::Arma1() : Arma(ARMA1_MAGAZINE,ARMA1_RELOAD_DELAY,ARMA1_SHOOT_DELAY,ARMA1_GRENADE_DELAY) {}
+Arma1::Arma1() : Arma(ARMA1_MAGAZINE,ARMA1_RELOAD_DELAY,ARMA1_SHOOT_DELAY) {
+    this->grenades = new DefaultGH();
+}
 
 void Arma2::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
     vec.push_back(Bullet(ARMA2_DAMAGE,ARMA2_BULLET_COUNT,direc,false,position));
 }
 
-Arma2::Arma2() : Arma(ARMA2_MAGAZINE,ARMA2_RELOAD_DELAY,ARMA2_SHOOT_DELAY,ARMA2_GRENADE_DELAY) {}
+Arma2::Arma2() : Arma(ARMA2_MAGAZINE,ARMA2_RELOAD_DELAY,ARMA2_SHOOT_DELAY) {
+    this->grenades = new Bombarder();
+}
 
 void Arma3::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
     vec.push_back(Bullet(ARMA3_DAMAGE,ARMA3_BULLET_COUNT,direc,true,position));
 }
 
-Arma3::Arma3() : Arma(ARMA3_MAGAZINE,ARMA3_RELOAD_DELAY,ARMA3_SHOOT_DELAY,ARMA3_GRENADE_DELAY) {}
+Arma3::Arma3() : Arma(ARMA3_MAGAZINE,ARMA3_RELOAD_DELAY,ARMA3_SHOOT_DELAY) {
+    this->grenades = new DefaultGH();
+}
+
+bool Arma::try_grenade(int id) {
+    return this->grenades->try_grenade(id);
+}
 
 
-bool Arma::try_grenade() {
-    if (this->g_delay == 0) {
-        this->g_delay = this->g_delay_cte;
+int Arma::charge_grenade(int type) {
+    return this->grenades->charge(type);
+}
+
+void Arma::create_grenade(int type, Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
+    this->grenades->create(type, position, direc, gren);
+}
+
+
+int Arma::damage_on_explode_on_hand(int type) {
+    return this->grenades->damage_on_explode_on_hand(type);
+}
+
+bool DefaultGH::advance_time() {
+    if (this->e_delay > 0) {
+        this->e_delay--;
+        //std::cout << "nuevo delay:" << std::to_string(g_delay) << std::endl;
+    } 
+    if (this->s_delay > 0) {
+        this->s_delay--;
+        //std::cout << "nuevo delay:" << std::to_string(g_delay) << std::endl;
+    } 
+}
+
+bool Bombarder::advance_time() {
+    if (this->delay > 0) {
+        this->delay--;
+        //std::cout << "nuevo delay:" << std::to_string(g_delay) << std::endl;
+    } 
+
+}
+
+void DefaultGH::create(int type, Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
+    if (direc == LEFT) {
+        if (type == 1)
+            gren.push_back(Grenade(HE_GRENADE, position.x - (GRANADA_FUERZA*e_distance), position.y, e_distance == 0));
+        if (type == 2)
+            gren.push_back(Grenade(SMOKE_GRENADE, position.x - (GRANADA_FUERZA*s_distance), position.y, s_distance == 0));
+    } else {
+        if (type == 1)
+            gren.push_back(Grenade(HE_GRENADE, position.x + (GRANADA_FUERZA*e_distance), position.y, e_distance == 0));
+        if (type == 2)
+            gren.push_back(Grenade(SMOKE_GRENADE, position.x + (GRANADA_FUERZA*s_distance), position.y, s_distance == 0));
+    }
+    this->e_distance = 0;
+    this->s_distance = 0;
+}
+
+void Bombarder::create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
+    int i = DEFAULT_MAX_X;
+    int x = position.x;
+    for (int j = 0; j < DEFAULT_MAX_X; j += BOMBARDER_SPACE_IN_BETWEEN) {
+        gren.push_back(Grenade(AIR_STRIKE, x, position.y, true));
+    }
+    this->delay = delay_cte;
+}
+
+int DefaultGH::damage_on_explode_on_hand(int type) {
+    return type == 1 ? GRANADA_DAMAGE : SMOKE_DAMAGE;
+}
+
+int Bombarder::damage_on_explode_on_hand(int type) {
+    return 0;
+}
+
+bool DefaultGH::try_grenade(int id) {
+    if (id == 1) {
+        if (this->e_delay == 0) {
+            this->e_delay = this->e_delay_cte;
+            return true;
+        }
+        return false;
+    } 
+    if (type == 2) {
+        if (this->s_delay == 0) {
+            this->s_delay = this->s_delay_cte;
+            return true;
+        }
+        return false;
+    }
+}
+
+bool Bombarder::try_grenade(int id) {
+    if (this->delay == 0) {
+        this->delay = this->delay_cte;
         return true;
     }
     return false;
 }
 
-int Arma::charge_grenade() {
-    if (this->g_delay == 0 && this->throwing_distance < 20) {
-        this->throwing_distance++;
-        return 1;
-    } else if (this->g_delay == 0 && this->throwing_distance >= 20) {
-        this->throwing_distance = 0;
-        return 2;
+void DefaultGH::charge(int type) {
+    if (type == 1) {
+        if (this->e_delay == 0 && this->e_distance < 20) {
+            this->e_distance++;
+            return 1;
+        } else if (this->e_delay == 0 && this->e_distance >= 20) {
+            this->e_distance = 0;
+            return 2;
+        }
+        return 0;
     }
-    return 0;
-}
-
-void Arma1::create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
-    std::cout << "DIREC: " << std::to_string(direc) << std::endl;
-    if (direc == LEFT) {
-
-        gren.push_back(Grenade(HE_GRENADE, position.x - (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
-    } else {
-        gren.push_back(Grenade(HE_GRENADE, position.x + (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
+    if (type == 2) {
+        if (this->s_delay == 0 && this->s_distance < 20) {
+            this->s_distance++;
+            return 1;
+        } else if (this->s_delay == 0 && this->s_distance >= 20) {
+            this->s_distance = 0;
+            return 2;
+        }
+        return 0;
     }
-    this->throwing_distance = 0;
-    this->g_delay = this->g_delay_cte;
 }
 
-void Arma2::create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
-    gren.push_back(Grenade(AIR_STRIKE, position.x, position.y, false));
-    this->throwing_distance = 0;
-    this->g_delay = this->g_delay_cte;
+void Bombarder::charge(int type) {
+    //nada
 }
 
-void Arma3::create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
-    if (direc == LEFT) {
-        gren.push_back(Grenade(SMOKE_GRENADE, position.x - (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
-    } else {
-        gren.push_back(Grenade(SMOKE_GRENADE, position.x + (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
-    }
-    this->throwing_distance = 0;
-    this->g_delay = this->g_delay_cte;
+Bombarder::Bombarder() {
+    this->delay = 0;
+    this->delay_cte = ARMA2_GRENADE_DELAY;
 }
 
-int Arma::damage_on_explode_on_hand() {
-    return 0;
-}
-
-int Arma1::damage_on_explode_on_hand() {
-    return 50;
+DefaultGH::DefaultGH() {
+    this->e_delay = 0;
+    this->s_delay = 0;
+    this->e_distance = 0;
+    this->s_distance = 0;
+    this->s_delay_cte = ARMA3_GRENADE_DELAY;
+    this->e_delay_cte = ARMA1_GRENADE_DELAY;
 }

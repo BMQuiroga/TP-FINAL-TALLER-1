@@ -165,34 +165,55 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bull
         //this->state = IDLE;
     } else if (cmd == THROW_GRENADE) {
         std:: cout << "THROW TRIED" << std::endl;
-        if (this->arma->try_grenade()) {
+        if (this->arma->try_grenade(1)) {
             std:: cout << "THROWN" << std::endl;
-            this->arma->create_grenade(position,facing_direction,gren);
+            this->arma->create_grenade(1,position,facing_direction,gren);
+            this->state = IDLE;
+        }
+    } else if (cmd == THROW_GRENADE2) {
+        std:: cout << "THROW TRIED" << std::endl;
+        if (this->arma->try_grenade(2)) {
+            std:: cout << "THROWN" << std::endl;
+            this->arma->create_grenade(2,position,facing_direction,gren);
             this->state = IDLE;
         }
     } else if (cmd == PREPARE_GRENADE) {
-        int u = this->arma->charge_grenade();
+        int u = this->arma->charge_grenade(1);
         std:: cout << "CHARGED GRENADE WITH U: " << u << std::endl;
-        if (u==1)
+        if (u==1) {
             this->state = THROWING_GRENADE;
+            this->grenade_type = 1;
+        }
         if (u==2) {
             this->state = IDLE;
-            take_damage(arma->damage_on_explode_on_hand());
-            this->arma->create_grenade(position,facing_direction,gren);
+            take_damage(arma->damage_on_explode_on_hand(1));
+            this->arma->create_grenade(1,position,facing_direction,gren);
+        }
+    } else if (cmd == PREPARE_GRENADE2) {
+        int u = this->arma->charge_grenade(2);
+        std:: cout << "CHARGED GRENADE WITH U: " << u << std::endl;
+        if (u==1) {
+            this->state = THROWING_GRENADE;
+            this->grenade_type = 2;
+        }
+        if (u==2) {
+            this->state = IDLE;
+            take_damage(arma->damage_on_explode_on_hand(2));
+            this->arma->create_grenade(2,position,facing_direction,gren);
         }
     }
 
     this->move();
     if (this->state == THROWING_GRENADE) {
         //como solo registra el click de la tecla 1 vez, uso el mantener estado en vez de el cmd
-        int u = this->arma->charge_grenade();
+        int u = this->arma->charge_grenade(grenade_type);
         std:: cout << "CHARGED GRENADE WITH U: " << u << std::endl;
         if (u==1)
             this->state = THROWING_GRENADE;
         if (u==2) {
             this->state = IDLE;
-            take_damage(arma->damage_on_explode_on_hand());//la granada de humo tambien hace daño a su usuario
-            this->arma->create_grenade(position,facing_direction,gren);
+            take_damage(arma->damage_on_explode_on_hand(grenade_type));//la granada de humo tambien hace daño a su usuario
+            this->arma->create_grenade(grenade_type,position,facing_direction,gren);
         }
     }
 
