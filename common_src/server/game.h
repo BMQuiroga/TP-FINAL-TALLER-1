@@ -344,10 +344,7 @@ class GameLoop : public Thread {
                 if (i == CODE_WITCH_SPAWN)
                     zombies_to_spawn_via_witch++;
                 if (i == CODE_VENOM_PROJECTILE) {
-                    Vector2D vec = zombie->get_location();
-                    //float direc = zombie->get_direction().x;
-                    entity_direction direc = zombie->get_direction().x == -1 ? LEFT : RIGHT;
-                    vomit.push_back(Vomit_Projectile(vec,direc));
+                    vomit.push_back(Vomit_Projectile(zombie->get_location(),zombie->get_facing_direction()));
                     //TODO crear el proyectil enemigo
                 }           
             }

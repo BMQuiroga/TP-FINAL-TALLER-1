@@ -24,6 +24,10 @@ GameEntity::GameEntity(
     this->max_y = max_y;
 }
 
+entity_direction GameEntity::get_facing_direction() {
+    return this->facing_direction;
+}
+
 GameEntity::GameEntity(GameEntity &&other) {
     if (this == &other)
         return;
