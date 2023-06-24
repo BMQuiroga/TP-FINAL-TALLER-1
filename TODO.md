@@ -79,8 +79,6 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 
 ## Escenario
 - [ ] **(P4)** los crateres son zona por la que no podés caminar
-- [ ] **(P1)** Te podés mover a los costados
-- [ ] **(P3)** Hay una ilusion de paralaje
 
 ## Modos de juego
 ### Clear the zone
