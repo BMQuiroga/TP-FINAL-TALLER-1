@@ -47,13 +47,6 @@ std::string filepath = CONFIG_BASE_PATH "/server/config.yaml"
 
 # Features (2/5)
 Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
-## Zombies
-
-### Jumper
-
-- [ ] **(P0)** salto tiene animación previa de aviso
-
-
 ## Jugador
 - [x] Munición infinita
 - [x] Tiempo de recarga 
