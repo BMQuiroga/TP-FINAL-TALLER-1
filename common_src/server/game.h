@@ -129,7 +129,7 @@ class GameLoop : public Thread {
             grenades.clear();
             vomit.clear();
             message_queues.clear();
-            physics->release();
+            // physics->release();
         }
     }
     

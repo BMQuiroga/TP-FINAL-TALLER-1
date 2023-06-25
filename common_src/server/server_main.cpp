@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
         while (std::cin.get() != 'q') continue;
         std::cout << "Closing server..." << std::endl;
         GameConfig::get_instance()->release();
+        PhysicsManager::get_instance()->release();
         sk.shutdown(SHUT_RD);
         sk.close();
         accepter.join();
