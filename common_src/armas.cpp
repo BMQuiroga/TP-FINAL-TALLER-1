@@ -146,8 +146,9 @@ void DefaultGH::create(int type, Vector2D position, entity_direction direc, std:
 void Bombarder::create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
     int i = DEFAULT_MAX_X;
     int x = position.x;
-    for (int j = 0; j < DEFAULT_MAX_X; j += BOMBARDER_SPACE_IN_BETWEEN) {
-        gren.push_back(Grenade(AIR_STRIKE, x, position.y, true));
+    for (int j = 300; j < DEFAULT_MAX_X; j += BOMBARDER_SPACE_IN_BETWEEN) {
+        if (abs(j - x) > GRANADA_SIZE * 2)
+            gren.push_back(Grenade(AIR_STRIKE, j, position.y, false));
     }
     this->delay = delay_cte;
 }

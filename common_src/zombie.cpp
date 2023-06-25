@@ -12,8 +12,10 @@ Zombie* Zombie::get_random_zombie(int secure) {
     int q;
     if (secure == -1) {
         q = getRandomNumber(0,4);
-    } else {
+    } else if (secure < 5) {
         q = secure;
+    } else if (secure == 5) {
+        q = getRandomNumber(0,3);
     }
     int x = getRandomNumber(SPAWNER_SAFE_AREA_X, DEFAULT_MAX_X);  // Random X position within game area
     int y = getRandomNumber(0, DEFAULT_MAX_Y);  // Random Y position within game area

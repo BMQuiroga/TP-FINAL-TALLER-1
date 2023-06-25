@@ -62,6 +62,8 @@ PlayerStateReference Grenade::make_ref() {
     if (state == 1 && !air_strike && sound) {
         a.id = 157; //ruido de rebote
         sound = false;
+    } else if (state == 1 && air_strike) {
+        a.id = 253;
     } else if (state == 2 && !smoke) {
         a.id = 158; //ruido de HE
     } else if (state == 2 && smoke) {

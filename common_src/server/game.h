@@ -286,9 +286,9 @@ class GameLoop : public Thread {
     }
 
     // Function to handle enemy spawns
-    void spawn_enemy() {
+    void spawn_enemy(int secure) {
         std::cout << "spawn" << std::endl;
-        zombies.push_back(Zombie::get_random_zombie(-1));
+        zombies.push_back(Zombie::get_random_zombie(secure));
     }
 
     void run() override {
@@ -350,7 +350,7 @@ class GameLoop : public Thread {
             }
             //std::cout << "ZOMBIES SPAWNED VIA WITCH: " << zombies_to_spawn_via_witch << std::endl;
             for (int i = 0; i < zombies_to_spawn_via_witch ; i++) {
-                spawn_enemy();
+                spawn_enemy(5);//asegura que no sean brujas
             }
             
             pass_time();
@@ -361,7 +361,7 @@ class GameLoop : public Thread {
             std::chrono::system_clock::now().time_since_epoch()).count();
             auto interval = current_time - game_started_time;
             if (interval % spawn_interval < 100 && interval > 0 && zombies.size() < MAX_ZOMBIES) {
-                spawn_enemy();
+                spawn_enemy(-1);//cualquier zombie
             }
 
             if (!zombies.empty()) {
