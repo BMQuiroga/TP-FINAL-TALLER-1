@@ -32,7 +32,7 @@
 //armas
 #define BULLET_SPEED 95
 
-#define ARMA1_DAMAGE 5
+#define ARMA1_DAMAGE 20
 #define ARMA1_BULLET_COUNT 20
 #define ARMA1_MAGAZINE 50
 #define ARMA1_RELOAD_DELAY 40
