@@ -14,7 +14,7 @@ class AssetManager {
     static AssetManager* sInstance;
     std::map<int,std::shared_ptr<Asset>> map;
     std::map<int,SDL2pp::Music> sound_map;
-    //SDL2pp::Font default_font;
+    SDL2pp::Font default_font;
     SDL2pp::Color default_color;
     SDL2pp::Color white_color;
 
@@ -40,7 +40,7 @@ class AssetManager {
 
     void play_music(SDL2pp::Mixer & mixer);
 
-    //SDL2pp::Font* get_default_font();
+    SDL2pp::Font* get_default_font();
 };
 
 #endif
