@@ -15,6 +15,15 @@ class Grenade;
 
 class Bullet;
 
+class GrenadeHolder {
+    public:
+    virtual int charge(int type) = 0;
+    virtual bool try_grenade(int type) = 0;
+    virtual void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren) = 0;
+    virtual void advance_time() = 0;
+    virtual int damage_on_explode_on_hand(int type) = 0;
+};
+
 class Arma {
     protected:
     //public:
@@ -23,7 +32,7 @@ class Arma {
     uint8_t delay_recarga;//CONSTANTE, TIEMPO QUE TARDA EN RECARGAR
     uint8_t delay_disparo;//CONSTANTE, TIEMPO ENTRE DISPAROS
     uint8_t delay;  // NO CONSTANTE, DELAY QUE QUEDA PARA DISPARAR
-    GrenadeHolder * grenades
+    GrenadeHolder * grenades;
 
     public:
     static Arma* get(int id);
@@ -80,15 +89,6 @@ class Arma3 : public Arma { //Scout
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
 };
 
-class GrenadeHolder {
-    public:
-    virtual int charge(int type) = 0;
-    virtual bool try_grenade(int type) = 0;
-    virtual bool create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren) = 0;
-    virtual void advance_time() = 0;
-    virtual int damage_on_explode_on_hand(int type) = 0;
-}
-
 class DefaultGH : public GrenadeHolder {
     private:
     int e_delay;
@@ -101,10 +101,10 @@ class DefaultGH : public GrenadeHolder {
     DefaultGH();
     int charge(int type);
     bool try_grenade(int type);
-    bool create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren);
+    void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren);
     void advance_time();
     int damage_on_explode_on_hand(int type);
-}
+};
 
 class Bombarder :  public GrenadeHolder {
     private:
@@ -114,10 +114,10 @@ class Bombarder :  public GrenadeHolder {
     Bombarder();
     int charge(int type);
     bool try_grenade(int type);
-    bool create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren);
+    void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren);
     void advance_time();
     int damage_on_explode_on_hand(int type);
-}
+};
 
 
 #endif

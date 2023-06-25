@@ -56,10 +56,12 @@
 //granadas
 
 #define GRANADA_DAMAGE 95
+#define AIR_STRIKE_DAMAGE 45
 #define SMOKE_DAMAGE 0
+
 #define GRANADA_DELAY_12 10 //tiempo en explotar
 #define GRANADA_DELAY_23 0  //tiempo en aparecer humo
-#define GRANADA_DELAY_3 15   //tiempo en desaparecer el humo
+#define GRANADA_DELAY_3 5   //tiempo en desaparecer el humo
 #define GRANADA_SIZE 128
 #define GRANADA_FUERZA 30 //distancia por tick de tecla apretada
 #define BOMBARDER_SPACE_IN_BETWEEN 250 //distancia entre boombas del bombardero

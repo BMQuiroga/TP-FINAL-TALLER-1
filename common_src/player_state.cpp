@@ -57,7 +57,7 @@ void PlayerState::take_damage(uint8_t damage) {
 }
 
 PlayerStateReference PlayerState::make_ref() {
-    std::cout << "made ref with id: " << std::to_string(id) << std::endl;
+    //std::cout << "made ref with id: " << std::to_string(id) << std::endl;
     PlayerStateReference ref;
     ref.id = id;
     ref.hit_points = hit_points;
@@ -157,7 +157,7 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bull
     } else if (cmd == SHOOT) {
         if (this->arma->try_shoot()) {
             this->state = ATTACKING;
-            this->arma->create_bullet(position,facing_direction,vec);
+            this->arma->create_bullet(position -64, facing_direction, vec);
             bullets++;
             //el -64 es para que salga la bala del medio del modelo
         }
@@ -165,41 +165,39 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bull
         //this->state = IDLE;
     } else if (cmd == THROW_GRENADE) {
         std:: cout << "THROW TRIED" << std::endl;
-        if (this->arma->try_grenade(1)) {
+        if (this->arma->try_grenade(HE_GRENADE)) {
             std:: cout << "THROWN" << std::endl;
-            this->arma->create_grenade(1,position,facing_direction,gren);
+            this->arma->create_grenade(HE_GRENADE,position,facing_direction,gren);
             this->state = IDLE;
         }
     } else if (cmd == THROW_GRENADE2) {
         std:: cout << "THROW TRIED" << std::endl;
-        if (this->arma->try_grenade(2)) {
+        if (this->arma->try_grenade(SMOKE_GRENADE)) {
             std:: cout << "THROWN" << std::endl;
-            this->arma->create_grenade(2,position,facing_direction,gren);
+            this->arma->create_grenade(SMOKE_GRENADE,position,facing_direction,gren);
             this->state = IDLE;
         }
     } else if (cmd == PREPARE_GRENADE) {
-        int u = this->arma->charge_grenade(1);
-        std:: cout << "CHARGED GRENADE WITH U: " << u << std::endl;
+        int u = this->arma->charge_grenade(HE_GRENADE);
         if (u==1) {
             this->state = THROWING_GRENADE;
-            this->grenade_type = 1;
+            this->grenade_type = HE_GRENADE;
         }
         if (u==2) {
             this->state = IDLE;
-            take_damage(arma->damage_on_explode_on_hand(1));
-            this->arma->create_grenade(1,position,facing_direction,gren);
+            take_damage(arma->damage_on_explode_on_hand(HE_GRENADE));
+            this->arma->create_grenade(HE_GRENADE,position,facing_direction,gren);
         }
     } else if (cmd == PREPARE_GRENADE2) {
-        int u = this->arma->charge_grenade(2);
-        std:: cout << "CHARGED GRENADE WITH U: " << u << std::endl;
+        int u = this->arma->charge_grenade(SMOKE_GRENADE);
         if (u==1) {
             this->state = THROWING_GRENADE;
-            this->grenade_type = 2;
+            this->grenade_type = SMOKE_GRENADE;
         }
         if (u==2) {
             this->state = IDLE;
-            take_damage(arma->damage_on_explode_on_hand(2));
-            this->arma->create_grenade(2,position,facing_direction,gren);
+            take_damage(arma->damage_on_explode_on_hand(SMOKE_GRENADE));
+            this->arma->create_grenade(SMOKE_GRENADE,position,facing_direction,gren);
         }
     }
 

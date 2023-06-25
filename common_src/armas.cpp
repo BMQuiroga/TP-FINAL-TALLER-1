@@ -108,7 +108,7 @@ int Arma::damage_on_explode_on_hand(int type) {
     return this->grenades->damage_on_explode_on_hand(type);
 }
 
-bool DefaultGH::advance_time() {
+void DefaultGH::advance_time() {
     if (this->e_delay > 0) {
         this->e_delay--;
         //std::cout << "nuevo delay:" << std::to_string(g_delay) << std::endl;
@@ -119,7 +119,7 @@ bool DefaultGH::advance_time() {
     } 
 }
 
-bool Bombarder::advance_time() {
+void Bombarder::advance_time() {
     if (this->delay > 0) {
         this->delay--;
         //std::cout << "nuevo delay:" << std::to_string(g_delay) << std::endl;
@@ -129,14 +129,14 @@ bool Bombarder::advance_time() {
 
 void DefaultGH::create(int type, Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
     if (direc == LEFT) {
-        if (type == 1)
+        if (type == HE_GRENADE)
             gren.push_back(Grenade(HE_GRENADE, position.x - (GRANADA_FUERZA*e_distance), position.y, e_distance == 0));
-        if (type == 2)
+        if (type == SMOKE_GRENADE)
             gren.push_back(Grenade(SMOKE_GRENADE, position.x - (GRANADA_FUERZA*s_distance), position.y, s_distance == 0));
     } else {
-        if (type == 1)
+        if (type == HE_GRENADE)
             gren.push_back(Grenade(HE_GRENADE, position.x + (GRANADA_FUERZA*e_distance), position.y, e_distance == 0));
-        if (type == 2)
+        if (type == SMOKE_GRENADE)
             gren.push_back(Grenade(SMOKE_GRENADE, position.x + (GRANADA_FUERZA*s_distance), position.y, s_distance == 0));
     }
     this->e_distance = 0;
@@ -161,20 +161,21 @@ int Bombarder::damage_on_explode_on_hand(int type) {
 }
 
 bool DefaultGH::try_grenade(int id) {
-    if (id == 1) {
+    if (id == HE_GRENADE) {
         if (this->e_delay == 0) {
             this->e_delay = this->e_delay_cte;
             return true;
         }
         return false;
     } 
-    if (type == 2) {
+    if (id == SMOKE_GRENADE) {
         if (this->s_delay == 0) {
             this->s_delay = this->s_delay_cte;
             return true;
         }
         return false;
     }
+    return false;
 }
 
 bool Bombarder::try_grenade(int id) {
@@ -185,8 +186,8 @@ bool Bombarder::try_grenade(int id) {
     return false;
 }
 
-void DefaultGH::charge(int type) {
-    if (type == 1) {
+int DefaultGH::charge(int type) {
+    if (type == HE_GRENADE) {
         if (this->e_delay == 0 && this->e_distance < 20) {
             this->e_distance++;
             return 1;
@@ -196,7 +197,7 @@ void DefaultGH::charge(int type) {
         }
         return 0;
     }
-    if (type == 2) {
+    if (type == SMOKE_GRENADE) {
         if (this->s_delay == 0 && this->s_distance < 20) {
             this->s_distance++;
             return 1;
@@ -206,10 +207,11 @@ void DefaultGH::charge(int type) {
         }
         return 0;
     }
+    return 0;
 }
 
-void Bombarder::charge(int type) {
-    //nada
+int Bombarder::charge(int type) {
+    return 0;
 }
 
 Bombarder::Bombarder() {
