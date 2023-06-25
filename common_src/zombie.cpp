@@ -64,6 +64,7 @@ void Zombie::on_collission_detected(GameEntity *other) {
         //std::cout << "boomboom" << std::endl;
         player->take_damage(damage);
     }*/
+    attack(other);
 }
 
 void Zombie::set_id(int new_id) {

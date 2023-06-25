@@ -236,7 +236,3 @@ DefaultGH::DefaultGH() {
     this->s_delay_cte = ARMA3_GRENADE_DELAY;
     this->e_delay_cte = ARMA1_GRENADE_DELAY;
 }
-
-Arma::~Arma() {
-    delete grenades;
-}

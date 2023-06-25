@@ -83,12 +83,8 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 - [ ] **(P4)** En modo survival las estadisticas se guardan y se muestra un ranking historico (1 ranking por cada estadistica) que se muestra al final del modo
 
 ## Interfaz gráfica
-- [x] Se muestra la vida de cada soldado
-- [x] Se muestra las rafagas restantes antes de recargar
 - [ ] **(P1)**Se muestra tiempo restante para lanzar granada
-- [ ] **(P3)** Se muestra balas disparadas
-- [ ] **(P1)** Se muestra infectados eliminados
-- [ ] **(P1)** Se muestra tiempo transcurrido
+
 
 ## Musica
 - **(P0)** No hay

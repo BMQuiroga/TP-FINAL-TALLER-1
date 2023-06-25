@@ -21,11 +21,12 @@
 #define GAME_TICK_RATE 5
 #define ZOMBIE_CREATION_TIME_MIN 10000
 #define ZOMBIE_CREATION_TIME_MAX 15000
-#define SCORE_TO_WIN 10
+
 #define MAX_ZOMBIES 4
 #define MAX_PLAYERS 1
 #define DEFAULT_MODE 1
 #define WAIT_TIME_START_GAME 10000
+#define CTA_NUMBER_OF_ZOMBIES 30
 
 //playerstate.h
 #define RESPAWN_TIME 100
@@ -138,20 +139,27 @@
 class GameConfig {
 public:
     static GameConfig* get_instance();
+    static void release();
 
     template <typename T>
     T get_value(const std::string& key) const {
         return config_[key].as<T>();
     }
+    template <typename T>
+    void set_value(const std::string& key, const T& value) {
+        config_[key] = value;
+    }
 
 private:
     static GameConfig *instance;
     GameConfig();
+    ~GameConfig();
 
     GameConfig(const GameConfig&) = delete;
     GameConfig& operator=(const GameConfig&) = delete;
 
-    void load_config();
+    void load();
+    void save();
 
     YAML::Node config_;
 };
