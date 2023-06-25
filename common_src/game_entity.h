@@ -67,6 +67,7 @@ class GameEntity {
     uint32_t get_physics_id();
     Vector2D get_location();
     Vector2D get_direction();
+    entity_direction get_facing_direction();
     bool check_collision(GameEntity *other);
     virtual void attack(GameEntity *other) = 0;
     virtual void on_collission_detected(GameEntity *other) = 0;

@@ -1,5 +1,7 @@
 #ifndef _GAME_CONFIG_H
 #define _GAME_CONFIG_H
+#include <iostream>
+#include <fstream>
 #include <map>
 #include <mutex>
 #include <vector>
@@ -34,6 +36,8 @@
 #define RESPAWN_TIME 100
 
 //armas
+#define BULLET_SPEED 95
+
 #define ARMA1_DAMAGE 5
 #define ARMA1_BULLET_COUNT 20
 #define ARMA1_MAGAZINE 50
@@ -66,10 +70,13 @@
 
 
 // common
-#define DEFAULT_MAX_X 1920
+#define DEFAULT_MAX_X 3000
 #define DEFAULT_MAX_Y 145
-#define STARTING_HIT_POINTS 100
 #define EVENTS_PER_LOOP 20
+
+//zombie spawn
+#define SPAWNER_SAFE_AREA_X 250
+#define PERCENT_OF_GUARANTEED_COMMON_ZOMBIES 30
 
 //zombie calculate_next_movement code;
 #define CODE_NULL 0
@@ -77,44 +84,50 @@
 #define CODE_WITCH_SPAWN 4
 
 // Player
-#define GUN_MAGAZINE_SIZE 10
 #define PLAYER_RECT_WIDTH 20
 #define PLAYER_RECT_HEIGHT 20
+#define PLAYER_SPEED 20
+#define PLAYER_HP 100
 
 // Zombie
 #define ZOMBIE_RECT_WIDTH 20
 #define ZOMBIE_RECT_HEIGHT 20
+#define ZOMBIE_HP 100
 #define ZOMBIE_SEEKING_DISTANCE 400
 #define ZOMBIE_DAMAGE 5
-#define ZOMBIE_SPEED 4
+#define ZOMBIE_SPEED 8
 #define ZOMBIE_TIMER 15
+#define ZOMBIE_IMPAIRED_TIME 25
 
 // Spear
 #define SPEAR_RECT_WIDTH 100
 #define SPEAR_DAMAGE 7
 #define SPEAR_HP 150
-#define SPEAR_SPEED 3
+#define SPEAR_SPEED 10
+#define SPEAR_SEEKING_DISTANCE 2000
 
 // Venom
 #define VENOM_RECT_WIDTH 96
-#define VENOM_SEEKING_DISTANCE 1000
+#define VENOM_SEEKING_DISTANCE 2000
 #define VENOM_HP 50
-#define VENOM_SPEED 2
+#define VENOM_SPEED 4
 #define VENOM_PROJECTILE_COOLDOWN 20
 #define VENOM_PROJECTILE_DAMAGE 50
-#define VENOM_PROJECTILE_SPEED 10
-#define VENOM_PROJECTILE_SIZE 64
+#define VENOM_PROJECTILE_SPEED 40
+#define VENOM_PROJECTILE_SIZE 20
 #define VENOM_DAMAGE 3
 
 //Witch
 #define WITCH_SEEKING_DISTANCE 800
 #define WITCH_HP 255
+#define WITCH_SCREAM_CHANCE 30
+#define WITCH_SPAWN_CHANCE 10
 
 //Jumper
-#define JUMPER_SEEKING_DISTANCE 300
+#define JUMPER_SEEKING_DISTANCE 500
 #define JUMPER_DAMAGE 45
 #define JUMPER_HP 50
-#define JUMPER_SPEED 10
+#define JUMPER_SPEED 20
 #define JUMPER_COOLDOWN 20
 
 struct GameLoopSettings {
@@ -138,13 +151,17 @@ struct GameLoopSettings {
 };
 
 
-struct GameConfig {
+class GameConfig {
     private:
-    static GameConfig* sInstance;
+    static GameConfig* instance;
     static std::mutex mutex_;
+    GameConfig(const GameConfig&) = delete;
+    GameConfig& operator=(const GameConfig&) = delete;
 
     //constructor
     GameConfig();
+    std::map<std::string, int> parseNode(
+        const YAML::Node& config, const std::string& node_name);
     std::map<std::string, std::map<std::string, int>> parseMapNodes(
         const YAML::Node& config, const std::string& node_name);
     std::vector<std::map<std::string, int>> parseToVector(
@@ -155,17 +172,14 @@ struct GameConfig {
 
     // Member variables to store the parsed configuration data
     int port;
-    int defaultMaxX;
-    int defaultMaxY;
-    int startingHitPoints;
-    int eventsPerLoop;
-    int gunMagazineSize;
-    int playerRectWidth;
-    int playerRectHeight;
+    int max_x;
+    int max_y;
+    int events_per_loop;
     std::vector<std::pair<std::string, std::string>> mapPaths;
     std::map<std::string, std::map<std::string, int>> weapons;
     std::vector<std::map<std::string, int>> enemies;
     std::map<std::string, std::map<std::string, int>> soldiers;
+    std::map<std::string, int> playerstate;
     std::map<std::string, int> mathCodes;
     std::map<std::string, int> gameloop_values;
 
@@ -180,23 +194,22 @@ struct GameConfig {
 
     // Member functions to access the parsed configuration data
     int getPort() const;
-    int getDefaultMaxX() const;
-    int getDefaultMaxY() const;
-    int getStartingHitPoints() const;
-    int getEventsPerLoop() const;
-    int getGunMagazineSize() const;
-    int getPlayerRectWidth() const;
-    int getPlayerRectHeight() const;
+    int get_max_x() const;
+    int get_max_y() const;
+    int get_events_per_loop() const;
     std::map<std::string, int> get_gameloop_values() const;
     std::vector<std::pair<std::string, std::string>> getMapPaths() const;
-    std::vector<std::map<std::string, int>> getEnemies() const;
     std::map<std::string, std::map<std::string, int>> getSoldiers() const;
+    std::map<std::string, int> get_playerstate() const;
     std::map<std::string, int> getMathCodes() const;
     std::map<std::string, int> get_weapon(const std::string& weapon_name);
     std::map<std::string, int> get_enemy(int enemy);
+    // template <typename T>
+    // T get_value(const std::string& key) const {
+    //     return config_[key].as<T>();
+    // }
     //libera el objeto
     static void release();
 };
-
 
 #endif

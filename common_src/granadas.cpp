@@ -1,7 +1,11 @@
 #include "granadas.h"
 
 Grenade::Grenade(int type, uint16_t x, uint16_t y, bool exploded_on_hand) :
-GameEntity("nade",DEFAULT_MAX_X,DEFAULT_MAX_Y,CollisionLayer::FriendlyProjectile) {
+GameEntity(
+    "nade",
+    GameConfig::get_instance()->get_max_x(),
+    GameConfig::get_instance()->get_max_y(),
+    CollisionLayer::FriendlyProjectile) {
     this->state = 1;
     if (exploded_on_hand)
         state++;

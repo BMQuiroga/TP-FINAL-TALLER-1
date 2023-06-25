@@ -49,6 +49,7 @@ libsdl2-ttf 2.20.2
 libsdl2-dev 2.26.5
 libSDL2pp 0.18.1
 qt6-base
+yaml-cpp
 Compilador de C++
 
 ## Funcionamiento

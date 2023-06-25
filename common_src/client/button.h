@@ -15,7 +15,7 @@ class Button {
     Button(const std::string& text, const SDL2pp::Rect& rect);
 
     //dibuja el boton
-    void Render(SDL2pp::Renderer& renderer);
+    void Render(SDL2pp::Renderer& renderer, SDL2pp::Color* background_color);
 
     //dado un evento, devuelve true si el boton fue presionado
     bool HandleEvent(const SDL_Event& event);

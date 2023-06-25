@@ -1,4 +1,4 @@
-#ifndef MAINMENU_H_
+/*#ifndef MAINMENU_H_
 #define MAINMENU_H_
 
 #include "button.h"
@@ -17,4 +17,4 @@ class MainMenu {
     int handleEvents();
 };
 
-#endif
+#endif*/

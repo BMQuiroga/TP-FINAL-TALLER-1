@@ -2,25 +2,26 @@
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 
-// GameConfig::GameConfig() {
-//     YAML::Node config = YAML::LoadFile("../config.yaml");
-//     default_max_x = config["default_max_x"].as<int>();
-//     default_max_y = config["default_max_y"].as<int>();
-//     starting_hit_points = config["starting_hit_points"].as<int>();
-//     gun_magazine_size = config["gun_magazine_size"].as<int>();
-//     player_rect_width = config["player_rect_width"].as<int>();
-//     player_rect_height = config["player_rect_height"].as<int>();
-//     zombie_rect_width = config["zombie_rect_width"].as<int>();
-//     zombie_rect_height = config["zombie_rect_height"].as<int>();
-// }
-
 GameConfig::GameConfig() {
     parseConfigFile("../config.yaml");
 }
 
+std::map<std::string, int> GameConfig::parseNode(const YAML::Node &config, const std::string &node_name)
+{
+    std::map<std::string, int> parsed_node;
+    const YAML::Node& node = config["Game"][node_name];
+    for (const auto& entry : node) {
+        std::string code_name = entry.first.as<std::string>();
+        int code_value = entry.second.as<int>();
+        parsed_node[code_name] = code_value;
+    }
+    return parsed_node;
+}
+
 std::map<std::string, std::map<std::string, int>> GameConfig::parseMapNodes(
-    const YAML::Node& config, 
-    const std::string& node_name) {
+    const YAML::Node &config,
+    const std::string &node_name)
+{
     std::map<std::string, std::map<std::string, int>> parsed_nodes;
     const YAML::Node& nodes = config["Game"][node_name];
     for (const auto& node : nodes) {
@@ -29,9 +30,9 @@ std::map<std::string, std::map<std::string, int>> GameConfig::parseMapNodes(
         for (const auto& entry : node) {
             node_name = entry.first.as<std::string>();
             for (const auto& attribute: entry.second) {
-                std::string codeName = attribute.first.as<std::string>();
-                int codeValue = attribute.second.as<int>();
-                node_data[codeName] = codeValue;
+                std::string code_name = attribute.first.as<std::string>();
+                int code_value = attribute.second.as<int>();
+                node_data[code_name] = code_value;
             }
         }
         parsed_nodes[node_name] = node_data;
@@ -48,9 +49,9 @@ std::vector<std::map<std::string, int>> GameConfig::parseToVector(
         std::map<std::string, int> node_data;
         for (const auto& entry : node) {
             for (const auto& attribute: entry.second) {
-                std::string codeName = attribute.first.as<std::string>();
-                int codeValue = attribute.second.as<int>();
-                node_data[codeName] = codeValue;
+                std::string code_name = attribute.first.as<std::string>();
+                int code_value = attribute.second.as<int>();
+                node_data[code_name] = code_value;
             }
         }
         parsed_nodes.push_back(node_data);
@@ -63,13 +64,9 @@ void GameConfig::parseConfigFile(const std::string& filename) {
 
     // Parse the configuration data and store it in member variables
     port = config["Game"]["port"].as<int>();
-    defaultMaxX = config["Game"]["default_max_x"].as<int>();
-    defaultMaxY = config["Game"]["default_max_y"].as<int>();
-    startingHitPoints = config["Game"]["starting_hit_points"].as<int>();
-    eventsPerLoop = config["Game"]["events_per_loop"].as<int>();
-    gunMagazineSize = config["Game"]["gun_magazine_size"].as<int>();
-    playerRectWidth = config["Game"]["player_rect_width"].as<int>();
-    playerRectHeight = config["Game"]["player_rect_height"].as<int>();
+    max_x = config["Game"]["default_max_x"].as<int>();
+    max_y = config["Game"]["default_max_y"].as<int>();
+    events_per_loop = config["Game"]["events_per_loop"].as<int>();
 
     // Parse the map paths
     const YAML::Node& mapPathsNode = config["Game"]["MapPaths"];
@@ -81,108 +78,55 @@ void GameConfig::parseConfigFile(const std::string& filename) {
 
     // Parse the weapons
     weapons = parseMapNodes(config, "Weapons");
-    // const YAML::Node& weaponsNode = config["Game"]["Weapons"];
-    // for (const auto& weapon : weaponsNode) {
-    //     std::map<std::string, std::int> weaponData;
-    //     weaponData["name"] = weaponNode.first.as<std::string>();
-    //     weaponData["damage"] = weapon["Weapon"]["damage"].as<std::string>();
-    //     weaponData["bulletcount"] = weapon["Weapon"]["bulletcount"].as<std::string>();
-    //     weaponData["magazine"] = weapon["Weapon"]["magazine"].as<std::string>();
-    //     weaponData["shootdelay"] = weapon["Weapon"]["shootdelay"].as<std::string>();
-    //     weaponData["reloadelay"] = weapon["Weapon"]["reloadelay"].as<std::string>();
-    //     weaponData["grenadedelay"] = weapon["Weapon"]["grenadedelay"].as<std::string>();
-    //     weapons.push_back(weaponData);
-    // }
 
-    // // Parse the enemies
+    // Parse the enemies
     enemies = parseToVector(config, "Enemies");
-    // const YAML::Node& enemiesNode = config["Game"]["Enemies"];
-    // for (const auto& enemy : enemiesNode) {
-    //     std::map<std::string, std::string> enemyData;
-    //     enemyData["name"] = enemy["Enemy"]["name"].as<std::string>();
-    //     enemyData["speed"] = enemy["Enemy"]["speed"].as<std::string>();
-    //     enemyData["rect_width"] = enemy["Enemy"]["rect_width"].as<std::string>();
-    //     // Add other enemy properties as needed
-    //     enemies.push_back(enemyData);
-    // }
 
-    // // Parse the soldiers
+    // Parse the soldiers
     soldiers = parseMapNodes(config, "Soldiers");
-    // const YAML::Node& soldiersNode = config["Game"]["Soldiers"];
-    // for (const auto& soldier : soldiersNode) {
-    //     std::map<std::string, int> soldier_data;
-    //     std::string soldierName = soldier.first.as<std::string>();
-    //     for (const auto& entry : soldier) {
-    //         std::string codeName = entry.first.as<std::string>();
-    //         int codeValue = entry.second.as<int>();
-    //         soldier_data[codeName] = codeValue;
-    //     }
-    //     soldiers[soldierName] = soldier_data;
-    // }
+
+    // Parse player info
+    playerstate = parseNode(config, "Playerstate");
 
     // // Parse the math codes
-    const YAML::Node& mathNode = config["Game"]["Math"];
-    for (const auto& entry : mathNode) {
-        std::string codeName = entry.first.as<std::string>();
-        int codeValue = entry.second.as<int>();
-        mathCodes[codeName] = codeValue;
-    }
+    mathCodes = parseNode(config, "Math");
+    // const YAML::Node& mathNode = config["Game"]["Math"];
+    // for (const auto& entry : mathNode) {
+    //     std::string code_name = entry.first.as<std::string>();
+    //     int code_value = entry.second.as<int>();
+    //     mathCodes[code_name] = code_value;
+    // }
 
     // Parse the gameloop values
-    const YAML::Node& gameloopNode = config["Game"]["Gameloop"];
-    for (const auto& entry : gameloopNode) {
-        std::string codeName = entry.first.as<std::string>();
-        int codeValue = entry.second.as<int>();
-        gameloop_values[codeName] = codeValue;
-    }
+    gameloop_values = parseNode(config, "Gameloop");
+    // const YAML::Node& gameloopNode = config["Game"]["Gameloop"];
+    // for (const auto& entry : gameloopNode) {
+    //     std::string code_name = entry.first.as<std::string>();
+    //     int code_value = entry.second.as<int>();
+    //     gameloop_values[code_name] = code_value;
+    // }
 
 }
 
-GameConfig* GameConfig::sInstance = nullptr;
-
-GameConfig* GameConfig::get_instance() {
-	if(sInstance == nullptr)
-		sInstance = new GameConfig();
-
-	return sInstance;
+void GameConfig::release() {
+	delete instance;
+	instance = nullptr;
 }
-
-
-// void GameConfig::release() {
-// 	delete sInstance;
-// 	sInstance = NULL;
-// }
 
 int GameConfig::getPort() const {
     return port;
 }
 
-int GameConfig::getDefaultMaxX() const {
-    return defaultMaxX;
+int GameConfig::get_max_x() const {
+    return max_x;
 }
 
-int GameConfig::getDefaultMaxY() const {
-    return defaultMaxY;
+int GameConfig::get_max_y() const {
+    return max_y;
 }
 
-int GameConfig::getStartingHitPoints() const {
-    return startingHitPoints;
-}
-
-int GameConfig::getEventsPerLoop() const {
-    return eventsPerLoop;
-}
-
-int GameConfig::getGunMagazineSize() const {
-    return gunMagazineSize;
-}
-
-int GameConfig::getPlayerRectWidth() const {
-    return playerRectWidth;
-}
-
-int GameConfig::getPlayerRectHeight() const {
-    return playerRectHeight;
+int GameConfig::get_events_per_loop() const {
+    return events_per_loop;
 }
 
 std::map<std::string, int> GameConfig::get_gameloop_values() const {
@@ -193,9 +137,6 @@ std::vector<std::pair<std::string, std::string>> GameConfig::getMapPaths() const
     return mapPaths;
 }
 
-std::vector<std::map<std::string, int>> GameConfig::getEnemies() const {
-    return enemies;
-}
 
 std::map<std::string, std::map<std::string, int>> GameConfig::getSoldiers() const {
     return soldiers;
@@ -206,7 +147,20 @@ std::map<std::string, int> GameConfig::get_weapon(const std::string &weapon_name
     return weapons[weapon_name];
 }
 
+std::map<std::string, int> GameConfig::get_playerstate() const {
+    return playerstate;
+}
+
 std::map<std::string, int> GameConfig::get_enemy(int enemy)
 {
     return enemies[enemy];
+}
+
+GameConfig* GameConfig::instance = nullptr;
+
+GameConfig* GameConfig::get_instance() {
+    if (instance == nullptr) {
+        instance = new GameConfig();
+    }
+    return instance;
 }

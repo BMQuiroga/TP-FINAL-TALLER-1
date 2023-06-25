@@ -47,13 +47,6 @@ std::string filepath = CONFIG_BASE_PATH "/server/config.yaml"
 
 # Features (2/5)
 Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
-## Zombies
-
-### Jumper
-
-- [ ] **(P0)** salto tiene animación previa de aviso
-
-
 ## Jugador
 - [x] Munición infinita
 - [x] Tiempo de recarga 
@@ -86,8 +79,6 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 
 ## Escenario
 - [ ] **(P4)** los crateres son zona por la que no podés caminar
-- [ ] **(P1)** Te podés mover a los costados
-- [ ] **(P3)** Hay una ilusion de paralaje
 
 ## Modos de juego
 ### Clear the zone
@@ -109,17 +100,6 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 - [ ] **(P3)** Se muestra balas disparadas
 - [ ] **(P1)** Se muestra infectados eliminados
 - [ ] **(P1)** Se muestra tiempo transcurrido
-## Controles
-- [x] se controla via teclado
-- [x] Recarga manual (mediante botón de recarga)
-- [ ] **(P1)** distancia de lanzado de granada depende de cuanto tiempo se mantiene presionado la tecla
-- [ ] **(P1)** Si mantenés mucho tiempo presionado la tecla de lanzar granada, explota en la mano
-
-
-## sonidos
-- [x] Cuando hay disparo
-- [ ] **(P1)** Cuando hay expĺosion
-- [ ] **(P1)** Cuando hay una recarga
 
 ## Musica
 - **(P0)** No hay

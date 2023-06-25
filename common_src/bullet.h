@@ -19,6 +19,7 @@ class Bullet : public GameEntity {
     void attack(GameEntity *other) override;
     bool is_off_scope();
     void on_collission_detected(GameEntity *other) override;
+    bool is_dead();
 };
 
 class Vomit_Projectile : public GameEntity {
@@ -31,6 +32,7 @@ class Vomit_Projectile : public GameEntity {
     void move();
     bool is_dead();
     PlayerStateReference make_ref();
+    PlayerStateReference make_noise_ref();
 };
 
 #endif

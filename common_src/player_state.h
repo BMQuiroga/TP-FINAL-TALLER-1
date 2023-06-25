@@ -31,13 +31,13 @@ class PlayerState : public GameEntity {
       const std::string &name,
       int id,
       int weapon_code = 3,
-      int16_t max_x = DEFAULT_MAX_X,
-      int16_t max_y = DEFAULT_MAX_Y);
+      int16_t max_x = GameConfig::get_instance()->get_max_x(),
+      int16_t max_y = GameConfig::get_instance()->get_max_y());
     PlayerState(PlayerState&&);
     ~PlayerState();
 
     // Procesa la solicitud del cliente y actualiza el estado actual del jugador
-    void next_state(uint8_t cmd, std::list<Bullet>& vec, uint16_t& bullets, std::list<Grenade>& gren);
+    void next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bullets, std::list<Grenade>& gren, bool& sr);
     void take_damage(uint8_t damage);
     void pass_time();
     void on_collission_detected(GameEntity *other) override;

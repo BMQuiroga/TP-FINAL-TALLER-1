@@ -30,6 +30,15 @@ bool Arma::try_shoot() {
     return false;
 }
 
+PlayerStateReference Arma::make_reload() {
+    PlayerStateReference a;
+    a.id = 160;
+    a.x = 0;
+    a.y = 0;
+    a.state = 0;
+    a.hit_points = 0;
+    return a;
+}
 
 uint8_t Arma::get_rounds() {
     return this->balas;
@@ -74,6 +83,8 @@ Arma::Arma(const std::string& weapon_name) {
     this->g_delay = 0;
     this->damage = weapon_info["damage"];
     this->bullet_count = weapon_info["bullet_count"];
+    this->grenade_type = weapon_info["grenadetype"];
+    this->grenade_power = weapon_info["grenadepower"];
 }
 
 Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd, uint16_t gd) {
@@ -131,25 +142,25 @@ void Arma1::create_grenade(Vector2D position, entity_direction direc, std::list<
     std::cout << "DIREC: " << std::to_string(direc) << std::endl;
     if (direc == LEFT) {
 
-        gren.push_back(Grenade(HE_GRENADE, position.x - (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
+        gren.push_back(Grenade(grenade_type, position.x - (grenade_power*throwing_distance), position.y, throwing_distance == 0));
     } else {
-        gren.push_back(Grenade(HE_GRENADE, position.x + (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
+        gren.push_back(Grenade(grenade_type, position.x + (grenade_power*throwing_distance), position.y, throwing_distance == 0));
     }
     this->throwing_distance = 0;
     this->g_delay = this->g_delay_cte;
 }
 
 void Arma2::create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
-    gren.push_back(Grenade(AIR_STRIKE, position.x, position.y, false));
+    gren.push_back(Grenade(grenade_type, position.x, position.y, false));
     this->throwing_distance = 0;
     this->g_delay = this->g_delay_cte;
 }
 
 void Arma3::create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
     if (direc == LEFT) {
-        gren.push_back(Grenade(SMOKE_GRENADE, position.x - (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
+        gren.push_back(Grenade(grenade_type, position.x - (grenade_power*throwing_distance), position.y, throwing_distance == 0));
     } else {
-        gren.push_back(Grenade(SMOKE_GRENADE, position.x + (GRANADA_FUERZA*throwing_distance), position.y, throwing_distance == 0));
+        gren.push_back(Grenade(grenade_type, position.x + (grenade_power*throwing_distance), position.y, throwing_distance == 0));
     }
     this->throwing_distance = 0;
     this->g_delay = this->g_delay_cte;

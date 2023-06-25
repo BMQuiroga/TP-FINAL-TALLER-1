@@ -28,12 +28,17 @@ class Arma {
     uint8_t throwing_distance; //NO CTE, DISTANCIA QUE CUBRE
     uint8_t damage;
     uint8_t bullet_count;
+    uint8_t grenade_type;
+    uint8_t grenade_power;
 
     public:
     //constructor
     Arma(uint8_t c, uint8_t dr, uint8_t dd, uint16_t gd);
     Arma(const std::string& weapon_name);
     Arma(std::map<std::string, int> &weapon_info);
+
+    //manda un PSR de recarga para que el cliente haga el ruido
+    static PlayerStateReference make_reload();
 
     //decrementa en 1 el delay
     void advance_time();

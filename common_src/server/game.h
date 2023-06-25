@@ -86,9 +86,10 @@ class GameLoop : public Thread {
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
     PhysicsManager *physics;
-    uint16_t kills;
-    uint16_t shots;
-    int game_ticks;
+    uint32_t kills;
+    uint32_t shots;
+    uint32_t game_ticks;
+    bool someone_reloaded;
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
@@ -119,6 +120,7 @@ class GameLoop : public Thread {
             max_zombies = gameloop_values["max_zombies"];
             max_players = number_players > 0 ? number_players : gameloop_values["max_players"];
             wait_time_start_game = gameloop_values["wait_time_start_game"];
+            someone_reloaded = false;
         }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
 
@@ -174,11 +176,19 @@ class GameLoop : public Thread {
             resp.players.push_back(b.make_ref());
         }
 
+        if (someone_reloaded) {
+            resp.players.push_back(Arma::make_reload());
+            someone_reloaded = false;
+        }
+
         for (Zombie* &zombie : zombies) {
             resp.zombies.push_back(zombie->make_ref());
         }
         resp.game_state = state;
 
+        resp.kills = this->kills;
+        resp.shots = this->shots;
+        resp.time = this->game_ticks / GAME_TICK_RATE;
         if (kills >= score_to_win) {
             resp.players.push_back(make_victory());
             this->state = ENDED;
@@ -227,7 +237,7 @@ class GameLoop : public Thread {
         }
         for (auto it = bullets.begin(); it != bullets.end();) {
             it->move();
-            if (it->is_off_scope()) {
+            if (it->is_dead()) {
                 it = bullets.erase(it);
             } else {
                 ++it;
@@ -338,12 +348,12 @@ class GameLoop : public Thread {
                         break;
                     }
                 } else if (player) {
-                    player->next_state(event.req.cmd,bullets,shots,grenades);
+                    player->next_state(event.req.cmd,bullets,shots,grenades,someone_reloaded);
                 }
             }
             for (PlayerState &player : players) {
                 if (player.get_state() != IDLE) {
-                    player.next_state(-1,bullets,shots,grenades); 
+                    player.next_state(-1,bullets,shots,grenades,someone_reloaded); 
                 }
             }
             int zombies_to_spawn_via_witch = 0;
@@ -352,10 +362,7 @@ class GameLoop : public Thread {
                 if (i == CODE_WITCH_SPAWN)
                     zombies_to_spawn_via_witch++;
                 if (i == CODE_VENOM_PROJECTILE) {
-                    Vector2D vec = zombie->get_location();
-                    //float direc = zombie->get_direction().x;
-                    entity_direction direc = zombie->get_direction().x == -1 ? LEFT : RIGHT;
-                    vomit.push_back(Vomit_Projectile(vec,direc));
+                    vomit.push_back(Vomit_Projectile(zombie->get_location(),zombie->get_facing_direction()));
                     //TODO crear el proyectil enemigo
                 }           
             }

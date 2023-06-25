@@ -64,6 +64,9 @@ struct LobbyCommandResponse {
 
 struct GameStateResponse {
     int game_state;
+    uint32_t kills;
+    uint32_t shots;
+    uint32_t time;
     std::vector<PlayerStateReference> players;
     std::vector<ZombieStateReference> zombies;
     GameStateResponse() = default;

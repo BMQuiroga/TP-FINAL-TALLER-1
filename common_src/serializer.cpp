@@ -46,6 +46,9 @@ int Serializer::copy_string(const int8_t *src, std::string &s) {
 std::vector<int8_t> Serializer::serialize(const GameStateResponse &resp) {
     std::vector<int8_t> buf;
     push_number(buf, resp.game_state);
+    push_number(buf, resp.kills);
+    push_number(buf, resp.shots);
+    push_number(buf, resp.time);
     push_number(buf, resp.players.size());
     push_number(buf, resp.zombies.size());
     for (auto player : resp.players) {
@@ -133,6 +136,9 @@ GameStateResponse Serializer::deserialize_game_state(const std::vector<int8_t> &
     size_t number_players;
     size_t number_zombies; 
     data += copy_number(data, &resp.game_state);
+    data += copy_number(data, &resp.kills);
+    data += copy_number(data, &resp.shots);
+    data += copy_number(data, &resp.time);
     int offset = 0, size = content.size() - sizeof(resp.game_state);
     offset += copy_number(data+offset, &number_players);
     offset += copy_number(data+offset, &number_zombies);
