@@ -32,7 +32,7 @@ public:
     ~MainWindow();
 
 public slots:
-    void receivePlayerInfo(const QString& text, int number);
+    void receivePlayerInfo(const QString& text, int number, int game_mode);
     void startJoinGameOption();
     void startCreateGameOption();
     void receiveInputGame(const QString& text, int number);

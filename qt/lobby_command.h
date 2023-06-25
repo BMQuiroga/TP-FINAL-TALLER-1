@@ -10,9 +10,11 @@ struct LobbyCommand
     std::string name;
     std::string parameter;
     int parameter2;
+    int parameter3;
     LobbyCommand(
         const std::string &name, 
         const std::string &parameter, 
-        int parameter2 = 0) : name(name), parameter(parameter), parameter2(parameter2) {}
+        int parameter2 = 0, int parameter3 = 0) : 
+        name(name), parameter(parameter), parameter2(parameter2), parameter3(parameter3) {}
 };
 #endif

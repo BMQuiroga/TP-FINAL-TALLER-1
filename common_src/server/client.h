@@ -35,6 +35,7 @@ private:
     int weapon_code;
     std::string uuid; // uuid of the client
     int joined_game; // unique id of the game this client joined
+    int game_mode;
 
 public:
     explicit Client(Socket&& socket,

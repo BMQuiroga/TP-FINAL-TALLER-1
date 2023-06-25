@@ -79,6 +79,8 @@ void Client::handle_request(ProtocolRequest &message) {
             NewPlayerRequest new_player_req = serializer.deserialize_input_name(message.content);
             name = new_player_req.name;
             weapon_code = new_player_req.weapon_code;
+            game_mode = new_player_req.game_mode;
+            std::cout << "game mode is " << game_mode << std::endl;
         }
     }
 }
