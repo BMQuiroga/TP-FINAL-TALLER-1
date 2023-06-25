@@ -148,6 +148,7 @@ public:
     void set_value(const std::string& key, const T& value) {
         config_[key] = value;
     }
+    void save();
 
 private:
     static GameConfig *instance;
@@ -158,7 +159,6 @@ private:
     GameConfig& operator=(const GameConfig&) = delete;
 
     void load();
-    void save();
 
     YAML::Node config_;
 };

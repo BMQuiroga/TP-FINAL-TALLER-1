@@ -6,6 +6,7 @@
 #include <thread>
 #include <string>
 #include <sstream>
+#include "../game_config.h"
 
 int main(int argc, char *argv[]) {
     int ret = 1;
@@ -25,6 +26,7 @@ int main(int argc, char *argv[]) {
         accepter.start();
         while (std::cin.get() != 'q') continue;
         std::cout << "Closing server..." << std::endl;
+        GameConfig::get_instance()->release();
         sk.shutdown(SHUT_RD);
         sk.close();
         accepter.join();
