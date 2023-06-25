@@ -24,6 +24,7 @@
 #define SCORE_TO_WIN 10
 #define MAX_ZOMBIES 4
 #define MAX_PLAYERS 1
+#define DEFAULT_MODE 1
 #define WAIT_TIME_START_GAME 10000
 
 //playerstate.h

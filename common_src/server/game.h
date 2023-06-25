@@ -87,7 +87,7 @@ class GameLoop : public Thread {
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
-        Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS, int game_mode) : 
+        Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS, int game_mode=DEFAULT_MODE) : 
         events(events), state{CREATED}, number_players(number_players), game_mode(game_mode) {
             physics = PhysicsManager::get_instance();
             physics->set_layer_collision_mask(
@@ -414,6 +414,7 @@ class Game {
     int id;
     std::string name;
     uint8_t number_players;
+    int game_mode;
     std::list<std::reference_wrapper<Queue<ProtocolResponse>>> players;
     Queue<GameEvent> events;
     GameLoop loop;

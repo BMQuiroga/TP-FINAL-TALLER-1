@@ -16,6 +16,7 @@ Game::Game(int id, const GameReference &game_ref) :
     name(game_ref.name),
     events(10000),
     number_players(game_ref.players),
+    game_mode(game_ref.game_mode),
     loop(events, game_ref.players, game_ref.game_mode) {
 }
 
@@ -48,7 +49,7 @@ void Game::push_event(
 
 Game::Game(Game &&other) : 
     events(std::move(other.events)), 
-    loop(events, other.number_players), 
+    loop(events, other.number_players, other.game_mode), 
     players(other.players),
     name(other.name) {
     id = other.id;
