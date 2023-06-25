@@ -16,7 +16,7 @@ Game::Game(int id, const GameReference &game_ref) :
     name(game_ref.name),
     events(10000),
     number_players(game_ref.players),
-    loop(events, game_ref.players) {
+    loop(events, game_ref.players, game_ref.game_mode) {
 }
 
 Game::Game(int id, const std::string& name) :

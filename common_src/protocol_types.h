@@ -31,6 +31,7 @@ struct ZombieStateReference {
 struct GameReference {
     int id;
     std::string name;
+    int game_mode;
     uint8_t players;
     GameReference() {}
     GameReference(int id, std::string &name, uint8_t players) :

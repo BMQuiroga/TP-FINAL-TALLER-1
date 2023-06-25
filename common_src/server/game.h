@@ -36,6 +36,9 @@
 
 #define FAILURE -1
 
+#define GM_SURVIVAL 2
+#define GM_CTA 1
+
 using namespace std::placeholders;
 
 enum GameState {
@@ -82,12 +85,13 @@ class GameLoop : public Thread {
     uint32_t kills;
     uint32_t shots;
     uint32_t game_ticks;
+    int game_mode;
     bool someone_reloaded;
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
-        Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS) : 
-        events(events), state{CREATED}, number_players(number_players) {
+        Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS, int game_mode) : 
+        events(events), state{CREATED}, number_players(number_players), game_mode(game_mode) {
             physics = PhysicsManager::get_instance();
             physics->set_layer_collision_mask(
                 CollisionLayer::Friendly,
@@ -201,7 +205,9 @@ class GameLoop : public Thread {
         resp.kills = this->kills;
         resp.shots = this->shots;
         resp.time = this->game_ticks / GAME_TICK_RATE;
-        if (kills >= SCORE_TO_WIN) {
+
+
+        if (zombies.empty() && game_mode == GM_CTA) {//CTA termina cuando no hay mas zombies
             resp.players.push_back(make_victory());
             this->state = ENDED;
         } else if (is_everyone_dead()) {
@@ -342,6 +348,8 @@ class GameLoop : public Thread {
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
         while (state == STARTED) {
+            if (game_ticks == 0 && game_mode == GM_CTA)
+                Zombie::generate_clear_the_area(CTA_NUMBER_OF_ZOMBIES);
             game_ticks++;
             int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
             auto startTime = std::chrono::high_resolution_clock::now();
@@ -389,7 +397,8 @@ class GameLoop : public Thread {
             std::chrono::system_clock::now().time_since_epoch()).count();
             auto interval = current_time - game_started_time;
             if (interval % spawn_interval < 100 && interval > 0 && zombies.size() < MAX_ZOMBIES) {
-                spawn_enemy(-1);//cualquier zombie
+                if (game_mode == GM_SURVIVAL)
+                    spawn_enemy(-1);//cualquier zombie
             }
 
             if (!zombies.empty()) {
