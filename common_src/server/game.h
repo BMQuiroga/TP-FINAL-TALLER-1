@@ -90,7 +90,7 @@ class GameLoop : public Thread {
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
-        Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS, int game_mode) : 
+        Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS, int game_mode=1) : 
         events(events), state{CREATED}, number_players(number_players), game_mode(game_mode) {
             physics = PhysicsManager::get_instance();
             physics->set_layer_collision_mask(
@@ -349,7 +349,7 @@ class GameLoop : public Thread {
             std::chrono::system_clock::now().time_since_epoch()).count();
         while (state == STARTED) {
             if (game_ticks == 0 && game_mode == GM_CTA)
-                Zombie::generate_clear_the_area(CTA_NUMBER_OF_ZOMBIES);
+                Zombie::generate_clear_the_area(CTA_NUMBER_OF_ZOMBIES,zombies);
             game_ticks++;
             int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
             auto startTime = std::chrono::high_resolution_clock::now();
