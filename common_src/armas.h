@@ -15,6 +15,15 @@ class Grenade;
 
 class Bullet;
 
+class GrenadeHolder {
+    public:
+    virtual int charge(int type) = 0;
+    virtual bool try_grenade(int type) = 0;
+    virtual void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren) = 0;
+    virtual void advance_time() = 0;
+    virtual int damage_on_explode_on_hand(int type) = 0;
+};
+
 class Arma {
     protected:
     //public:
@@ -23,13 +32,14 @@ class Arma {
     uint8_t delay_recarga;//CONSTANTE, TIEMPO QUE TARDA EN RECARGAR
     uint8_t delay_disparo;//CONSTANTE, TIEMPO ENTRE DISPAROS
     uint8_t delay;  // NO CONSTANTE, DELAY QUE QUEDA PARA DISPARAR
-    uint16_t g_delay_cte; //CONSTANTE, TIEMPO ENTRE GRANADAS
-    uint16_t g_delay; // NO CONSTANTE, DELAY QUE QUEDA PARA GRANADA
-    uint8_t throwing_distance; //NO CTE, DISTANCIA QUE CUBRE
+    GrenadeHolder * grenades;
 
     public:
+    static Arma* get(int id);
     //constructor
-    Arma(uint8_t c, uint8_t dr, uint8_t dd, uint16_t gd);
+    Arma(uint8_t c, uint8_t dr, uint8_t dd);
+
+    ~Arma();
 
     //manda un PSR de recarga para que el cliente haga el ruido
     static PlayerStateReference make_reload();
@@ -44,10 +54,10 @@ class Arma {
     bool try_reload();
 
     //eso, la intenta tirar
-    bool try_grenade();
+    bool try_grenade(int id);
 
     //intenta cargar, devuelve 0 si no esta listo, 1 si salio todo bien, 2 si le explota en la mano
-    int charge_grenade();
+    int charge_grenade(int type);
 
     //getters
     uint8_t get_rounds();
@@ -57,31 +67,59 @@ class Arma {
     virtual void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) = 0;
 
     //crea una granada en la lista de granadas???
-    virtual void create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) = 0;
+    void create_grenade(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren);
 
-    virtual int damage_on_explode_on_hand();
+    int damage_on_explode_on_hand(int type);
 };
 
-class Arma1 : public Arma { //IDF, Granada Explosiva
+class Arma1 : public Arma { //IDF
+    private:
     public:
     explicit Arma1();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
-    void create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) override;
-    int damage_on_explode_on_hand() override;
 };
 
 class Arma2 : public Arma { //P90, Bombardeo
     public:
     explicit Arma2();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
-    void create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) override;
 };
 
-class Arma3 : public Arma { //Scout, Smoke
+class Arma3 : public Arma { //Scout
     public:
     explicit Arma3();
     void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
-    void create_grenade(Vector2D position, entity_direction direc, std::list<Grenade>& gren) override;
 };
+
+class DefaultGH : public GrenadeHolder {
+    private:
+    int e_delay;
+    int e_delay_cte;
+    int s_delay;
+    int s_delay_cte;
+    int e_distance;
+    int s_distance;
+    public:
+    DefaultGH();
+    int charge(int type);
+    bool try_grenade(int type);
+    void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren);
+    void advance_time();
+    int damage_on_explode_on_hand(int type);
+};
+
+class Bombarder :  public GrenadeHolder {
+    private:
+    int delay;
+    int delay_cte;
+    public:
+    Bombarder();
+    int charge(int type);
+    bool try_grenade(int type);
+    void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren);
+    void advance_time();
+    int damage_on_explode_on_hand(int type);
+};
+
 
 #endif

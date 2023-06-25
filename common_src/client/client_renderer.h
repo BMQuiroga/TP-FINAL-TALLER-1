@@ -24,10 +24,15 @@ class ClientRenderer {
     bool defeat;
     int offset;
 
+    uint32_t s;//shots
+    uint32_t k;//kills
+    uint32_t t;//time
+
     SDL2pp::SDL sdl;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     SDL2pp::Mixer mixer;
+    SDL2pp::SDLTTF ttf;
 
     //renderiza la lista de imagenes actual_frame, llama n veces a render o play
     void render_all();
@@ -70,7 +75,7 @@ class ClientRenderer {
     void render_floor();
 
     //renderiza las balas, kills y tiempo
-    void render_score(uint32_t b, uint32_t k, uint32_t t);
+    void render_score();
 
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name);

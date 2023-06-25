@@ -46,6 +46,11 @@ class Queue {
         closed(other.closed) {
             other.close();
         }
+        Queue<T>& operator=(Queue<T> &&other) {
+            q = std::move(other.q);
+            closed = other.closed;
+            return *this;
+        }
 
 
         bool try_push(T const& val) {
@@ -128,12 +133,10 @@ class Queue {
         void close() {
             std::unique_lock<std::mutex> lck(mtx);
 
-            if (closed) {
-                throw std::runtime_error("The queue is already closed.");
+            if (!closed) {
+                closed = true;
+                is_not_empty.notify_all();
             }
-
-            closed = true;
-            is_not_empty.notify_all();
         }
 
     private:

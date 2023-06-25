@@ -122,19 +122,19 @@ file(GLOB TEST_SOURCES
 )
 
 add_executable(
-  test
+  test_all
   ${TEST_SOURCES}
   ${SERVER_SOURCES}
 )
 target_link_libraries(
-  test
+  test_all
   GTest::gtest_main Threads::Threads SDL2pp::SDL2pp ${YAML_CPP_LIBRARIES}
 )
 
 include(GoogleTest)
-gtest_discover_tests(test)
+gtest_discover_tests(test_all)
 add_custom_command(
-     TARGET test
+     TARGET test_all
      COMMENT "Run tests"
      POST_BUILD 
      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}

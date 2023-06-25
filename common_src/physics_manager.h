@@ -10,6 +10,7 @@ class GameEntity;
 enum class CollisionLayer {
     Friendly,
     FriendlyProjectile,
+    FriendlyExplosive,
     Hostile,
     HostileProjectile,
     MaxLayers,
@@ -19,8 +20,9 @@ enum class CollisionFlag {
     None = 0x00,
     Friendly = 0x01,
     FriendlyProjectile = 0x02,
-    Hostile = 0x04,
-    HostileProjectile = 0x08
+    FriendlyExplosive = 0x04,
+    Hostile = 0x08,
+    HostileProjectile = 0x10
 };
 
 class PhysicsManager {

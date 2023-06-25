@@ -96,6 +96,9 @@ class GameLoop : public Thread {
                 CollisionLayer::FriendlyProjectile,
                 CollisionFlag::Hostile);
             physics->set_layer_collision_mask(
+                CollisionLayer::FriendlyExplosive,
+                CollisionFlag::Friendly | CollisionFlag::Hostile);
+            physics->set_layer_collision_mask(
                 CollisionLayer::Hostile,
                 CollisionFlag::Friendly | CollisionFlag::FriendlyProjectile);
             physics->set_layer_collision_mask(
@@ -108,6 +111,31 @@ class GameLoop : public Thread {
             someone_reloaded = false;
         }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
+
+    void close() {
+        if (state != ENDED) {
+            state = ENDED;
+            events.close();
+            players.clear();
+            bullets.clear();
+            for (Zombie *z : zombies) {
+                delete z;
+            }
+            zombies.clear();
+            grenades.clear();
+            vomit.clear();
+            message_queues.clear();
+            physics->release();
+        }
+    }
+    
+    ~GameLoop() {
+        close();
+    }
+
+    GameState get_state() {
+        return state;
+    }
 
     PlayerStateReference make_defeat() {
         PlayerStateReference a;
@@ -130,7 +158,7 @@ class GameLoop : public Thread {
     }
 
     //une al player a la partida
-    int join(GameEvent &event) {
+    int join_game(GameEvent &event) {
         if (state == CREATED && players.size() < number_players) {
             players.push_back(PlayerState(event.player_name, players.size() + 1, event.weapon_code));
             message_queues.push_back(*event.player_messages);
@@ -286,19 +314,19 @@ class GameLoop : public Thread {
     }
 
     // Function to handle enemy spawns
-    void spawn_enemy() {
+    void spawn_enemy(int secure) {
         std::cout << "spawn" << std::endl;
-        zombies.push_back(Zombie::get_random_zombie(-1));
+        zombies.push_back(Zombie::get_random_zombie(secure));
     }
 
     void run() override {
-        while (state != STARTED) {
+        while (state == CREATED) {
             GameEvent event;
             int n_events = 0;
             while (events.try_pop(event) && n_events < EVENTS_PER_LOOP) {
                 n_events++;
                 if (event.req.cmd == JOIN) {
-                    int code = join(event);
+                    int code = join_game(event);
                     if (code != FAILURE && players.size() == number_players) {
                         state = STARTED;
                         push_game_lobby_state(0);
@@ -313,7 +341,7 @@ class GameLoop : public Thread {
         int delayMilliseconds = static_cast<int>(1000.0 / GAME_TICK_RATE);
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
-        while (state != ENDED) {
+        while (state == STARTED) {
             game_ticks++;
             int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
             auto startTime = std::chrono::high_resolution_clock::now();
@@ -350,7 +378,7 @@ class GameLoop : public Thread {
             }
             //std::cout << "ZOMBIES SPAWNED VIA WITCH: " << zombies_to_spawn_via_witch << std::endl;
             for (int i = 0; i < zombies_to_spawn_via_witch ; i++) {
-                spawn_enemy();
+                spawn_enemy(5);//asegura que no sean brujas
             }
             
             pass_time();
@@ -361,7 +389,7 @@ class GameLoop : public Thread {
             std::chrono::system_clock::now().time_since_epoch()).count();
             auto interval = current_time - game_started_time;
             if (interval % spawn_interval < 100 && interval > 0 && zombies.size() < MAX_ZOMBIES) {
-                spawn_enemy();
+                spawn_enemy(-1);//cualquier zombie
             }
 
             if (!zombies.empty()) {
@@ -392,7 +420,9 @@ class Game {
     public:
         explicit Game(int id, const std::string& name);
         explicit Game(int id, const GameReference& game_ref);
+        ~Game();
         Game(Game&&);
+        Game& operator=(Game&&);
 
         GameReference make_ref();
 
@@ -411,6 +441,7 @@ class Game {
          * Devuelve el id de una partida
         */
         int get_id() const;
+        GameState get_state();
         bool operator==(const Game &Game) const;
         bool operator==(const int &code) const;
 };

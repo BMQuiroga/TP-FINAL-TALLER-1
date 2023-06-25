@@ -12,8 +12,10 @@ Zombie* Zombie::get_random_zombie(int secure) {
     int q;
     if (secure == -1) {
         q = getRandomNumber(0,4);
-    } else {
+    } else if (secure < 5) {
         q = secure;
+    } else if (secure == 5) {
+        q = getRandomNumber(0,3);
     }
     int x = getRandomNumber(SPAWNER_SAFE_AREA_X, DEFAULT_MAX_X);  // Random X position within game area
     int y = getRandomNumber(0, DEFAULT_MAX_Y);  // Random Y position within game area
@@ -38,7 +40,7 @@ void Zombie::generate_clear_the_area(int zombies, std::list<Zombie*>& list) {
         list.push_back(get_random_zombie(0));
     }
     for (int i = 0; i < zombies * ((100 - PERCENT_OF_GUARANTEED_COMMON_ZOMBIES)/100); i++) {
-        list.push_back(get_random_zombie(1));
+        list.push_back(get_random_zombie(-1));
     }
 }
 

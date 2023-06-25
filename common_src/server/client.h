@@ -36,11 +36,13 @@ private:
     std::string uuid; // uuid of the client
     int joined_game; // unique id of the game this client joined
     int game_mode;
+    std::atomic_bool dead;
 
 public:
     explicit Client(Socket&& socket,
     ServerProtocol& protocol,
     GameHandler &game_handler);
+    ~Client();
     /**
      * Inicia los threads para recibir y enviar mensajes 
     */

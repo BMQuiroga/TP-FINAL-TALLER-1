@@ -15,17 +15,28 @@ Client::Client(
     joined_game(-1),
     name(""),
     uuid(get_uuid()),
+    dead(false),
     receiver(std::ref(skt), /*std::ref(responses),*/ protocol),
     sender(std::ref(skt), std::ref(responses), protocol)
 {
     receiver.register_callback([this](ProtocolRequest &message) {
-        handle_request(message);
+        try {
+            handle_request(message);
+        } catch(std::runtime_error e) {
+            kill();
+        }
     });
 }
 
+Client::~Client() {
+    kill();
+}
+
 void Client::handle_request(ProtocolRequest &message) {
+    if (dead)
+        return;
     if (joined_game >= 0) {
-        game_handler.get_game(joined_game).push_event(message, name, weapon_code, std::ref(responses));
+        game_handler.get_game(joined_game)->push_event(message, name, weapon_code, std::ref(responses));
         if (message.cmd < 0) {
             kill();
         }
@@ -40,10 +51,10 @@ void Client::handle_request(ProtocolRequest &message) {
             ProtocolResponse response;
             response.content_type = CREATE;
             GameReference create_req = serializer.deserialize_game_reference(message.content);
-            Game &game = game_handler.create_new_game(create_req, responses);
-            game.start();
-            game_handler.join_game(game.get_id(), name, weapon_code, responses);
-            joined_game = game.get_id();
+            Game *game = game_handler.create_new_game(create_req, responses);
+            game->start();
+            game_handler.join_game(game->get_id(), name, weapon_code, responses);
+            joined_game = game->get_id();
             resp.game_code = joined_game;
             resp.succeeded = JOIN_SUCCESS;
             response.content = serializer.serialize(resp);
@@ -52,7 +63,7 @@ void Client::handle_request(ProtocolRequest &message) {
         }
         if (message.cmd == LIST) {
             LobbyStateResponse resp;
-            resp.games = game_handler.get_games().get_refs();
+            resp.games = game_handler.get_refs();
             ProtocolResponse response;
             response.content_type = LOBBY_STATE;
             response.content = serializer.serialize(resp);
@@ -99,14 +110,17 @@ void Client::join()
 
 bool Client::is_dead()
 {
-    return receiver.is_dead() || sender.is_dead();
+    return dead;
 }
 
 void Client::kill()
 {
-    skt.shutdown(0);
-    skt.close();
-    receiver.kill();
-    sender.kill();
-    responses.close();
+    if (!dead) {
+        skt.shutdown(SHUT_RDWR);
+        skt.close();
+        receiver.kill();
+        sender.kill();
+        responses.close();
+        dead = true;
+    }
 }

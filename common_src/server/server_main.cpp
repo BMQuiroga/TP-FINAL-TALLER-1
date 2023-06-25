@@ -24,7 +24,8 @@ int main(int argc, char *argv[]) {
     try {
         accepter.start();
         while (std::cin.get() != 'q') continue;
-        sk.shutdown(0);
+        std::cout << "Closing server..." << std::endl;
+        sk.shutdown(SHUT_RD);
         sk.close();
         accepter.join();
         ret = 0;
@@ -34,11 +35,15 @@ int main(int argc, char *argv[]) {
             << "Something went wrong and an exception was caught: "
             << err.what()
             << "\n";
+        sk.shutdown(SHUT_RD);
         sk.close();
         accepter.join();
         return -1;
     } catch (...) {
         std::cerr << "Something went wrong and an unknown exception was caught.\n";
+        sk.shutdown(SHUT_RD);
+        sk.close();
+        accepter.join();
         return -1;
     }
 }

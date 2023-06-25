@@ -47,20 +47,9 @@ std::string filepath = CONFIG_BASE_PATH "/server/config.yaml"
 
 # Features (2/5)
 Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
-## Jugador
-- [x] Munición infinita
-- [x] Tiempo de recarga 
-- [ ] **(P0)** Todos salvo P90 pueden lanzar granadas explosivas y de humo
-
 
 ## Granadas
 - [ ] **(P0)** Daña a jugadores aliados también
-- [ ] **(P2)** humo: no producen daño. Los infectados quedan aturdidos y dejan de correr y saltar, siguen caminando
-
-## Bombardeo aereo
-- [ ] **(P2)** Solo P90 puede invocarlo
-- [ ] **(P2)** caen granadas por todo el escenario salvo la zona cercana al jugador
-- [ ] **(P2)** tiempo de espera entre bombardeos mayor
 
 ## Vida
 - [x] Los jugadores tienen vida.
