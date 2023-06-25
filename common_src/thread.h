@@ -16,7 +16,9 @@ class Thread {
         }
 
         void join() {
-            thread.join();
+            if (thread.joinable()) {
+                thread.join();
+            }
         }
 
         void main() {

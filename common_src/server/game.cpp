@@ -26,6 +26,11 @@ Game::Game(int id, const std::string& name) :
     loop(events) {
 }
 
+Game::~Game() {
+    loop.close();
+    loop.join();
+}
+
 GameReference Game::make_ref() {
     GameReference ref(id, name, players.size());
     return ref;
@@ -44,9 +49,20 @@ void Game::push_event(
 Game::Game(Game &&other) : 
     events(std::move(other.events)), 
     loop(events, other.number_players), 
-    players(other.players), 
+    players(other.players),
     name(other.name) {
     id = other.id;
+}
+
+Game& Game::operator=(Game &&other) {
+    if (this == &other) {
+        return *this;
+    }
+    events = std::move(other.events);
+    players = std::move(other.players);
+    name = other.name;
+    id = other.id;
+    return *this;
 }
 
 void Game::start() {

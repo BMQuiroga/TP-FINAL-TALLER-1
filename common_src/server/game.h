@@ -112,6 +112,24 @@ class GameLoop : public Thread {
         }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
 
+    void close() {
+        if (state != ENDED) {
+            state = ENDED;
+            events.close();
+            players.clear();
+            bullets.clear();
+            zombies.clear();
+            grenades.clear();
+            vomit.clear();
+            message_queues.clear();
+            physics->release();
+        }
+    }
+    
+    ~GameLoop() {
+        close();
+    }
+
     GameState get_state() {
         return state;
     }
@@ -137,7 +155,7 @@ class GameLoop : public Thread {
     }
 
     //une al player a la partida
-    int join(GameEvent &event) {
+    int join_game(GameEvent &event) {
         if (state == CREATED && players.size() < number_players) {
             players.push_back(PlayerState(event.player_name, players.size() + 1, event.weapon_code));
             message_queues.push_back(*event.player_messages);
@@ -299,13 +317,13 @@ class GameLoop : public Thread {
     }
 
     void run() override {
-        while (state != STARTED) {
+        while (state == CREATED) {
             GameEvent event;
             int n_events = 0;
             while (events.try_pop(event) && n_events < EVENTS_PER_LOOP) {
                 n_events++;
                 if (event.req.cmd == JOIN) {
-                    int code = join(event);
+                    int code = join_game(event);
                     if (code != FAILURE && players.size() == number_players) {
                         state = STARTED;
                         push_game_lobby_state(0);
@@ -320,7 +338,7 @@ class GameLoop : public Thread {
         int delayMilliseconds = static_cast<int>(1000.0 / GAME_TICK_RATE);
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
-        while (state != ENDED) {
+        while (state == STARTED) {
             game_ticks++;
             int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
             auto startTime = std::chrono::high_resolution_clock::now();
@@ -399,7 +417,9 @@ class Game {
     public:
         explicit Game(int id, const std::string& name);
         explicit Game(int id, const GameReference& game_ref);
+        ~Game();
         Game(Game&&);
+        Game& operator=(Game&&);
 
         GameReference make_ref();
 
