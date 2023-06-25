@@ -74,7 +74,7 @@ void MainWindow::showLobbyWidget() {
     currentWidget->show();
     QObject::connect(currentWidget, SIGNAL(windowClosed()), this, SLOT(receiveClosedSignal()));
     QObject::connect(this, SIGNAL(deactivateWidget()), currentWidget, SLOT(deactivate()));
-    QObject::connect(currentWidget, SIGNAL(inputPlayerInfoEntered(QString, int)), this, SLOT(receivePlayerInfo(QString, int)));
+    QObject::connect(currentWidget, SIGNAL(inputPlayerInfoEntered(QString, int, int)), this, SLOT(receivePlayerInfo(QString, int, int)));
 }
 
 void MainWindow::showGameOptionsWidget() {
@@ -93,12 +93,12 @@ void MainWindow::showGameOptionsWidget() {
     QObject::connect(currentWidget, SIGNAL(createGameOptionPicked()), this, SLOT(startCreateGameOption()));
 }
 
-void MainWindow::receivePlayerInfo(const QString& text, int number) {
+void MainWindow::receivePlayerInfo(const QString& text, int number, int game_mode) {
     // Handle the received input text
     qDebug() << "Received input text: " << text;
     showGameOptionsWidget();
     player_name = text.toStdString();
-    LobbyCommand command(INPUTNAME, player_name, number);
+    LobbyCommand command(INPUTNAME, player_name, number, game_mode);
     q.push(command);
 }
 

@@ -257,6 +257,7 @@ NewPlayerRequest Serializer::deserialize_input_name(const std::vector<int8_t> &c
     int offset = 0, size = content.size();
     offset += copy_string(data+offset, resp.name);
     offset += copy_number(data+offset, &resp.weapon_code);
+    offset += copy_number(data+offset, &resp.game_mode);
     return resp;
 }
 

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <mutex>
+#include <algorithm>
 
 template<typename T>
 class ProtectedVector {
@@ -18,6 +19,11 @@ class ProtectedVector {
     ProtectedVector() = default;
     ProtectedVector(ProtectedVector<T> &&other) : vec(other.vec) {}
 
+    void push_back(T&& value) {
+        std::lock_guard<std::mutex> lock(mtx);
+        vec.push_back(value);
+    }
+    
     void push_back(const T& value) {
         std::lock_guard<std::mutex> lock(mtx);
         vec.push_back(value);
@@ -41,6 +47,11 @@ class ProtectedVector {
     bool empty() const {
         std::lock_guard<std::mutex> lock(mtx);
         return vec.empty();
+    }
+
+    void clear() {
+        std::lock_guard<std::mutex> lock(mtx);
+        vec.clear();
     }
     
     template<typename Predicate>

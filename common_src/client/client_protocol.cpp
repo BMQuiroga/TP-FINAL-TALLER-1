@@ -56,6 +56,7 @@ void CProtocol::send_lobby_command(
     } else if (command.name == INPUTNAME) {
         serializer.push_string(req.content, command.parameter);
         serializer.push_number(req.content, command.parameter2);
+        serializer.push_number(req.content, command.parameter3);
     } else if (command.name == CREATEGAME) {
         ref.id = -1;
         ref.name = command.parameter;
