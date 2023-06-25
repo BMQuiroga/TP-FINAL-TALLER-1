@@ -46,6 +46,11 @@ class Queue {
         closed(other.closed) {
             other.close();
         }
+        Queue<T>& operator=(Queue<T> &&other) {
+            q = std::move(other.q);
+            closed = other.closed;
+            return *this;
+        }
 
 
         bool try_push(T const& val) {
