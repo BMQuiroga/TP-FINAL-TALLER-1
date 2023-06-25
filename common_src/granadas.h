@@ -29,6 +29,8 @@ class Grenade : public GameEntity {
     void attack(GameEntity * other) override;
 
     bool is_dead();
+
+    void take_damage(uint8_t) {};
 };
 
 #endif

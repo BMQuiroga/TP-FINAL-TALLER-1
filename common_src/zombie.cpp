@@ -65,6 +65,7 @@ void Zombie::on_collission_detected(GameEntity *other) {
         //std::cout << "boomboom" << std::endl;
         player->take_damage(damage);
     }*/
+    std::cout << "zombie ocd" << std::endl;
     attack(other);
 }
 
@@ -73,6 +74,7 @@ void Zombie::set_id(int new_id) {
 }
 
 void Zombie::take_damage(uint8_t damage) {
+    std::cout << "ZOMBIE TD" << std::endl;
     if (damage > health) {
         health = 0;
         state = DEAD;
@@ -174,6 +176,7 @@ CommonZombie::CommonZombie(
 }
 
 void Zombie::attack(GameEntity *other) {
+    std::cout << "ZOMBIE ATTACK" << std::endl;
     if (this->health > 0) {
         state = ATTACKING;
         PlayerState *player = (PlayerState*)other;

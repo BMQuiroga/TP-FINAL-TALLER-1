@@ -26,7 +26,7 @@
 #define MAX_PLAYERS 1
 #define DEFAULT_MODE 1
 #define WAIT_TIME_START_GAME 10000
-#define CTA_NUMBER_OF_ZOMBIES 30
+#define CTA_NUMBER_OF_ZOMBIES 2
 
 //playerstate.h
 #define RESPAWN_TIME 100

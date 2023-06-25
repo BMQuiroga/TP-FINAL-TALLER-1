@@ -40,6 +40,7 @@ PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {
 
 void PlayerState::on_collission_detected(GameEntity *other) {
     //other->attack(this);
+    std::cout << "player ocd" << std::endl;
 }
 
 std::string PlayerState::get_name() {
@@ -47,7 +48,7 @@ std::string PlayerState::get_name() {
 }
 
 void PlayerState::take_damage(uint8_t damage) {
-    std::cout << "baambaam" << std::endl;
+    std::cout << "PLAYER TD" << std::endl;
     if (damage > hit_points) {
         hit_points = 0;
         //respawn_time = RESPAWN_TIME;
