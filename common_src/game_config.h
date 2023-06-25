@@ -77,7 +77,6 @@
 
 //zombie spawn
 #define SPAWNER_SAFE_AREA_X 250
-#define PERCENT_OF_GUARANTEED_COMMON_ZOMBIES 30
 
 //zombie calculate_next_movement code;
 #define CODE_NULL 0

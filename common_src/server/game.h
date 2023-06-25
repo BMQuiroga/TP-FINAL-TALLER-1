@@ -343,13 +343,13 @@ class GameLoop : public Thread {
             }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_TIME_START_GAME));
+        if (game_mode == GM_CTA)
+            Zombie::generate_clear_the_area(CTA_NUMBER_OF_ZOMBIES,zombies);
         
         int delayMilliseconds = static_cast<int>(1000.0 / GAME_TICK_RATE);
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
         while (state == STARTED) {
-            if (game_ticks == 0 && game_mode == GM_CTA)
-                Zombie::generate_clear_the_area(CTA_NUMBER_OF_ZOMBIES,zombies);
             game_ticks++;
             int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
             auto startTime = std::chrono::high_resolution_clock::now();

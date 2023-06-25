@@ -36,12 +36,13 @@ Zombie* Zombie::get_random_zombie(int secure) {
 }
 
 void Zombie::generate_clear_the_area(int zombies, std::list<Zombie*>& list) {
-    for (int i = 0; i < zombies * (PERCENT_OF_GUARANTEED_COMMON_ZOMBIES/100); i++) {
+    for (int i = 0; i < (zombies/2); i++) {
         list.push_back(get_random_zombie(0));
     }
-    for (int i = 0; i < zombies * ((100 - PERCENT_OF_GUARANTEED_COMMON_ZOMBIES)/100); i++) {
+    for (int i = 0; i < (zombies/2); i++) {
         list.push_back(get_random_zombie(-1));
     }
+    std::cout << "GENERATED CLEAR THE AREA WITH " << zombies << " zombies, " << (zombies/2) << " commond and " << (zombies/2)<< " random" << std::endl;
 }
 
 void Zombie::move() {
