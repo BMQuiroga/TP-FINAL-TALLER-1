@@ -36,12 +36,14 @@ class Zombie : public GameEntity {
     uint8_t movement_type;
     uint8_t show_death_timer;
     int seeking_distance;
-    bool has_target_set{false};
-    GameEntity *target;
-    Vector2D target_position{VEC2_ZERO};
+    uint8_t smoked_time;
+    //bool has_target_set{false};
+    //GameEntity *target;
+    //Vector2D target_position{VEC2_ZERO};
 
   public:
     static Zombie* get_random_zombie(int secure);
+    static void generate_clear_the_area(int number_of_zombies, std::list<Zombie*>& list);
     Zombie(
         const std::string &name,
         Vector2D position,

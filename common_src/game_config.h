@@ -68,6 +68,10 @@
 #define DEFAULT_MAX_Y 145
 #define EVENTS_PER_LOOP 20
 
+//zombie spawn
+#define SPAWNER_SAFE_AREA_X 250
+#define PERCENT_OF_GUARANTEED_COMMON_ZOMBIES 30
+
 //zombie calculate_next_movement code;
 #define CODE_NULL 0
 #define CODE_VENOM_PROJECTILE 3
@@ -87,6 +91,7 @@
 #define ZOMBIE_DAMAGE 5
 #define ZOMBIE_SPEED 8
 #define ZOMBIE_TIMER 15
+#define ZOMBIE_IMPAIRED_TIME 25
 
 // Spear
 #define SPEAR_RECT_WIDTH 100
@@ -109,6 +114,8 @@
 //Witch
 #define WITCH_SEEKING_DISTANCE 800
 #define WITCH_HP 255
+#define WITCH_SCREAM_CHANCE 30
+#define WITCH_SPAWN_CHANCE 10
 
 //Jumper
 #define JUMPER_SEEKING_DISTANCE 500

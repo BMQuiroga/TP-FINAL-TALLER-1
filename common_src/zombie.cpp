@@ -15,8 +15,8 @@ Zombie* Zombie::get_random_zombie(int secure) {
     } else {
         q = secure;
     }
-    int x = getRandomNumber(0, 800);  // Random X position within game area
-    int y = getRandomNumber(0, 95);  // Random Y position within game area
+    int x = getRandomNumber(SPAWNER_SAFE_AREA_X, DEFAULT_MAX_X);  // Random X position within game area
+    int y = getRandomNumber(0, DEFAULT_MAX_Y);  // Random Y position within game area
     Vector2D position(x, y);
     if (q == 0) {
         return new CommonZombie("Common",position);
@@ -31,6 +31,15 @@ Zombie* Zombie::get_random_zombie(int secure) {
     }
     std::cout << "ERROR: GETRANDOMZOMBIE RETURNS NULL" << std::endl;
     return nullptr;
+}
+
+void Zombie::generate_clear_the_area(int zombies, std::list<Zombie*>& list) {
+    for (int i = 0; i < zombies * (PERCENT_OF_GUARANTEED_COMMON_ZOMBIES/100); i++) {
+        list.push_back(get_random_zombie(0))
+    }
+    for (int i = 0; i < zombies * ((100 - PERCENT_OF_GUARANTEED_COMMON_ZOMBIES)/100); i++) {
+        list.push_back(get_random_zombie())
+    }
 }
 
 void Zombie::move() {
@@ -177,7 +186,7 @@ bool Zombie::try_dissapear() {
 }
 
 void Zombie::process_smoke() {
-    
+    this->smoked_time = ZOMBIE_IMPAIRED_TIME;
 }
        
 
@@ -272,8 +281,14 @@ Witch::Witch(
 }
 
 int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
+    bool impaired = false;
     if (this->health == 0)
         return CODE_NULL;
+    if(this->smoked_time > 0) {
+        impaired = true;
+        smoked_time--;
+        speed = speed / 2;
+    }
     float closest_x = 0;
     float closest_y = 0;
     Vector2D this_pos = get_location();
@@ -297,19 +312,26 @@ int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
         set_direction(0,0);
     }   
     move();
+    if (impaired)
+        speed = speed * 2;
     return CODE_NULL;
 }
 
 int Witch::calculate_next_movement(std::vector<PlayerState>& players) {
     if (this->health == 0)
         return CODE_NULL;
+    if(this->smoked_time > 0) {
+        smoked_time--;
+        state = IDLE;
+        return CODE_NULL
+    }
     if (state == IDLE) {
-        int x = getRandomNumber(0,30);
+        int x = getRandomNumber(0,WITCH_SCREAM_CHANCE);
         if (x == 2) {
             state = SCREAMING;
         }
     } else if (state == SCREAMING) {
-        int x = getRandomNumber(0,10);
+        int x = getRandomNumber(0,WITCH_SPAWN_CHANCE);
         if (x == 2) {
             return CODE_WITCH_SPAWN;
         }
@@ -318,13 +340,16 @@ int Witch::calculate_next_movement(std::vector<PlayerState>& players) {
 }
 
 int Jumper::calculate_next_movement(std::vector<PlayerState>& players) {
+    if(this->smoked_time > 0) {
+        smoked_time--;
+    }
     if (this->health == 0)
         return CODE_NULL;
-    if (this->state == HURT && cooldown > 0) {
+    if (this->state == HURT && cooldown > 0 && this->smoked_time == 0) {
         cooldown--;
     } else if (this->state == HURT && cooldown == 0) {
         this->state = IDLE;
-    } else if (this->state == IDLE) {
+    } else if (this->state == IDLE && this->smoked_time == 0) {
         set_objetive(players);
     } else if (this->state == JUMPING) {
         if (jump()) { //termina el salto, entra en cooldown
@@ -378,6 +403,8 @@ bool Jumper::jump() {
 }
 
 int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->smoked_time > 0)
+        smoked_time--;
     if (this->health == 0)
         return CODE_NULL;
     if (cooldown > 0)
@@ -402,8 +429,8 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
         set_direction(0,direction_y);
         if (next_pos_x > 0)
             facing_direction = LEFT;//como no se mueve en el eje y, siempre estaria mirando hacia adelante, esto es un fix
-        if (abs(next_pos_y) < 20) {
-            if (cooldown == 0) {
+        if (abs(next_pos_y) < VENOM_PROJECTILE_SIZE) {
+            if (cooldown == 0 && smoked_time == 0) {
                 state = THROWING_GRENADE;
                 cooldown = VENOM_PROJECTILE_COOLDOWN;
                 return CODE_VENOM_PROJECTILE;
