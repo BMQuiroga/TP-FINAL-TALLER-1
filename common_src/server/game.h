@@ -118,6 +118,9 @@ class GameLoop : public Thread {
             events.close();
             players.clear();
             bullets.clear();
+            for (Zombie *z : zombies) {
+                delete z;
+            }
             zombies.clear();
             grenades.clear();
             vomit.clear();

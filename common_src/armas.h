@@ -39,6 +39,8 @@ class Arma {
     //constructor
     Arma(uint8_t c, uint8_t dr, uint8_t dd);
 
+    ~Arma();
+
     //manda un PSR de recarga para que el cliente haga el ruido
     static PlayerStateReference make_reload();
 

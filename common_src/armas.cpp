@@ -66,6 +66,13 @@ Arma::Arma(uint8_t c, uint8_t dr, uint8_t dd) {
     this->delay = 0;
 }
 
+Arma::~Arma() {
+    if (grenades) {
+        delete grenades;
+        grenades = nullptr;
+    }
+}
+
 void Arma1::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
     vec.push_back(Bullet(ARMA1_DAMAGE,ARMA1_BULLET_COUNT,direc,false,position,true));
 }
