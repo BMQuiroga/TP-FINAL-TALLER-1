@@ -35,7 +35,6 @@ class Arma {
     GrenadeHolder * grenades;
 
     public:
-    static Arma* get(int id);
     //constructor
     Arma(uint8_t c, uint8_t dr, uint8_t dd);
 
