@@ -71,6 +71,7 @@ class GameEntity {
     bool check_collision(GameEntity *other);
     virtual void attack(GameEntity *other) = 0;
     virtual void on_collission_detected(GameEntity *other) = 0;
+    virtual void take_damage(uint8_t dmg) {};
 };
 
 #endif

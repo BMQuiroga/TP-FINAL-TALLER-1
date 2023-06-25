@@ -92,5 +92,5 @@ void Grenade::attack(GameEntity * other) {
     if (smoke)
         z->process_smoke();
     else
-        z->take_damage(this->damage);
+        other->take_damage(this->damage);
 }

@@ -39,7 +39,7 @@ PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {
 }
 
 void PlayerState::on_collission_detected(GameEntity *other) {
-    other->attack(this);
+    //other->attack(this);
 }
 
 std::string PlayerState::get_name() {
