@@ -18,11 +18,13 @@ void ClientRenderer::render_floor() {
     );
 }
 
-void ClientRenderer::render_score(uint32_t b, uint32_t k, uint32_t t) {
-    std::cout << "RENDERSCORE: " << std::to_string(b) << " " << std::to_string(k) << " " << std::to_string(t) << std::endl;
-    /*std::string text_s = "Score: " + std::to_string((k*100) - t);
+void ClientRenderer::render_score() {
+    std::cout << "RENDERSCORE: " << std::to_string(s) << " " << std::to_string(k) << " " << std::to_string(t) << std::endl;
+    int score = (k*100);
+    score -= t;
+    std::string text_s = "Score: " + std::to_string(score);
     std::string text_k = "Kills: " + std::to_string(k);
-    std::string text_b = "Times Shot: " + std::to_string(b);
+    std::string text_b = "Times Shot: " + std::to_string(s);
     std::string text_t = "Time: " + std::to_string(t);
 
     Button button_s(text_s,SDL2pp::Rect(50,830,20*text_s.size(),40));
@@ -31,12 +33,12 @@ void ClientRenderer::render_score(uint32_t b, uint32_t k, uint32_t t) {
     Button button_t(text_t,SDL2pp::Rect(50,980,20*text_t.size(),40));
     
     SDL2pp::Color* white = assets->get_white_color();
-    //SDL2pp::Font font("../resources/Fonts/ARIAL.TTF", 30);
+    SDL2pp::Font* font = assets->get_default_font();
 
-    button_s.Render(this->renderer,white);
-    button_k.Render(this->renderer,white);
-    button_b.Render(this->renderer,white);
-    button_t.Render(this->renderer,white);*/
+    button_s.Render(this->renderer,white,font);
+    button_k.Render(this->renderer,white,font);
+    button_b.Render(this->renderer,white,font);
+    button_t.Render(this->renderer,white,font);
 }
 
 ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name) : 
@@ -103,8 +105,9 @@ void ClientRenderer::GameLoop() {
                     new_Model.frame = get_frame(new_Model);
                     frames_list->push_back(new_Model);
                 }
-                render_score(update.shots, update.kills, update.time);
-                //render_score(1,1,1);
+                this->s = update.shots;
+                this->k = update.kills;
+                this->t = update.time;
             } else if (new_update.content_type == LOBBY_STATE) {
                 // LobbyStateResponse update = serializer.deserialize(new_update.content);
             }
@@ -148,7 +151,8 @@ uint8_t ClientRenderer::get_frame(Image & im) {
 void ClientRenderer::render_all() {
     if (this->actual_frame != nullptr) {
         calculate_offset();
-        render_floor();;
+        render_floor();
+        render_score();
         for (auto const& it : *actual_frame) {
             //std::cout << "id:" << it.id << std::endl;
             if (it.id > 0 && it.id < 151) {
