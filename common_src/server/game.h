@@ -82,12 +82,13 @@ class GameLoop : public Thread {
     uint32_t kills;
     uint32_t shots;
     uint32_t game_ticks;
+    int game_mode;
     bool someone_reloaded;
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
-        Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS) : 
-        events(events), state{CREATED}, number_players(number_players) {
+        Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS, int game_mode) : 
+        events(events), state{CREATED}, number_players(number_players), game_mode(game_mode) {
             physics = PhysicsManager::get_instance();
             physics->set_layer_collision_mask(
                 CollisionLayer::Friendly,
