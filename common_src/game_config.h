@@ -137,20 +137,27 @@
 class GameConfig {
 public:
     static GameConfig* get_instance();
+    static void release();
 
     template <typename T>
     T get_value(const std::string& key) const {
         return config_[key].as<T>();
     }
+    template <typename T>
+    void set_value(const std::string& key, const T& value) {
+        config_[key] = value;
+    }
 
 private:
     static GameConfig *instance;
     GameConfig();
+    ~GameConfig();
 
     GameConfig(const GameConfig&) = delete;
     GameConfig& operator=(const GameConfig&) = delete;
 
-    void load_config();
+    void load();
+    void save();
 
     YAML::Node config_;
 };
