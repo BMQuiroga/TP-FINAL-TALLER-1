@@ -36,6 +36,9 @@
 
 #define FAILURE -1
 
+#define GM_SURVIVAL 2
+#define GM_CTA 1
+
 using namespace std::placeholders;
 
 enum GameState {
@@ -202,7 +205,9 @@ class GameLoop : public Thread {
         resp.kills = this->kills;
         resp.shots = this->shots;
         resp.time = this->game_ticks / GAME_TICK_RATE;
-        if (kills >= SCORE_TO_WIN) {
+
+
+        if (zombies.empty() && game_mode == GM_CTA) {//CTA termina cuando no hay mas zombies
             resp.players.push_back(make_victory());
             this->state = ENDED;
         } else if (is_everyone_dead()) {
@@ -343,6 +348,8 @@ class GameLoop : public Thread {
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
         while (state == STARTED) {
+            if (game_ticks == 0 && game_mode == GM_CTA)
+                Zombie::generate_clear_the_area(CTA_NUMBER_OF_ZOMBIES);
             game_ticks++;
             int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
             auto startTime = std::chrono::high_resolution_clock::now();
@@ -390,7 +397,8 @@ class GameLoop : public Thread {
             std::chrono::system_clock::now().time_since_epoch()).count();
             auto interval = current_time - game_started_time;
             if (interval % spawn_interval < 100 && interval > 0 && zombies.size() < MAX_ZOMBIES) {
-                spawn_enemy(-1);//cualquier zombie
+                if (game_mode == GM_SURVIVAL)
+                    spawn_enemy(-1);//cualquier zombie
             }
 
             if (!zombies.empty()) {
