@@ -96,6 +96,9 @@ class GameLoop : public Thread {
                 CollisionLayer::FriendlyProjectile,
                 CollisionFlag::Hostile);
             physics->set_layer_collision_mask(
+                CollisionLayer::FriendlyExplosive,
+                CollisionFlag::Friendly | CollisionFlag::Hostile);
+            physics->set_layer_collision_mask(
                 CollisionLayer::Hostile,
                 CollisionFlag::Friendly | CollisionFlag::FriendlyProjectile);
             physics->set_layer_collision_mask(
@@ -108,6 +111,10 @@ class GameLoop : public Thread {
             someone_reloaded = false;
         }
         // on_entity_moved(std::bind(&GameLoop::_on_entity_moved, this, _1, _2, _3)) {}
+
+    GameState get_state() {
+        return state;
+    }
 
     PlayerStateReference make_defeat() {
         PlayerStateReference a;
@@ -411,6 +418,7 @@ class Game {
          * Devuelve el id de una partida
         */
         int get_id() const;
+        GameState get_state();
         bool operator==(const Game &Game) const;
         bool operator==(const int &code) const;
 };

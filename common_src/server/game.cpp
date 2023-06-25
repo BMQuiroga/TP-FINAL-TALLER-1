@@ -65,6 +65,10 @@ int Game::get_id() const {
     return this->id;
 }
 
+GameState Game::get_state() {
+    return loop.get_state();
+}
+
 bool Game::operator==(const Game &Game) const {
     return id == Game.get_id();
 }
