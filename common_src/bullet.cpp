@@ -17,6 +17,8 @@ Bullet::Bullet(uint8_t dmg, uint8_t bc, entity_direction direc, bool piercing, V
     this->bullet_count = bc;
     this->state = 0;
     this->falloff = falloff;
+    this->rect_height = BULLET_HITBOX;
+    this->rect_width = BULLET_HITBOX;
     std::cout << "MY HITBOX IS: " << this->rect_height << " x " << this->rect_width << std::endl;
 }
 
@@ -91,10 +93,12 @@ Vomit_Projectile::Vomit_Projectile(Vector2D position, entity_direction direc) :
         DEFAULT_MAX_Y,
         CollisionLayer::HostileProjectile
     ) {
+    GameConfig *config = GameConfig::get_instance();
     this->facing_direction = direc;
     state = 0;
-    this->rect_width = VENOM_PROJECTILE_SIZE;
-    this->rect_height = VENOM_PROJECTILE_SIZE;
+    this->rect_width = config->get_value<uint16_t>("VENOM_PROJECTILE_SIZE");
+    this->rect_height = config->get_value<uint16_t>("VENOM_PROJECTILE_SIZE");
+    position.y -= 80;//para que dispare desde el pecho
     this->position = position;
     dead = false;
 }
@@ -105,8 +109,9 @@ void Vomit_Projectile::on_collission_detected(GameEntity *other) {
 }
 
 void Vomit_Projectile::attack(GameEntity *other) {
+    GameConfig *config = GameConfig::get_instance();
     PlayerState *z = (PlayerState*)other;
-    z->take_damage(VENOM_PROJECTILE_DAMAGE);
+    z->take_damage(config->get_value<uint8_t>("VENOM_PROJECTILE_DAMAGE"));
     dead = true;
 }
 
@@ -115,10 +120,11 @@ bool Vomit_Projectile::is_dead() {
 }
 
 void Vomit_Projectile::move() {
+    GameConfig *config = GameConfig::get_instance();
     if (this->facing_direction == LEFT) {
-        position.x -= VENOM_PROJECTILE_SPEED;
+        position.x -= config->get_value<uint8_t>("VENOM_PROJECTILE_SPEED");
     } else {
-        position.x += VENOM_PROJECTILE_SPEED;
+        position.x += config->get_value<uint8_t>("VENOM_PROJECTILE_SPEED");
     }
 }
 

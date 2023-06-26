@@ -74,6 +74,7 @@ Arma::~Arma() {
 }
 
 void Arma1::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
+    //position.y -= 80;//para que dispare desde el pecho
     vec.push_back(Bullet(ARMA1_DAMAGE,ARMA1_BULLET_COUNT,direc,false,position,true));
 }
 
@@ -82,6 +83,7 @@ Arma1::Arma1() : Arma(ARMA1_MAGAZINE,ARMA1_RELOAD_DELAY,ARMA1_SHOOT_DELAY) {
 }
 
 void Arma2::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
+    //position.y -= 80;//para que dispare desde el pecho
     vec.push_back(Bullet(ARMA2_DAMAGE,ARMA2_BULLET_COUNT,direc,false,position));
 }
 
@@ -90,6 +92,7 @@ Arma2::Arma2() : Arma(ARMA2_MAGAZINE,ARMA2_RELOAD_DELAY,ARMA2_SHOOT_DELAY) {
 }
 
 void Arma3::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
+    //position.y -= 80;//para que dispare desde el pecho
     vec.push_back(Bullet(ARMA3_DAMAGE,ARMA3_BULLET_COUNT,direc,true,position));
 }
 

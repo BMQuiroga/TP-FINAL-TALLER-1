@@ -158,7 +158,7 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bull
     } else if (cmd == SHOOT) {
         if (this->arma->try_shoot()) {
             this->state = ATTACKING;
-            this->arma->create_bullet(position -64, facing_direction, vec);
+            this->arma->create_bullet(position, facing_direction, vec);
             bullets++;
             //el -64 es para que salga la bala del medio del modelo
         }

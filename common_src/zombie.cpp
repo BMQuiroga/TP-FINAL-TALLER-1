@@ -161,20 +161,6 @@ ZombieStateReference Zombie::make_ref()
     return ref;
 }
 
-CommonZombie::CommonZombie(
-    const std::string &name,
-    Vector2D position,
-    int16_t max_x, 
-    int16_t max_y
-) : Zombie(name, position, max_x, max_y) {
-    id = 51;
-    damage = ZOMBIE_DAMAGE;
-    zombie_type = ZOMBIE;
-    attack_type = ZOMBIE_BITE;
-    movement_type = ZOMBIE_WALK;
-    health = ZOMBIE_HP;
-}
-
 void Zombie::attack(GameEntity *other) {
     std::cout << "ZOMBIE ATTACK" << std::endl;
     if (this->health > 0) {
@@ -193,7 +179,8 @@ bool Zombie::try_dissapear() {
 }
 
 void Zombie::process_smoke() {
-    this->smoked_time = ZOMBIE_IMPAIRED_TIME;
+    GameConfig *config = GameConfig::get_instance();
+    this->smoked_time =  config->get_value<int>("ZOMBIE_IMPAIRED_TIME");
 }
        
 
@@ -202,6 +189,21 @@ CommonZombie::CommonZombie(CommonZombie&& other)
 }
 
 CommonZombie::~CommonZombie() {}
+
+CommonZombie::CommonZombie(
+    const std::string &name,
+    Vector2D position,
+    int16_t max_x, 
+    int16_t max_y
+) : Zombie(name, position, max_x, max_y) {
+    GameConfig *config = GameConfig::get_instance();
+    id = 51;
+    damage = config->get_value<int>("ZOMBIE_DAMAGE");;
+    zombie_type = ZOMBIE;
+    attack_type = ZOMBIE_BITE;
+    movement_type = ZOMBIE_WALK;
+    health = ZOMBIE_HP;
+}
 
 Zombie::Zombie(
     const std::string &name,
@@ -213,10 +215,11 @@ Zombie::Zombie(
     position,
     max_x, max_y,
     CollisionLayer::Hostile) {
-    rect_width = ZOMBIE_RECT_HEIGHT;
-    rect_height = ZOMBIE_RECT_HEIGHT;
-    speed = ZOMBIE_SPEED;
-    seeking_distance = ZOMBIE_SEEKING_DISTANCE;
+    GameConfig *config = GameConfig::get_instance();
+    rect_width = config->get_value<int>("ZOMBIE_RECT_WIDTH");
+    rect_height = config->get_value<int>("ZOMBIE_RECT_HEIGHT");
+    speed = config->get_value<int>("ZOMBIE_SPEED");
+    seeking_distance = config->get_value<int>("ZOMBIE_SEEKING_DISTANCE");
     show_death_timer = ZOMBIE_TIMER;
 }
 
@@ -226,14 +229,15 @@ Spear::Spear(
     int16_t max_x, 
     int16_t max_y
 ) : Zombie(name, position, max_x, max_y) {
+    GameConfig *config = GameConfig::get_instance();
     id = 53;
-    damage = SPEAR_DAMAGE;
+    damage = config->get_value<int>("SPEAR_DAMAGE");
     zombie_type = SPEAR;
     attack_type = ZOMBIE_ATTACK1;
     movement_type = ZOMBIE_WALK;
-    rect_width = SPEAR_RECT_WIDTH;
-    health = SPEAR_HP;
-    speed = SPEAR_SPEED;
+    health = config->get_value<int>("SPEAR_HP");
+    speed = config->get_value<int>("SPEAR_SPEED");
+    seeking_distance = config->get_value<int>("SPEAR_SEEKING_DISTANCE");
 }
 
 Jumper::Jumper(
@@ -242,14 +246,15 @@ Jumper::Jumper(
     int16_t max_x, 
     int16_t max_y
 ) : Zombie(name, position, max_x, max_y), objetive(-1,-1) {
+    GameConfig *config = GameConfig::get_instance();
     id = 52;
-    damage = JUMPER_DAMAGE;
+    damage = config->get_value<int>("JUMPER_DAMAGE");
     zombie_type = JUMPER;
     attack_type = ZOMBIE_JUMP;
     movement_type = ZOMBIE_WALK;
-    seeking_distance = JUMPER_SEEKING_DISTANCE;
-    health = JUMPER_HP;
-    speed = JUMPER_SPEED;
+    seeking_distance = config->get_value<int>("JUMPER_SEEKING_DISTANCE");
+    health = config->get_value<int>("JUMPER_HP");
+    speed = config->get_value<int>("JUMPER_SPEED");
     cooldown = 0;
 }
 
@@ -259,15 +264,16 @@ Venom::Venom(
     int16_t max_x, 
     int16_t max_y
 ) : Zombie(name, position, max_x, max_y) {
+    GameConfig *config = GameConfig::get_instance();
     id = 54;
-    damage = VENOM_DAMAGE;//daño melee
+    damage = config->get_value<uint8_t>("VENOM_DAMAGE");//daño melee
     zombie_type = VENOM;
     attack_type = ZOMBIE_ATTACK2;
     movement_type = ZOMBIE_WALK;
-    seeking_distance = VENOM_SEEKING_DISTANCE;
-    rect_width = VENOM_RECT_WIDTH;
-    health = VENOM_HP;
-    speed = VENOM_SPEED;
+    seeking_distance = config->get_value<int>("VENOM_SEEKING_DISTANCE");
+    rect_width = config->get_value<uint16_t>("VENOM_RECT_WIDTH");
+    health = config->get_value<uint8_t>("VENOM_HP");
+    speed = config->get_value<uint16_t>("VENOM_SPEED");
     cooldown = 0;
 }
 
@@ -277,13 +283,14 @@ Witch::Witch(
     int16_t max_x, 
     int16_t max_y
 ) : Zombie(name, position, max_x, max_y) {
+    GameConfig *config = GameConfig::get_instance();
     id = 55;
     damage = 0;
     zombie_type = WITCH;
     attack_type = ZOMBIE_SCREAM;
     movement_type = ZOMBIE_WALK;
-    seeking_distance = WITCH_SEEKING_DISTANCE;
-    health = WITCH_HP;
+    seeking_distance = config->get_value<int>("WITCH_SEEKING_DISTANCE");
+    health = config->get_value<int>("WITCH_HP");
     speed = 0;
 }
 
@@ -332,13 +339,14 @@ int Witch::calculate_next_movement(std::vector<PlayerState>& players) {
         state = IDLE;
         return CODE_NULL;
     }
+    GameConfig *config = GameConfig::get_instance();
     if (state == IDLE) {
-        int x = getRandomNumber(0,WITCH_SCREAM_CHANCE);
+        int x = getRandomNumber(0,config->get_value<int>("WITCH_SCREAM_CHANCE"));
         if (x == 2) {
             state = SCREAMING;
         }
     } else if (state == SCREAMING) {
-        int x = getRandomNumber(0,WITCH_SPAWN_CHANCE);
+        int x = getRandomNumber(0,config->get_value<int>("WITCH_SPAWN_CHANCE"));
         if (x == 2) {
             return CODE_WITCH_SPAWN;
         }
@@ -360,8 +368,9 @@ int Jumper::calculate_next_movement(std::vector<PlayerState>& players) {
         set_objetive(players);
     } else if (this->state == JUMPING) {
         if (jump()) { //termina el salto, entra en cooldown
+            GameConfig *config = GameConfig::get_instance();
             this->state = HURT;
-            this->cooldown = 20;
+            this->cooldown = config->get_value<int>("JUMPER_COOLDOWN");;
             this->objetive.x = -1;
             this->objetive.y = -1;
         }
@@ -429,6 +438,7 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
             closest_y = vector.y;
         }
     }
+    GameConfig *config = GameConfig::get_instance();
     if (distance < seeking_distance) {
         float next_pos_x = this_pos.x - closest_x;
         float next_pos_y = this_pos.y - closest_y;
@@ -436,10 +446,10 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
         set_direction(0,direction_y);
         if (next_pos_x > 0)
             facing_direction = LEFT;//como no se mueve en el eje y, siempre estaria mirando hacia adelante, esto es un fix
-        if (abs(next_pos_y) < VENOM_PROJECTILE_SIZE) {
+        if (abs(next_pos_y) < config->get_value<int>("VENOM_PROJECTILE_SIZE")) {
             if (cooldown == 0 && smoked_time == 0) {
                 state = THROWING_GRENADE;
-                cooldown = VENOM_PROJECTILE_COOLDOWN;
+                cooldown = config->get_value<int>("VENOM_PROJECTILE_COOLDOWN");
                 return CODE_VENOM_PROJECTILE;
             } else {
                 return CODE_NULL;
