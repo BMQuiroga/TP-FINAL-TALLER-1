@@ -36,7 +36,7 @@ class Zombie : public GameEntity {
     uint8_t movement_type;
     uint8_t show_death_timer;
     int seeking_distance;
-    uint8_t smoked_time;
+    uint8_t smoked_time{0};
     //bool has_target_set{false};
     //GameEntity *target;
     //Vector2D target_position{VEC2_ZERO};
