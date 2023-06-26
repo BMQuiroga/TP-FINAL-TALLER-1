@@ -75,7 +75,7 @@ class ClientRenderer {
     void render_floor();
 
     //renderiza las balas, kills y tiempo
-    void render_score();
+    void render_score(SDL2pp::Color*);
 
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name);

@@ -18,7 +18,7 @@ void ClientRenderer::render_floor() {
     );
 }
 
-void ClientRenderer::render_score() {
+void ClientRenderer::render_score(SDL2pp::Color *white/*Puede no ser blanco*/) {
     std::cout << "RENDERSCORE: " << std::to_string(s) << " " << std::to_string(k) << " " << std::to_string(t) << std::endl;
     int score = (k*100);
     score -= t;
@@ -32,7 +32,6 @@ void ClientRenderer::render_score() {
     Button button_b(text_b,SDL2pp::Rect(50,930,20*text_b.size(),40));
     Button button_t(text_t,SDL2pp::Rect(50,980,20*text_t.size(),40));
     
-    SDL2pp::Color* white = assets->get_white_color();
     SDL2pp::Font* font = assets->get_default_font();
 
     button_s.Render(this->renderer,white,font);
@@ -152,7 +151,7 @@ void ClientRenderer::render_all() {
     if (this->actual_frame != nullptr) {
         calculate_offset();
         render_floor();
-        render_score();
+        render_score(assets->get_white_color());
         for (auto const& it : *actual_frame) {
             //std::cout << "id:" << it.id << std::endl;
             if (it.id > 0 && it.id < 151) {
@@ -309,6 +308,7 @@ void ClientRenderer::DeathScreen() {
             SDL2pp::Rect(0, 0, 1920, 1080),
             SDL2pp::Point(0,0)
         );
+        render_score(assets->get_red_color());
         renderer.Present();
     }
 }
@@ -325,6 +325,7 @@ void ClientRenderer::VictoryScreen() {
             SDL2pp::Rect(0, 0, 1920, 1080),
             SDL2pp::Point(0,0)
         );
+        render_score(assets->get_default_color());
         renderer.Present();
     }
 }
