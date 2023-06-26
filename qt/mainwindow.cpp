@@ -62,7 +62,7 @@ void MainWindow::showCreateGame()
     currentWidget->show();
     QObject::connect(currentWidget, SIGNAL(windowClosed()), this, SLOT(receiveClosedSignal()));
     QObject::connect(this, SIGNAL(deactivateWidget()), currentWidget, SLOT(deactivate()));
-    QObject::connect(currentWidget, SIGNAL(inputNumberEntered(QString, int)), this, SLOT(receiveInputGame(QString, int)));
+    QObject::connect(currentWidget, SIGNAL(inputNumberEntered(QString, int, int)), this, SLOT(receiveInputGame(QString, int, int)));
     QObject::connect(this, SIGNAL(createdGameWithCode(int)), currentWidget, SLOT(receiveNewGameCreatedCode(int)));
 }
 
@@ -78,7 +78,7 @@ void MainWindow::showLobbyWidget() {
     currentWidget->show();
     QObject::connect(currentWidget, SIGNAL(windowClosed()), this, SLOT(receiveClosedSignal()));
     QObject::connect(this, SIGNAL(deactivateWidget()), currentWidget, SLOT(deactivate()));
-    QObject::connect(currentWidget, SIGNAL(inputPlayerInfoEntered(QString, int, int)), this, SLOT(receivePlayerInfo(QString, int, int)));
+    QObject::connect(currentWidget, SIGNAL(inputPlayerInfoEntered(QString, int)), this, SLOT(receivePlayerInfo(QString, int)));
 }
 
 void MainWindow::showGameOptionsWidget() {
@@ -97,19 +97,19 @@ void MainWindow::showGameOptionsWidget() {
     QObject::connect(currentWidget, SIGNAL(createGameOptionPicked()), this, SLOT(startCreateGameOption()));
 }
 
-void MainWindow::receivePlayerInfo(const QString& text, int number, int game_mode) {
+void MainWindow::receivePlayerInfo(const QString& text, int number) {
     // Handle the received input text
     qDebug() << "Received input text: " << text;
     showGameOptionsWidget();
     player_name = text.toStdString();
-    LobbyCommand command(INPUTNAME, player_name, number, game_mode);
+    LobbyCommand command(INPUTNAME, player_name, number);
     q.push(command);
 }
 
-void MainWindow::receiveInputGame(const QString& text, int number) {
+void MainWindow::receiveInputGame(const QString& text, int number, int game_mode) {
     // Handle the received input text
     qDebug() << "Received input number: " << text;
-    LobbyCommand command(CREATEGAME, text.toStdString(), number);
+    LobbyCommand command(CREATEGAME, text.toStdString(), number, game_mode);
     q.push(command);
     LobbyResponse result = q_responses.pop();
     LobbyGameStateResponse game_info = result.game_state;

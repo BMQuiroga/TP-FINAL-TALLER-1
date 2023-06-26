@@ -26,7 +26,9 @@ JoinGame::JoinGame(std::vector<GameReference> &games_list,
         QListWidgetItem *newItem = new QListWidgetItem;
         QString id = QString::number(g.id);
         QString name = QString::fromStdString(g.name);
-        QString text =  QString("%1: \"%2\" partida para %3 jugadores").arg(id, name, QString::number(g.players));
+        QString game_mode = g.game_mode == 1 ? QString("Clear the zone") : QString("Survival");
+        QString text =  QString("%1: \"%2\" partida para %3 jugadores. Modo de juego: %4").arg(
+            id, name, QString::number(g.players), game_mode);
         newItem->setText(text);
         listWidget->insertItem(row, newItem);
         row++;

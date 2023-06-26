@@ -16,7 +16,7 @@ public:
 public slots:
     void deactivate();
 signals:
-    void inputPlayerInfoEntered(const QString& text, int number, int game_mode);
+    void inputPlayerInfoEntered(const QString& text, int number);
     void windowClosed();
 private:
     void sendNewPlayerInfo();
@@ -25,7 +25,6 @@ private:
     bool is_active {true};
     QLineEdit* inputName;
     QSpinBox* playerType;
-    QSpinBox* gameMode;
 };
 
 #endif // LOBBY_H

@@ -165,6 +165,7 @@ std::vector<int8_t> Serializer::serialize(const GameReference &ref) {
     push_number(buf, ref.id);
     push_string(buf, ref.name);
     push_number(buf, ref.players);
+    push_number(buf, ref.game_mode);
     return buf;
 }
 
@@ -175,6 +176,7 @@ GameReference Serializer::deserialize_game_reference(const std::vector<int8_t> &
     offset += copy_number(data+offset, &ref.id);
     offset += copy_string(data+offset, ref.name);
     offset += copy_number(data+offset, &ref.players);
+    offset += copy_number(data+offset, &ref.game_mode);
     return ref;
 }
 

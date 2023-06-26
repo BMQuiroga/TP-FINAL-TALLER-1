@@ -16,12 +16,15 @@ NumberPlayers::NumberPlayers(QWidget *parent) : QWidget(parent)  {
 void NumberPlayers::setNumberOfPlayers() {
     QSpinBox* inputNumber = findChild<QSpinBox*>("inputNumber");
     inputGameName = findChild<QLineEdit*>("inputGameName");
+    gameMode = findChild<QSpinBox*>("gameMode");
     QString name = inputGameName->text();
     QLabel* labelOut = findChild<QLabel*>("gameNumberLabel");
     QString number = inputNumber->text();
+    QString game_mode = gameMode->text();
     QString created_message = QString("Partida creada para %1 jugadores").arg(number);
     labelOut->setText(created_message);
-    emit inputNumberEntered(name, std::stoi(number.toStdString()));
+    emit inputNumberEntered(name, 
+        std::stoi(number.toStdString()), std::stoi(game_mode.toStdString()));    
 }
 
 void NumberPlayers::connectEvents() {

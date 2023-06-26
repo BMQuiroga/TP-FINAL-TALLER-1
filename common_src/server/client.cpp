@@ -52,7 +52,7 @@ void Client::handle_request(ProtocolRequest &message)
             ProtocolResponse response;
             response.content_type = CREATE;
             GameReference create_req = serializer.deserialize_game_reference(message.content);
-            create_req.game_mode = game_mode;
+            game_mode = create_req.game_mode;
             Game *game = game_handler.create_new_game(create_req, responses);
             game->start();
             game_handler.join_game(game->get_id(), name, weapon_code, responses);
@@ -95,8 +95,6 @@ void Client::handle_request(ProtocolRequest &message)
             NewPlayerRequest new_player_req = serializer.deserialize_input_name(message.content);
             name = new_player_req.name;
             weapon_code = new_player_req.weapon_code;
-            game_mode = new_player_req.game_mode;
-            std::cout << "game mode is " << game_mode << std::endl;
         }
     }
 }
