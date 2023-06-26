@@ -93,7 +93,6 @@ struct CreateRequest {
 struct NewPlayerRequest {
     std::string name; // name of the player
     int weapon_code;
-    int game_mode;
 };
 
 struct JoinRequest {
