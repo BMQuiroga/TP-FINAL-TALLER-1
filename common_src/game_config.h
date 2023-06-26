@@ -15,6 +15,8 @@
 #define MIN_MAX_VOLUME 128
 #define GAME_VOLUME 10
 
+#define LAG_CONSTANT 4000
+
 #define RESOLUTION_X 1920
 
 //game.h

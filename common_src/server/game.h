@@ -342,7 +342,7 @@ class GameLoop : public Thread {
                 }
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_TIME_START_GAME));
+        std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_TIME_START_GAME + LAG_CONSTANT));
         if (game_mode == GM_CTA)
             Zombie::generate_clear_the_area(CTA_NUMBER_OF_ZOMBIES,zombies);
         
