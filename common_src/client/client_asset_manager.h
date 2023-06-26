@@ -17,6 +17,7 @@ class AssetManager {
     SDL2pp::Font default_font;
     SDL2pp::Color default_color;
     SDL2pp::Color white_color;
+    SDL2pp::Color red_color;
 
     //constructor
     explicit AssetManager(SDL2pp::Renderer & renderer);
@@ -37,6 +38,7 @@ class AssetManager {
 
     SDL2pp::Color* get_default_color();
     SDL2pp::Color* get_white_color();
+    SDL2pp::Color* get_red_color();
 
     void play_music(SDL2pp::Mixer & mixer);
 

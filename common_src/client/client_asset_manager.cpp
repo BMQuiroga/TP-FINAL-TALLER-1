@@ -61,7 +61,7 @@ void AssetManager::Release() {
 //(0 idle, 1 attack, 2 dead, 3 grenade, 4 hurt 5 recharge, 6 shot, 7 walk, 8 fall, 9 run, 10 protect, 11 run+atack, 12 bite, 13 scream, 14 eating)
 
 AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
-	default_font("../resources/Fonts/Lato-Regular.ttf", 72), default_color(50,50,50,255), white_color(255,255,255,255)
+	default_font("../resources/Fonts/Lato-Regular.ttf", 72), default_color(50,50,50,255), white_color(255,255,255,255), red_color(255,0,0,255)
 	{
 	map.emplace(ROAD, std::make_shared<Asset>("../resources/backgrounds/War1/Bright/3road.png", 0, 1920, 1080, 1, renderer, 1));
 	map.emplace(REVIVE_SCREEN, std::make_shared<Asset>("../resources/HPBar/ReviveScreen.png", 0, 1920, 1080, 1, renderer, 1));
@@ -188,6 +188,11 @@ SDL2pp::Color* AssetManager::get_default_color() {
 
 SDL2pp::Color* AssetManager::get_white_color() {
 	SDL2pp::Color* p = &white_color;
+	return p;
+}
+
+SDL2pp::Color* AssetManager::get_red_color() {
+	SDL2pp::Color* p = &red_color;
 	return p;
 }
 

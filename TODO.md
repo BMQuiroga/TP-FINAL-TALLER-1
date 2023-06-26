@@ -48,9 +48,6 @@ std::string filepath = CONFIG_BASE_PATH "/server/config.yaml"
 # Features (2/5)
 Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 
-## Granadas
-- [ ] **(P0)** Daña a jugadores aliados también
-
 ## Vida
 - [x] Los jugadores tienen vida.
 - [x] Los zombies tienen vida.
@@ -79,7 +76,6 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 - [ ] **(P0)** termina cuando jugadores mueren
 
 ## Fin de partida
-- [ ] **(P0)** se muestra estadisticas de juego (cantidad de eliminados, balas disparadas, tiempo de partida)
 - [ ] **(P4)** En modo survival las estadisticas se guardan y se muestra un ranking historico (1 ranking por cada estadistica) que se muestra al final del modo
 
 ## Interfaz gráfica
