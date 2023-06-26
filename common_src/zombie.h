@@ -36,19 +36,26 @@ class Zombie : public GameEntity {
     uint8_t movement_type;
     uint8_t show_death_timer;
     int seeking_distance;
-    uint8_t smoked_time;
+    uint8_t smoked_time{0};
     //bool has_target_set{false};
     //GameEntity *target;
     //Vector2D target_position{VEC2_ZERO};
 
   public:
-    static Zombie* get_random_zombie(int secure);
-    static void generate_clear_the_area(int number_of_zombies, std::list<Zombie*>& list);
+    static Zombie* get_random_zombie(int secure, PhysicsManager *physics);
+    static void generate_clear_the_area(int number_of_zombies, std::list<Zombie*>& list, PhysicsManager *physics);
     Zombie(
-        const std::string &name,
-        Vector2D position,
-        int16_t max_x, 
-        int16_t max_y);
+      const std::string &name,
+      Vector2D position,
+      int16_t max_x, 
+      int16_t max_y,
+      PhysicsManager *physics
+    );
+    Zombie(
+      const std::string &name,
+      Vector2D position,
+      PhysicsManager *physics
+    );
     ~Zombie();
     Zombie(Zombie&&);
     //de un zombie fabrica una GSR para enviar al cliente
@@ -70,10 +77,17 @@ class Zombie : public GameEntity {
 class CommonZombie : public Zombie {
   public:
     CommonZombie(
-        const std::string &name,
-        Vector2D position,
-        int16_t max_x = DEFAULT_MAX_X,
-        int16_t max_y = DEFAULT_MAX_Y);
+      const std::string &name,
+      Vector2D position,
+      int16_t max_x = DEFAULT_MAX_X,
+      int16_t max_y = DEFAULT_MAX_Y,
+      PhysicsManager *physics = nullptr
+    );
+    CommonZombie(
+      const std::string &name,
+      Vector2D position,
+      PhysicsManager *physics
+    );
     ~CommonZombie();
     CommonZombie(CommonZombie&&);
     CommonZombie(const CommonZombie&) = default;  // Remove the 'delete'd declaration
@@ -85,10 +99,17 @@ class Jumper : public Zombie {
     Vector2D objetive;
   public:
     Jumper(
-        const std::string &name,
-        Vector2D position,
-        int16_t max_x = DEFAULT_MAX_X,
-        int16_t max_y = DEFAULT_MAX_Y);
+      const std::string &name,
+      Vector2D position,
+      int16_t max_x = DEFAULT_MAX_X,
+      int16_t max_y = DEFAULT_MAX_Y,
+      PhysicsManager *physics = nullptr
+    );
+    Jumper(
+      const std::string &name,
+      Vector2D position,
+      PhysicsManager *physics
+    );
     ~Jumper();
     Jumper(Jumper&&);
     Jumper(const Jumper&) = default;  // Remove the 'delete'd declaration
@@ -101,10 +122,17 @@ class Jumper : public Zombie {
 class Spear : public Zombie {
   public:
     Spear(
-        const std::string &name,
-        Vector2D position,
-        int16_t max_x = DEFAULT_MAX_X,
-        int16_t max_y = DEFAULT_MAX_Y);
+      const std::string &name,
+      Vector2D position,
+      int16_t max_x = DEFAULT_MAX_X,
+      int16_t max_y = DEFAULT_MAX_Y,
+      PhysicsManager *physics = nullptr
+    );
+    Spear(
+      const std::string &name,
+      Vector2D position,
+      PhysicsManager *physics
+    );
     ~Spear();
     Spear(Spear&&);
     Spear(const Spear&) = default;  // Remove the 'delete'd declaration
@@ -113,10 +141,17 @@ class Spear : public Zombie {
 class Witch : public Zombie {
   public:
     Witch(
-        const std::string &name,
-        Vector2D position,
-        int16_t max_x = DEFAULT_MAX_X,
-        int16_t max_y = DEFAULT_MAX_Y);
+      const std::string &name,
+      Vector2D position,
+      int16_t max_x = DEFAULT_MAX_X,
+      int16_t max_y = DEFAULT_MAX_Y,
+      PhysicsManager *physics = nullptr
+    );
+    Witch(
+      const std::string &name,
+      Vector2D position,
+      PhysicsManager *physics
+    );
     ~Witch();
     Witch(Witch&&);
     Witch(const Witch&) = default;  // Remove the 'delete'd declaration
@@ -129,10 +164,17 @@ class Venom : public Zombie {
     int cooldown;
   public:
     Venom(
-        const std::string &name,
-        Vector2D position,
-        int16_t max_x = DEFAULT_MAX_X,
-        int16_t max_y = DEFAULT_MAX_Y);
+      const std::string &name,
+      Vector2D position,
+      int16_t max_x = DEFAULT_MAX_X,
+      int16_t max_y = DEFAULT_MAX_Y,
+      PhysicsManager *physics = nullptr
+    );
+    Venom(
+      const std::string &name,
+      Vector2D position,
+      PhysicsManager *physics
+    );
     ~Venom();
     Venom(Venom&&);
     Venom(const Venom&) = default;  // Remove the 'delete'd declaration

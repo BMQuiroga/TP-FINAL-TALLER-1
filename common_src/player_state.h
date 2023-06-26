@@ -8,7 +8,6 @@
 #include "protocol_types.h"
 #include "armas.h"
 #include "bullet.h"
-#include "game_config.h"
 #include "granadas.h"
 
 class Arma;
@@ -32,6 +31,7 @@ class PlayerState : public GameEntity {
       const std::string &name,
       int id,
       int weapon_code = 3,
+      PhysicsManager *physics = nullptr,
       int16_t max_x = DEFAULT_MAX_X,
       int16_t max_y = DEFAULT_MAX_Y);
     PlayerState(PlayerState&&);
@@ -47,6 +47,7 @@ class PlayerState : public GameEntity {
     //void try_respawn();
 
     std::string get_name();
+    uint8_t get_hit_points();
     PlayerStateReference make_ref();
 
     //friend class Arma;

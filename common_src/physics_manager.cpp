@@ -1,16 +1,7 @@
 #include "physics_manager.h"
 
-PhysicsManager* PhysicsManager::instance = nullptr;
-
-PhysicsManager* PhysicsManager::get_instance() {
-    if (instance == nullptr)
-        instance = new PhysicsManager();
-    return instance;
-}
-
-void PhysicsManager::release() {
-    delete instance;
-    instance = nullptr;
+std::vector<GameEntity*>& PhysicsManager::get_collision_layer(CollisionLayer layer) {
+    return collision_layers[(int)layer];
 }
 
 void PhysicsManager::set_layer_collision_mask(
@@ -70,7 +61,7 @@ void PhysicsManager::update() {
             i = 1, j = 0
             1100.test(0) -> true
             */
-            if (i <= j && layer_masks[i].test(j)) {
+            if (layer_masks[i].test(j)) {
                 for (int k = 0; k < (int)collision_layers[i].size(); k++) {
                     for (int l = 0; l < (int)collision_layers[j].size(); l++) {
                        if (collision_layers[i][k]->check_collision(collision_layers[j][l])) {

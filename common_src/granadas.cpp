@@ -1,7 +1,13 @@
 #include "granadas.h"
 
-Grenade::Grenade(int type, uint16_t x, uint16_t y, bool exploded_on_hand) :
-GameEntity("nade",DEFAULT_MAX_X,DEFAULT_MAX_Y,/*CollisionLayer::FriendlyProjectile*/type == SMOKE_GRENADE ? CollisionLayer::FriendlyProjectile : CollisionLayer::FriendlyExplosive) {
+Grenade::Grenade(int type, uint16_t x, uint16_t y, bool exploded_on_hand, PhysicsManager *physics) :
+GameEntity(
+    "nade",
+    DEFAULT_MAX_X,
+    DEFAULT_MAX_Y,
+    type == SMOKE_GRENADE ? CollisionLayer::FriendlyProjectile : CollisionLayer::FriendlyExplosive,
+    physics
+) {
     this->state = 1;
     if (exploded_on_hand)
         state++;

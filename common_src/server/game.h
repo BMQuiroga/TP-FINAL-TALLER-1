@@ -81,7 +81,7 @@ class GameLoop : public Thread {
     std::list<Vomit_Projectile> vomit;
     ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues;
     Serializer serializer;
-    PhysicsManager *physics;
+    PhysicsManager physics;
     uint32_t kills;
     uint32_t shots;
     uint32_t game_ticks;
@@ -92,20 +92,19 @@ class GameLoop : public Thread {
     explicit GameLoop(
         Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS, int game_mode=DEFAULT_MODE) : 
         events(events), state{CREATED}, number_players(number_players), game_mode(game_mode) {
-            physics = PhysicsManager::get_instance();
-            physics->set_layer_collision_mask(
+            physics.set_layer_collision_mask(
                 CollisionLayer::Friendly,
                 CollisionFlag::Hostile | CollisionFlag::HostileProjectile);
-            physics->set_layer_collision_mask(
+            physics.set_layer_collision_mask(
                 CollisionLayer::FriendlyProjectile,
                 CollisionFlag::Hostile);
-            physics->set_layer_collision_mask(
+            physics.set_layer_collision_mask(
                 CollisionLayer::FriendlyExplosive,
                 CollisionFlag::Friendly | CollisionFlag::Hostile);
-            physics->set_layer_collision_mask(
+            physics.set_layer_collision_mask(
                 CollisionLayer::Hostile,
-                CollisionFlag::Friendly | CollisionFlag::FriendlyProjectile);
-            physics->set_layer_collision_mask(
+                CollisionFlag::Friendly);
+            physics.set_layer_collision_mask(
                 CollisionLayer::HostileProjectile,
                 CollisionFlag::Friendly
             );
@@ -164,7 +163,7 @@ class GameLoop : public Thread {
     //une al player a la partida
     int join_game(GameEvent &event) {
         if (state == CREATED && players.size() < number_players) {
-            players.push_back(PlayerState(event.player_name, players.size() + 1, event.weapon_code));
+            players.push_back(PlayerState(event.player_name, players.size() + 1, event.weapon_code, &physics));
             message_queues.push_back(*event.player_messages);
             return players.size();
         } else {
@@ -322,7 +321,7 @@ class GameLoop : public Thread {
     // Function to handle enemy spawns
     void spawn_enemy(int secure) {
         std::cout << "spawn" << std::endl;
-        zombies.push_back(Zombie::get_random_zombie(secure));
+        zombies.push_back(Zombie::get_random_zombie(secure, &physics));
     }
 
     void run() override {
@@ -344,7 +343,7 @@ class GameLoop : public Thread {
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_TIME_START_GAME + LAG_CONSTANT));
         if (game_mode == GM_CTA)
-            Zombie::generate_clear_the_area(CTA_NUMBER_OF_ZOMBIES,zombies);
+            Zombie::generate_clear_the_area(CTA_NUMBER_OF_ZOMBIES,zombies, &physics);
         
         int delayMilliseconds = static_cast<int>(1000.0 / GAME_TICK_RATE);
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -402,7 +401,7 @@ class GameLoop : public Thread {
             }
 
             if (!zombies.empty()) {
-                physics->update();
+                physics.update();
             }
             push_response();
 

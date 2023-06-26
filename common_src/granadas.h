@@ -17,7 +17,7 @@ class Grenade : public GameEntity {
 
     public:
     //constructor
-    Grenade(int type, uint16_t x,  uint16_t y, bool exploded_on_hand);
+    Grenade(int type, uint16_t x,  uint16_t y, bool exploded_on_hand, PhysicsManager *physics);
 
     //decrementa en 1 el delay
     void advance_time();

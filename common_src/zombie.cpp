@@ -8,7 +8,7 @@
 
 Zombie::~Zombie() {}
 
-Zombie* Zombie::get_random_zombie(int secure) {
+Zombie* Zombie::get_random_zombie(int secure, PhysicsManager *physics) {
     int q;
     if (secure == -1) {
         q = getRandomNumber(0,4);
@@ -21,26 +21,26 @@ Zombie* Zombie::get_random_zombie(int secure) {
     int y = getRandomNumber(0, DEFAULT_MAX_Y);  // Random Y position within game area
     Vector2D position(x, y);
     if (q == 0) {
-        return new CommonZombie("Common",position);
+        return new CommonZombie("Common", position, physics);
     } else if (q == 1) {
-        return new Jumper("Jumper",position);
+        return new Jumper("Jumper", position, physics);
     } else if (q == 2) {
-        return new Spear("Spear",position);
+        return new Spear("Spear",position, physics);
     } else if (q == 3) {
-        return new Venom("Venom",position);
+        return new Venom("Venom", position, physics);
     } else if (q == 4) {
-        return new Witch("Witch",position);
+        return new Witch("Witch", position, physics);
     }
     std::cout << "ERROR: GETRANDOMZOMBIE RETURNS NULL" << std::endl;
     return nullptr;
 }
 
-void Zombie::generate_clear_the_area(int zombies, std::list<Zombie*>& list) {
+void Zombie::generate_clear_the_area(int zombies, std::list<Zombie*>& list, PhysicsManager *physics) {
     for (int i = 0; i < (zombies/2); i++) {
-        list.push_back(get_random_zombie(0));
+        list.push_back(get_random_zombie(0, physics));
     }
     for (int i = 0; i < (zombies/2); i++) {
-        list.push_back(get_random_zombie(-1));
+        list.push_back(get_random_zombie(-1, physics));
     }
     std::cout << "GENERATED CLEAR THE AREA WITH " << zombies << " zombies, " << (zombies/2) << " commond and " << (zombies/2)<< " random" << std::endl;
 }
@@ -161,6 +161,34 @@ ZombieStateReference Zombie::make_ref()
     return ref;
 }
 
+CommonZombie::CommonZombie(
+    const std::string &name,
+    Vector2D position,
+    int16_t max_x, 
+    int16_t max_y,
+    PhysicsManager *physics
+) : Zombie(name, position, max_x, max_y, physics) {
+    GameConfig *config = GameConfig::get_instance();
+    id = 51;
+    damage = config->get_value<int>("ZOMBIE_DAMAGE");;
+    zombie_type = ZOMBIE;
+    attack_type = ZOMBIE_BITE;
+    movement_type = ZOMBIE_WALK;
+    health = ZOMBIE_HP;
+}
+
+CommonZombie::CommonZombie(
+    const std::string &name,
+    Vector2D position,
+    PhysicsManager *physics
+) : CommonZombie(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+
+CommonZombie::CommonZombie(CommonZombie&& other)
+    : Zombie(std::move(other)) {
+}
+
+CommonZombie::~CommonZombie() {}
+
 void Zombie::attack(GameEntity *other) {
     std::cout << "ZOMBIE ATTACK" << std::endl;
     if (this->health > 0) {
@@ -182,39 +210,20 @@ void Zombie::process_smoke() {
     GameConfig *config = GameConfig::get_instance();
     this->smoked_time =  config->get_value<int>("ZOMBIE_IMPAIRED_TIME");
 }
-       
-
-CommonZombie::CommonZombie(CommonZombie&& other)
-    : Zombie(std::move(other)) {
-}
-
-CommonZombie::~CommonZombie() {}
-
-CommonZombie::CommonZombie(
-    const std::string &name,
-    Vector2D position,
-    int16_t max_x, 
-    int16_t max_y
-) : Zombie(name, position, max_x, max_y) {
-    GameConfig *config = GameConfig::get_instance();
-    id = 51;
-    damage = config->get_value<int>("ZOMBIE_DAMAGE");;
-    zombie_type = ZOMBIE;
-    attack_type = ZOMBIE_BITE;
-    movement_type = ZOMBIE_WALK;
-    health = ZOMBIE_HP;
-}
 
 Zombie::Zombie(
     const std::string &name,
     Vector2D position,
     int16_t max_x, 
-    int16_t max_y
+    int16_t max_y,
+    PhysicsManager *physics
 ) : GameEntity(
     name,
     position,
     max_x, max_y,
-    CollisionLayer::Hostile) {
+    CollisionLayer::Hostile,
+    physics
+) {
     GameConfig *config = GameConfig::get_instance();
     rect_width = config->get_value<int>("ZOMBIE_RECT_WIDTH");
     rect_height = config->get_value<int>("ZOMBIE_RECT_HEIGHT");
@@ -223,12 +232,19 @@ Zombie::Zombie(
     show_death_timer = ZOMBIE_TIMER;
 }
 
+Zombie::Zombie(
+    const std::string &name,
+    Vector2D position,
+    PhysicsManager *physics
+) : Zombie(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+
 Spear::Spear(
     const std::string &name,
     Vector2D position,
     int16_t max_x, 
-    int16_t max_y
-) : Zombie(name, position, max_x, max_y) {
+    int16_t max_y,
+    PhysicsManager *physics
+) : Zombie(name, position, max_x, max_y, physics) {
     GameConfig *config = GameConfig::get_instance();
     id = 53;
     damage = config->get_value<int>("SPEAR_DAMAGE");
@@ -240,12 +256,21 @@ Spear::Spear(
     seeking_distance = config->get_value<int>("SPEAR_SEEKING_DISTANCE");
 }
 
+Spear::Spear(
+    const std::string &name,
+    Vector2D position,
+    PhysicsManager *physics
+) : Spear(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+
+Spear::~Spear() {}
+
 Jumper::Jumper(
     const std::string &name,
     Vector2D position,
     int16_t max_x, 
-    int16_t max_y
-) : Zombie(name, position, max_x, max_y), objetive(-1,-1) {
+    int16_t max_y,
+    PhysicsManager *physics
+) : Zombie(name, position, max_x, max_y, physics), objetive(-1,-1) {
     GameConfig *config = GameConfig::get_instance();
     id = 52;
     damage = config->get_value<int>("JUMPER_DAMAGE");
@@ -258,12 +283,21 @@ Jumper::Jumper(
     cooldown = 0;
 }
 
+Jumper::Jumper(
+    const std::string &name,
+    Vector2D position,
+    PhysicsManager *physics
+) : Jumper(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+
+Jumper::~Jumper() {}
+
 Venom::Venom(
     const std::string &name,
     Vector2D position,
     int16_t max_x, 
-    int16_t max_y
-) : Zombie(name, position, max_x, max_y) {
+    int16_t max_y,
+    PhysicsManager *physics
+) : Zombie(name, position, max_x, max_y, physics) {
     GameConfig *config = GameConfig::get_instance();
     id = 54;
     damage = config->get_value<uint8_t>("VENOM_DAMAGE");//daño melee
@@ -277,12 +311,21 @@ Venom::Venom(
     cooldown = 0;
 }
 
+Venom::Venom(
+    const std::string &name,
+    Vector2D position,
+    PhysicsManager *physics
+) : Venom(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+
+Venom::~Venom() {}
+
 Witch::Witch(
     const std::string &name,
     Vector2D position,
     int16_t max_x, 
-    int16_t max_y
-) : Zombie(name, position, max_x, max_y) {
+    int16_t max_y,
+    PhysicsManager *physics
+) : Zombie(name, position, max_x, max_y, physics) {
     GameConfig *config = GameConfig::get_instance();
     id = 55;
     damage = 0;
@@ -293,6 +336,14 @@ Witch::Witch(
     health = config->get_value<int>("WITCH_HP");
     speed = 0;
 }
+
+Witch::Witch(
+    const std::string &name,
+    Vector2D position,
+    PhysicsManager *physics
+) : Witch(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+
+Witch::~Witch() {}
 
 int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
     bool impaired = false;

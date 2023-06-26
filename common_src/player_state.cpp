@@ -4,20 +4,23 @@
 #include <list>
 #include <utility>
 #include <arpa/inet.h>
+#include "game_config.h"
 
 PlayerState::PlayerState(
     const std::string &name,
     int id,
     int weapon_code,
+    PhysicsManager *physics,
     int16_t max_x, 
     int16_t max_y
 ) : 
-GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
+GameEntity(name, max_x, max_y, CollisionLayer::Friendly, physics) {
+    GameConfig *config = GameConfig::get_instance();
     //this->id = id;
-    this->hit_points = PLAYER_HP;
+    this->hit_points = config->get_value<int>("PLAYER_HP");
     // this->arma = new Arma1();
-    this->rect_width = PLAYER_RECT_WIDTH;
-    this->rect_height = PLAYER_RECT_HEIGHT;
+    this->rect_width = config->get_value<int>("PLAYER_RECT_WIDTH");
+    this->rect_height = config->get_value<int>("PLAYER_RECT_HEIGHT");
     this->respawn_time = -1;
     if (weapon_code == 1)
         this->arma = new Arma1();
@@ -25,7 +28,7 @@ GameEntity(name, max_x, max_y, CollisionLayer::Friendly) {
         this->arma = new Arma2();
     if (weapon_code == 3)
         this->arma = new Arma3();
-    this->speed = PLAYER_SPEED;
+    this->speed = config->get_value<int>("PLAYER_SPEED");
     this->id = weapon_code;
 }
 
@@ -45,6 +48,10 @@ void PlayerState::on_collission_detected(GameEntity *other) {
 
 std::string PlayerState::get_name() {
     return name;
+}
+
+uint8_t PlayerState::get_hit_points() {
+    return hit_points;
 }
 
 void PlayerState::take_damage(uint8_t damage) {
@@ -158,7 +165,7 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bull
     } else if (cmd == SHOOT) {
         if (this->arma->try_shoot()) {
             this->state = ATTACKING;
-            this->arma->create_bullet(position, facing_direction, vec);
+            this->arma->create_bullet(position -64, facing_direction, vec, physics);
             bullets++;
             //el -64 es para que salga la bala del medio del modelo
         }
@@ -168,14 +175,14 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bull
         std:: cout << "THROW TRIED" << std::endl;
         if (this->arma->try_grenade(HE_GRENADE)) {
             std:: cout << "THROWN" << std::endl;
-            this->arma->create_grenade(HE_GRENADE,position,facing_direction,gren);
+            this->arma->create_grenade(HE_GRENADE,position,facing_direction,gren,physics);
             this->state = IDLE;
         }
     } else if (cmd == THROW_GRENADE2) {
         std:: cout << "THROW TRIED" << std::endl;
         if (this->arma->try_grenade(SMOKE_GRENADE)) {
             std:: cout << "THROWN" << std::endl;
-            this->arma->create_grenade(SMOKE_GRENADE,position,facing_direction,gren);
+            this->arma->create_grenade(SMOKE_GRENADE,position,facing_direction,gren,physics);
             this->state = IDLE;
         }
     } else if (cmd == PREPARE_GRENADE) {
@@ -187,7 +194,7 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bull
         if (u==2) {
             this->state = IDLE;
             take_damage(arma->damage_on_explode_on_hand(HE_GRENADE));
-            this->arma->create_grenade(HE_GRENADE,position,facing_direction,gren);
+            this->arma->create_grenade(HE_GRENADE,position,facing_direction,gren,physics);
         }
     } else if (cmd == PREPARE_GRENADE2) {
         int u = this->arma->charge_grenade(SMOKE_GRENADE);
@@ -198,7 +205,7 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bull
         if (u==2) {
             this->state = IDLE;
             take_damage(arma->damage_on_explode_on_hand(SMOKE_GRENADE));
-            this->arma->create_grenade(SMOKE_GRENADE,position,facing_direction,gren);
+            this->arma->create_grenade(SMOKE_GRENADE,position,facing_direction,gren,physics);
         }
     }
 
@@ -212,7 +219,7 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bull
         if (u==2) {
             this->state = IDLE;
             take_damage(arma->damage_on_explode_on_hand(grenade_type));//la granada de humo tambien hace daño a su usuario
-            this->arma->create_grenade(grenade_type,position,facing_direction,gren);
+            this->arma->create_grenade(grenade_type,position,facing_direction,gren,physics);
         }
     }
 

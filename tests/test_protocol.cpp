@@ -3,10 +3,11 @@
 #include "../common_src/zombie.h"
 #include "../common_src/server/game.h"
 
-TEST(ProtocolTest, TestGameStateSerialization) {
+TEST(ProtocolTests, TestGameStateSerialization) {
     Serializer serializer;
     PlayerState player("test player", 1, 1);
     CommonZombie zombie("test zombie", 1, 1);
+    Witch witch("test witch", Vector2D(2, 0), nullptr);
     GameStateResponse resp;
     resp.game_state = STARTED;
     resp.kills = 10;
@@ -14,6 +15,7 @@ TEST(ProtocolTest, TestGameStateSerialization) {
     resp.shots = 10;
     resp.time = 10;
     resp.zombies.push_back(zombie.make_ref());
+    resp.zombies.push_back(witch.make_ref());
     std::vector<int8_t> content = serializer.serialize(resp); // bytes to send to the client
     GameStateResponse received = serializer.deserialize_game_state(content);
     
@@ -45,13 +47,13 @@ TEST(ProtocolTest, TestGameStateSerialization) {
     }
 }
 
-TEST(ProtocolTest, TestLobbyStateSerialization) {
+TEST(ProtocolTests, TestLobbyStateSerialization) {
     Serializer serializer;
     Game game(0, "test game");
-    LobbyStateResponse resp;
+    LobbyGamesListsStateResponse resp;
     resp.games.push_back(game.make_ref());
     std::vector<int8_t> content = serializer.serialize(resp);
-    LobbyStateResponse received = serializer.deserialize_lobby_state(content);
+    LobbyGamesListsStateResponse received = serializer.deserialize_lobby_state(content);
     
     ASSERT_EQ(resp.games.size(), received.games.size());
     for (int i = 0; i < resp.games.size(); i++) {
@@ -62,7 +64,7 @@ TEST(ProtocolTest, TestLobbyStateSerialization) {
     }
 }
 
-TEST(ProtocolTest, TestLobbyGameStateSerialization) {
+TEST(ProtocolTests, TestLobbyGameStateSerialization) {
     Serializer serializer;
     LobbyGameStateResponse resp;
     resp.game_code = 0;
@@ -80,7 +82,7 @@ TEST(ProtocolTest, TestLobbyGameStateSerialization) {
     ASSERT_EQ(resp.succeeded, received.succeeded);
 }
 
-TEST(ProtocolTest, TestPreGameStateSerialization) {
+TEST(ProtocolTests, TestPreGameStateSerialization) {
     Serializer serializer;
     PreGameStateResponse resp;
     resp.max_number_players = 3;
