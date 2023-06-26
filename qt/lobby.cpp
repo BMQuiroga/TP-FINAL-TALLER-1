@@ -12,15 +12,12 @@ Lobby::Lobby(QWidget *parent) : QWidget(parent) {
 void Lobby::sendNewPlayerInfo() {
     inputName = findChild<QLineEdit*>("inputName");
     playerType = findChild<QSpinBox*>("playerType");
-    gameMode = findChild<QSpinBox*>("gameMode");
     QString name = inputName->text();
     QString player_type = playerType->text();
-    QString game_mode = gameMode->text();
     emit inputPlayerInfoEntered(name, 
-        std::stoi(player_type.toStdString()), std::stoi(game_mode.toStdString()));
+        std::stoi(player_type.toStdString()));
     inputName->clear();
     playerType->clear();
-    gameMode->clear();
 }
 
 void Lobby::deactivate() {

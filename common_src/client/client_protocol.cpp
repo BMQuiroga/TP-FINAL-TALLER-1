@@ -56,11 +56,11 @@ void CProtocol::send_lobby_command(
     } else if (command.name == INPUTNAME) {
         serializer.push_string(req.content, command.parameter);
         serializer.push_number(req.content, command.parameter2);
-        serializer.push_number(req.content, command.parameter3);
     } else if (command.name == CREATEGAME) {
         ref.id = -1;
         ref.name = command.parameter;
         ref.players = (uint8_t) command.parameter2;
+        ref.game_mode = (uint32_t) command.parameter3;
     }
 
     if (req.cmd == JOIN || req.cmd == CREATE)
@@ -94,5 +94,6 @@ int CProtocol::get_command_type(const std::string &resource) {
     if (resource == CREATEGAME) return CREATE;
     if (resource == JOINGAME) return JOIN;
     if (resource == INPUTNAME) return PLAYERNAME;
+    if (resource == GAMESLIST) return LIST;
     return INVALID;
 }

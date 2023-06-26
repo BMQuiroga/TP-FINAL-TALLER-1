@@ -18,7 +18,7 @@
 //#include "lobbywidget.h"
 
 MainWindow::MainWindow(Queue<LobbyCommand>& q, 
-    Queue<LobbyGameStateResponse>& q_responses, QWidget *parent) :
+    Queue<LobbyResponse>& q_responses, QWidget *parent) :
     q(q),
     q_responses(q_responses),
     QMainWindow(parent), 
@@ -29,6 +29,8 @@ MainWindow::MainWindow(Queue<LobbyCommand>& q,
 
 void MainWindow::showJoinGame()
 {
+    LobbyCommand command(GAMESLIST, "");
+    q.push(command);
     // Close the current widget if it exists
     if (currentWidget) {
         emit deactivateWidget();
@@ -36,7 +38,9 @@ void MainWindow::showJoinGame()
     }
 
     // Create and show the new widget (e.g., GameOptionsWidget)
-    currentWidget = new JoinGame();
+    LobbyResponse result = q_responses.pop();
+    LobbyGamesListsStateResponse games_list = result.games_list;
+    currentWidget = new JoinGame(games_list.games);
     currentWidget->show();
     QObject::connect(currentWidget, SIGNAL(windowClosed()), this, SLOT(receiveClosedSignal()));
     QObject::connect(this, SIGNAL(deactivateWidget()), currentWidget, SLOT(deactivate()));
@@ -58,7 +62,7 @@ void MainWindow::showCreateGame()
     currentWidget->show();
     QObject::connect(currentWidget, SIGNAL(windowClosed()), this, SLOT(receiveClosedSignal()));
     QObject::connect(this, SIGNAL(deactivateWidget()), currentWidget, SLOT(deactivate()));
-    QObject::connect(currentWidget, SIGNAL(inputNumberEntered(QString, int)), this, SLOT(receiveInputGame(QString, int)));
+    QObject::connect(currentWidget, SIGNAL(inputNumberEntered(QString, int, int)), this, SLOT(receiveInputGame(QString, int, int)));
     QObject::connect(this, SIGNAL(createdGameWithCode(int)), currentWidget, SLOT(receiveNewGameCreatedCode(int)));
 }
 
@@ -74,7 +78,7 @@ void MainWindow::showLobbyWidget() {
     currentWidget->show();
     QObject::connect(currentWidget, SIGNAL(windowClosed()), this, SLOT(receiveClosedSignal()));
     QObject::connect(this, SIGNAL(deactivateWidget()), currentWidget, SLOT(deactivate()));
-    QObject::connect(currentWidget, SIGNAL(inputPlayerInfoEntered(QString, int, int)), this, SLOT(receivePlayerInfo(QString, int, int)));
+    QObject::connect(currentWidget, SIGNAL(inputPlayerInfoEntered(QString, int)), this, SLOT(receivePlayerInfo(QString, int)));
 }
 
 void MainWindow::showGameOptionsWidget() {
@@ -93,23 +97,24 @@ void MainWindow::showGameOptionsWidget() {
     QObject::connect(currentWidget, SIGNAL(createGameOptionPicked()), this, SLOT(startCreateGameOption()));
 }
 
-void MainWindow::receivePlayerInfo(const QString& text, int number, int game_mode) {
+void MainWindow::receivePlayerInfo(const QString& text, int number) {
     // Handle the received input text
     qDebug() << "Received input text: " << text;
     showGameOptionsWidget();
     player_name = text.toStdString();
-    LobbyCommand command(INPUTNAME, player_name, number, game_mode);
+    LobbyCommand command(INPUTNAME, player_name, number);
     q.push(command);
 }
 
-void MainWindow::receiveInputGame(const QString& text, int number) {
+void MainWindow::receiveInputGame(const QString& text, int number, int game_mode) {
     // Handle the received input text
     qDebug() << "Received input number: " << text;
-    LobbyCommand command(CREATEGAME, text.toStdString(), number);
+    LobbyCommand command(CREATEGAME, text.toStdString(), number, game_mode);
     q.push(command);
-    LobbyGameStateResponse result = q_responses.pop();
-    emit createdGameWithCode(result.game_code);
-    game_code = result.game_code;
+    LobbyResponse result = q_responses.pop();
+    LobbyGameStateResponse game_info = result.game_state;
+    emit createdGameWithCode(game_info.game_code);
+    game_code = game_info.game_code;
     waitForGameToStart();
 }
 
@@ -125,10 +130,11 @@ void MainWindow::receiveGameCode(const QString& text) {
     // Handle the received input text
     LobbyCommand command(JOINGAME, text.toStdString());
     q.push(command);
-    LobbyGameStateResponse result = q_responses.pop();
-    if (result.succeeded == 0) {
+    LobbyResponse result = q_responses.pop();
+    LobbyGameStateResponse game_info = result.game_state;
+    if (game_info.succeeded == 0) {
         emit joinedSuccessfully();
-        game_code = result.game_code;
+        game_code = game_info.game_code;
         waitForGameToStart();
     } else {
         emit failedToJoin();
@@ -162,10 +168,11 @@ void MainWindow::waitForGameToStart() {
     showWaitingScreen();
     delayTimeForUpdates(5);
     while (!is_game_started && !is_closed) {
-        LobbyGameStateResponse result;
+        LobbyResponse result;
         if (q_responses.try_pop(result)) {
-            emit sendWaitingInfo(result.number_players_connected, result.max_number_players);
-            if (result.ready == 0) {
+            LobbyGameStateResponse game_info = result.game_state;
+            emit sendWaitingInfo(game_info.number_players_connected, game_info.max_number_players);
+            if (game_info.ready == 0) {
                 emit readyToStartGame();
                 is_game_started = true;
             }

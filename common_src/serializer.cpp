@@ -165,6 +165,7 @@ std::vector<int8_t> Serializer::serialize(const GameReference &ref) {
     push_number(buf, ref.id);
     push_string(buf, ref.name);
     push_number(buf, ref.players);
+    push_number(buf, ref.game_mode);
     return buf;
 }
 
@@ -175,19 +176,22 @@ GameReference Serializer::deserialize_game_reference(const std::vector<int8_t> &
     offset += copy_number(data+offset, &ref.id);
     offset += copy_string(data+offset, ref.name);
     offset += copy_number(data+offset, &ref.players);
+    offset += copy_number(data+offset, &ref.game_mode);
     return ref;
 }
 
-std::vector<int8_t> Serializer::serialize(const LobbyStateResponse &resp) {
+std::vector<int8_t> Serializer::serialize(const LobbyGamesListsStateResponse &resp) {
     std::vector<int8_t> buf;
     for (auto game : resp.games) {
         std::cout << "Game: " << std::endl << 
             "- id: " << game.id << std::endl <<//roto el id
             "- name: " << game.name << std::endl <<
-            "- players: " << std::to_string(game.players) << std::endl;
+            "- players: " << std::to_string(game.players) << std::endl <<
+            "- players connected: " << std::to_string(game.players_connected) << std::endl;
         push_number(buf, game.id);
         push_string(buf, game.name);
         push_number(buf, game.players);
+        push_number(buf, game.players_connected);
     }
     return buf;
 }
@@ -212,8 +216,8 @@ std::vector<int8_t> Serializer::serialize(const PreGameStateResponse &resp)
     return buf;
 }
 
-LobbyStateResponse Serializer::deserialize_lobby_state(const std::vector<int8_t> &content) {
-    LobbyStateResponse resp;
+LobbyGamesListsStateResponse Serializer::deserialize_lobby_state(const std::vector<int8_t> &content) {
+    LobbyGamesListsStateResponse resp;
     const int8_t *data = content.data();
     int offset = 0, size = content.size();
     std::string test("");
@@ -222,6 +226,7 @@ LobbyStateResponse Serializer::deserialize_lobby_state(const std::vector<int8_t>
         offset += copy_number(data+offset, &ref.id);
         offset += copy_string(data+offset, ref.name);
         offset += copy_number(data+offset, &ref.players);
+        offset += copy_number(data+offset, &ref.players_connected);
         resp.games.push_back(ref);
     }
     return resp;

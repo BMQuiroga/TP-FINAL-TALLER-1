@@ -422,6 +422,7 @@ class Game {
     int id;
     std::string name;
     uint8_t number_players;
+    uint8_t players_connected{0};
     int game_mode;
     std::list<std::reference_wrapper<Queue<ProtocolResponse>>> players;
     Queue<GameEvent> events;

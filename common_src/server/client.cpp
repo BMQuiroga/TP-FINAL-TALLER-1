@@ -32,7 +32,8 @@ Client::~Client() {
     kill();
 }
 
-void Client::handle_request(ProtocolRequest &message) {
+void Client::handle_request(ProtocolRequest &message)
+{
     if (dead)
         return;
     if (joined_game >= 0) {
@@ -51,23 +52,26 @@ void Client::handle_request(ProtocolRequest &message) {
             ProtocolResponse response;
             response.content_type = CREATE;
             GameReference create_req = serializer.deserialize_game_reference(message.content);
-            create_req.game_mode = game_mode;
+            game_mode = create_req.game_mode;
             Game *game = game_handler.create_new_game(create_req, responses);
             game->start();
             game_handler.join_game(game->get_id(), name, weapon_code, responses);
             joined_game = game->get_id();
             resp.game_code = joined_game;
             resp.succeeded = JOIN_SUCCESS;
+            resp.number_players_connected = 1;
+            resp.max_number_players = create_req.players;
             response.content = serializer.serialize(resp);
             response.size = response.content.size();
             responses.push(std::ref(response));
         }
         if (message.cmd == LIST) {
-            LobbyStateResponse resp;
+            LobbyGamesListsStateResponse resp;
             resp.games = game_handler.get_refs();
             ProtocolResponse response;
             response.content_type = LOBBY_STATE;
             response.content = serializer.serialize(resp);
+            response.size = response.content.size();
             responses.push(response);
         }
         if (message.cmd == JOIN) {
@@ -91,8 +95,6 @@ void Client::handle_request(ProtocolRequest &message) {
             NewPlayerRequest new_player_req = serializer.deserialize_input_name(message.content);
             name = new_player_req.name;
             weapon_code = new_player_req.weapon_code;
-            game_mode = new_player_req.game_mode;
-            std::cout << "game mode is " << game_mode << std::endl;
         }
     }
 }

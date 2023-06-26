@@ -2,6 +2,7 @@
 #define LOBBY_COMMAND_H
 #define INPUTNAME "inputName"
 #define JOINGAME "joinGame"
+#define GAMESLIST "gamesList"
 #define CREATEGAME "createGame"
 #define ENDLOBBY "end"
 #include <string>

@@ -54,6 +54,8 @@ qt5_wrap_ui(UIS_HEADERS
   qt/waitingroom.ui
 )
 
+qt5_add_resources(CLIENT_SOURCES qt/logo.qrc)
+
 # Habilito el automoc para poder hacer autoconnect de señales
 set(CMAKE_AUTOMOC on)
 # Habilito autorcc para manejar automaticamente los QResources

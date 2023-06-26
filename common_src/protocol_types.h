@@ -33,8 +33,9 @@ struct GameReference {
     std::string name;
     int game_mode;
     uint8_t players;
+    uint8_t players_connected;
     GameReference() {}
-    GameReference(int id, std::string &name, uint8_t players) :
+    GameReference(int id, std::string &name, uint8_t players, uint8_t players_connected=0) :
     id(id), name(name), players(players) {}
 };
 
@@ -42,13 +43,22 @@ enum ResponseType {
     GAME_STATE, LOBBY_STATE, GAME_START
 };
 
+enum LobbyResponseType {
+    LIST, JOIN, CREATE
+};
+
 // Solicitud del cliente
 struct ProtocolRequest {
     int cmd; // command (SHOOT, MOVE, etc)
     std::vector<int8_t> content; // request content
+    ProtocolRequest() {}
+    ProtocolRequest(int cmd) :
+    cmd(cmd) {}
 };
-struct InvalidRequest : ProtocolRequest {
-    int cmd {-1};
+
+
+struct InvalidRequest : public ProtocolRequest {
+    InvalidRequest() : ProtocolRequest(-1) {}
 };
 
 // Respuesta que se devuelve al cliente despues de cada solicitud
@@ -92,22 +102,27 @@ struct JoinRequest {
     // explicit JoinRequest(int game_code) : cmd(JOIN), game_code(game_code) {}
 };
 
-struct LobbyStateResponse {
+struct LobbyGamesListsStateResponse {
     std::vector<GameReference> games;
-    LobbyStateResponse() = default;
+    LobbyGamesListsStateResponse() = default;
 };
 struct LobbyGameStateResponse {
     int game_code;
     int succeeded;
     int ready{1};
-    int number_players_connected;
-    int max_number_players;
+    uint8_t number_players_connected;
+    uint8_t max_number_players;
+};
+
+struct LobbyResponse {
+    LobbyGamesListsStateResponse games_list;
+    LobbyGameStateResponse game_state;
 };
 
 struct PreGameStateResponse {
     int ready{1};
-    int number_players_connected;
-    int max_number_players;
+    uint8_t number_players_connected;
+    uint8_t max_number_players;
 };
 
 #endif
