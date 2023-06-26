@@ -49,16 +49,18 @@ class GameEntity {
     uint16_t speed;
     int8_t state;
     int16_t max_x, max_y;
+    PhysicsManager *physics;
     CollisionLayer collision_layer;
     bool move();
 
   public:
-    GameEntity(const std::string &name, int16_t max_x, int16_t max_y, CollisionLayer layer);
+    GameEntity(const std::string &name, int16_t max_x, int16_t max_y, CollisionLayer layer, PhysicsManager *physics);
     GameEntity(
       const std::string &name,
       Vector2D position,
       int16_t max_x, int16_t max_y,
-      CollisionLayer layer);
+      CollisionLayer layer,
+      PhysicsManager *physics = nullptr);
     GameEntity(GameEntity&&);
     ~GameEntity();
     std::string get_name();

@@ -5,20 +5,27 @@
 
 // uint32_t GameEntity::next_id = 1;
 
-GameEntity::GameEntity(const std::string &name, int16_t max_x, int16_t max_y, CollisionLayer layer) : 
-GameEntity(name, Vector2D(2,0), max_x, max_y, layer) {}
+GameEntity::GameEntity(
+    const std::string &name,
+    int16_t max_x,
+    int16_t max_y,
+    CollisionLayer layer,
+    PhysicsManager *physics) : 
+    GameEntity(name, Vector2D(2,0), max_x, max_y, layer, physics){}
 
 GameEntity::GameEntity(
     const std::string &name,
     Vector2D position,
     int16_t max_x, int16_t max_y,
-    CollisionLayer layer
+    CollisionLayer layer,
+    PhysicsManager *physics
 ) : name(name), direction(2, 0), position(position),
     facing_direction(RIGHT), speed(10), collision_layer(layer) {
     this->id = 0;
     this->rect_height = 3;
     this->rect_width = 3;
-    this->physics_id = PhysicsManager::get_instance()->register_entity(this, collision_layer);
+    this->physics = physics;
+    this->physics_id = physics ? physics->register_entity(this, collision_layer) : 0;
     this->state = IDLE;
     this->max_x = max_x;
     this->max_y = max_y;
@@ -39,7 +46,8 @@ GameEntity::GameEntity(GameEntity &&other) {
     facing_direction = other.facing_direction;
     speed = other.speed;
     id = other.id;
-    physics_id = PhysicsManager::get_instance()->register_entity(this, collision_layer);
+    physics = other.physics;
+    physics_id = physics ? physics->register_entity(this, collision_layer) : 0;
     state = other.state;
     max_x = other.max_x;
     max_y = other.max_y;
@@ -51,8 +59,9 @@ GameEntity::GameEntity(GameEntity &&other) {
 
 GameEntity::~GameEntity() {
     if (physics_id != 0) {
-        PhysicsManager::get_instance()->unregister_entity(physics_id);
+        physics->unregister_entity(physics_id);
         physics_id = 0;
+        physics = nullptr;
     }
 }
 

@@ -27,7 +27,6 @@ int main(int argc, char *argv[]) {
         while (std::cin.get() != 'q') continue;
         std::cout << "Closing server..." << std::endl;
         GameConfig::get_instance()->release();
-        PhysicsManager::get_instance()->release();
         sk.shutdown(SHUT_RD);
         sk.close();
         accepter.join();
@@ -38,12 +37,14 @@ int main(int argc, char *argv[]) {
             << "Something went wrong and an exception was caught: "
             << err.what()
             << "\n";
+        GameConfig::get_instance()->release();
         sk.shutdown(SHUT_RD);
         sk.close();
         accepter.join();
         return -1;
     } catch (...) {
         std::cerr << "Something went wrong and an unknown exception was caught.\n";
+        GameConfig::get_instance()->release();
         sk.shutdown(SHUT_RD);
         sk.close();
         accepter.join();

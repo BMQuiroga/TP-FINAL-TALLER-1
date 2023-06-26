@@ -13,7 +13,15 @@ class Bullet : public GameEntity {
     bool piercing;//hay un tipo de bala que atraviesa
     bool falloff;//perdida de daño en distancia
   public:
-    Bullet(uint8_t dmg, uint8_t bc, entity_direction direc, bool piercing, Vector2D position, bool falloff = false);
+    Bullet(
+      uint8_t dmg,
+      uint8_t bc,
+      entity_direction direc,
+      bool piercing,
+      Vector2D position,
+      bool falloff = false,
+      PhysicsManager *physics = nullptr
+    );
     PlayerStateReference make_ref();
     void move();
     void attack(GameEntity *other) override;

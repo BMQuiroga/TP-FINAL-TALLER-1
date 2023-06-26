@@ -19,7 +19,7 @@ class GrenadeHolder {
     public:
     virtual int charge(int type) = 0;
     virtual bool try_grenade(int type) = 0;
-    virtual void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren) = 0;
+    virtual void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics) = 0;
     virtual void advance_time() = 0;
     virtual int damage_on_explode_on_hand(int type) = 0;
 };
@@ -63,10 +63,10 @@ class Arma {
     uint8_t get_delay();
 
     //crea una bala y la pushea a la lista de balas del GameLoop
-    virtual void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) = 0;
+    virtual void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) = 0;
 
     //crea una granada en la lista de granadas???
-    void create_grenade(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren);
+    void create_grenade(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics);
 
     int damage_on_explode_on_hand(int type);
 };
@@ -75,19 +75,19 @@ class Arma1 : public Arma { //IDF
     private:
     public:
     explicit Arma1();
-    void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
+    void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) override;
 };
 
 class Arma2 : public Arma { //P90, Bombardeo
     public:
     explicit Arma2();
-    void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
+    void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) override;
 };
 
 class Arma3 : public Arma { //Scout
     public:
     explicit Arma3();
-    void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) override;
+    void create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) override;
 };
 
 class DefaultGH : public GrenadeHolder {
@@ -102,7 +102,7 @@ class DefaultGH : public GrenadeHolder {
     DefaultGH();
     int charge(int type);
     bool try_grenade(int type);
-    void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren);
+    void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics);
     void advance_time();
     int damage_on_explode_on_hand(int type);
 };
@@ -115,7 +115,7 @@ class Bombarder :  public GrenadeHolder {
     Bombarder();
     int charge(int type);
     bool try_grenade(int type);
-    void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren);
+    void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics);
     void advance_time();
     int damage_on_explode_on_hand(int type);
 };

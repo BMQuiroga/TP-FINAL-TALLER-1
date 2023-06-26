@@ -73,16 +73,16 @@ Arma::~Arma() {
     }
 }
 
-void Arma1::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
+void Arma1::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) {
     //position.y -= 80;//para que dispare desde el pecho
-    vec.push_back(Bullet(ARMA1_DAMAGE,ARMA1_BULLET_COUNT,direc,false,position,true));
+    vec.push_back(Bullet(ARMA1_DAMAGE,ARMA1_BULLET_COUNT,direc,false,position,true,physics));
 }
 
 Arma1::Arma1() : Arma(ARMA1_MAGAZINE,ARMA1_RELOAD_DELAY,ARMA1_SHOOT_DELAY) {
     this->grenades = new DefaultGH();
 }
 
-void Arma2::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
+void Arma2::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) {
     //position.y -= 80;//para que dispare desde el pecho
     vec.push_back(Bullet(ARMA2_DAMAGE,ARMA2_BULLET_COUNT,direc,false,position));
 }
@@ -91,7 +91,7 @@ Arma2::Arma2() : Arma(ARMA2_MAGAZINE,ARMA2_RELOAD_DELAY,ARMA2_SHOOT_DELAY) {
     this->grenades = new Bombarder();
 }
 
-void Arma3::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec) {
+void Arma3::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) {
     //position.y -= 80;//para que dispare desde el pecho
     vec.push_back(Bullet(ARMA3_DAMAGE,ARMA3_BULLET_COUNT,direc,true,position));
 }
@@ -109,8 +109,8 @@ int Arma::charge_grenade(int type) {
     return this->grenades->charge(type);
 }
 
-void Arma::create_grenade(int type, Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
-    this->grenades->create(type, position, direc, gren);
+void Arma::create_grenade(int type, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics) {
+    this->grenades->create(type, position, direc, gren, physics);
 }
 
 
@@ -137,29 +137,29 @@ void Bombarder::advance_time() {
 
 }
 
-void DefaultGH::create(int type, Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
+void DefaultGH::create(int type, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics) {
     if (direc == LEFT) {
         if (type == HE_GRENADE)
-            gren.push_back(Grenade(HE_GRENADE, position.x - (GRANADA_FUERZA*e_distance), position.y, e_distance == 0));
+            gren.push_back(Grenade(HE_GRENADE, position.x - (GRANADA_FUERZA*e_distance), position.y, e_distance == 0, physics));
         if (type == SMOKE_GRENADE)
-            gren.push_back(Grenade(SMOKE_GRENADE, position.x - (GRANADA_FUERZA*s_distance), position.y, s_distance == 0));
+            gren.push_back(Grenade(SMOKE_GRENADE, position.x - (GRANADA_FUERZA*s_distance), position.y, s_distance == 0, physics));
     } else {
         if (type == HE_GRENADE)
-            gren.push_back(Grenade(HE_GRENADE, position.x + (GRANADA_FUERZA*e_distance), position.y, e_distance == 0));
+            gren.push_back(Grenade(HE_GRENADE, position.x + (GRANADA_FUERZA*e_distance), position.y, e_distance == 0, physics));
         if (type == SMOKE_GRENADE)
-            gren.push_back(Grenade(SMOKE_GRENADE, position.x + (GRANADA_FUERZA*s_distance), position.y, s_distance == 0));
+            gren.push_back(Grenade(SMOKE_GRENADE, position.x + (GRANADA_FUERZA*s_distance), position.y, s_distance == 0, physics));
     }
     this->e_distance = 0;
     this->s_distance = 0;
 }
 
-void Bombarder::create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren) {
+void Bombarder::create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics) {
     int i = DEFAULT_MAX_X;
     int x = position.x;
     int safe_space = GRANADA_SIZE * 3;
     for (int j = 300; j < DEFAULT_MAX_X; j += BOMBARDER_SPACE_IN_BETWEEN) {
         if (abs(j - x) > safe_space)
-            gren.push_back(Grenade(AIR_STRIKE, j, getRandomNumber(0,DEFAULT_MAX_Y), false));
+            gren.push_back(Grenade(AIR_STRIKE, j, getRandomNumber(0,DEFAULT_MAX_Y), false, physics));
     }
     this->delay = delay_cte;
 }
