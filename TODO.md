@@ -62,7 +62,6 @@ Faltan mostrar muchos feature, ponganlé pilas a los prioritarios
 - [ ] **(P0)** hay un hitbox para detectar zombies en el eje y
 	* No pareciera haber un hitbox, intenté dispararle a un zombie que estaba en el maximo del eje y, yo estando casi en la zona mas baja del eje y, y le hice daño.
 
-
 ## Escenario
 - [ ] **(P4)** los crateres son zona por la que no podés caminar
 
