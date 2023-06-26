@@ -103,7 +103,7 @@ class GameLoop : public Thread {
                 CollisionFlag::Friendly | CollisionFlag::Hostile);
             physics.set_layer_collision_mask(
                 CollisionLayer::Hostile,
-                CollisionFlag::Friendly | CollisionFlag::FriendlyProjectile);
+                CollisionFlag::Friendly);
             physics.set_layer_collision_mask(
                 CollisionLayer::HostileProjectile,
                 CollisionFlag::Friendly
