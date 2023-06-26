@@ -44,3 +44,52 @@ TEST(ProtocolTest, TestGameStateSerialization) {
         ASSERT_EQ(resp.zombies[i].y, received.zombies[i].y);
     }
 }
+
+TEST(ProtocolTest, TestLobbyStateSerialization) {
+    Serializer serializer;
+    Game game(0, "test game");
+    LobbyStateResponse resp;
+    resp.games.push_back(game.make_ref());
+    std::vector<int8_t> content = serializer.serialize(resp);
+    LobbyStateResponse received = serializer.deserialize_lobby_state(content);
+    
+    ASSERT_EQ(resp.games.size(), received.games.size());
+    for (int i = 0; i < resp.games.size(); i++) {
+        ASSERT_EQ(resp.games[i].game_mode, received.games[i].game_mode);
+        ASSERT_EQ(resp.games[i].id, received.games[i].id);
+        ASSERT_EQ(resp.games[i].name, received.games[i].name);
+        ASSERT_EQ(resp.games[i].players, received.games[i].players);
+    }
+}
+
+TEST(ProtocolTest, TestLobbyGameStateSerialization) {
+    Serializer serializer;
+    LobbyGameStateResponse resp;
+    resp.game_code = 0;
+    resp.max_number_players = 3;
+    resp.number_players_connected = 1;
+    resp.ready = 0;
+    resp.succeeded = 1;
+    std::vector<int8_t> content = serializer.serialize(resp);
+    LobbyGameStateResponse received = serializer.deserialize_join_response(content);
+    
+    ASSERT_EQ(resp.game_code, received.game_code);
+    ASSERT_EQ(resp.max_number_players, received.max_number_players);
+    ASSERT_EQ(resp.number_players_connected, received.number_players_connected);
+    ASSERT_EQ(resp.ready, received.ready);
+    ASSERT_EQ(resp.succeeded, received.succeeded);
+}
+
+TEST(ProtocolTest, TestPreGameStateSerialization) {
+    Serializer serializer;
+    PreGameStateResponse resp;
+    resp.max_number_players = 3;
+    resp.number_players_connected = 1;
+    resp.ready = 0;
+    std::vector<int8_t> content = serializer.serialize(resp);
+    PreGameStateResponse received = serializer.deserialize_pregame_response(content);
+
+    ASSERT_EQ(resp.max_number_players, received.max_number_players);
+    ASSERT_EQ(resp.number_players_connected, received.number_players_connected);
+    ASSERT_EQ(resp.ready, received.ready);
+}
