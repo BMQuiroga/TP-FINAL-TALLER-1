@@ -94,5 +94,6 @@ int CProtocol::get_command_type(const std::string &resource) {
     if (resource == CREATEGAME) return CREATE;
     if (resource == JOINGAME) return JOIN;
     if (resource == INPUTNAME) return PLAYERNAME;
+    if (resource == GAMESLIST) return LIST;
     return INVALID;
 }

@@ -4,13 +4,33 @@
 #include <thread>
 #include <chrono>
 #include <QThread>
+#include "../common_src/protocol_types.h"
 #include <QKeyEvent>
+#include <QListWidgetItem>
+#include <QVector>
+#include <QVectorIterator>
+#include <QListWidget>
 #include <iostream>
 
-JoinGame::JoinGame(QWidget *parent) : QWidget(parent)  {
-    Ui::JoinGame lobby;
-    lobby.setupUi(this);
+JoinGame::JoinGame(std::vector<GameReference> &games_list, 
+    QWidget *parent) : QWidget(parent)  {
+    Ui::JoinGame join_game;
+    join_game.setupUi(this);
+    QVector<GameReference> games = QVector<GameReference>(games_list.begin(), games_list.end());
     connectEvents();
+    listWidget = findChild<QListWidget*>("listWidget");
+    QVectorIterator<GameReference> i(games);
+    int row = 0;
+    while (i.hasNext()) {
+        GameReference g = i.next();
+        QListWidgetItem *newItem = new QListWidgetItem;
+        QString id = QString::number(g.id);
+        QString name = QString::fromStdString(g.name);
+        QString text =  QString("%1: \"%2\" partida para %3 jugadores").arg(id, name, QString::number(g.players));
+        newItem->setText(text);
+        listWidget->insertItem(row, newItem);
+        row++;
+    }
 }
 
 void JoinGame::connectToGame() {
@@ -49,6 +69,4 @@ void JoinGame::receiveUnsuccessfulJoin() {
 
 void JoinGame::receiveSuccessfulJoin() {
     editOutputMessage(SUCCESS_MESSAGE);
-    // QThread::sleep(3);
-    // std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(3));
 }

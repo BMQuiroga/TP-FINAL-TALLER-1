@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(Queue<LobbyCommand>& q, 
-        Queue<LobbyGameStateResponse>& q_responses, QWidget *parent = nullptr);
+        Queue<LobbyResponse>& q_responses, QWidget *parent = nullptr);
     void showLobbyWidget();
     void showJoinGame();
     void showCreateGame();
@@ -49,7 +49,7 @@ signals:
 
 private:
     Queue<LobbyCommand>& q;
-    Queue<LobbyGameStateResponse>& q_responses;
+    Queue<LobbyResponse>& q_responses;
     QWidget* currentWidget {nullptr};
     Ui::MainWindow *ui;
     std::string player_name {""};

@@ -32,7 +32,8 @@ Client::~Client() {
     kill();
 }
 
-void Client::handle_request(ProtocolRequest &message) {
+void Client::handle_request(ProtocolRequest &message)
+{
     if (dead)
         return;
     if (joined_game >= 0) {
@@ -58,16 +59,19 @@ void Client::handle_request(ProtocolRequest &message) {
             joined_game = game->get_id();
             resp.game_code = joined_game;
             resp.succeeded = JOIN_SUCCESS;
+            resp.number_players_connected = 1;
+            resp.max_number_players = create_req.players;
             response.content = serializer.serialize(resp);
             response.size = response.content.size();
             responses.push(std::ref(response));
         }
         if (message.cmd == LIST) {
-            LobbyStateResponse resp;
+            LobbyGamesListsStateResponse resp;
             resp.games = game_handler.get_refs();
             ProtocolResponse response;
             response.content_type = LOBBY_STATE;
             response.content = serializer.serialize(resp);
+            response.size = response.content.size();
             responses.push(response);
         }
         if (message.cmd == JOIN) {

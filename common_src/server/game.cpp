@@ -33,7 +33,7 @@ Game::~Game() {
 }
 
 GameReference Game::make_ref() {
-    GameReference ref(id, name, players.size());
+    GameReference ref(id, name, number_players, players_connected);
     return ref;
 }
 
@@ -43,6 +43,9 @@ void Game::push_event(
     int weapon_code,
     Queue<ProtocolResponse> &player_messages
 ) {
+    if (req.cmd == JOIN) {
+        players_connected++;
+    }
     GameEvent ev(req, player_name, weapon_code, player_messages);
     events.push(std::ref(ev));
 }
@@ -51,6 +54,8 @@ Game::Game(Game &&other) :
     events(std::move(other.events)), 
     loop(events, other.number_players, other.game_mode), 
     players(other.players),
+    number_players(other.number_players),
+    players_connected(other.players_connected),
     name(other.name) {
     id = other.id;
 }
@@ -61,6 +66,8 @@ Game& Game::operator=(Game &&other) {
     }
     events = std::move(other.events);
     players = std::move(other.players);
+    number_players = other.number_players;
+    players_connected = other.players_connected;
     name = other.name;
     id = other.id;
     return *this;
