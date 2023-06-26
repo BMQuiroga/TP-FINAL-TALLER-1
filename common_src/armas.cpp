@@ -239,3 +239,17 @@ DefaultGH::DefaultGH() {
     this->s_delay_cte = ARMA3_GRENADE_DELAY;
     this->e_delay_cte = ARMA1_GRENADE_DELAY;
 }
+
+void Arma::make_ref(uint8_t& t1, uint8_t& t2) {
+    this->grenades->make_ref(t1,t2);
+}
+
+void DefaultGH::make_ref(uint8_t& t1, uint8_t& t2) {
+    t1 = e_delay * 100 / ARMA1_GRENADE_DELAY;
+    t2 = s_delay * 100 / ARMA3_GRENADE_DELAY;
+}
+
+void Bombarder::make_ref(uint8_t& t1, uint8_t& t2) {
+    t1 = delay * 100 / ARMA2_GRENADE_DELAY;
+    t2 = 255;//constante, cliente con esto entiende que es el bombarder
+}

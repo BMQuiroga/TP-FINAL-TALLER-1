@@ -75,6 +75,7 @@ PlayerStateReference PlayerState::make_ref() {
     ref.x = (uint16_t) position.x;
     ref.y = (uint16_t) position.y;
     ref.direction = facing_direction;
+    this->arma->make_ref(ref.grenade_timer, ref.grenade_timer2);
     return ref;
 }
 

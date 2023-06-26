@@ -22,6 +22,7 @@ class GrenadeHolder {
     virtual void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics) = 0;
     virtual void advance_time() = 0;
     virtual int damage_on_explode_on_hand(int type) = 0;
+    virtual void make_ref(uint8_t& t1, uint8_t& t2) = 0;
 };
 
 class Arma {
@@ -42,6 +43,8 @@ class Arma {
 
     //manda un PSR de recarga para que el cliente haga el ruido
     static PlayerStateReference make_reload();
+
+    void make_ref(uint8_t& t1, uint8_t& t2);
 
     //decrementa en 1 el delay
     void advance_time();
@@ -105,6 +108,7 @@ class DefaultGH : public GrenadeHolder {
     void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics);
     void advance_time();
     int damage_on_explode_on_hand(int type);
+    void make_ref(uint8_t& t1, uint8_t& t2);
 };
 
 class Bombarder :  public GrenadeHolder {
@@ -118,6 +122,7 @@ class Bombarder :  public GrenadeHolder {
     void create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics);
     void advance_time();
     int damage_on_explode_on_hand(int type);
+    void make_ref(uint8_t& t1, uint8_t& t2);
 };
 
 

@@ -71,9 +71,11 @@ void Serializer::serialize_player(const PlayerStateReference &player, std::vecto
     "- y: " << std::to_string(player.y) << std::endl <<
     "- direction: " << std::to_string(player.direction) << std::endl;*/
     push_number(buf, player.id);
-    push_string(buf,player.name);
+    push_string(buf, player.name);
     push_number(buf, player.x);
     push_number(buf, player.y);
+    push_number(buf, player.grenade_timer);
+    push_number(buf, player.grenade_timer2);
     push_number(buf, player.direction);
     push_number(buf, player.state);
     push_number(buf, player.hit_points);
@@ -111,6 +113,8 @@ int Serializer::deserialize_player(PlayerStateReference &player_ref, const int8_
     offset += copy_string(data+offset, player_ref.name);
     offset += copy_number(data+offset, &player_ref.x);
     offset += copy_number(data+offset, &player_ref.y);
+    offset += copy_number(data+offset, &player_ref.grenade_timer);
+    offset += copy_number(data+offset, &player_ref.grenade_timer2);
     offset += copy_number(data+offset, &player_ref.direction);
     offset += copy_number(data+offset, &player_ref.state);
     offset += copy_number(data+offset, &player_ref.hit_points);

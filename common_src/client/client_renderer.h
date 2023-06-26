@@ -77,6 +77,9 @@ class ClientRenderer {
     //renderiza las balas, kills y tiempo
     void render_score(SDL2pp::Color*);
 
+    //renderiza las granadas
+    void render_grenades(Image & im);
+
     public:
     explicit ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse> &updates, const std::string &player_name);
     //gameloop: renderiza el background y el actual_frame en loop mientras lo actualiza

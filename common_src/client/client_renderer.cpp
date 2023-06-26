@@ -9,6 +9,33 @@
 //#include <arpa/inet.h>
 #include "../game_config.h"
 
+void ClientRenderer::render_grenades(Image & im) {
+    if (im.grenade_timer2 < 102) {//bombarder
+        int percent = im.grenade_timer;
+        Asset * asset = assets->GetAsset(-9);
+        renderer.Copy(
+            (*asset->get_texture()),
+            SDL2pp::Rect(0, 0, 600, 495/100 * percent),
+            SDL2pp::Rect(1000, 830, 100, percent),
+        );
+    } else {
+        int percent = im.grenade_timer;
+        int percent = im.grenade_timer2;
+        Asset * asset = assets->GetAsset(-10);
+        renderer.Copy(
+            (*asset->get_texture()),
+            SDL2pp::Rect(0, 0, 396, 914/100 * percent),
+            SDL2pp::Rect(1000, 830, 50, percent),
+        );
+        Asset * asset = assets->GetAsset(-11);
+        renderer.Copy(
+            (*asset->get_texture()),
+            SDL2pp::Rect(0, 0, 396, 914/100 * percent),
+            SDL2pp::Rect(1060, 830, 50, percent),
+        );
+    }
+}
+
 void ClientRenderer::render_floor() {
     Asset * asset = assets->GetAsset(-8);
     renderer.Copy(
@@ -251,6 +278,7 @@ void ClientRenderer::renderOwn(Image & im) {
             SDL2pp::Rect(350 + 20*i, 930, 50, 50)
         );
     }
+    render_grenades(im);
 }
 
 void ClientRenderer::renderHealth(uint16_t x, uint16_t y, uint8_t hp) {
