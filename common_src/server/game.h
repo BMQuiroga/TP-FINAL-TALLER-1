@@ -262,6 +262,7 @@ class GameLoop : public Thread {
         }
         for (auto it = zombies.begin(); it != zombies.end();) {
             if ((*it)->try_dissapear()) {
+                delete *it;
                 it = zombies.erase(it);
                 kills++;
             } else {
@@ -299,6 +300,7 @@ class GameLoop : public Thread {
                 response.content = serializer.serialize(resp);
                 response.size = response.content.size();
                 queue.push(response);
+                // zombies.
         });
     }
 

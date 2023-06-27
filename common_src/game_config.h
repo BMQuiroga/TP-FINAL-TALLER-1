@@ -103,7 +103,7 @@
 
 class GameConfig {
 public:
-    static GameConfig* get_instance();
+    static GameConfig* get_instance(const char *config_path = nullptr);
     static void release();
 
     template <typename T>
@@ -118,7 +118,7 @@ public:
 
 private:
     static GameConfig *instance;
-    GameConfig();
+    GameConfig(const char *config_path);
     ~GameConfig();
 
     GameConfig(const GameConfig&) = delete;
@@ -127,6 +127,7 @@ private:
     void load();
 
     YAML::Node config_;
+    std::string path;
 };
 
 

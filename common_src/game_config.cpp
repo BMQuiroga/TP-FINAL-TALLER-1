@@ -2,15 +2,15 @@
 
 GameConfig* GameConfig::instance = nullptr;
 
-GameConfig::GameConfig() {
+GameConfig::GameConfig(const char *config_path) : path(config_path ? config_path : "config.yml") {
     load();
 }
 
 GameConfig::~GameConfig () {}
 
-GameConfig* GameConfig::get_instance() {
+GameConfig* GameConfig::get_instance(const char *config_path) {
     if (instance == nullptr) {
-        instance = new GameConfig();
+        instance = new GameConfig(config_path);
     }
     return instance;
 }
@@ -24,7 +24,7 @@ void GameConfig::release() {
 }
 
 void GameConfig::load() {
-    std::ifstream file("config.yml");
+    std::ifstream file(path);
     if (file) {
         config_ = YAML::Load(file);
         file.close();
@@ -34,7 +34,7 @@ void GameConfig::load() {
 }
 
 void GameConfig::save() {
-    std::ofstream file("config.yml");
+    std::ofstream file(path);
     if (file) {
         file << config_;
         file.close();
