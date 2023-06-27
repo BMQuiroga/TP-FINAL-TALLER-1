@@ -88,7 +88,11 @@ Al recibir una request para crear una partida, se crea un objeto de clase `Game`
 
 <img src="./diagrams/diagram_threads.png" alt="Diagrama hilos" width="600px">
 
-### Diagramas secuencia
+### Diagramas de clase
+
+<img src="./diagrams/game_loop.png" alt="Diagrama hilos" width="100%">
+
+### Diagramas de secuencia
 
 Cuando el cliente está jugando, cualquier botón que presione se traduce en un evento que se debe comunicar al servidor, para que este lo procese
 y devuelva la respuesta correspondiente.

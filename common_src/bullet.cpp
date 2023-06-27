@@ -22,7 +22,7 @@ Bullet::Bullet(
     ) {
     this->damage = dmg;
 
-    position.x += 30;//offset para que la bala se genere a la altura del arma
+    position.x += GameConfig::get_instance()->get_value<int>("BULLET_SHOT_OFFSET");//offset para que la bala se genere a la altura del arma
     this->position = position;
 
     this->piercing = piercing;

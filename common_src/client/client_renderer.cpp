@@ -46,7 +46,7 @@ void ClientRenderer::render_floor() {
 }
 
 void ClientRenderer::render_score(SDL2pp::Color *white/*Puede no ser blanco*/) {
-    std::cout << "RENDERSCORE: " << std::to_string(s) << " " << std::to_string(k) << " " << std::to_string(t) << std::endl;
+    //std::cout << "RENDERSCORE: " << std::to_string(s) << " " << std::to_string(k) << " " << std::to_string(t) << std::endl;
     int score = (k*100);
     score -= t;
     std::string text_s = "Score: " + std::to_string(score);
