@@ -84,7 +84,7 @@ Arma1::Arma1() : Arma(GameConfig::get_instance()->get_value<int>("ARMA1_MAGAZINE
 
 void Arma2::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) {
     //position.y -= 80;//para que dispare desde el pecho
-    vec.push_back(Bullet(GameConfig::get_instance()->get_value<int>("ARMA2_DAMAGE"),GameConfig::get_instance()->get_value<int>("ARMA2_BULLET_COUNT"),direc,false,position));
+    vec.push_back(Bullet(GameConfig::get_instance()->get_value<int>("ARMA2_DAMAGE"),GameConfig::get_instance()->get_value<int>("ARMA2_BULLET_COUNT"),direc,false,position,false,physics));
 }
 
 Arma2::Arma2() : Arma(GameConfig::get_instance()->get_value<int>("ARMA2_MAGAZINE"),GameConfig::get_instance()->get_value<int>("ARMA2_RELOAD_DELAY"),GameConfig::get_instance()->get_value<int>("ARMA2_SHOOT_DELAY")) {
@@ -93,7 +93,7 @@ Arma2::Arma2() : Arma(GameConfig::get_instance()->get_value<int>("ARMA2_MAGAZINE
 
 void Arma3::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) {
     //position.y -= 80;//para que dispare desde el pecho
-    vec.push_back(Bullet(GameConfig::get_instance()->get_value<int>("ARMA3_DAMAGE"),GameConfig::get_instance()->get_value<int>("ARMA3_BULLET_COUNT"),direc,true,position));
+    vec.push_back(Bullet(GameConfig::get_instance()->get_value<int>("ARMA3_DAMAGE"),GameConfig::get_instance()->get_value<int>("ARMA3_BULLET_COUNT"),direc,true,position,false,physics));
 }
 
 Arma3::Arma3() : Arma(GameConfig::get_instance()->get_value<int>("ARMA3_MAGAZINE"),GameConfig::get_instance()->get_value<int>("ARMA3_RELOAD_DELAY"),GameConfig::get_instance()->get_value<int>("ARMA3_SHOOT_DELAY")) {
@@ -238,4 +238,18 @@ DefaultGH::DefaultGH() {
     this->s_distance = 0;
     this->s_delay_cte = GameConfig::get_instance()->get_value<int>("ARMA3_GRENADE_DELAY");
     this->e_delay_cte = GameConfig::get_instance()->get_value<int>("ARMA1_GRENADE_DELAY");
+}
+
+void Arma::make_ref(uint8_t& t1, uint8_t& t2) {
+    this->grenades->make_ref(t1,t2);
+}
+
+void DefaultGH::make_ref(uint8_t& t1, uint8_t& t2) {
+    t1 = e_delay * 100 / GameConfig::get_instance()->get_value<int>("ARMA1_GRENADE_DELAY");;
+    t2 = s_delay * 100 / GameConfig::get_instance()->get_value<int>("ARMA3_GRENADE_DELAY");;
+}
+
+void Bombarder::make_ref(uint8_t& t1, uint8_t& t2) {
+    t1 = delay * 100 / GameConfig::get_instance()->get_value<int>("ARMA2_GRENADE_DELAY");;
+    t2 = 255;//constante, cliente con esto entiende que es el bombarder
 }

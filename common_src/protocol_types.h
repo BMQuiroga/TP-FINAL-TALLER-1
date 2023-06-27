@@ -14,6 +14,8 @@ struct PlayerStateReference {
     uint16_t y;
     int8_t state;
     uint8_t weapon_code;
+    uint8_t grenade_timer;
+    uint8_t grenade_timer2;
 };
 struct ZombieStateReference {
     uint32_t id;

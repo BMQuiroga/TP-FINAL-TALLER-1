@@ -16,6 +16,8 @@ struct Image {
     uint8_t frame;
     uint8_t rounds;
     std::string name;
+    uint8_t grenade_timer;
+    uint8_t grenade_timer2;
 
     //EN DESUSO construye la imagen directamente de la tira de bits
     static std::list<Image>* Create(uint8_t* array);

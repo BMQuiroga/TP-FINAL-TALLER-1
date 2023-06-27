@@ -40,7 +40,7 @@ void Zombie::generate_clear_the_area(int zombies, std::list<Zombie*>& list, Phys
         list.push_back(get_random_zombie(0, physics));
     }
     for (int i = 0; i < (zombies/2); i++) {
-        list.push_back(get_random_zombie(-1, physics));
+        list.push_back(get_random_zombie(2, physics));
     }
     std::cout << "GENERATED CLEAR THE AREA WITH " << zombies << " zombies, " << (zombies/2) << " commond and " << (zombies/2)<< " random" << std::endl;
 }
@@ -65,7 +65,7 @@ void Zombie::on_collission_detected(GameEntity *other) {
         //std::cout << "boomboom" << std::endl;
         player->take_damage(damage);
     }*/
-    std::cout << "zombie ocd" << std::endl;
+    //std::cout << "zombie ocd" << std::endl;
     attack(other);
 }
 
@@ -74,7 +74,7 @@ void Zombie::set_id(int new_id) {
 }
 
 void Zombie::take_damage(uint8_t damage) {
-    std::cout << "ZOMBIE TD" << std::endl;
+    //std::cout << "ZOMBIE TD" << std::endl;
     if (damage > health) {
         health = 0;
         state = DEAD;
@@ -193,8 +193,7 @@ void Zombie::attack(GameEntity *other) {
     std::cout << "ZOMBIE ATTACK" << std::endl;
     if (this->health > 0) {
         state = ATTACKING;
-        PlayerState *player = (PlayerState*)other;
-        player->take_damage(damage);
+        other->take_damage(damage);
     }
 }
 
@@ -305,7 +304,6 @@ Venom::Venom(
     attack_type = ZOMBIE_ATTACK2;
     movement_type = ZOMBIE_WALK;
     seeking_distance = config->get_value<int>("VENOM_SEEKING_DISTANCE");
-    rect_width = config->get_value<uint16_t>("VENOM_RECT_WIDTH");
     health = config->get_value<uint8_t>("VENOM_HP");
     speed = config->get_value<uint16_t>("VENOM_SPEED");
     cooldown = 0;

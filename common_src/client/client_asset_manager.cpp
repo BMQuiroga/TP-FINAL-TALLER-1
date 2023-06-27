@@ -35,6 +35,9 @@
 #define EAT_ 14000
 #define JUMP_ 15000
 
+#define SMOKE_ICON -11
+#define HE_ICON -10
+#define AIR_STRIKE_ICON -9
 #define ROAD -8
 #define REVIVE_SCREEN -7
 #define WIN_SCREEN -6
@@ -63,6 +66,9 @@ void AssetManager::Release() {
 AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	default_font("../resources/Fonts/Lato-Regular.ttf", 72), default_color(50,50,50,255), white_color(255,255,255,255), red_color(255,0,0,255)
 	{
+	map.emplace(SMOKE_ICON, std::make_shared<Asset>("../resources/HPBar/smok2.png", 0, 1920, 1080, 1, renderer, 1));
+	map.emplace(HE_ICON, std::make_shared<Asset>("../resources/HPBar/he2.png", 0, 1920, 1080, 1, renderer, 1));
+	map.emplace(AIR_STRIKE_ICON, std::make_shared<Asset>("../resources/HPBar/jet.png", 0, 1920, 1080, 1, renderer, 1));
 	map.emplace(ROAD, std::make_shared<Asset>("../resources/backgrounds/War1/Bright/3road.png", 0, 1920, 1080, 1, renderer, 1));
 	map.emplace(REVIVE_SCREEN, std::make_shared<Asset>("../resources/HPBar/ReviveScreen.png", 0, 1920, 1080, 1, renderer, 1));
 	map.emplace(WIN_SCREEN, std::make_shared<Asset>("../resources/HPBar/WinScreen.png", 0, 1920, 1080, 1, renderer, 1));

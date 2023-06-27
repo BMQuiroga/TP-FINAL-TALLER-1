@@ -42,7 +42,7 @@ PlayerState::PlayerState(PlayerState &&other) : GameEntity(std::move(other)) {
 
 void PlayerState::on_collission_detected(GameEntity *other) {
     //other->attack(this);
-    std::cout << "player ocd" << std::endl;
+    //std::cout << "player ocd" << std::endl;
 }
 
 std::string PlayerState::get_name() {
@@ -54,7 +54,7 @@ uint8_t PlayerState::get_hit_points() {
 }
 
 void PlayerState::take_damage(uint8_t damage) {
-    std::cout << "PLAYER TD" << std::endl;
+    //std::cout << "PLAYER TD" << std::endl;
     if (damage > hit_points) {
         hit_points = 0;
         //respawn_time = GameConfig::get_instance()->get_value<int>("RESPAWN_TIME");
@@ -74,6 +74,7 @@ PlayerStateReference PlayerState::make_ref() {
     ref.x = (uint16_t) position.x;
     ref.y = (uint16_t) position.y;
     ref.direction = facing_direction;
+    this->arma->make_ref(ref.grenade_timer, ref.grenade_timer2);
     return ref;
 }
 
