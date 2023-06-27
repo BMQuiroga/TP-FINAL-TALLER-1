@@ -69,7 +69,18 @@ Según el comando enviado, es decir, si cliente se conecta a una partida ya crea
 
 El cliente tiene tres threads, uno para realizar el render y el manejo de eventos, que será el main thread, uno para enviar los comandos que realiza el jugador al servidor y uno para recibir el estado de la partida del servidor. Además, en el cliente hay dos colas, `events_q` para los eventos y `updates_q` para los modelos a renderizar en pantalla. Primero inicia los dos hilos para la comunicación con el servidor. Cuando el jugador toque una tecla, el manejador de eventos agrega en la cola el evento que se realizó. El `ClientSender` recibe este evento al hacer un pop y se lo envía al servidor. El `ClientReceiver` va a estar esperando a recibir una actualización de la partida que llega desde el servidor, para poder pushearla a la cola `updates_q`. La actualización va a estar dada en una lista. En el hilo main, el render va intentar hacer un pop de la cola `updates_q` sin bloquearse, y si hay alguna actualización de la partida, lo va a renderizar en pantalla.
 
-El servidor funciona con un thread accepter que está permanentemente esperando nuevas conexiones, y que crea nuevos objetos `Client`. El objeto `GameHandler` se encarga de ubicar a cada `Client` en su partida. La partida `Game` tiene un thread Gameloop que popea eventos de la cola `events_q`, calcula el próximo estado de la partida y convierte los elementos de la partida a `PlayerStateReference` y `ZombieStateReference`
+El servidor funciona con un thread accepter que está permanentemente esperando nuevas conexiones, y que crea nuevos objetos `Client`. El objeto `GameHandler` se encarga de ubicar a cada `Client` en su partida. Por cada Client, hay dos hilos `Receiver` y `Sender`, que se encargan de mantener la comunicación del client. Cuando se inicializa un Client, el receiver registra un callback, que en este caso es el método `handle_request` de la clase Client. En `handle_request` es donde se manejan los pedidos ProtocolRequest del cliente al servidor. 
+
+Si el cliente ya está unido a una partida, el game_handler se encarga de buscar la partida. Una vez que tenemos la partida, ésta pushea el mensaje como un evento.
+
+Si el cliente no está unido a una partida, entonces se esperan cuatro tipos de requests, que son las siguientes:
+
+- El cliente quiere registrar su nombre.
+- El cliente quiere crear una partida.
+- El cliente quiere unirse a una partida.
+- El cliente quiere recibir una lista con las partidas disponibles para unirse.
+
+Al recibir una request para crear una partida, se crea un objeto de clase `Game`. La partida `Game` tiene un thread `Gameloop` que popea eventos de la cola `events_q`, calcula el próximo estado de la partida y convierte los elementos de la partida a `PlayerStateReference` y `ZombieStateReference`.
 
 ## Diagramas
 
