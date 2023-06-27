@@ -5,6 +5,8 @@
 #include <QLineEdit>
 #include <QObject>
 #include <QSpinBox>
+#include <QPushButton>
+#include <QString>
 
 class NumberPlayers : public QWidget {
     Q_OBJECT
@@ -18,11 +20,14 @@ signals:
     void windowClosed();
 private:
     void setNumberOfPlayers();
+    void selectGameModeOption();
     void connectEvents();
+    int getGameModeNumber(const QString& gameMode);
     void closeEvent(QCloseEvent *event);
     bool is_active {true};
     QLineEdit* inputGameName;
-    QSpinBox* gameMode;
+    QPushButton* activeButton{nullptr};
+    QString initial_stylesheet;
 };
 
 #endif // NUMBER_PLAYERS_H

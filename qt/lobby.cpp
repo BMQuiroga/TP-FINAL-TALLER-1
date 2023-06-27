@@ -9,22 +9,46 @@ Lobby::Lobby(QWidget *parent) : QWidget(parent) {
     connectEvents();
 }
 
+int Lobby::getPlayerTypeNumber(const QString& playerType) {
+    if (playerType == "idf") {
+        return 1;
+    } else if (playerType == "p90") {
+        return 2;
+    }
+    return 3;
+}
+
 void Lobby::sendNewPlayerInfo() {
     inputName = findChild<QLineEdit*>("inputName");
-    playerType = findChild<QSpinBox*>("playerType");
+    if (!activeButton) {
+        QLabel* errorLabel = findChild<QLabel*>("error");
+        errorLabel->setText("Elija una de las opciones antes de continuar");
+        return;
+    } 
+    QString playerType = activeButton->text();
     QString name = inputName->text();
-    QString player_type = playerType->text();
-    emit inputPlayerInfoEntered(name, 
-        std::stoi(player_type.toStdString()));
+    int player_type = getPlayerTypeNumber(playerType);
+    emit inputPlayerInfoEntered(name, player_type);
     inputName->clear();
-    playerType->clear();
 }
 
 void Lobby::deactivate() {
     is_active = false;
 }
 
-void Lobby::closeEvent(QCloseEvent *event) {
+void Lobby::selectPlayerOption() {
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    QString new_style = buttonSender->styleSheet().append(
+        QString("QPushButton { background-color: #89d8d3; }"));
+    buttonSender->setStyleSheet(new_style);
+    if (activeButton != nullptr) {
+        activeButton->setStyleSheet(initial_stylesheet);
+    }
+    activeButton = buttonSender;
+}
+
+void Lobby::closeEvent(QCloseEvent *event)
+{
     if (is_active) {
         emit windowClosed();
     }
@@ -36,6 +60,16 @@ void Lobby::connectEvents() {
     QPushButton* buttonName = findChild<QPushButton*>("buttonName");
     QObject::connect(buttonName, &QPushButton::clicked,
                      this, &Lobby::sendNewPlayerInfo);
+    QPushButton* idf_button = findChild<QPushButton*>("idf");
+    QObject::connect(idf_button, &QPushButton::clicked,
+                     this, &Lobby::selectPlayerOption);
+    QPushButton* scout_button = findChild<QPushButton*>("scout");
+    QObject::connect(scout_button, &QPushButton::clicked,
+                     this, &Lobby::selectPlayerOption);
+    QPushButton* p90_button = findChild<QPushButton*>("p90");
+    QObject::connect(p90_button, &QPushButton::clicked,
+                     this, &Lobby::selectPlayerOption);
+    initial_stylesheet = p90_button->styleSheet();
 }
 
 Lobby::~Lobby() {

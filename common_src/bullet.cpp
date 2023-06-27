@@ -96,13 +96,14 @@ PlayerStateReference Bullet::make_ref() {
     return a;
 }
 
-Vomit_Projectile::Vomit_Projectile(Vector2D position, entity_direction direc) :
+Vomit_Projectile::Vomit_Projectile(Vector2D position, entity_direction direc, PhysicsManager *physics) :
     GameEntity(
         "Im vomit", 
         position,
         GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"),
         GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"),
-        CollisionLayer::HostileProjectile
+        CollisionLayer::HostileProjectile,
+        physics
     ) {
     GameConfig *config = GameConfig::get_instance();
     this->facing_direction = direc;

@@ -1,0 +1,10 @@
+@startuml
+actor User
+User -> ClientRenderer: click on send button
+ClientRenderer -> Intention: make_intention(event)
+Intention -> ClientRenderer: Intention intention
+ClientRenderer -> Queue: push(intention)
+ClientSender -> Queue: pop()
+Queue -> ClientSender: Intention command
+ClientSender -> ClientProtocol: send(command)
+@enduml

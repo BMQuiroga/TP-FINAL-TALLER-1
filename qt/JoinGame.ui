@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>928</width>
-    <height>526</height>
+    <width>922</width>
+    <height>733</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,32 +29,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="0" column="1">
-    <widget class="QFrame" name="title">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>492</width>
-       <height>190</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-image: url(":/newPrefix/logo.png");</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout"/>
-    </widget>
    </item>
    <item row="0" column="2">
     <spacer name="horizontalSpacer_2">
@@ -124,8 +98,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>904</width>
-        <height>199</height>
+        <width>902</width>
+        <height>406</height>
        </rect>
       </property>
       <widget class="QListWidget" name="listWidget">
@@ -222,10 +196,37 @@
      </item>
     </layout>
    </item>
+   <item row="0" column="1">
+    <widget class="QFrame" name="title">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>492</width>
+       <height>190</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-image: url(&quot;:/newPrefix/logo.png&quot;);</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout"/>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources>
   <include location="../ui/logo.qrc"/>
+  <include location="background.qrc"/>
  </resources>
  <connections/>
 </ui>

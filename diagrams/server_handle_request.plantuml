@@ -1,0 +1,12 @@
+@startuml
+Receiver -> ServerProtocol: get()
+ServerProtocol -> Receiver: ProtocolRequest request
+Receiver -> Client: handle_request(request)
+Client -> GameHandler: get_game(joined_game)
+GameHandler -> Client: Game& game
+Client -> GameEvent: GameEvent(client_name, request)
+GameEvent -> Client: GameEvent event
+Client -> Game: push_event(event)
+Game -> Queue: push(event)
+GameLoop -> Queue: try_pop(GameEvent &event)
+@enduml

@@ -35,9 +35,9 @@ A partir de este momento, con las correcciones, se nos dio la tarea de que el ju
 
 **German**:
 
-**Mariana**:
+**Mariana**: Hilos del cliente de sender y receiver, protocolo de mensajes de lobby, vistas y diseño del lobby, encapsulan todo el uso de QT.
 
-**Bruno**: Clases asset, Image, asset manager, client rendere, del lado del cliente, encapsulan todo el uso de SDL. Clases Zombie, Bullet, VenomProjectile, Arma, GrenadeHolder del lado del server, incluye la IA de los zombies y el funcionamiento de las armas.
+**Bruno**: Clases asset, Image, asset manager, client renderer, del lado del cliente, encapsulan todo el uso de SDL. Clases Zombie, Bullet, VenomProjectile, Arma, GrenadeHolder del lado del server, incluye la IA de los zombies y el funcionamiento de las armas.
 
 
 
