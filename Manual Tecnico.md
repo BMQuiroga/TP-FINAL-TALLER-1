@@ -21,9 +21,11 @@ El ejecutable client excluye en su compilacion los archivos que esten en la carp
 ## Diseño
 
 ### Niveles:
-Los niveles son sencillos, una caja de 1920x145 por donde los jugadores y los zombies pueden moverse libremente
+Los niveles son sencillos, una caja de 1920x145 por donde los jugadores y los zombies pueden moverse libremente.
+
 ### Personajes:
-Las verdaderas diferencias entre los personajes, son las diferencias entre sus atributos 'arma' el cual contiene a un objeto de tipo **Arma** el cual encapsula el arma de fuego y la granada, las armas tienen atributos como los tiempos entre recargas, disparos o tamaño del cargador, pero mayormente se diferencian por los metodos polimorficos 'create_grenade' y 'create_bullet' los cuales pushean a la cola del game distintos objetos **Bullet** y **Grenade**.
+Las verdaderas diferencias entre los personajes, son las diferencias entre sus atributos 'arma' el cual contiene a un objeto de tipo **Arma** el cual encapsula el arma de fuego y la granada en un objeto **GrenadeHolder** , las armas tienen atributos como los tiempos entre recargas, disparos o tamaño del cargador, pero mayormente se diferencian por el metodo polimorficos 'create_bullet' los cuales pushean a la cola del game distintos objetos **Bullet**. El arma se asigna en el constructor de PlayerState, y la granada, en el constructor de arma.
+
 ### Zombies e IA:
 Nuevamente, los zombies son practicamente iguales, salvando las diferencias que hay en sus atributos constantes (velocidad, daño, rango de deteccion, etc. definidos en el game_config), la mayor diferencia que hay entre ellos son los metodos polimorficos **attack** y **calculate_next_movement**.
 'attack' define el comportamiento al colisionar con un jugador y calculate_next_movement define el proximo movimiento/accion del zombie, encapsula toda la IA.
