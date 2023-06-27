@@ -323,7 +323,7 @@ class GameLoop : public Thread {
     // Function to handle enemy spawns
     void spawn_enemy(int secure) {
         std::cout << "spawn" << std::endl;
-        zombies.push_back(Zombie::get_random_zombie(secure, &physics));
+        zombies.push_back(Zombie::get_random_zombie(secure, &physics, players));
     }
 
     void run() override {
@@ -345,7 +345,7 @@ class GameLoop : public Thread {
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(GameConfig::get_instance()->get_value<int>("WAIT_TIME_START_GAME") + GameConfig::get_instance()->get_value<int>("LAG_CONSTANT")));
         if (game_mode == GM_CTA)
-            Zombie::generate_clear_the_area(GameConfig::get_instance()->get_value<int>("CTA_NUMBER_OF_ZOMBIES"),zombies, &physics);
+            Zombie::generate_clear_the_area(GameConfig::get_instance()->get_value<int>("CTA_NUMBER_OF_ZOMBIES"),zombies, &physics, players);
         
         int delayMilliseconds = static_cast<int>(1000.0 / GameConfig::get_instance()->get_value<int>("GAME_TICK_RATE"));
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(

@@ -21,6 +21,10 @@ Bullet::Bullet(
         physics
     ) {
     this->damage = dmg;
+
+    position.x += 40;//offset para que la bala se genere a la altura del arma
+    this->position = position;
+
     this->piercing = piercing;
     this->facing_direction = direc;
     this->bullet_count = bc;
@@ -32,7 +36,7 @@ Bullet::Bullet(
 }
 
 void Bullet::move() {
-    std::cout << "bullet previously at: " << position.x << ", " << position.y;
+    //std::cout << "bullet previously at: " << position.x << ", " << position.y;
     GameConfig *config = GameConfig::get_instance();
     if (this->facing_direction == LEFT) {
         position.x -= config->get_value<int>("ZOMBIE_RECT_WIDTH");
@@ -41,7 +45,7 @@ void Bullet::move() {
     }
     if (falloff)
         this->damage = damage * 3 / 4;
-    std::cout << " moved at: " << position.x << ", " << position.y << std::endl;
+    //std::cout << " moved at: " << position.x << ", " << position.y << std::endl;
     //std::cout << "MOVED" << std::endl;
 }
 
@@ -110,7 +114,7 @@ Vomit_Projectile::Vomit_Projectile(Vector2D position, entity_direction direc, Ph
     state = 0;
     this->rect_width = config->get_value<uint16_t>("VENOM_PROJECTILE_SIZE");
     this->rect_height = config->get_value<uint16_t>("VENOM_PROJECTILE_SIZE");
-    position.y -= 80;//para que dispare desde el pecho
+    position.y += 40;//para que dispare desde el pecho
     this->position = position;
     dead = false;
 }

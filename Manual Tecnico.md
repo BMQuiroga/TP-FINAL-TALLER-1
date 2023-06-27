@@ -87,3 +87,22 @@ Al recibir una request para crear una partida, se crea un objeto de clase `Game`
 ### Diagrama de hilos cliente y servidor
 
 <img src="./diagrams/diagram_threads.png" alt="Diagrama hilos" width="600px">
+
+### Diagramas secuencia
+
+Cuando el cliente está jugando, cualquier botón que presione se traduce en un evento que se debe comunicar al servidor, para que este lo procese
+y devuelva la respuesta correspondiente.
+
+En cada ciclo de renderizacion, se consulta por cualquier evento de teclado con la funcion SDL_PollEvents, cuyo resultado se usará
+para inicializar un objeto del tipo `Intention`, que contendrá la información necesaria para enviar al servidor. Luego, para enviar
+este evento al servidor, simplemente se hace un push a una cola que se comparte con el hilo del ClientSender, que estará verificando
+si hay un evento nuevo en la cola para enviarlo al server.
+
+<img src="./diagrams/client_press_button.png" alt="Diagrama hilos" width="600px">
+
+
+En el server, el hilo `Receiver` (asociado al cliente conectado), una vez que recibe la solicitud enviada por el cliente, crea un
+objeto del tipo `GameEvent` (tipo que contendrá metadata adicional sobre el evento recibido), que luego envía a la cola de eventos
+del juego. El hilo del GameLoop será quien verifique actualizaciones a esta cola de eventos para procesar el evento nuevo.
+
+<img src="./diagrams/server_handle_request.png" alt="Diagrama hilos" width="600px">

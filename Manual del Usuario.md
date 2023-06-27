@@ -67,20 +67,36 @@ Granada 2: H
 
 ### Personajes
 
-IDF: cuenta con un rifle de rafagas de corta distancia, granadas de humo que relentizan o aturden enemigos y granadas explosivas las cuales se pueden cargar para lanzarlas más lejos, ¡cuidado de no mantenerla en tu mano por demasiado tiempo!
+IDF: cuenta con un rifle de rafagas de corta distancia, granadas de humo que relentizan o aturden enemigos y granadas explosivas las cuales se pueden cargar para lanzarlas mas lejos, cuidado de no mantenerla en tu mano por demasiado tiempo!
 
-P90: cuenta con una ametralladora multi-propósito y bombardero aéreo cuyo poder es devastador.
+![](./resources/user%20manual%20pics/soldier1.png)
 
-Scout: cuenta con un rifle de larga distancia con balas que atraviesan enemigos y las mismas granadas que IDF.
+P90: cuenta con una ametralladora multi-proposito y bombardero aereo cuyo poder es devastador
 
-### Zombies
+![](./resources/user%20manual%20pics/soldier2.png)
 
-Infectado: Zombie común, corre hacia el jugador más cercano e intenta hacerle daño.
+Scout: cuenta con un rifle de larga distancia con balas que atraviesan enemigos y un las mismas granadas que IDF
 
-Spear: Zombie armado con una lanza, es más lento, pero hace más daño.
+![](./resources/user%20manual%20pics/soldier3.png)
 
-Venom: Tiene la capacidad de lanzar proyectiles de larga distancia a través del mapa. También tiene un ataque de corto rango.
+### Zombies:
+Infectado: Zombie comun, corre hacia el jugador mas cercano e intenta hacerle daño.
 
-Witch: Ocasionalmente se pone a gritar, atrayendo a más Zombies. Tiene muchísima vida, pero no se mueve ni ataca directamente.
+![](./resources/user%20manual%20pics/zombie.png)
 
-Jumper: Tiene la capacidad de saltar, tiene baja vida. Sin embargo, hace mucho daño y es muy rápido.
+Spear: Zombie armado con una lanza, es mas lento pero hace mas daño.
+
+![](./resources/user%20manual%20pics/spear.png)
+
+Venom: Tiene la capacidad de lanzar proyectiles de larga distancia a traves del mapa y tambien tiene un ataque de corto rango.
+
+![](./resources/user%20manual%20pics/venom.png)
+
+Witch: Ocacionalmente se pone a gritar, atrayendo a mas Zombies, tiene muchisima vida, pero no se mueve ni ataca directamente.
+
+![](./resources/user%20manual%20pics/witch.png)
+
+Jumper: Tiene la capacidad de saltar, tiene baja vida, sin embargo hace mucho daño y es muy rapido.
+
+![](./resources/user%20manual%20pics/jumper.png)
+

@@ -8,7 +8,7 @@
 
 Zombie::~Zombie() {}
 
-Zombie* Zombie::get_random_zombie(int secure, PhysicsManager *physics) {
+Zombie* Zombie::get_random_zombie(int secure, PhysicsManager *physics, std::vector<PlayerState>& players) {
     int q;
     if (secure == -1) {
         q = getRandomNumber(0,4);
@@ -17,30 +17,45 @@ Zombie* Zombie::get_random_zombie(int secure, PhysicsManager *physics) {
     } else if (secure == 5) {
         q = getRandomNumber(0,3);
     }
-    int x = getRandomNumber(GameConfig::get_instance()->get_value<int>("SPAWNER_SAFE_AREA_X"), GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"));  // Random X position within game area
-    int y = getRandomNumber(0, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"));  // Random Y position within game area
-    Vector2D position(x, y);
+    int distance;
+    int x,y;
+
+    do {
+        distance = 99999;
+        x = getRandomNumber(0, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"));  // Random X position within game area
+        y = getRandomNumber(0, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"));  // Random Y position within game area
+        Vector2D this_pos(x, y);
+        for (GameEntity &player : players) {
+            Vector2D vector = player.get_location();
+            int new_d = calculateDistance(this_pos,vector);
+            if (new_d < distance) {
+                distance = new_d;
+            }
+        } 
+    } while (distance < GameConfig::get_instance()->get_value<int>("SPAWNER_SAFE_AREA_X"));
+    
+    Vector2D this_pos(x, y);
     if (q == 0) {
-        return new CommonZombie("Common", position, physics);
+        return new CommonZombie("Common", this_pos, physics);
     } else if (q == 1) {
-        return new Jumper("Jumper", position, physics);
+        return new Jumper("Jumper", this_pos, physics);
     } else if (q == 2) {
-        return new Spear("Spear",position, physics);
+        return new Spear("Spear",this_pos, physics);
     } else if (q == 3) {
-        return new Venom("Venom", position, physics);
+        return new Venom("Venom", this_pos, physics);
     } else if (q == 4) {
-        return new Witch("Witch", position, physics);
+        return new Witch("Witch", this_pos, physics);
     }
     std::cout << "ERROR: GETRANDOMZOMBIE RETURNS NULL" << std::endl;
     return nullptr;
 }
 
-void Zombie::generate_clear_the_area(int zombies, std::list<Zombie*>& list, PhysicsManager *physics) {
+void Zombie::generate_clear_the_area(int zombies, std::list<Zombie*>& list, PhysicsManager *physics, std::vector<PlayerState>& players) {
     for (int i = 0; i < (zombies/2); i++) {
-        list.push_back(get_random_zombie(0, physics));
+        list.push_back(get_random_zombie(0, physics, players));
     }
     for (int i = 0; i < (zombies/2); i++) {
-        list.push_back(get_random_zombie(2, physics));
+        list.push_back(get_random_zombie(-1, physics, players));
     }
     std::cout << "GENERATED CLEAR THE AREA WITH " << zombies << " zombies, " << (zombies/2) << " commond and " << (zombies/2)<< " random" << std::endl;
 }
@@ -94,36 +109,6 @@ void Zombie::set_direction(int x, int y) {
         this->facing_direction = RIGHT;
     }
 }
-/*
-void Zombie::next_state() {
-    Vector2D target_position = target->get_location();
-    // Calculate the direction vector from the zombie to the player
-    Vector2D target_direction = target_position - position;
-    // Normalize the target direction if it's not too close to zero
-    float threshold = 0.001f;
-    float magnitude = target_direction.magnitude();
-    if (magnitude > threshold) {
-        target_direction.x /= magnitude;
-        target_direction.y /= magnitude;
-    } else {
-        target_direction = Vector2D(0.0f, 0.0f);  // Set target direction to zero if too close to zero
-    }
-    // Adjust the current direction towards the target direction
-    float dampingFactor = 0.1f;  // Adjust this value to control the damping effect
-    direction += dampingFactor * (target_direction - direction);
-    // Normalize the direction
-    magnitude = direction.magnitude();
-    if (magnitude > threshold) {
-        direction.x /= magnitude;
-        direction.y /= magnitude;
-    } else {
-        direction = Vector2D(0.0f, 0.0f);  // Set direction to zero if too close to zero
-    }
-
-    // Normalize the direction vector
-    // direction = new_direction.normalized();
-    // std::cout << "My new direction is " << direction.x << "and y " << direction.y << std::endl;
-}*/
 
 uint8_t Zombie::get_damage()
 {
@@ -253,6 +238,8 @@ Spear::Spear(
     health = config->get_value<int>("SPEAR_HP");
     speed = config->get_value<int>("SPEAR_SPEED");
     seeking_distance = config->get_value<int>("SPEAR_SEEKING_DISTANCE");
+    rect_width = config->get_value<int>("SPEAR_RECT_WIDTH");
+    rect_height = config->get_value<int>("SPEAR_RECT_HEIGHT");
 }
 
 Spear::Spear(
@@ -306,6 +293,8 @@ Venom::Venom(
     seeking_distance = config->get_value<int>("VENOM_SEEKING_DISTANCE");
     health = config->get_value<uint8_t>("VENOM_HP");
     speed = config->get_value<uint16_t>("VENOM_SPEED");
+    rect_width = config->get_value<int>("VENOM_RECT_WIDTH");
+    rect_height = config->get_value<int>("VENOM_RECT_HEIGHT");
     cooldown = 0;
 }
 
@@ -344,10 +333,14 @@ Witch::Witch(
 Witch::~Witch() {}
 
 int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->id == 53 && this->health == 0) {//particlarmente, el spear no se muere
+        state = DEAD;
+        return GameConfig::get_instance()->get_value<int>("CODE_NULL");
+    }
     bool impaired = false;
     if (this->health == 0)
         return GameConfig::get_instance()->get_value<int>("CODE_NULL");
-    if(this->smoked_time > 0) {
+    if (this->smoked_time > 0) {
         impaired = true;
         smoked_time--;
         speed = speed / 2;
