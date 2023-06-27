@@ -19,7 +19,7 @@ Zombie* Zombie::get_random_zombie(int secure, PhysicsManager *physics, std::vect
     }
     int distance;
     int x,y;
-    
+
     do {
         distance = 99999;
         x = getRandomNumber(0, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"));  // Random X position within game area
@@ -238,6 +238,8 @@ Spear::Spear(
     health = config->get_value<int>("SPEAR_HP");
     speed = config->get_value<int>("SPEAR_SPEED");
     seeking_distance = config->get_value<int>("SPEAR_SEEKING_DISTANCE");
+    rect_width = config->get_value<int>("SPEAR_RECT_WIDTH");
+    rect_height = config->get_value<int>("SPEAR_RECT_HEIGHT");
 }
 
 Spear::Spear(
@@ -291,6 +293,8 @@ Venom::Venom(
     seeking_distance = config->get_value<int>("VENOM_SEEKING_DISTANCE");
     health = config->get_value<uint8_t>("VENOM_HP");
     speed = config->get_value<uint16_t>("VENOM_SPEED");
+    rect_width = config->get_value<int>("VENOM_RECT_WIDTH");
+    rect_height = config->get_value<int>("VENOM_RECT_HEIGHT");
     cooldown = 0;
 }
 
