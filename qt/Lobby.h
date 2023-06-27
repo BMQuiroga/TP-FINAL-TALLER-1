@@ -30,8 +30,8 @@ private:
     void selectPlayerOption();
     void closeEvent(QCloseEvent *event);
     bool is_active {true};
-    QLineEdit* inputName;
-    QPushButton* activeButton;
+    QLineEdit* inputName{nullptr};
+    QPushButton* activeButton{nullptr};
     QString initial_stylesheet;
 };
 

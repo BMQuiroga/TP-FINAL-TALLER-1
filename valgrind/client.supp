@@ -1,0 +1,108 @@
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_closure_invoke
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.29
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:atk_add_focus_tracker
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.20.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:gtk_css_provider_load_from_path
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_type_create_instance
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_signal_emit_valist
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:_ZN22QGuiApplicationPrivate21createEventDispatcherEv
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libQt5Gui.so.5.15.3
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libQt5Widgets.so.5.15.3
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_signal_emit
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.7200.4
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/qt5/plugins/platformthemes/libqgtk3.so
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:_dl_catch_exception
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libQt5XcbQpa.so.5.15.3
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:XmbTextListToTextProperty
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:_ZN4YAML11NodeBuilder4PushERKNS_4MarkEm
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.18.2
+}

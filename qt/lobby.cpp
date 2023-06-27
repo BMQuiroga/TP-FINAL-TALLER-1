@@ -20,8 +20,9 @@ int Lobby::getPlayerTypeNumber(const QString& playerType) {
 }
 
 void Lobby::sendNewPlayerInfo() {
+    std::cout << "Huwuw" << std::endl;
     inputName = findChild<QLineEdit*>("inputName");
-    if (!activeButton) {
+    if (activeButton == nullptr) {
         QLabel* errorLabel = findChild<QLabel*>("error");
         errorLabel->setText("Elija una de las opciones antes de continuar");
         return;
