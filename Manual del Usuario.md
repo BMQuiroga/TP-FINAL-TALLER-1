@@ -100,3 +100,24 @@ Jumper: Tiene la capacidad de saltar, tiene baja vida, sin embargo hace mucho da
 
 ![](./resources/user%20manual%20pics/jumper.png)
 
+
+### Lobby
+
+Antes de empezar a jugar, necesita ingresar un nombre y elegir qué personaje usar.
+
+![Lobby](./resources/user%20manual%20pics/lobby.gif)
+
+Una vez hecho este paso, puede crear una partida nueva, o unirse a una partida ya existente. 
+
+Para crear una nueva partida, hay que elegir el modo de juego, darle un nombre a la partida e indicar 
+la cantidad de jugadores que podrán conectarse a la partida. Una vez creada la partida, tendrá que esperar a que la partida se llene.
+
+![Partida nueva](./resources/user%20manual%20pics/partida_nueva.gif)
+
+Para unirse a una partida, le aparece una lista de partidas disponibles a unirse y deberá ingresar el código de la partida que quiera.
+
+<img src="./resources/user manual pics/join_game.png" alt="Join Game" width="600px">
+
+Si el código no es valido, aparecerá un mensaje de error.
+
+<img src="./resources/user manual pics/codigo_no_valido.png" alt="Codigo no valido" width="600px">
