@@ -63,18 +63,34 @@ Granada 2: H
 ### Personajes:
 IDF: cuenta con un rifle de rafagas de corta distancia, granadas de humo que relentizan o aturden enemigos y granadas explosivas las cuales se pueden cargar para lanzarlas mas lejos, cuidado de no mantenerla en tu mano por demasiado tiempo!
 
+![](./resources/user%20manual%20pics/soldier1.png)
+
 P90: cuenta con una ametralladora multi-proposito y bombardero aereo cuyo poder es devastador
 
+![](./resources/user%20manual%20pics/soldier2.png)
+
 Scout: cuenta con un rifle de larga distancia con balas que atraviesan enemigos y un las mismas granadas que IDF
+
+![](./resources/user%20manual%20pics/soldier3.png)
 
 ### Zombies:
 Infectado: Zombie comun, corre hacia el jugador mas cercano e intenta hacerle daño.
 
+![](./resources/user%20manual%20pics/zombie.png)
+
 Spear: Zombie armado con una lanza, es mas lento pero hace mas daño.
+
+![](./resources/user%20manual%20pics/spear.png)
 
 Venom: Tiene la capacidad de lanzar proyectiles de larga distancia a traves del mapa y tambien tiene un ataque de corto rango.
 
+![](./resources/user%20manual%20pics/venom.png)
+
 Witch: Ocacionalmente se pone a gritar, atrayendo a mas Zombies, tiene muchisima vida, pero no se mueve ni ataca directamente.
 
+![](./resources/user%20manual%20pics/witch.png)
+
 Jumper: Tiene la capacidad de saltar, tiene baja vida, sin embargo hace mucho daño y es muy rapido.
+
+![](./resources/user%20manual%20pics/jumper.png)
 
