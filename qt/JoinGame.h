@@ -1,7 +1,7 @@
 #ifndef JOIN_GAME_H
 #define JOIN_GAME_H
 #define SUCCESS_MESSAGE "Te uniste a la partida correctamente"
-#define FAILURE_MESSAGE "El código de partida no era valida. Intenta nuevamente."
+#define FAILURE_MESSAGE "El código ingresado no es válido. Intente nuevamente."
 
 #include "../common_src/protocol_types.h"
 #include <QWidget>
