@@ -90,7 +90,7 @@ class GameLoop : public Thread {
     // PropertyObserver<uint16_t, GameEntity> on_entity_moved;
   public:
     explicit GameLoop(
-        Queue<GameEvent> &events, uint8_t number_players=MAX_PLAYERS, int game_mode=DEFAULT_MODE) : 
+        Queue<GameEvent> &events, uint8_t number_players=GameConfig::get_instance()->get_value<int>("MAX_PLAYERS"), int game_mode=GameConfig::get_instance()->get_value<int>("DEFAULT_MODE")) : 
         events(events), state{CREATED}, number_players(number_players), game_mode(game_mode) {
             physics.set_layer_collision_mask(
                 CollisionLayer::Friendly,
@@ -203,7 +203,7 @@ class GameLoop : public Thread {
         resp.game_state = state;
         resp.kills = this->kills;
         resp.shots = this->shots;
-        resp.time = this->game_ticks / GAME_TICK_RATE;
+        resp.time = this->game_ticks / GameConfig::get_instance()->get_value<int>("GAME_TICK_RATE");
 
 
         if (zombies.empty() && game_mode == GM_CTA) {//CTA termina cuando no hay mas zombies
@@ -330,7 +330,7 @@ class GameLoop : public Thread {
         while (state == CREATED) {
             GameEvent event;
             int n_events = 0;
-            while (events.try_pop(event) && n_events < EVENTS_PER_LOOP) {
+            while (events.try_pop(event) && n_events < GameConfig::get_instance()->get_value<int>("EVENTS_PER_LOOP")) {
                 n_events++;
                 if (event.req.cmd == JOIN) {
                     int code = join_game(event);
@@ -343,20 +343,20 @@ class GameLoop : public Thread {
                 }
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_TIME_START_GAME + LAG_CONSTANT));
+        std::this_thread::sleep_for(std::chrono::milliseconds(GameConfig::get_instance()->get_value<int>("WAIT_TIME_START_GAME") + GameConfig::get_instance()->get_value<int>("LAG_CONSTANT")));
         if (game_mode == GM_CTA)
-            Zombie::generate_clear_the_area(CTA_NUMBER_OF_ZOMBIES,zombies, &physics);
+            Zombie::generate_clear_the_area(GameConfig::get_instance()->get_value<int>("CTA_NUMBER_OF_ZOMBIES"),zombies, &physics);
         
-        int delayMilliseconds = static_cast<int>(1000.0 / GAME_TICK_RATE);
+        int delayMilliseconds = static_cast<int>(1000.0 / GameConfig::get_instance()->get_value<int>("GAME_TICK_RATE"));
         auto game_started_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
         while (state == STARTED) {
             game_ticks++;
-            int spawn_interval = getRandomNumber(ZOMBIE_CREATION_TIME_MIN, ZOMBIE_CREATION_TIME_MAX);
+            int spawn_interval = getRandomNumber(GameConfig::get_instance()->get_value<int>("ZOMBIE_CREATION_TIME_MIN"), GameConfig::get_instance()->get_value<int>("ZOMBIE_CREATION_TIME_MAX"));
             auto startTime = std::chrono::high_resolution_clock::now();
             GameEvent event;
             int n_events = 0;
-            while (events.try_pop(event) && n_events < EVENTS_PER_LOOP) {
+            while (events.try_pop(event) && n_events < GameConfig::get_instance()->get_value<int>("EVENTS_PER_LOOP")) {
                 n_events++;
                 // std::cout << "Popped event with cmd=" << std::to_string(event.req.cmd) << std::endl;
                 PlayerState *player = get_player(event.player_name);
@@ -378,9 +378,9 @@ class GameLoop : public Thread {
             int zombies_to_spawn_via_witch = 0;
             for (Zombie* &zombie : zombies) {
                 int i = zombie->calculate_next_movement(players);
-                if (i == CODE_WITCH_SPAWN)
+                if (i == GameConfig::get_instance()->get_value<int>("CODE_WITCH_SPAWN"))
                     zombies_to_spawn_via_witch++;
-                if (i == CODE_VENOM_PROJECTILE) {
+                if (i == GameConfig::get_instance()->get_value<int>("CODE_VENOM_PROJECTILE")) {
                     vomit.push_back(Vomit_Projectile(zombie->get_location(),zombie->get_facing_direction()));
                     //TODO crear el proyectil enemigo
                 }           
@@ -397,7 +397,7 @@ class GameLoop : public Thread {
             auto current_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
             auto interval = current_time - game_started_time;
-            if (interval % spawn_interval < 100 && interval > 0 && zombies.size() < MAX_ZOMBIES) {
+            if (interval % spawn_interval < 100 && interval > 0 && zombies.size() < GameConfig::get_instance()->get_value<int>("MAX_ZOMBIES")) {
                 if (game_mode == GM_SURVIVAL)
                     spawn_enemy(-1);//cualquier zombie
             }

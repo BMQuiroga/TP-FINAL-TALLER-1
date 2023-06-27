@@ -30,7 +30,7 @@ class Zombie : public GameEntity {
   //clase zombie, hija de GameEntity
   protected:
     uint8_t damage;
-    uint8_t health{ZOMBIE_HP};
+    uint8_t health{(uint8_t)GameConfig::get_instance()->get_value<int>("ZOMBIE_HP")};
     uint8_t zombie_type;
     uint8_t attack_type;
     uint8_t movement_type;
@@ -79,8 +79,8 @@ class CommonZombie : public Zombie {
     CommonZombie(
       const std::string &name,
       Vector2D position,
-      int16_t max_x = DEFAULT_MAX_X,
-      int16_t max_y = DEFAULT_MAX_Y,
+      int16_t max_x = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"),
+      int16_t max_y = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"),
       PhysicsManager *physics = nullptr
     );
     CommonZombie(
@@ -101,8 +101,8 @@ class Jumper : public Zombie {
     Jumper(
       const std::string &name,
       Vector2D position,
-      int16_t max_x = DEFAULT_MAX_X,
-      int16_t max_y = DEFAULT_MAX_Y,
+      int16_t max_x = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"),
+      int16_t max_y = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"),
       PhysicsManager *physics = nullptr
     );
     Jumper(
@@ -124,8 +124,8 @@ class Spear : public Zombie {
     Spear(
       const std::string &name,
       Vector2D position,
-      int16_t max_x = DEFAULT_MAX_X,
-      int16_t max_y = DEFAULT_MAX_Y,
+      int16_t max_x = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"),
+      int16_t max_y = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"),
       PhysicsManager *physics = nullptr
     );
     Spear(
@@ -143,8 +143,8 @@ class Witch : public Zombie {
     Witch(
       const std::string &name,
       Vector2D position,
-      int16_t max_x = DEFAULT_MAX_X,
-      int16_t max_y = DEFAULT_MAX_Y,
+      int16_t max_x = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"),
+      int16_t max_y = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"),
       PhysicsManager *physics = nullptr
     );
     Witch(
@@ -166,8 +166,8 @@ class Venom : public Zombie {
     Venom(
       const std::string &name,
       Vector2D position,
-      int16_t max_x = DEFAULT_MAX_X,
-      int16_t max_y = DEFAULT_MAX_Y,
+      int16_t max_x = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"),
+      int16_t max_y = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"),
       PhysicsManager *physics = nullptr
     );
     Venom(

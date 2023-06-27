@@ -17,8 +17,8 @@ Zombie* Zombie::get_random_zombie(int secure, PhysicsManager *physics) {
     } else if (secure == 5) {
         q = getRandomNumber(0,3);
     }
-    int x = getRandomNumber(SPAWNER_SAFE_AREA_X, DEFAULT_MAX_X);  // Random X position within game area
-    int y = getRandomNumber(0, DEFAULT_MAX_Y);  // Random Y position within game area
+    int x = getRandomNumber(GameConfig::get_instance()->get_value<int>("SPAWNER_SAFE_AREA_X"), GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"));  // Random X position within game area
+    int y = getRandomNumber(0, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"));  // Random Y position within game area
     Vector2D position(x, y);
     if (q == 0) {
         return new CommonZombie("Common", position, physics);
@@ -174,14 +174,14 @@ CommonZombie::CommonZombie(
     zombie_type = ZOMBIE;
     attack_type = ZOMBIE_BITE;
     movement_type = ZOMBIE_WALK;
-    health = ZOMBIE_HP;
+    health = GameConfig::get_instance()->get_value<int>("ZOMBIE_HP");
 }
 
 CommonZombie::CommonZombie(
     const std::string &name,
     Vector2D position,
     PhysicsManager *physics
-) : CommonZombie(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+) : CommonZombie(name, position, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"), GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"), physics) {}
 
 CommonZombie::CommonZombie(CommonZombie&& other)
     : Zombie(std::move(other)) {
@@ -229,14 +229,14 @@ Zombie::Zombie(
     rect_height = config->get_value<int>("ZOMBIE_RECT_HEIGHT");
     speed = config->get_value<int>("ZOMBIE_SPEED");
     seeking_distance = config->get_value<int>("ZOMBIE_SEEKING_DISTANCE");
-    show_death_timer = ZOMBIE_TIMER;
+    show_death_timer = GameConfig::get_instance()->get_value<int>("ZOMBIE_TIMER");
 }
 
 Zombie::Zombie(
     const std::string &name,
     Vector2D position,
     PhysicsManager *physics
-) : Zombie(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+) : Zombie(name, position, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"), GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"), physics) {}
 
 Spear::Spear(
     const std::string &name,
@@ -260,7 +260,7 @@ Spear::Spear(
     const std::string &name,
     Vector2D position,
     PhysicsManager *physics
-) : Spear(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+) : Spear(name, position, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"), GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"), physics) {}
 
 Spear::~Spear() {}
 
@@ -287,7 +287,7 @@ Jumper::Jumper(
     const std::string &name,
     Vector2D position,
     PhysicsManager *physics
-) : Jumper(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+) : Jumper(name, position, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"), GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"), physics) {}
 
 Jumper::~Jumper() {}
 
@@ -315,7 +315,7 @@ Venom::Venom(
     const std::string &name,
     Vector2D position,
     PhysicsManager *physics
-) : Venom(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+) : Venom(name, position, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"), GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"), physics) {}
 
 Venom::~Venom() {}
 
@@ -341,14 +341,14 @@ Witch::Witch(
     const std::string &name,
     Vector2D position,
     PhysicsManager *physics
-) : Witch(name, position, DEFAULT_MAX_X, DEFAULT_MAX_Y, physics) {}
+) : Witch(name, position, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"), GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"), physics) {}
 
 Witch::~Witch() {}
 
 int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
     bool impaired = false;
     if (this->health == 0)
-        return CODE_NULL;
+        return GameConfig::get_instance()->get_value<int>("CODE_NULL");
     if(this->smoked_time > 0) {
         impaired = true;
         smoked_time--;
@@ -367,7 +367,7 @@ int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
             closest_y = vector.y;
         }
     }
-    if (distance < seeking_distance || this->health < ZOMBIE_HP) {
+    if (distance < seeking_distance || this->health < GameConfig::get_instance()->get_value<int>("ZOMBIE_HP")) {
         float next_pos_x = this_pos.x - closest_x;
         float next_pos_y = this_pos.y - closest_y;
         int direction_x = next_pos_x > 0 ? -1 : next_pos_x < 0 ? 1 : 0;
@@ -379,16 +379,16 @@ int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
     move();
     if (impaired)
         speed = speed * 2;
-    return CODE_NULL;
+    return GameConfig::get_instance()->get_value<int>("CODE_NULL");
 }
 
 int Witch::calculate_next_movement(std::vector<PlayerState>& players) {
     if (this->health == 0)
-        return CODE_NULL;
+        return GameConfig::get_instance()->get_value<int>("CODE_NULL");
     if(this->smoked_time > 0) {
         smoked_time--;
         state = IDLE;
-        return CODE_NULL;
+        return GameConfig::get_instance()->get_value<int>("CODE_NULL");
     }
     GameConfig *config = GameConfig::get_instance();
     if (state == IDLE) {
@@ -399,10 +399,10 @@ int Witch::calculate_next_movement(std::vector<PlayerState>& players) {
     } else if (state == SCREAMING) {
         int x = getRandomNumber(0,config->get_value<int>("WITCH_SPAWN_CHANCE"));
         if (x == 2) {
-            return CODE_WITCH_SPAWN;
+            return GameConfig::get_instance()->get_value<int>("CODE_WITCH_SPAWN");
         }
     }
-    return CODE_NULL;
+    return GameConfig::get_instance()->get_value<int>("CODE_NULL");
 }
 
 int Jumper::calculate_next_movement(std::vector<PlayerState>& players) {
@@ -410,7 +410,7 @@ int Jumper::calculate_next_movement(std::vector<PlayerState>& players) {
         smoked_time--;
     }
     if (this->health == 0)
-        return CODE_NULL;
+        return GameConfig::get_instance()->get_value<int>("CODE_NULL");
     if (this->state == HURT && cooldown > 0 && this->smoked_time == 0) {
         cooldown--;
     } else if (this->state == HURT && cooldown == 0) {
@@ -426,7 +426,7 @@ int Jumper::calculate_next_movement(std::vector<PlayerState>& players) {
             this->objetive.y = -1;
         }
     }
-    return CODE_NULL;
+    return GameConfig::get_instance()->get_value<int>("CODE_NULL");
 }
 
 void Jumper::set_objetive(std::vector<PlayerState>& players) {
@@ -473,7 +473,7 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
     if (this->smoked_time > 0)
         smoked_time--;
     if (this->health == 0)
-        return CODE_NULL;
+        return GameConfig::get_instance()->get_value<int>("CODE_NULL");
     if (cooldown > 0)
         cooldown--;
     float closest_x = 0;
@@ -501,9 +501,9 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
             if (cooldown == 0 && smoked_time == 0) {
                 state = THROWING_GRENADE;
                 cooldown = config->get_value<int>("VENOM_PROJECTILE_COOLDOWN");
-                return CODE_VENOM_PROJECTILE;
+                return GameConfig::get_instance()->get_value<int>("CODE_VENOM_PROJECTILE");
             } else {
-                return CODE_NULL;
+                return GameConfig::get_instance()->get_value<int>("CODE_NULL");
             }
         set_direction(0,direction_y);
         }
@@ -511,7 +511,7 @@ int Venom::calculate_next_movement(std::vector<PlayerState>& players) {
         set_direction(0,0);
     }   
     move();
-    return CODE_NULL;
+    return GameConfig::get_instance()->get_value<int>("CODE_NULL");
 }
 
 void Jumper::attack(GameEntity * other) {

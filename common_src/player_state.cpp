@@ -4,7 +4,6 @@
 #include <list>
 #include <utility>
 #include <arpa/inet.h>
-#include "game_config.h"
 
 PlayerState::PlayerState(
     const std::string &name,
@@ -58,7 +57,7 @@ void PlayerState::take_damage(uint8_t damage) {
     std::cout << "PLAYER TD" << std::endl;
     if (damage > hit_points) {
         hit_points = 0;
-        //respawn_time = RESPAWN_TIME;
+        //respawn_time = GameConfig::get_instance()->get_value<int>("RESPAWN_TIME");
     } else {
         hit_points -= damage;
     } 
@@ -240,7 +239,7 @@ void PlayerState::pass_time() {
         respawn_time = -1;
         this->hit_points = 100;
     } else if (this->hit_points == 0 && this->respawn_time == -1) {
-        respawn_time = RESPAWN_TIME;
+        this->respawn_time = GameConfig::get_instance()->get_value<int>("RESPAWN_TIME");
     }
 }
 

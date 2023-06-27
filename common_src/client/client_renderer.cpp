@@ -53,14 +53,14 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse
     renderer(window, -1, SDL_RENDERER_ACCELERATED),
     mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096) {
     this->assets = AssetManager::Instance(this->renderer);
-    Mix_VolumeMusic(MIN_MAX_VOLUME / 100 * GAME_VOLUME);
+    Mix_VolumeMusic(GameConfig::get_instance()->get_value<int>("MIN_MAX_VOLUME") / 100 * GameConfig::get_instance()->get_value<int>("GAME_VOLUME"));
     std::cout << "player name is " << this->player_name << std::endl;
     //mixer.OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 }
 
 void ClientRenderer::GameLoop() {
     // std::list<Image>* new_update = nullptr;
-    int wait_time = 1000/GAME_FRAME_RATE;
+    int wait_time = 1000/GameConfig::get_instance()->get_value<int>("GAME_FRAME_RATE");
     std::list<Image>* frames_list = nullptr;
     //this->assets->play_music(this->mixer); //anda horrible
     ProtocolResponse new_update;
@@ -177,17 +177,17 @@ void ClientRenderer::play(Image & im) {
 void ClientRenderer::calculate_offset() {
     for (auto const& it : *actual_frame) {
         if (it.name == player_name) {
-            //offset = (RESOLUTION_X/2) - it.x;
-            //int a = (RESOLUTION_X / 2) - it.x;;
-            //int b = DEFAULT_MAX_X - RESOLUTION_X;
+            //offset = (GameConfig::get_instance()->get_value<int>("RESOLUTION_X")/2) - it.x;
+            //int a = (GameConfig::get_instance()->get_value<int>("RESOLUTION_X") / 2) - it.x;;
+            //int b = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X") - GameConfig::get_instance()->get_value<int>("RESOLUTION_X");
             //offset = std::max(std::min(a,0), std::min(b,0));
-            int fix = RESOLUTION_X/2;
-            int max = DEFAULT_MAX_X + 128;//128 es el tamaño del modelo del jugador
+            int fix = GameConfig::get_instance()->get_value<int>("RESOLUTION_X")/2;
+            int max = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X") + 128;//128 es el tamaño del modelo del jugador
             int x = it.x;
             if (x < fix)
                 offset = 0;
             else if (x > (max - fix))
-                offset = RESOLUTION_X - max;
+                offset = GameConfig::get_instance()->get_value<int>("RESOLUTION_X") - max;
             else
                 offset = fix - x;
 
@@ -213,7 +213,7 @@ void ClientRenderer::render(Image & im) {
     renderer.Copy(
         (*asset->get_texture()),
         SDL2pp::Rect(asset->get_length() * im.frame, 0, asset->get_length(), asset->get_height()),
-        SDL2pp::Rect(x, y + Y_OFFSET, asset->get_length() - 1, asset->get_height() - 1),
+        SDL2pp::Rect(x, y + GameConfig::get_instance()->get_value<int>("Y_OFFSET"), asset->get_length() - 1, asset->get_height() - 1),
         0,
         SDL2pp::NullOpt,
         im.flip > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
@@ -260,12 +260,12 @@ void ClientRenderer::renderHealth(uint16_t x, uint16_t y, uint8_t hp) {
 
     /*renderer.Copy(
         (*empty->get_texture()),
-        SDL2pp::Rect(0,0,50,HP_BAR_HEIGHT),
-        SDL2pp::Rect(x , y + (HP_BAR_HEIGHT*2) + Y_OFFSET, HP_BAR_LENGTH - 1, HP_BAR_HEIGHT - 1));*/
+        SDL2pp::Rect(0,0,50,GameConfig::get_instance()->get_value<int>("HP_BAR_HEIGHT")),
+        SDL2pp::Rect(x , y + (GameConfig::get_instance()->get_value<int>("HP_BAR_HEIGHT")*2) + GameConfig::get_instance()->get_value<int>("Y_OFFSET"), GameConfig::get_instance()->get_value<int>("HP_BAR_LENGTH") - 1, GameConfig::get_instance()->get_value<int>("HP_BAR_HEIGHT") - 1));*/
     renderer.Copy(
         (*full->get_texture()),
-        SDL2pp::Rect(0,0,HP_BAR_LENGTH,HP_BAR_HEIGHT),
-        SDL2pp::Rect(x , y + (HP_BAR_HEIGHT*2) + Y_OFFSET, std::round(hp_percentage) - 1, HP_BAR_HEIGHT - 1));
+        SDL2pp::Rect(0,0,GameConfig::get_instance()->get_value<int>("HP_BAR_LENGTH"),GameConfig::get_instance()->get_value<int>("HP_BAR_HEIGHT")),
+        SDL2pp::Rect(x , y + (GameConfig::get_instance()->get_value<int>("HP_BAR_HEIGHT")*2) + GameConfig::get_instance()->get_value<int>("Y_OFFSET"), std::round(hp_percentage) - 1, GameConfig::get_instance()->get_value<int>("HP_BAR_HEIGHT") - 1));
 }
 
 void ClientRenderer::renderBackground() {
@@ -301,7 +301,7 @@ bool ClientRenderer::handleEvents() {
 void ClientRenderer::DeathScreen() {
     assets->play(152,this->mixer);
     Asset * asset = assets->GetAsset(-5);
-    for (int i = 0; i < GAME_FRAME_RATE*5 ; i++) {
+    for (int i = 0; i < GameConfig::get_instance()->get_value<int>("GAME_FRAME_RATE")*5 ; i++) {
         renderer.Clear();
         renderer.Copy(
             (*asset->get_texture()),
@@ -318,7 +318,7 @@ void ClientRenderer::VictoryScreen() {
     running = false;
     assets->play(153,this->mixer);
     Asset * asset = assets->GetAsset(-6);
-    for (int i = 0; i < GAME_FRAME_RATE*5 ; i++) {
+    for (int i = 0; i < GameConfig::get_instance()->get_value<int>("GAME_FRAME_RATE")*5 ; i++) {
         renderer.Clear();
         renderer.Copy(
             (*asset->get_texture()),

@@ -3,8 +3,8 @@
 Grenade::Grenade(int type, uint16_t x, uint16_t y, bool exploded_on_hand, PhysicsManager *physics) :
 GameEntity(
     "nade",
-    DEFAULT_MAX_X,
-    DEFAULT_MAX_Y,
+    GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"),
+    GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"),
     type == SMOKE_GRENADE ? CollisionLayer::FriendlyProjectile : CollisionLayer::FriendlyExplosive,
     physics
 ) {
@@ -14,24 +14,24 @@ GameEntity(
     this->dead = false;
     this->sound = true;
     if (type == HE_GRENADE) {
-        this->damage = GRANADA_DAMAGE;
+        this->damage = GameConfig::get_instance()->get_value<int>("GRANADA_DAMAGE");
         this->smoke = false;
         this->air_strike = false;
-        this->time_to_change = GRANADA_DELAY_12;
+        this->time_to_change = GameConfig::get_instance()->get_value<int>("GRANADA_DELAY_12");
     } else if (type == SMOKE_GRENADE) {
         this->damage = 0;
         this->smoke = true;
         this->air_strike = false;
-        this->time_to_change = GRANADA_DELAY_12;
+        this->time_to_change = GameConfig::get_instance()->get_value<int>("GRANADA_DELAY_12");
     } else if (type == AIR_STRIKE) {
-        this->damage = AIR_STRIKE_DAMAGE;
+        this->damage = GameConfig::get_instance()->get_value<int>("AIR_STRIKE_DAMAGE");
         this->smoke = false;
         this->air_strike = true;
-        this->time_to_change = GRANADA_DELAY_12;
+        this->time_to_change = GameConfig::get_instance()->get_value<int>("GRANADA_DELAY_12");
     }
     this->position = Vector2D(x,y);
-    this->rect_width = GRANADA_SIZE;
-    this->rect_height = GRANADA_SIZE;
+    this->rect_width = GameConfig::get_instance()->get_value<int>("GRANADA_SIZE");
+    this->rect_height = GameConfig::get_instance()->get_value<int>("GRANADA_SIZE");
 }
 
 void Grenade::advance_time() {
@@ -42,10 +42,10 @@ void Grenade::advance_time() {
     if (time_to_change <= 0) {         
         if (state == 1) {
             state = 2;
-            time_to_change = GRANADA_DELAY_23;
+            time_to_change = GameConfig::get_instance()->get_value<int>("GRANADA_DELAY_23");
         } else if (state == 2) {
             state = 3;
-            time_to_change = GRANADA_DELAY_3;
+            time_to_change = GameConfig::get_instance()->get_value<int>("GRANADA_DELAY_3");
         } else if (state == 3) {
             state = 4;
         } else if (state == 4) {

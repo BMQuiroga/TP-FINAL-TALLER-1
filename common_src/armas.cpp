@@ -75,28 +75,28 @@ Arma::~Arma() {
 
 void Arma1::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) {
     //position.y -= 80;//para que dispare desde el pecho
-    vec.push_back(Bullet(ARMA1_DAMAGE,ARMA1_BULLET_COUNT,direc,false,position,true,physics));
+    vec.push_back(Bullet(GameConfig::get_instance()->get_value<int>("ARMA1_DAMAGE"),GameConfig::get_instance()->get_value<int>("ARMA1_BULLET_COUNT"),direc,false,position,true,physics));
 }
 
-Arma1::Arma1() : Arma(ARMA1_MAGAZINE,ARMA1_RELOAD_DELAY,ARMA1_SHOOT_DELAY) {
+Arma1::Arma1() : Arma(GameConfig::get_instance()->get_value<int>("ARMA1_MAGAZINE"),GameConfig::get_instance()->get_value<int>("ARMA1_RELOAD_DELAY"),GameConfig::get_instance()->get_value<int>("ARMA1_SHOOT_DELAY")) {
     this->grenades = new DefaultGH();
 }
 
 void Arma2::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) {
     //position.y -= 80;//para que dispare desde el pecho
-    vec.push_back(Bullet(ARMA2_DAMAGE,ARMA2_BULLET_COUNT,direc,false,position));
+    vec.push_back(Bullet(GameConfig::get_instance()->get_value<int>("ARMA2_DAMAGE"),GameConfig::get_instance()->get_value<int>("ARMA2_BULLET_COUNT"),direc,false,position));
 }
 
-Arma2::Arma2() : Arma(ARMA2_MAGAZINE,ARMA2_RELOAD_DELAY,ARMA2_SHOOT_DELAY) {
+Arma2::Arma2() : Arma(GameConfig::get_instance()->get_value<int>("ARMA2_MAGAZINE"),GameConfig::get_instance()->get_value<int>("ARMA2_RELOAD_DELAY"),GameConfig::get_instance()->get_value<int>("ARMA2_SHOOT_DELAY")) {
     this->grenades = new Bombarder();
 }
 
 void Arma3::create_bullet(Vector2D position, entity_direction direc, std::list<Bullet>& vec, PhysicsManager *physics) {
     //position.y -= 80;//para que dispare desde el pecho
-    vec.push_back(Bullet(ARMA3_DAMAGE,ARMA3_BULLET_COUNT,direc,true,position));
+    vec.push_back(Bullet(GameConfig::get_instance()->get_value<int>("ARMA3_DAMAGE"),GameConfig::get_instance()->get_value<int>("ARMA3_BULLET_COUNT"),direc,true,position));
 }
 
-Arma3::Arma3() : Arma(ARMA3_MAGAZINE,ARMA3_RELOAD_DELAY,ARMA3_SHOOT_DELAY) {
+Arma3::Arma3() : Arma(GameConfig::get_instance()->get_value<int>("ARMA3_MAGAZINE"),GameConfig::get_instance()->get_value<int>("ARMA3_RELOAD_DELAY"),GameConfig::get_instance()->get_value<int>("ARMA3_SHOOT_DELAY")) {
     this->grenades = new DefaultGH();
 }
 
@@ -140,32 +140,32 @@ void Bombarder::advance_time() {
 void DefaultGH::create(int type, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics) {
     if (direc == LEFT) {
         if (type == HE_GRENADE)
-            gren.push_back(Grenade(HE_GRENADE, position.x - (GRANADA_FUERZA*e_distance), position.y, e_distance == 0, physics));
+            gren.push_back(Grenade(HE_GRENADE, position.x - (GameConfig::get_instance()->get_value<int>("GRANADA_FUERZA")*e_distance), position.y, e_distance == 0, physics));
         if (type == SMOKE_GRENADE)
-            gren.push_back(Grenade(SMOKE_GRENADE, position.x - (GRANADA_FUERZA*s_distance), position.y, s_distance == 0, physics));
+            gren.push_back(Grenade(SMOKE_GRENADE, position.x - (GameConfig::get_instance()->get_value<int>("GRANADA_FUERZA")*s_distance), position.y, s_distance == 0, physics));
     } else {
         if (type == HE_GRENADE)
-            gren.push_back(Grenade(HE_GRENADE, position.x + (GRANADA_FUERZA*e_distance), position.y, e_distance == 0, physics));
+            gren.push_back(Grenade(HE_GRENADE, position.x + (GameConfig::get_instance()->get_value<int>("GRANADA_FUERZA")*e_distance), position.y, e_distance == 0, physics));
         if (type == SMOKE_GRENADE)
-            gren.push_back(Grenade(SMOKE_GRENADE, position.x + (GRANADA_FUERZA*s_distance), position.y, s_distance == 0, physics));
+            gren.push_back(Grenade(SMOKE_GRENADE, position.x + (GameConfig::get_instance()->get_value<int>("GRANADA_FUERZA")*s_distance), position.y, s_distance == 0, physics));
     }
     this->e_distance = 0;
     this->s_distance = 0;
 }
 
 void Bombarder::create(int id, Vector2D position, entity_direction direc, std::list<Grenade>& gren, PhysicsManager *physics) {
-    int i = DEFAULT_MAX_X;
+    int i = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X");
     int x = position.x;
-    int safe_space = GRANADA_SIZE * 3;
-    for (int j = 300; j < DEFAULT_MAX_X; j += BOMBARDER_SPACE_IN_BETWEEN) {
+    int safe_space = GameConfig::get_instance()->get_value<int>("GRANADA_SIZE") * 3;
+    for (int j = 300; j < GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"); j += GameConfig::get_instance()->get_value<int>("BOMBARDER_SPACE_IN_BETWEEN")) {
         if (abs(j - x) > safe_space)
-            gren.push_back(Grenade(AIR_STRIKE, j, getRandomNumber(0,DEFAULT_MAX_Y), false, physics));
+            gren.push_back(Grenade(AIR_STRIKE, j, getRandomNumber(0,GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y")), false, physics));
     }
     this->delay = delay_cte;
 }
 
 int DefaultGH::damage_on_explode_on_hand(int type) {
-    return type == 1 ? GRANADA_DAMAGE : SMOKE_DAMAGE;
+    return type == 1 ? GameConfig::get_instance()->get_value<int>("GRANADA_DAMAGE") : GameConfig::get_instance()->get_value<int>("SMOKE_DAMAGE");
 }
 
 int Bombarder::damage_on_explode_on_hand(int type) {
@@ -228,7 +228,7 @@ int Bombarder::charge(int type) {
 
 Bombarder::Bombarder() {
     this->delay = 0;
-    this->delay_cte = ARMA2_GRENADE_DELAY;
+    this->delay_cte = GameConfig::get_instance()->get_value<int>("ARMA2_GRENADE_DELAY");
 }
 
 DefaultGH::DefaultGH() {
@@ -236,6 +236,6 @@ DefaultGH::DefaultGH() {
     this->s_delay = 0;
     this->e_distance = 0;
     this->s_distance = 0;
-    this->s_delay_cte = ARMA3_GRENADE_DELAY;
-    this->e_delay_cte = ARMA1_GRENADE_DELAY;
+    this->s_delay_cte = GameConfig::get_instance()->get_value<int>("ARMA3_GRENADE_DELAY");
+    this->e_delay_cte = GameConfig::get_instance()->get_value<int>("ARMA1_GRENADE_DELAY");
 }

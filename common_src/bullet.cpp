@@ -15,8 +15,8 @@ Bullet::Bullet(
     GameEntity(
         "Im a bullet", 
         position,
-        DEFAULT_MAX_X,
-        DEFAULT_MAX_Y,
+        GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"),
+        GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"),
         CollisionLayer::FriendlyProjectile,
         physics
     ) {
@@ -26,16 +26,16 @@ Bullet::Bullet(
     this->bullet_count = bc;
     this->state = 0;
     this->falloff = falloff;
-    this->rect_height = BULLET_HITBOX;
-    this->rect_width = BULLET_HITBOX;
+    this->rect_height = GameConfig::get_instance()->get_value<int>("BULLET_HITBOX");
+    this->rect_width = GameConfig::get_instance()->get_value<int>("BULLET_HITBOX");
     std::cout << "MY HITBOX IS: " << this->rect_height << " x " << this->rect_width << std::endl;
 }
 
 void Bullet::move() {
     if (this->facing_direction == LEFT) {
-        position.x -= BULLET_SPEED;
+        position.x -= GameConfig::get_instance()->get_value<int>("BULLET_SPEED");
     } else {
-        position.x += BULLET_SPEED;
+        position.x += GameConfig::get_instance()->get_value<int>("BULLET_SPEED");
     }
     if (falloff)
         this->damage = damage * 3 / 4;
@@ -98,8 +98,8 @@ Vomit_Projectile::Vomit_Projectile(Vector2D position, entity_direction direc) :
     GameEntity(
         "Im vomit", 
         position,
-        DEFAULT_MAX_X,
-        DEFAULT_MAX_Y,
+        GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"),
+        GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"),
         CollisionLayer::HostileProjectile
     ) {
     GameConfig *config = GameConfig::get_instance();

@@ -9,6 +9,7 @@
 #include "armas.h"
 #include "bullet.h"
 #include "granadas.h"
+#include "game_config.h"
 
 class Arma;
 
@@ -32,8 +33,8 @@ class PlayerState : public GameEntity {
       int id,
       int weapon_code = 3,
       PhysicsManager *physics = nullptr,
-      int16_t max_x = DEFAULT_MAX_X,
-      int16_t max_y = DEFAULT_MAX_Y);
+      int16_t max_x = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"),
+      int16_t max_y = GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"));
     PlayerState(PlayerState&&);
     ~PlayerState();
 
@@ -43,7 +44,7 @@ class PlayerState : public GameEntity {
     void pass_time();
     void on_collission_detected(GameEntity *other) override;
     bool is_dead();
-    //uint8_t get_respawn_time();
+    //uint8_t get_GameConfig::get_instance()->get_value<int>("RESPAWN_TIME")();
     //void try_respawn();
 
     std::string get_name();
