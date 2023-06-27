@@ -35,7 +35,7 @@ class Vomit_Projectile : public GameEntity {
   protected:
     bool dead;
   public:
-    Vomit_Projectile(Vector2D position, entity_direction direc);
+    Vomit_Projectile(Vector2D position, entity_direction direc, PhysicsManager *physics);
     void on_collission_detected(GameEntity *other) override;
     void attack(GameEntity *other) override;
     void move();

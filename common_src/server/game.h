@@ -381,7 +381,7 @@ class GameLoop : public Thread {
                 if (i == GameConfig::get_instance()->get_value<int>("CODE_WITCH_SPAWN"))
                     zombies_to_spawn_via_witch++;
                 if (i == GameConfig::get_instance()->get_value<int>("CODE_VENOM_PROJECTILE")) {
-                    vomit.push_back(Vomit_Projectile(zombie->get_location(),zombie->get_facing_direction()));
+                    vomit.push_back(Vomit_Projectile(zombie->get_location(),zombie->get_facing_direction(), &physics));
                     //TODO crear el proyectil enemigo
                 }           
             }
