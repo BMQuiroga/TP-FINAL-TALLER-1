@@ -42,8 +42,8 @@ class Zombie : public GameEntity {
     //Vector2D target_position{VEC2_ZERO};
 
   public:
-    static Zombie* get_random_zombie(int secure, PhysicsManager *physics);
-    static void generate_clear_the_area(int number_of_zombies, std::list<Zombie*>& list, PhysicsManager *physics);
+    static Zombie* get_random_zombie(int secure, PhysicsManager *physics, std::vector<PlayerState>& players);
+    static void generate_clear_the_area(int number_of_zombies, std::list<Zombie*>& list, PhysicsManager *physics, std::vector<PlayerState>& players);
     Zombie(
       const std::string &name,
       Vector2D position,

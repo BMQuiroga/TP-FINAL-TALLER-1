@@ -8,7 +8,7 @@
 
 Zombie::~Zombie() {}
 
-Zombie* Zombie::get_random_zombie(int secure, PhysicsManager *physics) {
+Zombie* Zombie::get_random_zombie(int secure, PhysicsManager *physics, std::vector<PlayerState>& players) {
     int q;
     if (secure == -1) {
         q = getRandomNumber(0,4);
@@ -17,30 +17,45 @@ Zombie* Zombie::get_random_zombie(int secure, PhysicsManager *physics) {
     } else if (secure == 5) {
         q = getRandomNumber(0,3);
     }
-    int x = getRandomNumber(GameConfig::get_instance()->get_value<int>("SPAWNER_SAFE_AREA_X"), GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"));  // Random X position within game area
-    int y = getRandomNumber(0, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"));  // Random Y position within game area
-    Vector2D position(x, y);
+    int distance;
+    int x,y;
+    
+    do {
+        distance = 99999;
+        x = getRandomNumber(0, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_X"));  // Random X position within game area
+        y = getRandomNumber(0, GameConfig::get_instance()->get_value<int>("DEFAULT_MAX_Y"));  // Random Y position within game area
+        Vector2D this_pos(x, y);
+        for (GameEntity &player : players) {
+            Vector2D vector = player.get_location();
+            int new_d = calculateDistance(this_pos,vector);
+            if (new_d < distance) {
+                distance = new_d;
+            }
+        } 
+    } while (distance < GameConfig::get_instance()->get_value<int>("SPAWNER_SAFE_AREA_X"));
+    
+    Vector2D this_pos(x, y);
     if (q == 0) {
-        return new CommonZombie("Common", position, physics);
+        return new CommonZombie("Common", this_pos, physics);
     } else if (q == 1) {
-        return new Jumper("Jumper", position, physics);
+        return new Jumper("Jumper", this_pos, physics);
     } else if (q == 2) {
-        return new Spear("Spear",position, physics);
+        return new Spear("Spear",this_pos, physics);
     } else if (q == 3) {
-        return new Venom("Venom", position, physics);
+        return new Venom("Venom", this_pos, physics);
     } else if (q == 4) {
-        return new Witch("Witch", position, physics);
+        return new Witch("Witch", this_pos, physics);
     }
     std::cout << "ERROR: GETRANDOMZOMBIE RETURNS NULL" << std::endl;
     return nullptr;
 }
 
-void Zombie::generate_clear_the_area(int zombies, std::list<Zombie*>& list, PhysicsManager *physics) {
+void Zombie::generate_clear_the_area(int zombies, std::list<Zombie*>& list, PhysicsManager *physics, std::vector<PlayerState>& players) {
     for (int i = 0; i < (zombies/2); i++) {
-        list.push_back(get_random_zombie(0, physics));
+        list.push_back(get_random_zombie(0, physics, players));
     }
     for (int i = 0; i < (zombies/2); i++) {
-        list.push_back(get_random_zombie(2, physics));
+        list.push_back(get_random_zombie(-1, physics, players));
     }
     std::cout << "GENERATED CLEAR THE AREA WITH " << zombies << " zombies, " << (zombies/2) << " commond and " << (zombies/2)<< " random" << std::endl;
 }
