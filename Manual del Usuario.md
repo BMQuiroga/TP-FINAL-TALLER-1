@@ -67,6 +67,8 @@ Granada 2: H
 
 ### Personajes
 
+IDF: cuenta con un rifle de rafagas de corta distancia, granadas de humo que relentizan o aturden enemigos y granadas explosivas las cuales se pueden cargar para lanzarlas mas lejos, cuidado de no mantenerla en tu mano por demasiado tiempo!
+
 ![](./resources/user%20manual%20pics/soldier1.png)
 
 P90: cuenta con una ametralladora multi-proposito y bombardero aereo cuyo poder es devastador
