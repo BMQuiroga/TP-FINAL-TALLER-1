@@ -33,8 +33,8 @@ cmake ..
 make -j4
 
 ## Ejecucion
-./server puerto
-./client localhost puerto
+./server config.yml
+./client ip puerto
 
 ## Descripción del cliente
 

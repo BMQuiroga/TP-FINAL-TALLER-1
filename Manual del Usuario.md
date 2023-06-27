@@ -35,10 +35,10 @@ make -j4
 
 ## Ejecución
 
-Hay 2 ejecutables: servidor y cliente, mientras el cliente es necesario que se ejecute en su computadora para jugar, el servidor puede ser abierto por cualquier usuario.
+Hay 2 ejecutables: servidor y cliente, mientras el cliente es necesario que se ejecute en su computadora para jugar, el servidor puede ser abierto por cualquier usuario. Por defecto el puerto del server es 9091, definido en config.yml
 
 Para levantar el servidor, dentro del intérprete de comandos levantado en la carpeta build, ejecute el siguiente comando:
-./server puerto
+./server config.yml
 
 Para levantar el cliente, también en la carpeta build, ejecutar:
 ./client ip puerto
