@@ -18,6 +18,7 @@ class AssetManager {
     SDL2pp::Color default_color;
     SDL2pp::Color white_color;
     SDL2pp::Color red_color;
+    SDL2pp::Chunk music;
 
     //constructor
     explicit AssetManager(SDL2pp::Renderer & renderer);

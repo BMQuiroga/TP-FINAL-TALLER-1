@@ -54,7 +54,7 @@ uint8_t PlayerState::get_hit_points() {
 }
 
 void PlayerState::take_damage(uint8_t damage) {
-    //std::cout << "PLAYER TD" << std::endl;
+    std::cout << "PLAYER TD: " << std::to_string(damage)<< std::endl;
     if (damage > hit_points) {
         hit_points = 0;
         //respawn_time = GameConfig::get_instance()->get_value<int>("RESPAWN_TIME");

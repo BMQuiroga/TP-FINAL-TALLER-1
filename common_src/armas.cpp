@@ -165,7 +165,8 @@ void Bombarder::create(int id, Vector2D position, entity_direction direc, std::l
 }
 
 int DefaultGH::damage_on_explode_on_hand(int type) {
-    return type == 1 ? GameConfig::get_instance()->get_value<int>("GRANADA_DAMAGE") : GameConfig::get_instance()->get_value<int>("SMOKE_DAMAGE");
+    //return type == 1 ? GameConfig::get_instance()->get_value<int>("GRANADA_DAMAGE") : GameConfig::get_instance()->get_value<int>("SMOKE_DAMAGE");
+    return 0;
 }
 
 int Bombarder::damage_on_explode_on_hand(int type) {
