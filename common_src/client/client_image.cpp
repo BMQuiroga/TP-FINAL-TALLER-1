@@ -55,6 +55,8 @@ Image::Image(const PlayerStateReference &state) {
     this->frame = 0;
     this->name = state.name;
     this->rounds = state.rounds;
+    this->grenade_timer = state.grenade_timer;
+    this->grenade_timer2 = state.grenade_timer2;
 }
 
 Image::Image(const ZombieStateReference &state) {

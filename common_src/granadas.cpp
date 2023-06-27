@@ -35,9 +35,9 @@ GameEntity(
 }
 
 void Grenade::advance_time() {
-    std::cout << "TIME ADVANCED STATE: " << std::to_string(state) << " AND TIME TO CHANGE: " << time_to_change << std::endl;
-    if (smoke)
-        std::cout << "SMOKE ADVANCED STATE: " << std::to_string(state) << " AND TIME TO CHANGE: " << time_to_change << std::endl;
+    ///std::cout << "TIME ADVANCED STATE: " << std::to_string(state) << " AND TIME TO CHANGE: " << time_to_change << std::endl;
+    ///if (smoke)
+    ///    std::cout << "SMOKE ADVANCED STATE: " << std::to_string(state) << " AND TIME TO CHANGE: " << time_to_change << std::endl;
     this->time_to_change--;
     if (time_to_change <= 0) {         
         if (state == 1) {
