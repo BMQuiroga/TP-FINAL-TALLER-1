@@ -94,36 +94,6 @@ void Zombie::set_direction(int x, int y) {
         this->facing_direction = RIGHT;
     }
 }
-/*
-void Zombie::next_state() {
-    Vector2D target_position = target->get_location();
-    // Calculate the direction vector from the zombie to the player
-    Vector2D target_direction = target_position - position;
-    // Normalize the target direction if it's not too close to zero
-    float threshold = 0.001f;
-    float magnitude = target_direction.magnitude();
-    if (magnitude > threshold) {
-        target_direction.x /= magnitude;
-        target_direction.y /= magnitude;
-    } else {
-        target_direction = Vector2D(0.0f, 0.0f);  // Set target direction to zero if too close to zero
-    }
-    // Adjust the current direction towards the target direction
-    float dampingFactor = 0.1f;  // Adjust this value to control the damping effect
-    direction += dampingFactor * (target_direction - direction);
-    // Normalize the direction
-    magnitude = direction.magnitude();
-    if (magnitude > threshold) {
-        direction.x /= magnitude;
-        direction.y /= magnitude;
-    } else {
-        direction = Vector2D(0.0f, 0.0f);  // Set direction to zero if too close to zero
-    }
-
-    // Normalize the direction vector
-    // direction = new_direction.normalized();
-    // std::cout << "My new direction is " << direction.x << "and y " << direction.y << std::endl;
-}*/
 
 uint8_t Zombie::get_damage()
 {
@@ -344,10 +314,14 @@ Witch::Witch(
 Witch::~Witch() {}
 
 int Zombie::calculate_next_movement(std::vector<PlayerState>& players) {
+    if (this->id == 53 && this->health == 0) {//particlarmente, el spear no se muere
+        state = DEAD;
+        return GameConfig::get_instance()->get_value<int>("CODE_NULL");
+    }
     bool impaired = false;
     if (this->health == 0)
         return GameConfig::get_instance()->get_value<int>("CODE_NULL");
-    if(this->smoked_time > 0) {
+    if (this->smoked_time > 0) {
         impaired = true;
         smoked_time--;
         speed = speed / 2;

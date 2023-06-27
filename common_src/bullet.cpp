@@ -32,7 +32,7 @@ Bullet::Bullet(
 }
 
 void Bullet::move() {
-    std::cout << "bullet previously at: " << position.x << ", " << position.y;
+    //std::cout << "bullet previously at: " << position.x << ", " << position.y;
     GameConfig *config = GameConfig::get_instance();
     if (this->facing_direction == LEFT) {
         position.x -= config->get_value<int>("ZOMBIE_RECT_WIDTH");
@@ -41,7 +41,7 @@ void Bullet::move() {
     }
     if (falloff)
         this->damage = damage * 3 / 4;
-    std::cout << " moved at: " << position.x << ", " << position.y << std::endl;
+    //std::cout << " moved at: " << position.x << ", " << position.y << std::endl;
     //std::cout << "MOVED" << std::endl;
 }
 
