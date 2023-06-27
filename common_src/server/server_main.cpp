@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     } else {
         std::cerr << "Bad program call. Expected "
                 << argv[0]
-                << " <puerto/servicename>\n";
+                << " <ruta/config_path>\n";
         return ret;
     }
     
