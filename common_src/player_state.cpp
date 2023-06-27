@@ -20,7 +20,7 @@ GameEntity(name, max_x, max_y, CollisionLayer::Friendly, physics) {
     // this->arma = new Arma1();
     this->rect_width = config->get_value<int>("PLAYER_RECT_WIDTH");
     this->rect_height = config->get_value<int>("PLAYER_RECT_HEIGHT");
-    this->respawn_time = -1;
+    //this->respawn_time = -1;
     if (weapon_code == 1)
         this->arma = new Arma1();
     if (weapon_code == 2)
@@ -57,6 +57,7 @@ void PlayerState::take_damage(uint8_t damage) {
     std::cout << "PLAYER TD: " << std::to_string(damage)<< std::endl;
     if (damage > hit_points) {
         hit_points = 0;
+        state = DEAD;
         //respawn_time = GameConfig::get_instance()->get_value<int>("RESPAWN_TIME");
     } else {
         hit_points -= damage;
@@ -222,7 +223,6 @@ void PlayerState::next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bull
             this->arma->create_grenade(grenade_type,position,facing_direction,gren,physics);
         }
     }
-
 }
 
 bool PlayerState::is_dead() {
@@ -234,11 +234,23 @@ void PlayerState::pass_time() {
     //-1 seria que esta vivo
     //cuando muere, se pone un timer
     //cuando el timer baja a 0, el jugador revive
+    //si en algun punto, estan todos los jugadores muertos, termina la partida
+    //i
+   // f (this->id == 3)
+        //std::cout << "respawntime:" << std::to_string(respawn_time) << std::endl;
+
+    if (this->hit_points > 0) {
+        this->respawn_time = -1;
+        return;
+    }
+        
+
     if (this->hit_points == 0 && this->respawn_time > 0) {
         respawn_time--;
     } else if (this->hit_points == 0 && this->respawn_time == 0) {
         respawn_time = -1;
-        this->hit_points = 100;
+        this->hit_points = GameConfig::get_instance()->get_value<int>("PLAYER_HP_AFTER_REVIVE");
+        this->state = IDLE;
     } else if (this->hit_points == 0 && this->respawn_time == -1) {
         this->respawn_time = GameConfig::get_instance()->get_value<int>("RESPAWN_TIME");
     }

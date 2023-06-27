@@ -22,6 +22,7 @@ bool Arma::try_shoot() {
         balas--;
         if (balas == 0) {
             this->try_reload();
+            delay += delay_disparo;//delay como si disparase y recargase instanteaneamente despues
         } else {
             delay = delay_disparo;
         }
