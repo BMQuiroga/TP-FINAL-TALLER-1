@@ -10,28 +10,28 @@
 #include "../game_config.h"
 
 void ClientRenderer::render_grenades(Image & im) {
-    if (im.grenade_timer2 < 102) {//bombarder
-        int percent = im.grenade_timer;
+    if (im.grenade_timer2 > 102) {//bombarder
+        int percent = 100 - im.grenade_timer;
         Asset * asset = assets->GetAsset(-9);
         renderer.Copy(
             (*asset->get_texture()),
             SDL2pp::Rect(0, 0, 600, 495/100 * percent),
-            SDL2pp::Rect(1000, 830, 100, percent),
+            SDL2pp::Rect(900, 830, 100, percent)
         );
     } else {
-        int percent = im.grenade_timer;
-        int percent = im.grenade_timer2;
+        int percent = 100 - im.grenade_timer;
+        int percent2 = 100 - im.grenade_timer2;
         Asset * asset = assets->GetAsset(-10);
         renderer.Copy(
             (*asset->get_texture()),
-            SDL2pp::Rect(0, 0, 396, 914/100 * percent),
-            SDL2pp::Rect(1000, 830, 50, percent),
+            SDL2pp::Rect(0, 0, 234, 411/100 * percent),
+            SDL2pp::Rect(900, 830, 50, percent)
         );
-        Asset * asset = assets->GetAsset(-11);
+        Asset * asset2 = assets->GetAsset(-11);
         renderer.Copy(
-            (*asset->get_texture()),
-            SDL2pp::Rect(0, 0, 396, 914/100 * percent),
-            SDL2pp::Rect(1060, 830, 50, percent),
+            (*asset2->get_texture()),
+            SDL2pp::Rect(0, 0, 396, 914/100 * percent2),
+            SDL2pp::Rect(960, 830, 50, percent2)
         );
     }
 }
@@ -199,6 +199,14 @@ void ClientRenderer::render_all() {
 
 void ClientRenderer::play(Image & im) {
     assets->play(im.id,this->mixer);
+    /*if (im.id > 153 && im.id < 157) {
+        Asset * asset = assets->GetAsset(-5);
+        renderer.Copy(
+            (*asset->get_texture()),
+            SDL2pp::Rect(0, 0, 1200, 900),
+            SDL2pp::Rect(im.x, im.y, 1200, 900)
+        );
+    }*/
 }
 
 void ClientRenderer::calculate_offset() {
@@ -226,6 +234,10 @@ void ClientRenderer::calculate_offset() {
 void ClientRenderer::render(Image & im) {
     uint16_t x = im.x + offset;
     uint16_t y = im.y;
+    if (im.id > 50 && im.id < 56) {
+        //if (im.health == 0)
+            //im.action = DEAD;//hay un bug en el que aveces, no se muere server-side
+    }
     Asset * asset = assets->GetAsset(im.id + im.action*1000);
 
     im.frame++;

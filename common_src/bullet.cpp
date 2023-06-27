@@ -32,14 +32,16 @@ Bullet::Bullet(
 }
 
 void Bullet::move() {
+    std::cout << "bullet previously at: " << position.x << ", " << position.y;
+    GameConfig *config = GameConfig::get_instance();
     if (this->facing_direction == LEFT) {
-        position.x -= BULLET_SPEED;
+        position.x -= config->get_value<int>("ZOMBIE_RECT_WIDTH");
     } else {
-        position.x += BULLET_SPEED;
+        position.x += config->get_value<int>("ZOMBIE_RECT_WIDTH");
     }
     if (falloff)
         this->damage = damage * 3 / 4;
-
+    std::cout << " moved at: " << position.x << ", " << position.y << std::endl;
     //std::cout << "MOVED" << std::endl;
 }
 
@@ -58,12 +60,12 @@ void Bullet::attack(GameEntity *other) {
 
     if (piercing) {
         z->take_damage(damage);
-        std::cout << "PIERCING: Dealt " << std::to_string(damage) << " damage" << std::endl;
+        //std::cout << "PIERCING: Dealt " << std::to_string(damage) << " damage" << std::endl;
         damage = damage / 2;
     } else {
         while ((bullet_count > 0) && (z->get_health() > 0)) {
             z->take_damage(damage);
-            std::cout << "Dealt " << std::to_string(damage) << " damage" << std::endl;
+            //std::cout << "Dealt " << std::to_string(damage) << " damage" << std::endl;
             bullet_count--;
         }
 
@@ -72,7 +74,7 @@ void Bullet::attack(GameEntity *other) {
 }
 
 bool Bullet::is_off_scope() {
-    return this->max_x < position.x;
+    return this->max_x < position.x || position.x < 0;
 }
 
 PlayerStateReference Bullet::make_ref() {
