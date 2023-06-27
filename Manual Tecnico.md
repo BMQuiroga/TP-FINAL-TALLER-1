@@ -90,6 +90,15 @@ Al recibir una request para crear una partida, se crea un objeto de clase `Game`
 
 ### Diagramas de clase
 
+A continuacion se observa una de las clases mas importantes para el funcionamiento del juego: el GameLoop. Es un hilo que solamente permanece a la espera de eventos
+y los procesa al recibirlos. Ni bien se inicializa, su estado se establece con el valor `CREATED`, y asi permanecerá hasta que se llame al método `start()`. Una vez 
+hecho esto, el estado transicionará al valor `STARTED` y no se aceptarán mas jugadores. Contiene a todas las entidades del juego, pero aqui solo se muestran los jugadores
+para simplificar el diagrama.
+
+Todas las entidades del juego hereden de la clase `GameEntity`, que contendrá gran parte del comportamiento básico de una entidad (moverse, atacar, colisionar, etc).
+Luego, para detectar colisiones será fundamental el uso del `PhysicsManager`, que establecerá como tienen que colisionar las distintas entidades con un sistema de capas: 
+cada tipo de entidad reside en a capa de colision, y a su vez tiene asignada una máscara de colisión, que indicará con que capas ese tipo de entidad colisiona. 
+
 <img src="./diagrams/game_loop.png" alt="Diagrama hilos" width="100%">
 
 ### Diagramas de secuencia
