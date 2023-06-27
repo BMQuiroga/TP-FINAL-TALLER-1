@@ -1,15 +1,16 @@
 ﻿# Manual de Usuario
 
-Bienvenidos a **Left4Dead**, El proyecto final de la materia Taller de Programacion, a continuacion habra una guia detallada sobre el funcionamiento del juego, orientado al usuario final
+Bienvenidos a **Left4Dead**, El proyecto final de la materia Taller de Programación. A continuación habrá una guía detallada sobre el funcionamiento del juego, orientado al usuario final.
 
-# Sobre el juego
-Este juego de disparos en 2D cuenta con 3 personajes, 5 especies de zombies y 2 modos de juego.
+## Sobre el juego
 
-**Supervivencia**: Modo sin fin, sobrevive tanto tiempo como puedas ante una invacion zombie que se vuelve gradualmente mas poderosa, lucha por conseguir la mayor puntuacion posible!
+Este juego de disparos en 2D cuenta con 3 tipos de personajes, 5 especies de zombies y 2 modos de juego.
 
-**Limpiar la Zona**: Lucha contra una cantidad fija de enemigos, limpia la zona lo mas rapido posible para conseguir un mejor puntaje!
+**Supervivencia**: Modo sin fin, sobrevive tanto tiempo como puedas ante una invación zombie que se vuelve gradualmente más poderosa, ¡lucha por conseguir la mayor puntuación posible!
 
-# Instalacion
+**Limpiar la Zona**: Lucha contra una cantidad fija de enemigos, ¡limpia la zona lo más rápido posible para conseguir un mejor puntaje!
+
+## Instalación
 
 Este proyecto tiene las siguientes dependencias:
 
@@ -25,31 +26,35 @@ Compilador de C++
 Una vez instaladas todas y descargado el proyecto en formato .zip o tar.gz, descomprimirlo y adentro de la carpeta abrir el interprete de comandos.
 En el interprete ejecutar los siguientes comandos:
 
-*****mkdir build
+```console
+mkdir build
 cd build
 cmake ..
-make -j4*****
+make -j4
+```
 
-## Ejecucion
+## Ejecución
 
 Hay 2 ejecutables: servidor y cliente, mientras el cliente es necesario que se ejecute en su computadora para jugar, el servidor puede ser abierto por cualquier usuario.
 
-Para levantar el servidor, dentro del inteprete de comandos levantado en la carpeta build ejecute el siguiente comando:
+Para levantar el servidor, dentro del intérprete de comandos levantado en la carpeta build, ejecute el siguiente comando:
 ./server puerto
 
-Para levantar el cliente, tambien en la carpeta build ejecutar:
+Para levantar el cliente, también en la carpeta build, ejecutar:
 ./client ip puerto
 
 ## Menu
 
-Al ejecutar el juego, se da la opcion de crear una partida nueva o unirse a una existente con un codigo de partida. Una vez seleccionada la opcion deseada se cierra la ventana y empieza la partida
+Al ejecutar el juego, se da la opción de crear una partida nueva o unirse a una existente con un código de partida con una cantidad determinada de jugadores. Una vez seleccionada la opción deseada, entra a una pantalla de espera hasta que se llene la partida. Una vez que haya la cantidad necesaria de jugadores conectados en la partida, se cierra la ventana y empieza la partida.
 
-## Configuracion
+## Configuración
 
-Depende de la version del juego que tenga, la configuracion puede ser hecha modificando constantes en el archivo game_config.h o en el archivo game_config.yaml. Tenga en cuenta que si su version usa game_config.h debera reinstalar el juego para poder ver los cambios.
+Según la versión del juego que tenga, la configuración puede ser hecha modificando constantes en el archivo game_config.h o en el archivo game_config.yaml. Tenga en cuenta que si su version usa game_config.h deberá reinstalar el juego para poder ver los cambios.
 
 ## Jugabilidad
-### Controles:
+
+### Controles
+
 Movimiento: ⬅ ➡ ⬆ ⬇
 
 Disparar: S
@@ -60,21 +65,22 @@ Granada 1: G
 
 Granada 2: H
 
-### Personajes:
-IDF: cuenta con un rifle de rafagas de corta distancia, granadas de humo que relentizan o aturden enemigos y granadas explosivas las cuales se pueden cargar para lanzarlas mas lejos, cuidado de no mantenerla en tu mano por demasiado tiempo!
+### Personajes
 
-P90: cuenta con una ametralladora multi-proposito y bombardero aereo cuyo poder es devastador
+IDF: cuenta con un rifle de rafagas de corta distancia, granadas de humo que relentizan o aturden enemigos y granadas explosivas las cuales se pueden cargar para lanzarlas más lejos, ¡cuidado de no mantenerla en tu mano por demasiado tiempo!
 
-Scout: cuenta con un rifle de larga distancia con balas que atraviesan enemigos y un las mismas granadas que IDF
+P90: cuenta con una ametralladora multi-propósito y bombardero aéreo cuyo poder es devastador.
 
-### Zombies:
-Infectado: Zombie comun, corre hacia el jugador mas cercano e intenta hacerle daño.
+Scout: cuenta con un rifle de larga distancia con balas que atraviesan enemigos y las mismas granadas que IDF.
 
-Spear: Zombie armado con una lanza, es mas lento pero hace mas daño.
+### Zombies
 
-Venom: Tiene la capacidad de lanzar proyectiles de larga distancia a traves del mapa y tambien tiene un ataque de corto rango.
+Infectado: Zombie común, corre hacia el jugador más cercano e intenta hacerle daño.
 
-Witch: Ocacionalmente se pone a gritar, atrayendo a mas Zombies, tiene muchisima vida, pero no se mueve ni ataca directamente.
+Spear: Zombie armado con una lanza, es más lento, pero hace más daño.
 
-Jumper: Tiene la capacidad de saltar, tiene baja vida, sin embargo hace mucho daño y es muy rapido.
+Venom: Tiene la capacidad de lanzar proyectiles de larga distancia a través del mapa. También tiene un ataque de corto rango.
 
+Witch: Ocasionalmente se pone a gritar, atrayendo a más Zombies. Tiene muchísima vida, pero no se mueve ni ataca directamente.
+
+Jumper: Tiene la capacidad de saltar, tiene baja vida. Sin embargo, hace mucho daño y es muy rápido.
