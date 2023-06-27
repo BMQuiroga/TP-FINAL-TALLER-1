@@ -198,6 +198,7 @@ int MainWindow::get_game_code() {
 void MainWindow::receiveClosedSignal() {
     LobbyCommand end_command(ENDLOBBY, "");
     is_closed = true;
+    is_game_started = false;
     q.push(end_command);
 }
 
