@@ -1,0 +1,79 @@
+@startuml
+
+class Queue {
+    - std::queue<T, C> q;
+    - const unsigned int max_size;
+    - bool closed;
+    - std::mutex mtx;
+    - std::condition_variable is_not_full;
+    - std::condition_variable is_not_empty;
+    + bool try_push(T const& val)
+    + bool try_pop(T& val)
+    + void push(T const& val)
+    + T pop()
+}
+
+class PhysicsManager {
+    - std::vector<GameEntity*> collision_layers[5]
+    - std::bitset<5> layer_masks[5]
+    - uint32_t last_id
+    + void set_layer_collision_mask(CollisionLayer layer, CollisionFlag flag)
+    + uint32_t register_entity(GameEntity *entity, CollisionLayer layer)
+    + void unregister_entity(uint32_t id)
+    + void update()
+    + std::vector<GameEntity*>& get_collision_layer(CollisionLayer layer)
+}
+
+abstract class GameEntity {
+    # uint32_t id
+    # uint32_t physics_id
+    # std::string name
+    # Vector2D position
+    # int8_t state
+    # PhysicsManager *physics
+    # CollisionLayer collision_layer
+    # bool move()
+    + virtual void attack(GameEntity *other)
+    + virtual void on_collission_detected(GameEntity *other)
+    + virtual void take_damage(uint8_t dmg)
+}
+
+class PlayerState {
+    - uint8_t hit_points
+    - void move()
+    - void attack(GameEntity *other)
+    + void next_state(uint8_t cmd, std::list<Bullet>& vec, uint32_t& bullets, std::list<Grenade>& gren, bool& sr)
+    + void take_damage(uint8_t damage)
+    + void on_collission_detected(GameEntity *other)
+    + bool is_dead()
+    + std::string get_name()
+    + uint8_t get_hit_points()
+    + PlayerStateReference make_ref()
+}
+
+abstract class Thread {
+    + void run()
+}
+
+class GameLoop {
+    - Queue<GameEvent> &events
+    - uint8_t number_players
+    - std::vector<PlayerState> players
+     -ProtectedVector<std::reference_wrapper<Queue<ProtocolResponse>>> message_queues
+    - Serializer serializer
+    - PhysicsManager physics
+    - uint32_t kills
+    - uint32_t shots
+    - uint32_t game_ticks
+    - int game_mode
+    + void start()
+    + void run()
+}
+
+GameLoop *-- PhysicsManager
+GameLoop *-- Queue
+GameLoop *-- PlayerState: 1..*
+GameLoop --|> Thread
+PlayerState --|> GameEntity
+
+@enduml
