@@ -1,11 +1,11 @@
 ﻿# Manual del Proyecto
 
-Bienvenidos a **Left4Dead**, El proyecto final de la materia Taller de Programacion, a continuacion habra una guia sobre el proyectio, orientado a correctores.
+Bienvenidos a **Left4Dead**, El proyecto final de la materia Taller de Programación I. A continuación habra una guía sobre el proyectio, orientado a correctores.
 
 # Equipo
-Germán Gonzalo Escandar Obadía - 105250
-Mariana Galdo Martinez - 105658
-Bruno Martin Quiroga - 107788
+- Germán Gonzalo Escandar Obadía - 105250
+- Mariana Galdo Martinez - 105658
+- Bruno Martin Quiroga - 107788
 
 # Cronograma
 16/5 -> 23/5 Objetivo: tener un servidor unipartida que permita que 2 jugadores se muevan.
@@ -33,7 +33,7 @@ A partir de este momento, con las correcciones, se nos dio la tarea de que el ju
 
 # Tareas de cada miembro del grupo
 
-**German**: implementacion de logica de servidor (protocolo, hilos, lectura de configuracion) y del juego (GameLoop, entidades, detección de colisiones), testing con GoogleTest
+**German**: implementación de lógica de servidor (protocolo, hilos, lectura de configuracion) y del juego (GameLoop, entidades, detección de colisiones), testing con GoogleTest
 
 **Mariana**: Hilos del cliente de sender y receiver, protocolo de mensajes de lobby, vistas y diseño del lobby, encapsulan todo el uso de QT.
 
