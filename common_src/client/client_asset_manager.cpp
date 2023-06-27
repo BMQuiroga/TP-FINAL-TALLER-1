@@ -64,7 +64,7 @@ void AssetManager::Release() {
 //(0 idle, 1 attack, 2 dead, 3 grenade, 4 hurt 5 recharge, 6 shot, 7 walk, 8 fall, 9 run, 10 protect, 11 run+atack, 12 bite, 13 scream, 14 eating)
 
 AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
-	default_font("../resources/Fonts/Lato-Regular.ttf", 72), default_color(50,50,50,255), white_color(255,255,255,255), red_color(255,0,0,255)
+	default_font("../resources/Fonts/Lato-Regular.ttf", 72), default_color(50,50,50,255), white_color(255,255,255,255), red_color(255,0,0,255), music("../resources/Sound/Music.mp3")
 	{
 	map.emplace(SMOKE_ICON, std::make_shared<Asset>("../resources/HPBar/smok2.png", 0, 1920, 1080, 1, renderer, 1));
 	map.emplace(HE_ICON, std::make_shared<Asset>("../resources/HPBar/he2.png", 0, 1920, 1080, 1, renderer, 1));
@@ -159,7 +159,7 @@ AssetManager::AssetManager(SDL2pp::Renderer & renderer) :
 	map.emplace(SMOKE + DEAD_, std::make_shared<Asset>("../resources/Soldier_3/Smoke.png", 0, 128, 128, 22, renderer, 0));
 	//DEAD_ es es standar para la animacion que se queda trabada en el ultimo frame en vez de loopear
 
-	sound_map.emplace(0,SDL2pp::Music("../resources/Sound/Music.mp3"));
+	//sound_map.emplace(0,SDL2pp::Music("../resources/Sound/Music.mp3"));
 
 	sound_map.emplace(152,SDL2pp::Music("../resources/Sound/DeathScreen.mp3"));
 	sound_map.emplace(153,SDL2pp::Music("../resources/Sound/VictoryScreen.mp3"));
@@ -203,7 +203,7 @@ SDL2pp::Color* AssetManager::get_red_color() {
 }
 
 void AssetManager::play_music(SDL2pp::Mixer & mixer) {
-	//mixer.PlayMusic(sound_map.at(0), -1);
+	mixer.PlayChannel(-1, music, -1);
 }
 
 SDL2pp::Font* AssetManager::get_default_font() {

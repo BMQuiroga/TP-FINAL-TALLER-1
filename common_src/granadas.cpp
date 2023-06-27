@@ -94,6 +94,7 @@ void Grenade::on_collission_detected(GameEntity * other) {
 }
 
 void Grenade::attack(GameEntity * other) {
+    std::cout << "BOOM" << std::endl;
     Zombie *z = (Zombie*)other;
     if (smoke)
         z->process_smoke();
