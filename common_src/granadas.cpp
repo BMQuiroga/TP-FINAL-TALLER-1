@@ -94,9 +94,11 @@ void Grenade::on_collission_detected(GameEntity * other) {
 }
 
 void Grenade::attack(GameEntity * other) {
+    std::cout << "BOOM" << std::endl;
     Zombie *z = (Zombie*)other;
     if (smoke)
         z->process_smoke();
     else
         other->take_damage(this->damage);
+    //la granada es muy dificil que le pegue al mismo jugador que la tira, porque la hitbox de player es muy chiquita
 }

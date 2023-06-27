@@ -78,7 +78,7 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse
     window("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_RESIZABLE),
     actual_frame(nullptr),
     renderer(window, -1, SDL_RENDERER_ACCELERATED),
-    mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096) {
+    mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, GameConfig::get_instance()->get_value<int>("MIXER_CHANNELS"), 4096) {
     this->assets = AssetManager::Instance(this->renderer);
     Mix_VolumeMusic(GameConfig::get_instance()->get_value<int>("MIN_MAX_VOLUME") / 100 * GameConfig::get_instance()->get_value<int>("GAME_VOLUME"));
     std::cout << "player name is " << this->player_name << std::endl;
@@ -87,9 +87,13 @@ ClientRenderer::ClientRenderer(Queue<Intention*> &events, Queue<ProtocolResponse
 
 void ClientRenderer::GameLoop() {
     // std::list<Image>* new_update = nullptr;
+    int music = GameConfig::get_instance()->get_value<int>("MUSIC");
+    std::cout << "music" << music << std::endl;
+    if(music > 0)
+        this->assets->play_music(this->mixer);
+    
     int wait_time = 1000/GameConfig::get_instance()->get_value<int>("GAME_FRAME_RATE");
     std::list<Image>* frames_list = nullptr;
-    //this->assets->play_music(this->mixer); //anda horrible
     ProtocolResponse new_update;
     Serializer serializer;
     while (running) {

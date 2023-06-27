@@ -33,7 +33,7 @@ A partir de este momento, con las correcciones, se nos dio la tarea de que el ju
 
 # Tareas de cada miembro del grupo
 
-**German**:
+**German**: implementacion de logica de servidor (protocolo, hilos, lectura de configuracion) y del juego (GameLoop, entidades, detección de colisiones), testing con GoogleTest
 
 **Mariana**: Hilos del cliente de sender y receiver, protocolo de mensajes de lobby, vistas y diseño del lobby, encapsulan todo el uso de QT.
 

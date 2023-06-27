@@ -22,7 +22,7 @@ Bullet::Bullet(
     ) {
     this->damage = dmg;
 
-    position.x += 40;//offset para que la bala se genere a la altura del arma
+    position.x += 30;//offset para que la bala se genere a la altura del arma
     this->position = position;
 
     this->piercing = piercing;
@@ -114,7 +114,7 @@ Vomit_Projectile::Vomit_Projectile(Vector2D position, entity_direction direc, Ph
     state = 0;
     this->rect_width = config->get_value<uint16_t>("VENOM_PROJECTILE_SIZE");
     this->rect_height = config->get_value<uint16_t>("VENOM_PROJECTILE_SIZE");
-    position.y += 40;//para que dispare desde el pecho
+    position.y += 30;//para que dispare desde el pecho
     this->position = position;
     dead = false;
 }
