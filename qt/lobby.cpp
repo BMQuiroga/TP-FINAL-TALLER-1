@@ -10,9 +10,10 @@ Lobby::Lobby(QWidget *parent) : QWidget(parent) {
 }
 
 int Lobby::getPlayerTypeNumber(const QString& playerType) {
-    if (playerType == "idf") {
+    std::string type = playerType.toStdString();
+    if (type == PLAYERTYPE1) {
         return 1;
-    } else if (playerType == "p90") {
+    } else if (type == PLAYERTYPE2) {
         return 2;
     }
     return 3;
@@ -25,7 +26,7 @@ void Lobby::sendNewPlayerInfo() {
         errorLabel->setText("Elija una de las opciones antes de continuar");
         return;
     } 
-    QString playerType = activeButton->text();
+    QString playerType = activeButton->objectName();
     QString name = inputName->text();
     int player_type = getPlayerTypeNumber(playerType);
     emit inputPlayerInfoEntered(name, player_type);
@@ -60,14 +61,14 @@ void Lobby::connectEvents() {
     QPushButton* buttonName = findChild<QPushButton*>("buttonName");
     QObject::connect(buttonName, &QPushButton::clicked,
                      this, &Lobby::sendNewPlayerInfo);
-    QPushButton* idf_button = findChild<QPushButton*>("idf");
+    QPushButton* idf_button = findChild<QPushButton*>(PLAYERTYPE1);
     QObject::connect(idf_button, &QPushButton::clicked,
                      this, &Lobby::selectPlayerOption);
-    QPushButton* scout_button = findChild<QPushButton*>("scout");
-    QObject::connect(scout_button, &QPushButton::clicked,
-                     this, &Lobby::selectPlayerOption);
-    QPushButton* p90_button = findChild<QPushButton*>("p90");
+    QPushButton* p90_button = findChild<QPushButton*>(PLAYERTYPE2);
     QObject::connect(p90_button, &QPushButton::clicked,
+                     this, &Lobby::selectPlayerOption);
+    QPushButton* scout_button = findChild<QPushButton*>(PLAYERTYPE3);
+    QObject::connect(scout_button, &QPushButton::clicked,
                      this, &Lobby::selectPlayerOption);
     initial_stylesheet = p90_button->styleSheet();
 }

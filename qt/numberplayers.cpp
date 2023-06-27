@@ -15,7 +15,8 @@ NumberPlayers::NumberPlayers(QWidget *parent) : QWidget(parent)  {
 }
 
 int NumberPlayers::getGameModeNumber(const QString& gameMode) {
-    if (gameMode == "clear_zone") {
+    std::string mode = gameMode.toStdString();
+    if (mode == "clear_zone") {
         return 1;
     }
     return 2;
@@ -32,7 +33,7 @@ void NumberPlayers::setNumberOfPlayers() {
     QString name = inputGameName->text();
     QLabel* labelOut = findChild<QLabel*>("gameNumberLabel");
     QString number = inputNumber->text();
-    QString modeName = activeButton->text();
+    QString modeName = activeButton->objectName();
     int game_mode = getGameModeNumber(modeName);
     QString created_message = QString("Partida creada para %1 jugadores").arg(number);
     labelOut->setText(created_message);

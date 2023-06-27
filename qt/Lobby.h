@@ -1,5 +1,8 @@
 #ifndef LOBBY_H
 #define LOBBY_H
+#define PLAYERTYPE1 "idf"
+#define PLAYERTYPE2 "p90"
+#define PLAYERTYPE3 "scout"
 
 #include <QWidget>
 #include <QLineEdit>
