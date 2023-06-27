@@ -51,8 +51,6 @@ Al ejecutar el juego, se da la opción de crear una partida nueva o unirse a una
 
 Según la versión del juego que tenga, la configuración puede ser hecha modificando constantes en el archivo game_config.h o en el archivo game_config.yaml. Tenga en cuenta que si su version usa game_config.h deberá reinstalar el juego para poder ver los cambios.
 
-## Jugabilidad
-
 ### Controles
 
 Movimiento: ⬅ ➡ ⬆ ⬇
@@ -100,7 +98,7 @@ Jumper: Tiene la capacidad de saltar, tiene baja vida, sin embargo hace mucho da
 
 ![](./resources/user%20manual%20pics/jumper.png)
 
-
+## Jugabilidad
 ### Lobby
 
 Antes de empezar a jugar, necesita ingresar un nombre y elegir qué personaje usar.
