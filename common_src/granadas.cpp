@@ -100,4 +100,5 @@ void Grenade::attack(GameEntity * other) {
         z->process_smoke();
     else
         other->take_damage(this->damage);
+    //la granada es muy dificil que le pegue al mismo jugador que la tira, porque la hitbox de player es muy chiquita
 }
