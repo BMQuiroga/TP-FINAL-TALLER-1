@@ -24,6 +24,7 @@ void GameConfig::release() {
 }
 
 void GameConfig::load() {
+    std::lock_guard<std::mutex> lock(mtx);
     std::ifstream file(path);
     if (file) {
         config_ = YAML::Load(file);
@@ -34,6 +35,7 @@ void GameConfig::load() {
 }
 
 void GameConfig::save() {
+    std::lock_guard<std::mutex> lock(mtx);
     std::ofstream file(path);
     if (file) {
         file << config_;
